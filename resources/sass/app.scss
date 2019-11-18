@@ -1,1 +1,22 @@
-//
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+/* This provides a styling for the editor cursor plus button*/
+.ce-toolbar__plus {
+    @apply bg-blue-500 text-white;
+}
+
+
+/* some standard patterns used all over the designs */
+.pat-1 {
+    background-color: #e2e8f0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23bee3f8' fill-opacity='0.68' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+.pat-2 {
+    background-color: #1a202c;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%232a4365' fill-opacity='0.68' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+}

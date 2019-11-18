@@ -1,0 +1,46 @@
+.te-typo {
+    
+    // HEADERS
+    & h1, h2, h3, h4, h5, h6 {
+        @apply text-blue-900 antialiased;
+    }
+
+    & h1, h2 {
+        @apply text-4xl;
+    }
+
+    & h3, h4 {
+        @apply text-3xl;
+    }
+
+    & h5, h6 {
+        @apply text-2xl;
+    }
+
+    & h1, h3, h5 {
+        @apply font-semibold;
+    }
+
+    // PARAGRAPHS
+    & ul>li, ol>li, 
+    // above specific ul> or ol> is used to make sure that 
+    // this style does not interfere with the toolbox of editor js 
+    // where <li> is used directly under <div>
+    .ce-paragraph, 
+    p  {
+        line-height: 1.6em;
+        @apply antialiased text-gray-800;
+    }
+
+    & b {
+        @apply font-bold;
+    }
+
+    & code {
+        @apply bg-red-100 text-red-700 px-2  mx-1 rounded-sm font-mono;
+    }
+
+    & mark {
+        @apply bg-yellow-200 py-1;
+    }
+}

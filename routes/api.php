@@ -16,3 +16,8 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::post('/pages', function (Request $req) {
+    return $req->input();
+})->name('api.pages.store');

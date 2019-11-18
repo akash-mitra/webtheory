@@ -11,6 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('app');
+// });
+
+Route::get('/admin', 'AdminController@dashboard');
+
+Route::get('/admin/pages/create', 'AdminPageController@create');
+
+Route::post('/admin/media/uploadFile', 'MediaController@upload');

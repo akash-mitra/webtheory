@@ -1,0 +1,51 @@
+.te-typo h1, .te-typo h2, .te-typo h3, .te-typo h4, .te-typo h5, .te-typo h6 {
+  color: #2a4365;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.te-typo h1, .te-typo h2 {
+  font-size: 2.25rem;
+}
+
+.te-typo h3, .te-typo h4 {
+  font-size: 1.875rem;
+}
+
+.te-typo h5, .te-typo h6 {
+  font-size: 1.5rem;
+}
+
+.te-typo h1, .te-typo h3, .te-typo h5 {
+  font-weight: 600;
+}
+
+.te-typo ul > li, .te-typo ol > li,
+.te-typo .ce-paragraph,
+.te-typo p {
+  line-height: 1.6em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2d3748;
+}
+
+.te-typo b {
+  font-weight: 700;
+}
+
+.te-typo code {
+  background-color: #fff5f5;
+  color: #c53030;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  border-radius: 0.125rem;
+  font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.te-typo mark {
+  background-color: #fefcbf;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
