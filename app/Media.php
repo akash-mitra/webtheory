@@ -6,10 +6,28 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Media extends Model
 {
-    protected $fillable = ['name', 'type', 'size', 'path', 'url', 'storage'];
+    protected $fillable = ['name', 'type', 'size', 'path', 'url', 'storage', 'user_id'];
+
+    protected $appends = ['created_ago', 'updated_ago'];
+    
+    public function author()
+    {
+        return $this->belongsTo('App\User', 'user_id');
+    }
+    
+    public function getCreatedAgoAttribute()
+    {
+        return empty($this->created_at)? null : $this->created_at->diffForHumans();
+    }
+    
+    public function getUpdatedAgoAttribute()
+    {
+        return empty($this->updated_at)? null : $this->updated_at->diffForHumans();
+    }
     
     // Static Global Variables
     protected static $allowedExtensions = ['jpeg', 'jpg', 'png', 'bmp', 'gif'];
@@ -41,17 +59,16 @@ class Media extends Model
             $path = Storage::disk($diskStorageType)->putFile($subDirectory, $file, self::$visibility);
             
             $media = new Media([    
-                'name'       => empty($name)? $file->getClientOriginalName() : $name,
+                'name'       => empty($name) ? $file->getClientOriginalName() : $name,
                 'type'       => $file->guessExtension(), 
                 'size'       => round($sizeInBytes / 1024, 2), // killobytes
                 'path'       => $path,
-                'url'        => ($diskStorageType === 'public')? '/storage/' . $path : Storage::disk($diskStorageType)->url($path),
+                'url'        => ($diskStorageType === 'public') ? '/storage/' . $path : Storage::disk($diskStorageType)->url($path),
                 'storage'    => $diskStorageType,
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'updated_at' => now()->format('Y-m-d H:i:s')
+                'user_id'    => Auth::id()
             ]);
             
-            //if ($register) $media->save();
+            if ($register) $media->save();
 
             return $media;
 
@@ -61,7 +78,7 @@ class Media extends Model
                 if (Storage::disk($diskStorageType)->exists($path)) {
                     Storage::disk($diskStorageType)->delete($path);
                 }
-                //if (!empty ($media) && $register === true) $media->delete();
+                if (!empty ($media) && $register === true) $media->delete();
             }
 
             throw $e;

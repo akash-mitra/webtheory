@@ -7,16 +7,67 @@ use Illuminate\Http\Request;
 
 class MediaController extends Controller
 {
-    public function upload ()
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
-        
-        $uploadedFile = request()->file('image');
-        
-        $media =  Media::store ($uploadedFile);
+        return response()->json(Media::with('author')->get());
+    }
 
-        return [
-            "success" => 1,
-            "file" => [ "url" => $media['url'] ]
-        ];
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function upload(Request $request)
+    {
+        if (!$request->hasFile('image')) {
+            return [
+                "success" => 0,
+                "file" => [ 'id' => null, 'path' => null, 'url' => null ]
+            ];
+        }
+        else if ($request->file('image')->isValid()) {
+            $uploadedFile = $request->file('image');
+            $media =  Media::store($uploadedFile);
+            return [
+                "success" => 1,
+                "file" => [ 'id' => $media['id'], 'path' => $media['path'], 'url' => $media['url'] ]
+            ];
+        } else {
+            return [
+                "success" => 0,
+                "file" => [ 'id' => null, 'path' => null, 'url' => null ]
+            ];
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  Media  $media
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Media $media)
+    {
+        $media->load('author');
+        return response()->json($media);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  Media  $media
+     * @return \Illuminate\Http\Response
+     */
+    public function remove(Media $media)
+    {
+        Media::_destroy($media);
+        
+        return response()->json("success", 204);
     }
 }
