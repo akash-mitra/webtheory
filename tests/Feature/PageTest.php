@@ -79,7 +79,7 @@ class PageTest extends TestDataSetup
                 'created_at', 'updated_at', 
                 'url', 'created_ago', 'updated_ago',
                 'content' => [
-                    'id', 'page_id', 'body', 
+                    'id', 'page_id', 'body_json', 'body_html', 
                     'created_at', 'updated_at'
                 ],
                 'category' => [
@@ -104,7 +104,7 @@ class PageTest extends TestDataSetup
                 'created_at', 'updated_at', 
                 'url', 'created_ago', 'updated_ago',
                 'content' => [
-                    'id', 'page_id', 'body', 
+                    'id', 'page_id', 'body_json', 'body_html', 
                     'created_at', 'updated_at'
                 ],
                 'category' => [
@@ -129,7 +129,7 @@ class PageTest extends TestDataSetup
             'summary' => 'Test Summary',
             'metakey' => 'Test, Meta, Key',
             'metadesc' => 'Test Meta Description',
-            'body' => 'Test Body'
+            'body_json' => 'Test Body'
         ];
 
         // Unauthenticated user cannot save page
@@ -147,7 +147,7 @@ class PageTest extends TestDataSetup
                 'updated_at', 'created_at', 
                 'id', 'url', 'created_ago', 'updated_ago',
                 'content' => [
-                    'id', 'page_id', 'body', 
+                    'id', 'page_id', 'body_json', 'body_html', 
                     'created_at', 'updated_at'
                 ],
                 'category' => [
@@ -174,10 +174,10 @@ class PageTest extends TestDataSetup
             'metakey' => 'Test, Meta, Key',
             'metadesc' => 'Test Meta Description',
         ]);
-        $pagecontent = factory(PageContent::class)->create(['page_id' => $page->id, 'body' => 'Test Body']);
+        $pagecontent = factory(PageContent::class)->create(['page_id' => $page->id, 'body_json' => 'Test Body']);
         
         $page->title = 'Test Title Updated';
-        $page->body = 'Test Body Updated';
+        $page->body_json = 'Test Body Updated';
 
         // Unauthenticated user cannot update page
         $response = $this->put('/api/pages/' . $page->id, $page->toArray(), ['Accept' => 'application/json']);
@@ -194,7 +194,7 @@ class PageTest extends TestDataSetup
                 'created_at', 'updated_at', 
                 'url', 'created_ago', 'updated_ago',
                 'content' => [
-                    'id', 'page_id', 'body', 
+                    'id', 'page_id', 'body_json', 'body_html',
                     'created_at', 'updated_at'
                 ],
                 'category' => [

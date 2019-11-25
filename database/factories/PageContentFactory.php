@@ -8,6 +8,7 @@ use Faker\Generator as Faker;
 $factory->define(PageContent::class, function (Faker $faker) {
     return [
         'page_id' => null,
-        'body' => $faker->paragraph,
+        'body_json' => $faker->paragraph,
+        'body_html' => $faker->paragraph,
     ];
 });

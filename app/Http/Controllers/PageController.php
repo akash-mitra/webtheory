@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use App\Http\Requests\PageRequest;
+use App\ContentConversion;
 use App\Page;
 use App\PageContent;
 
@@ -41,7 +42,10 @@ class PageController extends Controller
             ]);
             $page->save();
 
-            $pagecontent = new PageContent(['body' => $request->body]);
+            $pagecontent = new PageContent([
+                'body_json' => $request->body_json,
+                'body_html' => ContentConversion::getHtml($request->body_json)
+            ]);
             $page->content()->save($pagecontent);
         });
 
@@ -74,7 +78,10 @@ class PageController extends Controller
     {
         DB::transaction(function () use ($request, &$page) {
             $page->fill(request(['category_id', 'title', 'summary', 'metakey', 'metadesc', 'status']))->save();
-            $page->content()->update(['body' => $request->body]);
+            $page->content()->update([
+                'body_json' => $request->body_json,
+                'body_html' => ContentConversion::getHtml($request->body_json)
+            ]);
         });
         
         $page->load('content', 'category', 'author');
