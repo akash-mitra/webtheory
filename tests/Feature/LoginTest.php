@@ -39,8 +39,9 @@ class LoginTest extends TestDataSetup
     // Logout Test
     public function test_logout()
     {
-        Passport::actingAs($this->user);
-        $response = $this->post('/api/logout', [], ['Accept' => 'application/json']);
+        // Passport::actingAs($this->user);
+        // $response = $this->post('/api/logout', [], ['Accept' => 'application/json']);
+        $response = $this->actingAs($this->user)->post('/api/logout', [], ['Accept' => 'application/json']);
         $response->assertStatus(200)
             ->assertJson([
                 'message' => 'Successfully logged out'

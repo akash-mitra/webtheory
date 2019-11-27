@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
+/*
 Route::group(['middleware' => ['cors']], function () {
     Route::post('login', 'LoginController@login');
 
@@ -40,6 +41,9 @@ Route::group(['middleware' => ['auth:api', 'cors']], function () {
     Route::post('media', 'MediaController@upload')->name('media.upload');
     Route::delete('media/{media}', 'MediaController@remove')->name('media.remove');
 });
+
+*/
+
 
 // Route::apiResources([
 //     'categories' => 'CategoryController',
