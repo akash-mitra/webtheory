@@ -1,12 +1,13 @@
 <template>
-    <p>Hello     
-    </p>
+    <p>Hello</p>
 </template>
 
 <script>
     export default {
-        props: ['message'],
-
+        
+        mounted() {
+            console.log('this is pages app')
+        }
         
     };
 

@@ -1,1 +1,0 @@
-Vue.component('tensor-editor', require('./apps/Editor.vue').default);

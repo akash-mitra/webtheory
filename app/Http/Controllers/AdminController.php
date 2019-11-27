@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function dashboard()
+    // catch all route under /app 
+    public function app()
     {
-        return view('backend.dashboard');
+        return view('app');
     }
 }

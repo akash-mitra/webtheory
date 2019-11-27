@@ -1,10 +1,19 @@
 require('./bootstrap');
-require('./util.js');
+// require('./util.js');
 
-// import Vue from 'vue';
-window.Vue = require('vue');
+import routes from './routes.js';
 
+import Vue from 'vue';
+// window.Vue = require('vue');
 
+import VueRouter from 'vue-router';
+
+Vue.use(VueRouter);
+
+let app = new Vue({
+    el: '#app',
+    router: new VueRouter(routes)
+})
 
 /**
  * The following block of code may be used to automatically register your
@@ -13,30 +22,30 @@ window.Vue = require('vue');
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
-import upperFirst from 'lodash/upperFirst'
-import camelCase from 'lodash/camelCase'
+// import upperFirst from 'lodash/upperFirst'
+// import camelCase from 'lodash/camelCase'
 
-const requireComponent = require.context('./components', true, /\.vue$/i)
+// const requireComponent = require.context('./components', true, /\.vue$/i)
 
-requireComponent.keys().forEach(fileName => {
-    // Get component config
-    const componentConfig = requireComponent(fileName)
+// requireComponent.keys().forEach(fileName => {
+//     // Get component config
+//     const componentConfig = requireComponent(fileName)
     
-    // Get PascalCase name of component
-    const componentName = componentConfig.name || upperFirst(
-        camelCase(
-            // Strip the leading `./` and extension from the filename
-            fileName.replace(/^\.\/(.*)\.\w+$/, '$1')
-        )
-    )
+//     // Get PascalCase name of component
+//     const componentName = componentConfig.name || upperFirst(
+//         camelCase(
+//             // Strip the leading `./` and extension from the filename
+//             fileName.replace(/^\.\/(.*)\.\w+$/, '$1')
+//         )
+//     )
 
-    // Register component globally
-    Vue.component(
-        componentName,
-        // Look for the component options on `.default`, which will
-        // exist if the component was exported with `export default`,
-        // otherwise fall back to module's root.
-        componentConfig.default || componentConfig
-    )
-})
+//     // Register component globally
+//     Vue.component(
+//         componentName,
+//         // Look for the component options on `.default`, which will
+//         // exist if the component was exported with `export default`,
+//         // otherwise fall back to module's root.
+//         componentConfig.default || componentConfig
+//     )
+// })
 

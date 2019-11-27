@@ -1,18 +1,14 @@
 const mix = require('laravel-mix');
-
 const tailwindcss = require('tailwindcss')
 
-/*
- |--------------------------------------------------------------------------
- | Mix Asset Management
- |--------------------------------------------------------------------------
- |
- | Mix provides a clean, fluent API for defining some Webpack build steps
- | for your Laravel application. By default, we are compiling the Sass
- | file for the application as well as bundling up all the JS files.
- |
- */
 
+// this is added to give webpack the ability to do dynamic import
+mix.babelConfig({
+  plugins: ['@babel/plugin-syntax-dynamic-import'],
+});
+
+
+// CSS and JS files
 mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .sass('resources/sass/typography.scss', 'public/css')
@@ -22,7 +18,7 @@ mix.js('resources/js/app.js', 'public/js')
       });
 
 
-mix.js('resources/js/editor.js', 'public/js');
+
 
 // useful but buggy!
 // mix.browserSync('https://localhost:3000/');

@@ -39,12 +39,18 @@ Route::prefix('api')->group(function () {
     Route::delete('media/{media}', 'MediaController@remove')->name('api.media.remove');
 });
 
-// Route::get('/', function () {
-//     return view('app');
-// });
 
-Route::get('/admin', 'AdminController@dashboard');
 
-Route::get('/admin/pages/create', 'AdminPageController@create');
 
-Route::post('/admin/media/uploadFile', 'MediaController@upload');
+//-----------------------------------------------------------------------------
+// This is the main entry point for the SPA
+// (This routes needs to be protected by Admin auth later)
+//-----------------------------------------------------------------------------
+Route::get('/app/{any}', 'AdminController@app')->where('any', '.*')->name('app');
+
+
+
+
+//-----------------------------------------------------------------------------
+// 
+Route::post('/server/media/uploadFile', 'MediaController@upload');
