@@ -1286,7 +1286,7 @@ Vue.component('tensor-editor', __webpack_require__(/*! ./apps/Editor.vue */ "./r
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/akash/code/blog-theory-app/resources/js/editor.js */"./resources/js/editor.js");
+module.exports = __webpack_require__(/*! /Users/akash/code/webtheory/resources/js/editor.js */"./resources/js/editor.js");
 
 
 /***/ })
