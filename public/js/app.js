@@ -18135,8 +18135,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
-__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js"); // require('./util.js');
+__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+__webpack_require__(/*! ./util.js */ "./resources/js/util.js");
 
 
  // window.Vue = require('vue');
@@ -18145,7 +18146,10 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js"); // requir
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]);
 var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   el: '#app',
-  router: new vue_router__WEBPACK_IMPORTED_MODULE_2__["default"](_routes_js__WEBPACK_IMPORTED_MODULE_0__["default"])
+  router: new vue_router__WEBPACK_IMPORTED_MODULE_2__["default"](_routes_js__WEBPACK_IMPORTED_MODULE_0__["default"]),
+  data: {
+    showDropDownMenu: 0
+  }
 });
 /**
  * The following block of code may be used to automatically register your
@@ -18337,6 +18341,187 @@ var PageEditor = function PageEditor() {
     component: PageEditor
   }]
 });
+
+/***/ }),
+
+/***/ "./resources/js/util.js":
+/*!******************************!*\
+  !*** ./resources/js/util.js ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+(function (util, undefined) {
+  //Private Property
+  var isHot = true; // Public properties
+
+  util.token = document.head.querySelector('meta[name="csrf-token"]'); //Public Methods
+
+  /**
+   * Generic DOM Selector 
+   */
+
+  util.get = function (selector) {
+    return document.querySelector(selector);
+  };
+
+  util.click = function (selector, callback) {
+    var els = document.querySelectorAll(selector);
+    var l = els.length;
+
+    for (var i = 0; i < l; i++) {
+      var el = els[i];
+      el.addEventListener("click", callback);
+    }
+  };
+
+  util.confirm = function (message) {
+    var positiveCallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    var negativeCallback = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+    if (typeof positiveCallback != 'function') {
+      positiveCallback = function positiveCallback() {};
+    }
+
+    if (typeof negativeCallback != 'function') {
+      negativeCallback = function negativeCallback() {};
+    }
+
+    if (confirm(message)) positiveCallback();else negativeCallback();
+  };
+  /**
+   * ---------------------------------------------------------------
+   * Creates a form with the given data and submits the form to the
+   * provided URL. If no data is provided, empty form is submitted.
+   * ---------------------------------------------------------------*/
+
+
+  util.submit = function (url, data, method) {
+    if (typeof url === 'undefined') {
+      return;
+    }
+
+    if (typeof data === 'undefined') {
+      data = {};
+    }
+
+    if (typeof method === 'undefined') {
+      method = 'post';
+    }
+
+    var form = document.createElement('form');
+    form.method = method.toLowerCase() === 'get' ? 'GET' : 'POST';
+    form.action = url;
+
+    for (var key in data) {
+      if (data.hasOwnProperty(key)) {
+        var hiddenField = document.createElement('input');
+        hiddenField.type = 'hidden';
+        hiddenField.name = key;
+        hiddenField.value = data[key];
+        form.appendChild(hiddenField);
+      }
+    }
+
+    var csrfField = document.createElement('input');
+    csrfField.type = 'hidden';
+    csrfField.name = '_token';
+    csrfField.value = util.token.content;
+    form.appendChild(csrfField);
+
+    if (method.toLowerCase() === 'delete' || method.toLowerCase() === 'patch' || method.toLowerCase() === 'put') {
+      var methodField = document.createElement('input');
+      methodField.type = 'hidden';
+      methodField.name = '_method';
+      methodField.value = method.toUpperCase();
+      form.appendChild(methodField);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+  };
+  /**
+   * ---------------------------------------------------------------
+   * Makes ajax request to the URL with or without the given data
+   * ---------------------------------------------------------------*/
+
+
+  util.ajax = function (type, url, data, success_handler, client_error_handler, server_error_handler, other_error_handler) {
+    if (typeof type === 'undefined') type = 'post';
+    if (typeof url === 'undefined') return;
+    if (typeof data === 'undefined') data = {};
+    if (typeof success_handler === 'undefined') success_handler = function success_handler(response_data) {
+      alert('Operation completed successfully');
+      console.log(response_data);
+    };
+
+    var general_error_handler = function general_error_handler(statusCode, data) {
+      var message = data.hasOwnProperty('message') ? data.message : 'There is an error while trying to reach server.';
+      alert(statusCode + ': ' + message);
+      console.log(data);
+    };
+
+    if (typeof client_error_handler === 'undefined') client_error_handler = general_error_handler;
+    if (typeof server_error_handler === 'undefined') server_error_handler = general_error_handler;
+    if (typeof other_error_handler === 'undefined') other_error_handler = general_error_handler;
+    var handler;
+
+    switch (type.toLowerCase()) {
+      case 'get':
+        handler = axios.get(url);
+        break;
+
+      case 'post':
+        handler = axios.post(url, data);
+        break;
+
+      case 'patch':
+        handler = axios.patch(url, data);
+        break;
+
+      case 'delete':
+        handler = axios["delete"](url);
+    }
+
+    handler.then(function (response) {
+      console.log('success');
+      success_handler(response.data);
+    });
+    handler["catch"](function (error) {
+      // Error
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        if (error.response.status >= 400 && error.response.status < 500) {
+          client_error_handler(error.response.status, error.response.data);
+        }
+
+        if (error.response.status >= 500) {
+          server_error_handler(error.response.status, error.response.data);
+        } // console.log(error.response.headers);
+
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser 
+        other_error_handler('204', 'The request was made but no response was received. Please try again later.');
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        other_error_handler('000', 'Something wrong happened in setting up the request.');
+        console.log('Error', error.message);
+      } // console.log(error.config);
+
+    });
+  }; // axios.patch('/admin/categories/' + this.id, {
+  //         'name': this.name, 'description': this.description, 'parent_id': this.parent_id
+  // }).then((response) => {
+  //         flash({ message: response.data.flash.message })
+  // })
+  // .catch
+  //Private Method
+  // function addItem(item) {}
+
+})(window.util = window.util || {});
 
 /***/ }),
 

@@ -1,5 +1,5 @@
 require('./bootstrap');
-// require('./util.js');
+require('./util.js');
 
 import routes from './routes.js';
 
@@ -12,7 +12,10 @@ Vue.use(VueRouter);
 
 let app = new Vue({
     el: '#app',
-    router: new VueRouter(routes)
+    router: new VueRouter(routes),
+    data: {
+        showDropDownMenu: 0,
+    }
 })
 
 /**
