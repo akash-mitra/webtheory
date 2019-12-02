@@ -32,10 +32,10 @@
                     </svg>
                 </div>
 
-                <nav id="nav-menu" class="hidden md:block px-4 lg:px-8 md:flex py-4 md:py-0">
-                    <p class="px-2 md:px-4 tracking-wide text-sm uppercase py-2 text-blue-700">Pages</p>
-                    <p class="px-2 md:px-4 tracking-wide text-sm uppercase py-2 text-gray-500">Categories</p>
-                    <p class="px-2 md:px-4 tracking-wide text-sm uppercase py-2 text-gray-500">Settings</p>
+                <nav id="nav-menu" class="hidden md:block px-4 lg:px-8 md:flex py-4 md:py-0 w-full max-w-4xl">
+                    <p class="px-2 md:px-6 tracking-wide text-sm py-2 text-blue-700">Pages</p>
+                    <p class="px-2 md:px-6 tracking-wide text-sm py-2 text-gray-500">Categories</p>
+                    <p class="px-2 md:px-6 tracking-wide text-sm py-2 text-gray-500">Settings</p>
                 </nav>
 
             </div>

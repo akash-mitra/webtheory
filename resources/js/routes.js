@@ -23,6 +23,11 @@ export default {
             path: '/app/pages/create',
             component: PageEditor
         },
+
+        {
+            path: '/app/pages/:id',
+            component: PageEditor
+        },
     ]
 
 }

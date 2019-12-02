@@ -122,12 +122,15 @@
                     case 'patch':
                             handler = axios.patch(url, data);
                             break;
+                    case 'put':
+                            handler = axios.put(url, data);
+                            break;
                     case 'delete':
                             handler = axios.delete(url);
             }
 
             handler.then((response) => {
-                    console.log('success')
+                    
                     success_handler(response.data)
             });
 
