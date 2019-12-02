@@ -2,13 +2,13 @@ require('./bootstrap');
 require('./util.js');
 
 import routes from './routes.js';
-
 import Vue from 'vue';
-// window.Vue = require('vue');
-
 import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
+
+Vue.component('t-loader', require('./ui/TensorLoader.vue').default);
+Vue.component('t-button', require('./ui/TensorButton.vue').default);
 
 let app = new Vue({
     el: '#app',
