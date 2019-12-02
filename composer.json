@@ -10,10 +10,13 @@
     "require": {
         "php": "^7.2",
         "barryvdh/laravel-cors": "^0.11.4",
+        "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
+        "laravel/cashier": "^10.5",
         "laravel/framework": "^6.2",
         "laravel/helpers": "^1.1",
         "laravel/passport": "^8.0",
+        "laravel/socialite": "^4.3",
         "laravel/tinker": "^1.0"
     },
     "require-dev": {

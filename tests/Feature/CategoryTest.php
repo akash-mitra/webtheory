@@ -19,7 +19,7 @@ class CategoryTest extends TestDataSetup
             ->assertJsonStructureExact([
                 '*' => [
                     'id', 'name', 'parent_id', 'description', 
-                    'created_at', 'updated_at', 
+                    'created_at', 'updated_at', 'deleted_at', 
                     'url', 'created_ago', 'updated_ago'
                 ]
             ]);
@@ -32,7 +32,7 @@ class CategoryTest extends TestDataSetup
             ->assertJsonStructureExact([
                 '*' => [
                     'id', 'name', 'parent_id', 'description', 
-                    'created_at', 'updated_at', 
+                    'created_at', 'updated_at', 'deleted_at', 
                     'url', 'created_ago', 'updated_ago'
                 ]
             ]);
@@ -50,7 +50,7 @@ class CategoryTest extends TestDataSetup
             ->assertJsonFragment(['name' => $category->name])
             ->assertJsonStructureExact([
                 'id', 'name', 'parent_id', 'description', 
-                'created_at', 'updated_at', 
+                'created_at', 'updated_at', 'deleted_at', 
                 'url', 'created_ago', 'updated_ago'
             ]);
         $this->assertDatabaseHas('categories', ['name' => $category->name]);
@@ -62,7 +62,7 @@ class CategoryTest extends TestDataSetup
             ->assertJsonFragment(['name' => $category->name])
             ->assertJsonStructureExact([
                 'id', 'name', 'parent_id', 'description', 
-                'created_at', 'updated_at', 
+                'created_at', 'updated_at', 'deleted_at', 
                 'url', 'created_ago', 'updated_ago'
             ]);
         $this->assertDatabaseHas('categories', ['name' => $category->name]);
@@ -85,7 +85,7 @@ class CategoryTest extends TestDataSetup
             ->assertJsonFragment(['name' => $category->name])
             ->assertJsonStructureExact([
                 'name', 'parent_id', 'description', 
-                'updated_at', 'created_at', 
+                'updated_at', 'created_at',  
                 'id', 'url', 'created_ago', 'updated_ago'
             ]);
         $this->assertDatabaseHas('categories', ['name' => $category->name]);
@@ -111,7 +111,7 @@ class CategoryTest extends TestDataSetup
             ->assertJsonFragment(['name' => 'Test Category Updated'])
             ->assertJsonStructureExact([
                 'id', 'name', 'parent_id', 'description', 
-                'created_at', 'updated_at', 
+                'created_at', 'updated_at', 'deleted_at', 
                 'url', 'created_ago', 'updated_ago'
             ]);
         $this->assertDatabaseHas('categories', ['name' => 'Test Category Updated']);
@@ -132,6 +132,6 @@ class CategoryTest extends TestDataSetup
         // Passport::actingAs($this->user);
         $response = $this->delete('/api/categories/' . $category->id);
         $response->assertStatus(204);
-        $this->assertDatabaseMissing('categories', ['name' => $category->name]);
+        $this->assertSoftDeleted('categories', ['name' => $category->name]);
     }
 }

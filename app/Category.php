@@ -4,16 +4,19 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = ['name', 'description', 'parent_id'];
     
     protected $appends = ['url', 'created_ago', 'updated_ago'];
 
     public function parent()
     {
-        return $this->belongsTo('App\Category', 'parent_id')->withDefault();
+        return $this->belongsTo('App\Category', 'parent_id');
     }
     
     public function pages()

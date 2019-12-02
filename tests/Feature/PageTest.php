@@ -23,16 +23,16 @@ class PageTest extends TestDataSetup
             ->assertJsonStructureExact([
                 '*' => [
                     'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'status',
-                    'created_at', 'updated_at', 
+                    'created_at', 'updated_at', 'deleted_at', 
                     'url', 'created_ago', 'updated_ago',
                     'category' => [
                         'id', 'name', 'parent_id', 'description', 
-                        'created_at', 'updated_at', 
+                        'created_at', 'updated_at', 'deleted_at', 
                         'url', 'created_ago', 'updated_ago'
                     ],
                     'author' => [
-                        'id', 'name', 'email', 'email_verified_at', 
-                        'created_at', 'updated_at'
+                        'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
+                        'created_at', 'updated_at', 'deleted_at'
                     ]
                 ]
             ]);
@@ -45,16 +45,16 @@ class PageTest extends TestDataSetup
             ->assertJsonStructureExact([
                 '*' => [
                     'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'status',
-                    'created_at', 'updated_at', 
+                    'created_at', 'updated_at', 'deleted_at', 
                     'url', 'created_ago', 'updated_ago',
                     'category' => [
                         'id', 'name', 'parent_id', 'description', 
-                        'created_at', 'updated_at', 
+                        'created_at', 'updated_at', 'deleted_at', 
                         'url', 'created_ago', 'updated_ago'
                     ],
                     'author' => [
-                        'id', 'name', 'email', 'email_verified_at', 
-                        'created_at', 'updated_at'
+                        'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
+                        'created_at', 'updated_at', 'deleted_at'
                     ]
                 ]
             ]);
@@ -76,7 +76,7 @@ class PageTest extends TestDataSetup
             ->assertJsonFragment(['title' => $page->title])
             ->assertJsonStructureExact([
                 'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'status',
-                'created_at', 'updated_at', 
+                'created_at', 'updated_at', 'deleted_at', 
                 'url', 'created_ago', 'updated_ago',
                 'content' => [
                     'id', 'page_id', 'body_json', 'body_html', 
@@ -84,12 +84,12 @@ class PageTest extends TestDataSetup
                 ],
                 'category' => [
                     'id', 'name', 'parent_id', 'description', 
-                    'created_at', 'updated_at', 
+                    'created_at', 'updated_at', 'deleted_at', 
                     'url', 'created_ago', 'updated_ago'
                 ],
                 'author' => [
-                    'id', 'name', 'email', 'email_verified_at', 
-                    'created_at', 'updated_at'
+                    'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
+                    'created_at', 'updated_at', 'deleted_at'
                 ]
             ]);
         $this->assertDatabaseHas('pages', ['title' => $page->title]);
@@ -101,7 +101,7 @@ class PageTest extends TestDataSetup
             ->assertJsonFragment(['title' => $page->title])
             ->assertJsonStructureExact([
                 'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'status',
-                'created_at', 'updated_at', 
+                'created_at', 'updated_at', 'deleted_at', 
                 'url', 'created_ago', 'updated_ago',
                 'content' => [
                     'id', 'page_id', 'body_json', 'body_html', 
@@ -109,12 +109,12 @@ class PageTest extends TestDataSetup
                 ],
                 'category' => [
                     'id', 'name', 'parent_id', 'description', 
-                    'created_at', 'updated_at', 
+                    'created_at', 'updated_at', 'deleted_at', 
                     'url', 'created_ago', 'updated_ago'
                 ],
                 'author' => [
-                    'id', 'name', 'email', 'email_verified_at', 
-                    'created_at', 'updated_at'
+                    'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
+                    'created_at', 'updated_at', 'deleted_at'
                 ]
             ]);
         $this->assertDatabaseHas('pages', ['title' => $page->title]);
@@ -129,7 +129,7 @@ class PageTest extends TestDataSetup
             'summary' => 'Test Summary',
             'metakey' => 'Test, Meta, Key',
             'metadesc' => 'Test Meta Description',
-            'body_json' => 'Test Body'
+            'body_json' => '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading."}},{"type":"paragraph","data":{"text":"Test Paragraph"}}]}'
         ];
 
         // Unauthenticated user cannot save page
@@ -153,12 +153,12 @@ class PageTest extends TestDataSetup
                 ],
                 'category' => [
                     'id', 'name', 'parent_id', 'description', 
-                    'created_at', 'updated_at', 
+                    'created_at', 'updated_at', 'deleted_at', 
                     'url', 'created_ago', 'updated_ago'
                 ],
                 'author' => [
-                    'id', 'name', 'email', 'email_verified_at', 
-                    'created_at', 'updated_at'
+                    'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
+                    'created_at', 'updated_at', 'deleted_at'
                 ]
             ]);
         $this->assertDatabaseHas('pages', ['title' => $page['title']]);
@@ -175,10 +175,13 @@ class PageTest extends TestDataSetup
             'metakey' => 'Test, Meta, Key',
             'metadesc' => 'Test Meta Description',
         ]);
-        $pagecontent = factory(PageContent::class)->create(['page_id' => $page->id, 'body_json' => 'Test Body']);
+        $pagecontent = factory(PageContent::class)->create([
+            'page_id' => $page->id, 
+            'body_json' => '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading."}},{"type":"paragraph","data":{"text":"Test Paragraph"}}]}'
+        ]);
         
         $page->title = 'Test Title Updated';
-        $page->body_json = 'Test Body Updated';
+        $page->body_json = '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading Updated."}},{"type":"paragraph","data":{"text":"Test Paragraph Updated"}}]}';
 
         // Unauthenticated user cannot update page
         // $response = $this->put('/api/pages/' . $page->id, $page->toArray(), ['Accept' => 'application/json']);
@@ -192,7 +195,7 @@ class PageTest extends TestDataSetup
             ->assertJsonFragment(['title' => 'Test Title Updated'])
             ->assertJsonStructureExact([
                 'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'status',
-                'created_at', 'updated_at', 
+                'created_at', 'updated_at', 'deleted_at', 
                 'url', 'created_ago', 'updated_ago',
                 'content' => [
                     'id', 'page_id', 'body_json', 'body_html',
@@ -200,12 +203,12 @@ class PageTest extends TestDataSetup
                 ],
                 'category' => [
                     'id', 'name', 'parent_id', 'description', 
-                    'created_at', 'updated_at', 
+                    'created_at', 'updated_at', 'deleted_at', 
                     'url', 'created_ago', 'updated_ago'
                 ],
                 'author' => [
-                    'id', 'name', 'email', 'email_verified_at', 
-                    'created_at', 'updated_at'
+                    'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
+                    'created_at', 'updated_at', 'deleted_at'
                 ]
             ]);
         $this->assertDatabaseHas('pages', ['title' => 'Test Title Updated']);
@@ -233,6 +236,6 @@ class PageTest extends TestDataSetup
         // Passport::actingAs($this->user);
         $response = $this->delete('/api/pages/' . $page->id);
         $response->assertStatus(204);
-        $this->assertDatabaseMissing('pages', ['title' => $page->title]);
+        $this->assertSoftDeleted('pages', ['title' => $page->title]);
     }
 }

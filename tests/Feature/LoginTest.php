@@ -19,7 +19,8 @@ class LoginTest extends TestDataSetup
         $response->assertStatus(200)
             ->assertJsonStructureExact([
                 'id', 'name', 'email', 
-                'email_verified_at', 'created_at', 'updated_at', 
+                'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
+                'created_at', 'updated_at', 'deleted_at', 
                 'token_type', 'access_token', 'expires_at'
             ]);
         $this->assertDatabaseHas('users', ['email' => $body['email']]);

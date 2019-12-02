@@ -4,9 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Page extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = ['category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'status'];
     
     protected $appends = ['url', 'created_ago', 'updated_ago'];
@@ -23,10 +26,12 @@ class Page extends Model
     
     public function category()
     {
-        return $this->belongsTo('App\Category', 'category_id')->withDefault([
-            'name' => 'Uncategorized',
-            'description' => null
-        ]);
+        return $this->belongsTo('App\Category', 'category_id');
+
+        // return $this->belongsTo('App\Category', 'category_id')->withDefault([
+        //     'name' => 'Uncategorized',
+        //     'description' => null
+        // ]);
     }
 
     public function getBodyAttribute()

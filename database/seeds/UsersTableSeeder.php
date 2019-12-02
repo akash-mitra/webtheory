@@ -18,8 +18,7 @@ class UsersTableSeeder extends Seeder
             'email' => 'admin@example.com',
             'email_verified_at' => now(),
             // 'password' => Hash::make(str_random(8)),
-            // 'type' => 'admin',
-            // 'role' => 'admin',
+            'role' => 'admin',
         ]);
     }
 }
