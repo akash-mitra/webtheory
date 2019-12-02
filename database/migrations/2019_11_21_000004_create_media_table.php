@@ -21,7 +21,7 @@ class CreateMediaTable extends Migration
             $table->string('path');
             $table->string('url');
             $table->string('storage', 10);
-            $table->bigInteger('user_id')->unsigned();
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });
     }

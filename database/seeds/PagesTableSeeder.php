@@ -15,7 +15,7 @@ class PagesTableSeeder extends Seeder
     public function run()
     {
         $pages1 = factory(Page::class, 3)->create([
-            'category_id' => null,
+            'category_id' => 0,
             'user_id' => 1,
         ])->each(function ($page) {
             $page->content()->save(factory(PageContent::class)->make());

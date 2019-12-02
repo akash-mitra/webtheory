@@ -29,7 +29,7 @@ class PageRequest extends FormRequest
             'summary' => ['nullable', 'string', 'max:1048'],
             'metakey' => ['nullable', 'string', 'max:255'],
             'metadesc' => ['nullable', 'string', 'max:255'],
-            'body_json' => ['required', 'string'],
+            'body_json' => ['required', 'json'],
         ];
     }
 
