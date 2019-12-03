@@ -1,6 +1,6 @@
 <template>
 
-    <div class="w-full">
+    <div class="w-full" @keydown.cmd.83="processShortcutKey($event)" @keydown.ctrl.83="processShortcutKey($event)">
 
         
 
@@ -40,19 +40,19 @@
                         Title
                     </label>
                     
-                    <textarea name="title" v-model="title" class="bg-transparent border-b-2 border-gray-400 h-24 outline-none text-blue-800 text-3xl tracking-wide w-full" placeholder="Title of your story"></textarea>
+                    <textarea name="title" v-model="title" ref="title" class="bg-transparent border-b-2 border-gray-400 h-24 outline-none text-blue-800 text-3xl tracking-wide w-full" placeholder="Title of your story"></textarea>
                 </div>
 
                 <div class="mt-12 mx-auto  max-w-4xl">
                     <label v-show="intro.length===0" class="uppercase text-xs tracking-wider text-gray-700 block pb-2">
                         Intro
                     </label>
-                    <textarea name="intro" v-model="intro" class="bg-transparent border-b-2 border-gray-400 h-24 outline-none text-gray-700 text-lg tracking-wide w-full" placeholder="Provide a 3/4 lines of introduction to your story..."></textarea>
+                    <textarea name="intro" v-model="intro" class="bg-transparent h-24 outline-none text-gray-700 text-lg tracking-wide w-full" placeholder="Provide a 3/4 lines of introduction to your story..."></textarea>
                 </div>
             </div>
 
-            <div class="w-full p-2 bg-gray-100">
-                <div class="max-w-4xl mx-auto bg-white -mt-16 shadow-xl px-6 pt-6">
+            <div class="w-full p-2 bg-gray-100 pb-20">
+                <div class="max-w-4xl mx-auto bg-white -mt-16 shadow-xl px-6 pt-6 border-t-2 border-blue-400">
                     <div id="tensor-editor" class="mt-4 mx-auto text-gray-700 py-4 te-typo bg-white -mr-2"></div>  
                 </div>
             </div>
@@ -61,7 +61,7 @@
 
 
         <!-- meta section -->
-        <div v-show="tab==='meta'" id="page-meta" class="w-full max-w-4xl mx-auto px-4 xl:px-0">
+        <div v-show="tab==='meta'" id="page-meta" class="w-full max-w-4xl mx-auto px-4 xl:px-0 pb-20">
 
             <!-- meta tags -->
             <div class="text-sm text-gray-600 pt-10 pb-3 uppercase">Meta Information</div>
@@ -107,7 +107,7 @@
 
                     <div class="inline-block relative w-64">
                         <select v-model="category_id" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
-                            <option :value="0" selected='selected'>Select Category</option>
+                            <option :value="1" selected='selected'>Uncategorised</option>
                                         
                             <option v-for="category in categories" :value="category.id" v-bind:key="category.id">                        
                                     {{ category.name }}
@@ -146,7 +146,7 @@
                 </div>
             </div> <!-- end of search preview -->
             
-        </div>
+        </div><!-- end of meta section -->
 
 
 
@@ -191,7 +191,7 @@ export default {
                 {id: 4, name: 'Cyan'},
             ],
 
-            tab: 'meta',
+            tab: 'content',
             isSaving: false,
         }
     },
@@ -204,7 +204,16 @@ export default {
 
         this.fetchContentDataFromServer()
 
+        
+
+
+
     }, // end of created
+
+
+    mounted: function () {
+        this.focusInput()
+    },
 
 
     methods: {
@@ -392,13 +401,25 @@ export default {
 
         }, // end of loadEditorTool
 
+        focusInput: function () {
+
+            this.$refs.title.focus()
+        },
+
+        processShortcutKey: function (event) {
+            this.initiateSave()
+
+            if (event) {
+                event.preventDefault()
+            }
+        },
 
 
     }, // end of methods
 
     computed: {
         url: function () {
-            return 'https://yoursite.com/slug'; 
+            return 'https://yoursite.com/' + this.id + '-' + this.title.replace(/\W+/g, '-').toLowerCase(); 
         }
     } 
 }

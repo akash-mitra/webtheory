@@ -8,7 +8,7 @@
 export default {
     
     props: {
-        size: { required: true, type: Number, default: 24 }
+        size: { required: true, type: String, default: "24" }
     }
 }
 
