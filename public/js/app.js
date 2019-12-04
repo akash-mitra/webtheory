@@ -2034,8 +2034,8 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     size: {
       required: true,
-      type: Number,
-      "default": 24
+      type: String,
+      "default": "24"
     }
   }
 });
