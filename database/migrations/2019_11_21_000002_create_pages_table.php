@@ -16,11 +16,12 @@ class CreatePagesTable extends Migration
         Schema::create('pages', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('category_id')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('user_id');
             $table->string('title', 100);
             $table->string('summary', 1048)->nullable();
             $table->string('metakey')->nullable();
             $table->string('metadesc')->nullable();
+            $table->unsignedInteger('media_id')->nullable();
             $table->string('status', 30)->default('Draft');
             $table->timestamps();
             $table->softDeletes();

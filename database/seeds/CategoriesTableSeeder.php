@@ -18,10 +18,13 @@ class CategoriesTableSeeder extends Seeder
             'name' => 'Uncategorized',
             'parent_id' => null,
             'description' => 'Uncategorized',
+            'user_id' => 1,
             'created_at' => now(),
             'updated_at' => now()
         ]);
 
-        factory(Category::class, 10)->create();
+        factory(Category::class, 10)->create([
+            'user_id' => 1,
+        ]);
     }
 }

@@ -20,5 +20,13 @@ class UsersTableSeeder extends Seeder
             // 'password' => Hash::make(str_random(8)),
             'role' => 'admin',
         ]);
+
+        factory(User::class, 2)->create([
+            'role' => 'author',
+        ]);
+        
+        factory(User::class, 10)->create([
+            'role' => 'registered',
+        ]);
     }
 }

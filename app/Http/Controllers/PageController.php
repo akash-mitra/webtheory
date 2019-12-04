@@ -18,7 +18,7 @@ class PageController extends Controller
      */
     public function index()
     {
-        return response()->json(Page::with('category', 'author')->get());
+        return response()->json(Page::with('category', 'author', 'media')->get());
     }
 
     /**
@@ -38,6 +38,7 @@ class PageController extends Controller
                 'summary' => $request->summary,
                 'metakey' => $request->metakey,
                 'metadesc' => $request->metadesc,
+                'media_id' => $request->media_id,
                 'status' => 'Draft'
             ]);
             $page->save();
@@ -49,7 +50,7 @@ class PageController extends Controller
             $page->content()->save($pagecontent);
         });
 
-        $page->load('content', 'category', 'author');
+        $page->load('content');
 
         return response()->json($page);
     }
@@ -62,7 +63,7 @@ class PageController extends Controller
      */
     public function show(Page $page)
     {
-        $page->load('content', 'category', 'author');
+        $page->load('content', 'category', 'author', 'media');
         
         return response()->json($page);
     }
@@ -77,14 +78,14 @@ class PageController extends Controller
     public function update(PageRequest $request, Page $page)
     {
         DB::transaction(function () use ($request, &$page) {
-            $page->fill(request(['category_id', 'title', 'summary', 'metakey', 'metadesc', 'status']))->save();
+            $page->fill(request(['category_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status']))->save();
             $page->content()->update([
                 'body_json' => $request->body_json,
                 'body_html' => ContentConversion::getHtml($request->body_json)
             ]);
         });
         
-        $page->load('content', 'category', 'author');
+        $page->load('content');
         
         return response()->json($page);
     }
@@ -100,5 +101,18 @@ class PageController extends Controller
         $page->delete();
         
         return response()->json("success", 204);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  Page  $page
+     * @return \Illuminate\Http\Response
+     */
+    public function comments(Page $page)
+    {
+        $page->load('comments.user', 'comments.subcomments');
+        
+        return response()->json($page);
     }
 }

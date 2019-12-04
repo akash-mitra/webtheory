@@ -10,6 +10,6 @@ class PageContent extends Model
     
     public function page()
     {
-        return $this->belongsTo('App\PageContent', 'page_id');
+        return $this->belongsTo('App\Page', 'page_id');
     }
 }

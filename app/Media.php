@@ -18,6 +18,16 @@ class Media extends Model
     {
         return $this->belongsTo('App\User', 'user_id');
     }
+
+    public function categories()
+    {
+        return $this->hasMany('App\Category', 'media_id');
+    }
+
+    public function pages()
+    {
+        return $this->hasMany('App\Page', 'media_id');
+    }
     
     public function getCreatedAgoAttribute()
     {

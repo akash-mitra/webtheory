@@ -10,7 +10,7 @@ class Page extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'status'];
+    protected $fillable = ['category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'status', 'media_id'];
     
     protected $appends = ['url', 'created_ago', 'updated_ago'];
     
@@ -32,6 +32,16 @@ class Page extends Model
         //     'name' => 'Uncategorized',
         //     'description' => null
         // ]);
+    }
+
+    public function media()
+    {
+        return $this->belongsTo('App\Media', 'media_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany('App\PageComment', 'reference_id');
     }
 
     public function getBodyAttribute()

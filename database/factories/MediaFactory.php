@@ -14,6 +14,6 @@ $factory->define(Media::class, function (Faker $faker) {
         'path' => 'media/' . $filename,
         'url' => '/storage/media/' . $filename,
         'storage' => 'public',
-        // 'user_id' => 1,
+        'user_id' => 1,
     ];
 });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CategoryRequest;
 use App\Category;
 
@@ -14,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return response()->json(Category::all());
+        return response()->json(Category::with('media', 'author')->get());
     }
 
     /**
@@ -28,7 +29,11 @@ class CategoryController extends Controller
         $category = new Category([
             'name' => $request->name,
             'parent_id' => $request->parent_id,
-            'description' => $request->description
+            'description' => $request->description,
+            'metakey' => $request->metakey,
+            'metadesc' => $request->metadesc,
+            'media_id' => $request->media_id,
+            'user_id' => Auth::id(),
         ]);
         $category->save();
 
@@ -43,6 +48,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
+        $category->load('media', 'author');
         return response()->json($category);
     }
 
@@ -55,7 +61,7 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
-        $category->fill(request(['name', 'parent_id', 'description']))->save();
+        $category->fill(request(['name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id']))->save();
 
         return response()->json($category);
     }
@@ -71,5 +77,18 @@ class CategoryController extends Controller
         $category->delete();
         
         return response()->json("success", 204);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  Category  $category
+     * @return \Illuminate\Http\Response
+     */
+    public function comments(Category $category)
+    {
+        $category->load('comments.user', 'comments.subcomments');
+        
+        return response()->json($category);
     }
 }

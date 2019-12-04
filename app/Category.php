@@ -10,7 +10,7 @@ class Category extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name', 'description', 'parent_id'];
+    protected $fillable = ['name', 'description', 'parent_id', 'metakey', 'metadesc', 'media_id', 'user_id'];
     
     protected $appends = ['url', 'created_ago', 'updated_ago'];
 
@@ -18,15 +18,30 @@ class Category extends Model
     {
         return $this->belongsTo('App\Category', 'parent_id');
     }
-    
+
+    public function subcategories()
+    {
+        return $this->hasMany('App\Category', 'parent_id');
+    }
+
+    public function media()
+    {
+        return $this->belongsTo('App\Media', 'media_id');
+    }
+
+    public function author()
+    {
+        return $this->belongsTo('App\User', 'user_id');
+    }
+
     public function pages()
     {
         return $this->hasMany('App\Page');
     }
 
-    public function subcategories()
+    public function comments()
     {
-        return $this->hasMany('App\Category', 'parent_id');
+        return $this->hasMany('App\CategoryComment', 'reference_id');
     }
 
     public function getUrlAttribute()

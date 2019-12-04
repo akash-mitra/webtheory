@@ -18,6 +18,10 @@ class CreateCategoriesTable extends Migration
             $table->string('name');
             $table->unsignedInteger('parent_id')->nullable();
             $table->string('description', 500)->nullable();
+            $table->string('metakey')->nullable();
+            $table->string('metadesc')->nullable();
+            $table->unsignedInteger('media_id')->nullable();
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->softDeletes();
         });
