@@ -92,15 +92,29 @@ class PageController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the page status.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  Page  $page
      * @return \Illuminate\Http\Response
      */
-    public function updatepage(Request $request, Page $page)
+    public function updateStatus(Request $request, Page $page)
     {
-        $page->fill(request(['category_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status']))->save();
+        $page->fill(request(['status']))->save();
+        
+        return response()->json($page);
+    }
+
+    /**
+     * Update the page owner.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Page  $page
+     * @return \Illuminate\Http\Response
+     */
+    public function updateOwner(Request $request, Page $page)
+    {
+        $page->fill(request(['user_id']))->save();
         
         return response()->json($page);
     }

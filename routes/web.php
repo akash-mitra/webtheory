@@ -38,7 +38,8 @@ Route::prefix('api')->group(function () {
 
     Route::post('pages', 'PageController@store')->name('api.pages.store');
     Route::put('pages/{page}', 'PageController@update')->name('api.pages.update');
-    Route::put('pageupdate/{page}', 'PageController@updatepage')->name('api.pages.updatepage');
+    Route::put('pages/{page}/status', 'PageController@updateStatus')->name('api.pages.updatestatus');
+    Route::put('pages/{page}/owner', 'PageController@updateOwner')->name('api.pages.updateowner');
     Route::delete('pages/{page}', 'PageController@destroy')->name('api.pages.destroy');
 
     Route::get('media', 'MediaController@index')->name('api.media.index');
@@ -59,6 +60,10 @@ Route::prefix('api')->group(function () {
     Route::put('comments/pages/{pagecomment}/dislike', 'PageCommentController@dislike')->name('api.pagecomments.dislike');
 
     Route::get('users/comments', 'ProfileController@comments')->name('api.users.comments');
+
+    Route::get('lov/categories', 'LovController@categories')->name('api.lov.categories');
+    Route::get('lov/authors', 'LovController@authors')->name('api.lov.authors');
+
 });
 
 
