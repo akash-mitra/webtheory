@@ -1,12 +1,107 @@
 <template>
-    <p>Hello</p>
+    
+
+
+    <div class="max-w-4xl mx-auto">
+
+
+        <div class="px-6 my-6 w-full flex justify-between items-center">
+            <h2 class="text-gray-500 text-2xl">Pages</h2>
+            <a href="/app/pages/create" class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow">Create</a>
+        </div>
+
+        <div class="px-6">
+            <input type="text" 
+                class="w-full rounded-lg shadow px-4 py-3 text-sm focus:outline-none" 
+                name="search"
+                placeholder="Search by page title, category or author..."
+                v-model="searchPhrase"
+            />
+        </div>
+
+
+        <div class="px-6 w-full flex justify-start items-center my-8 border-b">
+            <div @click="tab='all'" class="px-4 text-sm uppercase cursor-pointer" :class="tab==='all'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">All</div>
+            <div @click="tab='draft'" class="px-4 text-sm uppercase cursor-pointer" :class="tab==='draft'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Draft</div>
+            
+        </div>
+
+        <div class="px-6">
+
+            <div v-for="page in filteredPages" class="w-full bg-white shadow border-t border-blue-200 rounded my-4">
+                <div class="w-full relative cursor-pointer" @click="openPageEditor(page.id)">
+                    <div v-if="page.status==='Draft'" class="absolute top-0 mt-4 right-0 mr-8 px-2 py-1 text-xs text-gray-500 bg-white flex items-center border rounded-lg border-gray-500">draft</div>
+                    <h3 class="px-6 pt-4 text-blue-400 text-sm">{{ page.category ? page.category.name : '' }}</h3>
+                    <h3 class="px-6 pt-2 text-gray-700 font-semibold text-sm">{{ page.title }}</h3>
+                    <div class="px-6 py-4 text-sm text-gray-600">{{ page.summary }}</div>
+                </div>
+
+                <div class="px-6 py-2 bg-gray-100 text-xs flex justify-between items-center" @mouseover="selected = page.id" @mouseleave="selected = null">
+                    <div class="mr-4 text-gray-700 flex items-center">
+                        <img :src="page.author.avatar" class="h-6 w-6 rounded-full mr-4"/>
+                        {{ page.author.name }} updated {{ page.updated_ago}}
+                    </div>
+                    <div v-show="selected===page.id" @click="unpublish(page)" class="text-blue-600 mr-4 cursor-pointer hover:text-red-600">Unpublish</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </template>
 
 <script>
     export default {
         
-        mounted() {
-            console.log('this is pages app')
+        data() {
+            return {
+                pages: [],
+                selected: null,
+                tab: 'all',
+                searchPhrase: ''
+            }
+        },
+
+        created() {
+            util.ajax ('get', '/api/pages', {},  (response) => { this.pages = response })
+        },
+
+        computed: {
+            filteredPages () {
+                return this.pages.filter((page) => {
+
+                    if(this.tab === 'draft' && page.status != 'Draft') return false
+
+                    if(this.tab === 'deleted' && page.deleted_at == null) return false
+
+                    if (this.searchPhrase.length > 0 
+                        && page.title.indexOf(this.searchPhrase) === -1
+                        && page.summary.indexOf(this.searchPhrase) === -1
+                        && page.author.name.indexOf(this.searchPhrase) === -1) 
+                        return false
+
+
+                    return true
+
+                })
+            }
+        },
+
+        methods: {
+            openPageEditor (id) {
+                this.$router.push({ path: `/app/pages/${id}` })
+            },
+
+            unpublish (page) {
+                page.status = 'Draft'
+
+                this.save(page)
+            },
+
+            save (page) {
+                // util.ajax ('put', '/api/pages/' + page.id, page, (response) => {
+                //     console.log(response)
+                // }) 
+            }
         }
         
     };

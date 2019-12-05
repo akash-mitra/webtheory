@@ -1957,9 +1957,95 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {
-    console.log('this is pages app');
+  data: function data() {
+    return {
+      pages: [],
+      selected: null,
+      tab: 'all',
+      searchPhrase: ''
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    util.ajax('get', '/api/pages', {}, function (response) {
+      _this.pages = response;
+    });
+  },
+  computed: {
+    filteredPages: function filteredPages() {
+      var _this2 = this;
+
+      return this.pages.filter(function (page) {
+        if (_this2.tab === 'draft' && page.status != 'Draft') return false;
+        if (_this2.tab === 'deleted' && page.deleted_at == null) return false;
+        if (_this2.searchPhrase.length > 0 && page.title.indexOf(_this2.searchPhrase) === -1 && page.summary.indexOf(_this2.searchPhrase) === -1 && page.author.name.indexOf(_this2.searchPhrase) === -1) return false;
+        return true;
+      });
+    }
+  },
+  methods: {
+    openPageEditor: function openPageEditor(id) {
+      this.$router.push({
+        path: "/app/pages/".concat(id)
+      });
+    },
+    unpublish: function unpublish(page) {
+      page.status = 'Draft';
+      this.save(page);
+    },
+    save: function save(page) {// util.ajax ('put', '/api/pages/' + page.id, page, (response) => {
+      //     console.log(response)
+      // }) 
+    }
   }
 });
 
@@ -3241,9 +3327,218 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("p", [_vm._v("Hello")])
+  return _c("div", { staticClass: "max-w-4xl mx-auto" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "px-6" }, [
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.searchPhrase,
+            expression: "searchPhrase"
+          }
+        ],
+        staticClass:
+          "w-full rounded-lg shadow px-4 py-3 text-sm focus:outline-none",
+        attrs: {
+          type: "text",
+          name: "search",
+          placeholder: "Search by page title, category or author..."
+        },
+        domProps: { value: _vm.searchPhrase },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.searchPhrase = $event.target.value
+          }
+        }
+      })
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "px-6 w-full flex justify-start items-center my-8 border-b"
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "px-4 text-sm uppercase cursor-pointer",
+            class:
+              _vm.tab === "all"
+                ? "text-gray-700 py-2 border-b-4 border-blue-500"
+                : "text-gray-500 py-2",
+            on: {
+              click: function($event) {
+                _vm.tab = "all"
+              }
+            }
+          },
+          [_vm._v("All")]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "px-4 text-sm uppercase cursor-pointer",
+            class:
+              _vm.tab === "draft"
+                ? "text-gray-700 py-2 border-b-4 border-blue-500"
+                : "text-gray-500 py-2",
+            on: {
+              click: function($event) {
+                _vm.tab = "draft"
+              }
+            }
+          },
+          [_vm._v("Draft")]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "px-6" },
+      _vm._l(_vm.filteredPages, function(page) {
+        return _c(
+          "div",
+          {
+            staticClass:
+              "w-full bg-white shadow border-t border-blue-200 rounded my-4"
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "w-full relative cursor-pointer",
+                on: {
+                  click: function($event) {
+                    return _vm.openPageEditor(page.id)
+                  }
+                }
+              },
+              [
+                page.status === "Draft"
+                  ? _c(
+                      "div",
+                      {
+                        staticClass:
+                          "absolute top-0 mt-4 right-0 mr-8 px-2 py-1 text-xs text-gray-500 bg-white flex items-center border rounded-lg border-gray-500"
+                      },
+                      [_vm._v("draft")]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("h3", { staticClass: "px-6 pt-4 text-blue-400 text-sm" }, [
+                  _vm._v(_vm._s(page.category ? page.category.name : ""))
+                ]),
+                _vm._v(" "),
+                _c(
+                  "h3",
+                  {
+                    staticClass: "px-6 pt-2 text-gray-700 font-semibold text-sm"
+                  },
+                  [_vm._v(_vm._s(page.title))]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "px-6 py-4 text-sm text-gray-600" }, [
+                  _vm._v(_vm._s(page.summary))
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass:
+                  "px-6 py-2 bg-gray-100 text-xs flex justify-between items-center",
+                on: {
+                  mouseover: function($event) {
+                    _vm.selected = page.id
+                  },
+                  mouseleave: function($event) {
+                    _vm.selected = null
+                  }
+                }
+              },
+              [
+                _c(
+                  "div",
+                  { staticClass: "mr-4 text-gray-700 flex items-center" },
+                  [
+                    _c("img", {
+                      staticClass: "h-6 w-6 rounded-full mr-4",
+                      attrs: { src: page.author.avatar }
+                    }),
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(page.author.name) +
+                        " updated " +
+                        _vm._s(page.updated_ago) +
+                        "\n                "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.selected === page.id,
+                        expression: "selected===page.id"
+                      }
+                    ],
+                    staticClass:
+                      "text-blue-600 mr-4 cursor-pointer hover:text-red-600",
+                    on: {
+                      click: function($event) {
+                        return _vm.unpublish(page)
+                      }
+                    }
+                  },
+                  [_vm._v("Unpublish")]
+                )
+              ]
+            )
+          ]
+        )
+      }),
+      0
+    )
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "px-6 my-6 w-full flex justify-between items-center" },
+      [
+        _c("h2", { staticClass: "text-gray-500 text-2xl" }, [_vm._v("Pages")]),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass:
+              "bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow",
+            attrs: { href: "/app/pages/create" }
+          },
+          [_vm._v("Create")]
+        )
+      ]
+    )
+  }
+]
 render._withStripped = true
 
 
