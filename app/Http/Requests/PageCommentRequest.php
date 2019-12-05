@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CategoryRequest extends FormRequest
+class PageCommentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,12 +25,9 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:255', Rule::unique('categories', 'name')->ignore($this->category)], // 'alpha_dash',
-            'parent_id' => ['nullable', 'integer', 'exists:categories,id'],
-            'description' => ['nullable', 'string', 'max:500'],
-            'metakey' => ['nullable', 'string', 'max:255'],
-            'metadesc' => ['nullable', 'string', 'max:255'],
-            'media_id' => ['nullable', 'integer', 'exists:media,id'],
+            'parent_id' => ['nullable', 'integer', 'exists:page_comments,id'],
+            'reference_id' => ['required', 'integer', 'exists:pages,id'],
+            'body' => ['required', 'string'],
         ];
     }
 

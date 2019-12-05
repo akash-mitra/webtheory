@@ -7,12 +7,12 @@ use Laravel\Passport\Passport;
 
 class LoginTest extends TestDataSetup
 {
-    // Login Test
+    /* Login Test */
     public function test_login()
     {
-        // Correct credentials
+        /* Correct credentials */
         $body = [
-            'email' => 'testuser@example.com',
+            'email' => 'adminuser@example.com',
             'password' => 'password'
         ];
         $response = $this->post('/api/login', $body, ['Accept' => 'application/json']);
@@ -25,9 +25,9 @@ class LoginTest extends TestDataSetup
             ]);
         $this->assertDatabaseHas('users', ['email' => $body['email']]);
 
-        // Incorrect credentials
+        /* Incorrect credentials */
         $body = [
-            'email' => 'testuser@example.com',
+            'email' => 'adminuser@example.com',
             'password' => 'password1234'
         ];
         $response = $this->post('/api/login', $body, ['Accept' => 'application/json']);
@@ -37,12 +37,13 @@ class LoginTest extends TestDataSetup
             ]);
     }
 
-    // Logout Test
+    /* Logout Test */
     public function test_logout()
     {
-        // Passport::actingAs($this->user);
+        // Passport::actingAs($this->adminUser);
         // $response = $this->post('/api/logout', [], ['Accept' => 'application/json']);
-        $response = $this->actingAs($this->user)->post('/api/logout', [], ['Accept' => 'application/json']);
+        
+        $response = $this->actingAs($this->adminUser)->post('/api/logout', [], ['Accept' => 'application/json']);
         $response->assertStatus(200)
             ->assertJson([
                 'message' => 'Successfully logged out'

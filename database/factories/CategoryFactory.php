@@ -12,5 +12,9 @@ $factory->define(Category::class, function (Faker $faker) {
         'name' => $faker->colorName,
         'parent_id' => null,
         'description' => $faker->catchPhrase,
+        'metakey' => $faker->word . ',' . $faker->word,
+        'metadesc' => $faker->catchPhrase,
+        'media_id' => null,
+        'user_id' => 1,
     ];
 });

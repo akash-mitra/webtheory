@@ -43,6 +43,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'preferences' => 'array',
     ];
 
+    public function categories()
+    {
+        return $this->hasMany('App\Category');
+    }
+
     public function pages()
     {
         return $this->hasMany('App\Page');
@@ -51,6 +56,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function media()
     {
         return $this->hasMany('App\Media');
+    }
+
+    public function categorycomments()
+    {
+        return $this->hasMany('App\CategoryComment');
+    }
+
+    public function pagecomments()
+    {
+        return $this->hasMany('App\PageComment');
     }
 
     public function providers($provider = null)

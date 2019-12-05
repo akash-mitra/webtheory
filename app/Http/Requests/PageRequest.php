@@ -29,6 +29,7 @@ class PageRequest extends FormRequest
             'summary' => ['nullable', 'string', 'max:1048'],
             'metakey' => ['nullable', 'string', 'max:255'],
             'metadesc' => ['nullable', 'string', 'max:255'],
+            'media_id' => ['nullable', 'integer', 'exists:media,id'],
             'body_json' => ['required', 'json'],
         ];
     }

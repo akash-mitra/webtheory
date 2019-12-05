@@ -12,7 +12,7 @@ class MediaTableSeeder extends Seeder
      */
     public function run()
     {
-        $media = factory(Media::class, 5)->create([
+        $media = factory(Media::class, 10)->create([
             'user_id' => 1,
         ]);
     }

@@ -45,19 +45,26 @@ class TestDataSetup extends TestCase
     {
         // API TESTING DATA
         
+        $this->adminUser = factory(User::class)->create(['email' => 'adminuser@example.com', 'role' => 'admin']);
+        $this->authorUser = factory(User::class)->create(['email' => 'authoruser@example.com', 'role' => 'author']);
+        $this->registeredUser = factory(User::class)->create(['email' => 'registereduser@example.com', 'role' => 'registered']);
         $this->user = factory(User::class)->create(['email' => 'testuser@example.com']);
-
-        $this->category = factory(Category::class)->create();
+        
+        $this->media = factory(Media::class)->create([
+            'user_id' => $this->adminUser->id,
+        ]);
+        
+        $this->category = factory(Category::class)->create([
+            'user_id' => $this->adminUser->id,
+        ]);
 
         $this->page = factory(Page::class)->create([
             'category_id' => $this->category->id,
-            'user_id' => $this->user->id,
-        ])->each(function ($page) {
-            $page->content()->save(factory(PageContent::class)->make());
-        });
-        
-        $this->media = factory(Media::class)->create([
-            'user_id' => $this->user->id,
+            'user_id' => $this->adminUser->id,
         ]);
+        $this->pagecontent = factory(PageContent::class)->create([
+            'page_id' => $this->page->id
+        ]);
+        
     }
 }
