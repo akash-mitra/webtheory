@@ -38,6 +38,7 @@ Route::prefix('api')->group(function () {
 
     Route::post('pages', 'PageController@store')->name('api.pages.store');
     Route::put('pages/{page}', 'PageController@update')->name('api.pages.update');
+    Route::put('pageupdate/{page}', 'PageController@updatepage')->name('api.pages.updatepage');
     Route::delete('pages/{page}', 'PageController@destroy')->name('api.pages.destroy');
 
     Route::get('media', 'MediaController@index')->name('api.media.index');

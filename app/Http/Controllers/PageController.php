@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use DB;
 use App\Http\Requests\PageRequest;
 use App\ContentConversion;
@@ -86,6 +87,20 @@ class PageController extends Controller
         });
         
         $page->load('content');
+        
+        return response()->json($page);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Page  $page
+     * @return \Illuminate\Http\Response
+     */
+    public function updatepage(Request $request, Page $page)
+    {
+        $page->fill(request(['category_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status']))->save();
         
         return response()->json($page);
     }
