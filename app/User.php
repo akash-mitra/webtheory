@@ -68,6 +68,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany('App\PageComment');
     }
 
+    public function isAdmin()
+    {
+        return $this->role == 'admin';
+    }
+
+    public function isAuthor()
+    {
+        return $this->role == 'author';
+    }
+
     public function providers($provider = null)
     {
         if (empty($provider)) {
