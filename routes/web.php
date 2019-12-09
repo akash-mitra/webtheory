@@ -75,3 +75,13 @@ Route::prefix('api')->group(function () {
 //-----------------------------------------------------------------------------
 Route::get('/app/{any}', 'AdminController@app')->where('any', '.*')->name('app');
 
+// LATER REPLACE THIS ENDPOINT AT FRONTEND WITH media.upload named route
+Route::post('/server/media/uploadFile', 'MediaController@upload');
+
+Route::get('test', function () {
+    $page = \App\Page::findOrFail(35);
+    $content = $page->content;
+    $body_json = $content->body_json;
+    $body_html = \App\ContentConversion::getHtml($body_json);
+    return $body_html;
+});
