@@ -32,7 +32,7 @@ class LovController extends Controller
      */
     public function authors()
     {
-        $authors = User::where('role', 'admin')->orWhere('role', 'author')->withTrashed()->get()->sortBy('id');
+        $authors = User::where('is_admin', true)->orWhere('is_author', true)->withTrashed()->get()->sortBy('id');
 
         $authors = array_map(function ($author) {
             return [
