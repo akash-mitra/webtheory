@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Api\Auth;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Socialite;
 use App\User;
 use Illuminate\Support\Facades\Auth;
