@@ -249,6 +249,74 @@ class PageTest extends TestDataSetup
         $this->assertDatabaseMissing('pages', ['title' => 'Test Title']);
     }
 
+    /* Page Status Update */
+    public function test_page_status_update()
+    {
+        $page = factory(Page::class)->create([
+            'category_id' => $this->category->id,
+            'user_id' => $this->authorUser1->id
+        ]);
+        $pagecontent = factory(PageContent::class)->create([
+            'page_id' => $page->id
+        ]);
+        
+        $page->status = 'Published';
+        
+        /* Unauthenticated user cannot update page status */
+        // $response = $this->put('/api/pages/' . $page->id . '/status', $page->toArray(), ['Accept' => 'application/json']);
+        // $response->assertStatus(401)
+        //     ->assertJson(['message' => 'Unauthenticated.']);
+
+        /* Authenticated user can update page status */
+        // Passport::actingAs($this->adminUser);
+        // $response = $this->put('/api/pages/' . $page->id . '/status', $page->toArray());
+
+        $response = $this->actingAs($this->adminUser)->put('/api/pages/' . $page->id . '/status', $page->toArray());
+        $response->assertStatus(200)
+            ->assertJsonFragment(['status' => 'Published'])
+            ->assertJsonStructureExact([
+                'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
+                'created_at', 'updated_at', 'deleted_at', 
+                'url', 'created_ago', 'updated_ago'
+            ]);
+        $this->assertDatabaseHas('pages', ['status' => 'Published']);
+        $this->assertDatabaseMissing('pages', ['id' => $page->id, 'status' => 'Draft']);
+    }
+
+    /* Page Owner Update */
+    public function test_page_owner_update()
+    {
+        $page = factory(Page::class)->create([
+            'category_id' => $this->category->id,
+            'user_id' => $this->authorUser1->id
+        ]);
+        $pagecontent = factory(PageContent::class)->create([
+            'page_id' => $page->id
+        ]);
+        
+        $page->user_id = $this->authorUser2->id;
+        
+        /* Unauthenticated user cannot update page owner */
+        // $response = $this->put('/api/pages/' . $page->id . '/owner', $page->toArray(), ['Accept' => 'application/json']);
+        // $response->assertStatus(401)
+        //     ->assertJson(['message' => 'Unauthenticated.']);
+
+        /* Authenticated user can update page owner */
+        // Passport::actingAs($this->adminUser);
+        // $response = $this->put('/api/pages/' . $page->id . '/owner', $page->toArray());
+
+        $response = $this->actingAs($this->adminUser)->put('/api/pages/' . $page->id . '/owner', $page->toArray());
+        $response->assertStatus(200)
+            ->assertJsonFragment(['user_id' => $this->authorUser2->id])
+            ->assertJsonStructureExact([
+                'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
+                'created_at', 'updated_at', 'deleted_at', 
+                'url', 'created_ago', 'updated_ago'
+            ]);
+        $this->assertDatabaseHas('pages', ['user_id' => $this->authorUser2->id]);
+        $this->assertDatabaseMissing('pages', ['id' => $page->id, 'user_id' => $this->authorUser1->id]);
+    }
+
     /* Page Destroy */
     public function test_page_destroy()
     {

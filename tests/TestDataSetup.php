@@ -46,7 +46,8 @@ class TestDataSetup extends TestCase
         // API TESTING DATA
         
         $this->adminUser = factory(User::class)->create(['email' => 'adminuser@example.com', 'role' => 'admin']);
-        $this->authorUser = factory(User::class)->create(['email' => 'authoruser@example.com', 'role' => 'author']);
+        $this->authorUser1 = factory(User::class)->create(['email' => 'authoruser1@example.com', 'role' => 'author']);
+        $this->authorUser2 = factory(User::class)->create(['email' => 'authoruser2@example.com', 'role' => 'author']);
         $this->registeredUser = factory(User::class)->create(['email' => 'registereduser@example.com', 'role' => 'registered']);
         $this->user = factory(User::class)->create(['email' => 'testuser@example.com']);
         

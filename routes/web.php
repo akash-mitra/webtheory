@@ -32,6 +32,9 @@ Route::prefix('api')->group(function () {
     Route::get('comments/pages', 'Api\PageCommentController@index')->name('pagecomments.index');
     Route::get('comments/pages/{pagecomment}', 'Api\PageCommentController@show')->name('pagecomments.show');
 
+    Route::get('users/comments', 'Api\ProfileController@comments')->name('users.comments');
+    Route::get('users/{user}', 'Api\ProfileController@show')->name('users.show');
+
     // Authenticated Routes
     Route::post('logout', 'Api\Auth\LoginController@logout');
 
@@ -62,7 +65,8 @@ Route::prefix('api')->group(function () {
     Route::put('comments/pages/{pagecomment}/like', 'Api\PageCommentController@like')->name('pagecomments.like');
     Route::put('comments/pages/{pagecomment}/dislike', 'Api\PageCommentController@dislike')->name('pagecomments.dislike');
 
-    Route::get('users/comments', 'Api\ProfileController@comments')->name('users.comments');
+    Route::put('users/{user}', 'Api\ProfileController@update')->name('users.update');
+    Route::put('users/{user}/role', 'Api\ProfileController@updateRole')->name('users.updaterole');
 
     Route::get('lov/categories', 'Api\LovController@categories')->name('lov.categories');
     Route::get('lov/authors', 'Api\LovController@authors')->name('lov.authors');

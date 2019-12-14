@@ -50,7 +50,7 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return response()->json($user);
     }
 
     /**
@@ -62,7 +62,23 @@ class ProfileController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $user->fill(request(['about_me', 'gender', 'dob', 'preferences']))->save();
+        
+        return response()->json($user);
+    }
+
+    /**
+     * Update the user role.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function updateRole(Request $request, User $user)
+    {
+        $user->fill(request(['role']))->save();
+        
+        return response()->json($user);
     }
 
     /**

@@ -4,11 +4,106 @@ namespace Tests\Feature;
 
 use Tests\TestDataSetup;
 use Laravel\Passport\Passport;
+use App\User;
 use App\CategoryComment;
 use App\PageComment;
 
 class ProfileTest extends TestDataSetup
 {
+    /* User Show */
+    public function test_user_show()
+    {
+        $user = factory(User::class)->create([
+            'email' => 'dummyuser@example.com',
+            'role' => 'registered'
+        ]);
+
+        /* Unauthenticated user can view user profile */
+        $response = $this->get('/api/users/' . $user->id);
+        $response->assertStatus(200)
+            ->assertJsonFragment(['name' => $user->name])
+            ->assertJsonStructureExact([
+                'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
+                'created_at', 'updated_at', 'deleted_at'
+            ]);
+        $this->assertDatabaseHas('users', ['name' => $user->name]);
+
+        /* Authenticated user can view user profile */
+        // Passport::actingAs($this->adminUser);
+        // $response = $this->get('/api/users/' . $user->id);
+
+        $response = $this->actingAs($this->adminUser)->get('/api/users/' . $user->id);
+        $response->assertStatus(200)
+            ->assertJsonFragment(['name' => $user->name])
+            ->assertJsonStructureExact([
+                'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
+                'created_at', 'updated_at', 'deleted_at'
+            ]);
+        $this->assertDatabaseHas('users', ['name' => $user->name]);
+    }
+
+    /* User Update */
+    public function test_user_update()
+    {
+        $user = factory(User::class)->create([
+            'email' => 'dummyuser@example.com',
+            'role' => 'registered',
+            'about_me' => 'I am a dummy user'
+        ]);
+        
+        $user->about_me = 'I am a registered user';
+        $user->gender = true;
+
+        /* Unauthenticated user cannot update profile */
+        // $response = $this->put('/api/users/' . $user->id, $user->toArray(), ['Accept' => 'application/json']);
+        // $response->assertStatus(401)
+        //     ->assertJson(['message' => 'Unauthenticated.']);
+
+        /* Authenticated user can update user */
+        // Passport::actingAs($user);
+        // $response = $this->put('/api/users/' . $user->id, $user->toArray());
+
+        $response = $this->actingAs($user)->put('/api/users/' . $user->id, $user->toArray());
+        $response->assertStatus(200)
+            ->assertJsonFragment(['about_me' => 'I am a registered user'])
+            ->assertJsonStructureExact([
+                'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
+                'created_at', 'updated_at', 'deleted_at'
+            ]);
+        $this->assertDatabaseHas('users', ['about_me' => 'I am a registered user']);
+        $this->assertDatabaseMissing('users', ['about_me' => 'I am a dummy user']);
+    }
+
+    /* User Role Update */
+    public function test_user_role_update()
+    {
+        $user = factory(User::class)->create([
+            'email' => 'dummyuser@example.com',
+            'role' => 'registered'
+        ]);
+        
+        $user->role = 'author';
+
+        /* Unauthenticated user cannot update profile */
+        // $response = $this->put('/api/users/' . $user->id, $user->toArray(), ['Accept' => 'application/json']);
+        // $response->assertStatus(401)
+        //     ->assertJson(['message' => 'Unauthenticated.']);
+
+        /* Authenticated user can update user */
+        // Passport::actingAs($this->adminUser);
+        // $response = $this->put('/api/users/' . $user->id  . '/role', $user->toArray());
+
+        $response = $this->actingAs($this->adminUser)->put('/api/users/' . $user->id  . '/role', $user->toArray());
+        $response->assertStatus(200)
+            ->assertJsonFragment(['role' => 'author'])
+            ->assertJsonStructureExact([
+                'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
+                'created_at', 'updated_at', 'deleted_at'
+            ]);
+        $this->assertDatabaseHas('users', ['role' => 'author']);
+        $this->assertDatabaseMissing('users', ['id' => $user->id, 'role' => 'registered']);
+    }
+
     /* User Comments Test */
     public function test_user_comments()
     {
