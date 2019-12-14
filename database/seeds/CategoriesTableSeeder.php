@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use App\Category;
 
 class CategoriesTableSeeder extends Seeder
@@ -13,14 +12,11 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('categories')->insert([
-            'id' => 0,
+        factory(Category::class)->create([
             'name' => 'Uncategorized',
             'parent_id' => null,
             'description' => 'Uncategorized',
             'user_id' => 1,
-            'created_at' => now(),
-            'updated_at' => now()
         ]);
 
         factory(Category::class, 10)->create([
