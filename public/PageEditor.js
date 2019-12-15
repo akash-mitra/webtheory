@@ -200,6 +200,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -222,7 +228,7 @@ __webpack_require__.r(__webpack_exports__);
       category_id: 1,
       status: 'Draft',
       categories: [],
-      tab: 'setting',
+      tab: 'content',
       isSaving: false
     };
   },
@@ -336,6 +342,17 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     // end of fetchCategoryListFromServer
+    deletePage: function deletePage() {
+      var _this2 = this;
+
+      if (confirm('Are you sure to delete this page?')) {
+        util.ajax('delete', '/api/pages/' + this.id, {}, function (response) {
+          alert('Page Deleted');
+
+          _this2.$router.push('/app/pages');
+        });
+      }
+    },
 
     /**--------------------------------------------------------------------------
      * Invokes the Editor and pre-configures the editor with various editor tools
@@ -1140,7 +1157,7 @@ var render = function() {
           _c(
             "div",
             { staticClass: "text-sm text-gray-600 pt-10 pb-3 uppercase" },
-            [_vm._v("Publication")]
+            [_vm._v("\n            Publication\n        ")]
           ),
           _vm._v(" "),
           _c(
@@ -1166,20 +1183,34 @@ var render = function() {
                 [
                   _c("div", { staticClass: "ml-2 text-gray-700 text-sm" }, [
                     _vm._v(
-                      "\n                        " +
+                      "\n                    " +
                         _vm._s(_vm.status) +
-                        "\n                    "
+                        "\n                "
                     )
                   ])
                 ]
               ),
               _vm._v(" "),
               _c("div", { staticClass: "w-full mb-2 text-xs text-gray-700" }, [
-                _vm._v("Only Live page will be accessible to site visitors. ")
+                _vm._v(
+                  "\n                Only Live page will be accessible to site visitors. \n            "
+                )
               ])
             ],
             1
-          )
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "pt-10 pb-3 text-right" }, [
+            _c(
+              "span",
+              {
+                staticClass:
+                  "text-sm text-grey-600 hover:text-red-600 cursor-pointer",
+                on: { click: _vm.deletePage }
+              },
+              [_vm._v("\n                Delete this page \n            ")]
+            )
+          ])
         ]
       )
     ]

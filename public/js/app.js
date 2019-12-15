@@ -2004,6 +2004,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2039,13 +2040,13 @@ __webpack_require__.r(__webpack_exports__);
         path: "/app/pages/".concat(id)
       });
     },
-    unpublish: function unpublish(page) {
-      page.status = 'Draft';
-      this.save(page);
-    },
-    save: function save(page) {// util.ajax ('put', '/api/pages/' + page.id, page, (response) => {
-      //     console.log(response)
-      // }) 
+    changeStatus: function changeStatus(page, status) {
+      page.status = status;
+      util.ajax('put', '/api/pages/' + page.id + '/status', {
+        status: page.status
+      }, function (response) {
+        console.log(response);
+      });
     }
   }
 });
@@ -3579,19 +3580,45 @@ var render = function() {
                       {
                         name: "show",
                         rawName: "v-show",
-                        value: _vm.selected === page.id,
-                        expression: "selected===page.id"
+                        value:
+                          _vm.selected === page.id && page.status != "Draft",
+                        expression:
+                          "selected===page.id && page.status != 'Draft'"
                       }
                     ],
                     staticClass:
                       "text-blue-600 mr-4 cursor-pointer hover:text-red-600",
                     on: {
                       click: function($event) {
-                        return _vm.unpublish(page)
+                        return _vm.changeStatus(page, "Draft")
                       }
                     }
                   },
                   [_vm._v("Unpublish")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value:
+                          _vm.selected === page.id && page.status === "Draft",
+                        expression:
+                          "selected===page.id && page.status === 'Draft'"
+                      }
+                    ],
+                    staticClass:
+                      "text-blue-600 mr-4 cursor-pointer hover:text-green-600",
+                    on: {
+                      click: function($event) {
+                        return _vm.changeStatus(page, "Live")
+                      }
+                    }
+                  },
+                  [_vm._v("Publish")]
                 )
               ]
             )

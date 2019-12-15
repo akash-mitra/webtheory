@@ -150,19 +150,25 @@
         <!-- setting section -->
         <div v-show="tab==='setting'" id="page-setting" class="w-full max-w-4xl mx-auto px-4 xl:px-0 pb-20">
 
-            <div class="text-sm text-gray-600 pt-10 pb-3 uppercase">Publication</div>
+            <div class="text-sm text-gray-600 pt-10 pb-3 uppercase">
+                Publication
+            </div>
 
-                <div class="bg-white rounded w-full py-6 px-4 border-t-2 border-blue-400 shadow">
-                    
-                    <t-toggle class="mb-4" v-model="status" true-value="Live" false-value="Draft">
-                        <div class="ml-2 text-gray-700 text-sm">
-                            {{ status }}
-                        </div>
-                    </t-toggle>
-                    <div class="w-full mb-2 text-xs text-gray-700">Only Live page will be accessible to site visitors. </div>
-
+            <div class="bg-white rounded w-full py-6 px-4 border-t-2 border-blue-400 shadow">
+                <t-toggle class="mb-4" v-model="status" true-value="Live" false-value="Draft">
+                    <div class="ml-2 text-gray-700 text-sm">
+                        {{ status }}
+                    </div>
+                </t-toggle>
+                <div class="w-full mb-2 text-xs text-gray-700">
+                    Only Live page will be accessible to site visitors. 
                 </div>
-            
+            </div>
+
+            <div class="pt-10 pb-3 text-right">
+                <span class="text-sm text-grey-600 hover:text-red-600 cursor-pointer" @click="deletePage">
+                    Delete this page 
+                </span>
             </div>
 
         </div><!-- end of setting section -->
@@ -204,7 +210,7 @@ export default {
         
             categories: [],
 
-            tab: 'setting',
+            tab: 'content',
             isSaving: false,
         }
     },
@@ -341,12 +347,25 @@ export default {
         }, // end of fetchContentAndLoadEditor
 
 
-        fetchCategoryListFromServer: function () {
+        fetchCategoryListFromServer () {
 
                 let p = this
                 util.ajax ('get', '/api/lov/categories', {}, (data) => { p.categories = data })
             
         }, // end of fetchCategoryListFromServer
+
+
+        deletePage () {
+
+            if (confirm('Are you sure to delete this page?')) {
+                
+                util.ajax ('delete', '/api/pages/' + this.id, {}, (response) => {
+                    alert ('Page Deleted')
+
+                    this.$router.push('/app/pages')
+                })
+            }
+        },
 
         /**--------------------------------------------------------------------------
          * Invokes the Editor and pre-configures the editor with various editor tools
