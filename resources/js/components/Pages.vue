@@ -6,7 +6,7 @@
 
 
         <div class="px-6 my-6 w-full flex justify-between items-center">
-            <h2 class="text-gray-500 text-2xl">Pages</h2>
+            <h2 class="text-gray-600 text-2xl">Pages</h2>
             <a href="/app/pages/create" class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow">Create</a>
         </div>
 
@@ -23,7 +23,7 @@
         <div class="px-6 w-full flex justify-start items-center my-8 border-b">
             <div @click="tab='all'" class="px-4 text-sm uppercase cursor-pointer" :class="tab==='all'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">All</div>
             <div @click="tab='draft'" class="px-4 text-sm uppercase cursor-pointer" :class="tab==='draft'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Draft</div>
-            
+            <div @click="tab='byme'" class="px-4 text-sm uppercase cursor-pointer" :class="tab==='byme'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">By Me</div>
         </div>
 
         <div class="px-6">
@@ -32,7 +32,7 @@
                 <div class="w-full relative cursor-pointer" @click="openPageEditor(page.id)">
                     <div v-if="page.status==='Draft'" class="absolute top-0 mt-4 right-0 mr-8 px-2 py-1 text-xs text-gray-500 bg-white flex items-center border rounded-lg border-gray-500">draft</div>
                     <h3 class="px-6 pt-4 text-blue-400 text-sm">{{ page.category ? page.category.name : '' }}</h3>
-                    <h3 class="px-6 pt-2 text-gray-700 font-semibold text-sm">{{ page.title }}</h3>
+                    <h3 class="px-6 pt-2 text-blue-800 font-semibold text-sm1">{{ page.title }}</h3>
                     <div class="px-6 py-4 text-sm text-gray-600">{{ page.summary }}</div>
                 </div>
 
@@ -70,6 +70,8 @@
                 return this.pages.filter((page) => {
 
                     if(this.tab === 'draft' && page.status != 'Draft') return false
+
+                    if(this.tab === 'byme' && page.author.id != window.authUser.id) return false
 
                     if(this.tab === 'deleted' && page.deleted_at == null) return false
 

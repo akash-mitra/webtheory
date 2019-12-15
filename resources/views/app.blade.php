@@ -82,6 +82,6 @@
 
     @yield('script')
 
-        
+        <script>window.authUser = @json($user)</script>
     </body>
 </html>

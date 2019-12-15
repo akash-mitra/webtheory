@@ -1,6 +1,6 @@
 <template>
 
-    <div class="w-full" @keydown.cmd.83="processShortcutKey($event)" @keydown.ctrl.83="processShortcutKey($event)">
+    <div class="w-full" @keydown.ctrl.83.exact.prevent.stop="initiateSave">
 
         
 
@@ -11,7 +11,7 @@
                 <div class="flex justify-start items-center">
                     <div @click="tab='content'" class="pr-6 py-4 text-xs uppercase text-gray-800 cursor-pointer" :class="tab==='content'?'px-6 text-blue-600 font-bold border-b-4 border-blue-500':''">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-6 w-6 sm:hidden"><path class="primary" d="M6 2h6v6c0 1.1.9 2 2 2h6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2zm2 11a1 1 0 0 0 0 2h8a1 1 0 0 0 0-2H8zm0 4a1 1 0 0 0 0 2h4a1 1 0 0 0 0-2H8z"/><polygon class="secondary" points="14 2 20 8 14 8"/></svg>
-                        <span class="hidden sm:inline-block tracking-wider">Contents</span>
+                        <span class="hidden sm:inline-block tracking-wider">Content</span>
                     </div>
                     <div @click="tab='meta'" class="px-6 py-4 text-xs uppercase text-gray-800 cursor-pointer" :class="tab==='meta'?'text-blue-600 font-bold border-b-4 border-blue-500':''">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-6 w-6 sm:hidden"><path class="primary" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z"/><path class="secondary" d="M11 12a1 1 0 0 1 0-2h2a1 1 0 0 1 .96 1.27L12.33 17H13a1 1 0 0 1 0 2h-2a1 1 0 0 1-.96-1.27L11.67 12H11zm2-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>
@@ -19,7 +19,7 @@
                     </div>
                     <div @click="tab='setting'" class="px-6 py-4 text-xs uppercase text-gray-800 cursor-pointer" :class="tab==='setting'?'text-blue-600 font-bold border-b-4 border-blue-500':''">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-6 w-6 sm:hidden"><path class="secondary" fill-rule="evenodd" d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
-                        <span class="hidden sm:inline-block tracking-wider">Settings</span>
+                        <span class="hidden sm:inline-block tracking-wider">Setting</span>
                     </div>
                 </div>
                 <t-button v-bind:isLoading="isSaving" @click.native="initiateSave">
@@ -36,24 +36,24 @@
 
             <div class="pt-10 w-full p-6 pb-24">
                 <div class="mx-auto max-w-4xl"> 
-                    <label v-show="title.length===0" class="uppercase text-xs tracking-wider text-gray-700 block pb-2">
+                    <label v-show="title.length===0" class="px-6 uppercase text-xs tracking-wider text-gray-700 block pb-2">
                         Title
                     </label>
                     
-                    <textarea name="title" v-model="title" ref="title" class="bg-transparent border-b-2 border-gray-400 h-24 outline-none text-blue-800 text-3xl tracking-wide w-full" placeholder="Title of your story"></textarea>
+                    <textarea name="title" v-model="title" ref="title" class="px-6 bg-transparent border-b-2 border-gray-400 h-24 outline-none text-blue-800 text-3xl tracking-wide w-full" placeholder="Title of your story"></textarea>
                 </div>
 
                 <div class="mt-12 mx-auto  max-w-4xl">
-                    <label v-show="intro.length===0" class="uppercase text-xs tracking-wider text-gray-700 block pb-2">
+                    <label v-show="intro.length===0" class="px-6 uppercase text-xs tracking-wider text-gray-700 block pb-2">
                         Intro
                     </label>
-                    <textarea name="intro" v-model="intro" class="bg-transparent h-24 outline-none text-gray-700 text-lg tracking-wide w-full" placeholder="Provide a 3/4 lines of introduction to your story..."></textarea>
+                    <textarea name="intro" v-model="intro" class="px-6 bg-transparent h-24 outline-none text-gray-700 text-lg tracking-wide w-full" placeholder="Provide a 3/4 lines of introduction to your story..."></textarea>
                 </div>
             </div>
 
             <div class="w-full p-2 bg-gray-100 pb-20">
                 <div class="max-w-4xl mx-auto bg-white -mt-16 shadow-xl px-6 pt-6 border-t-2 border-blue-400">
-                    <div id="tensor-editor" class="mt-4 mx-auto text-gray-700 py-4 te-typo bg-white -mr-2"></div>  
+                    <div id="tensor-editor" class="mx-auto text-gray-700 pb-4 te-typo bg-white -mr-2"></div>  
                 </div>
             </div>
 
@@ -107,10 +107,8 @@
 
                     <div class="inline-block relative w-64">
                         <select v-model="category_id" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
-                            <option :value="1" selected='selected'>Uncategorised</option>
-                                        
-                            <option v-for="category in categories" :value="category.id" v-bind:key="category.id">                        
-                                    {{ category.name }}
+                            <option v-for="category in categories" :value="category.key" v-bind:key="category.key">                        
+                                    {{ category.value }}
                             </option>
                         </select>
                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -149,6 +147,25 @@
         </div><!-- end of meta section -->
 
 
+        <!-- setting section -->
+        <div v-show="tab==='setting'" id="page-setting" class="w-full max-w-4xl mx-auto px-4 xl:px-0 pb-20">
+
+            <div class="text-sm text-gray-600 pt-10 pb-3 uppercase">Publication</div>
+
+                <div class="bg-white rounded w-full py-6 px-4 border-t-2 border-blue-400 shadow">
+                    
+                    <t-toggle class="mb-4" v-model="status" true-value="Live" false-value="Draft">
+                        <div class="ml-2 text-gray-700 text-sm">
+                            {{ status }}
+                        </div>
+                    </t-toggle>
+                    <div class="w-full mb-2 text-xs text-gray-700">Only Live page will be accessible to site visitors. </div>
+
+                </div>
+            
+            </div>
+
+        </div><!-- end of setting section -->
 
     </div>
 
@@ -183,15 +200,11 @@ export default {
             metakey: '',
             metadesc: '',
             category_id: 1,
+            status: 'Draft',
+        
+            categories: [],
 
-            categories: [
-                {id: 1, name: 'Orange'},
-                {id: 2, name: 'Blue'},
-                {id: 3, name: 'Green'},
-                {id: 4, name: 'Cyan'},
-            ],
-
-            tab: 'content',
+            tab: 'setting',
             isSaving: false,
         }
     },
@@ -202,9 +215,9 @@ export default {
      */
     created: function () { 
 
-        this.fetchContentDataFromServer()
+        this.fetchContentAndLoadEditor()
 
-        
+        this.fetchCategoryListFromServer()
 
 
 
@@ -258,7 +271,8 @@ export default {
                         body_json: JSON.stringify(bodyJson),
                         metakey: p.metakey,
                         metadesc: p.metadesc,
-                        category_id: p.category_id
+                        category_id: p.category_id,
+                        status: p.status,
                     }, this.postSaveProcessing)
                     
                 }).catch((error) => {
@@ -304,7 +318,7 @@ export default {
          * then this method will make an AJAX query in the server to fetch the 
          * contents of the article from the database when Vue is created.
          */
-        fetchContentDataFromServer: function () {
+        fetchContentAndLoadEditor: function () {
 
             if (typeof this.$route.params.id != 'undefined' && parseInt(this.$route.params.id) > 0) {
                 // download data from server...
@@ -317,15 +331,22 @@ export default {
                     p.metakey = data.metakey
                     p.metadesc = data.metadesc
                     p.category_id = data.category_id
+                    p.status = data.status
                     p.body = JSON.parse(data.content.body_json)
                     p.editor = p.loadEditorTool()
                 })
             } else {
                 this.editor = this.loadEditorTool()
             }
-        }, // end of fetchContentDataFromServer
+        }, // end of fetchContentAndLoadEditor
 
 
+        fetchCategoryListFromServer: function () {
+
+                let p = this
+                util.ajax ('get', '/api/lov/categories', {}, (data) => { p.categories = data })
+            
+        }, // end of fetchCategoryListFromServer
 
         /**--------------------------------------------------------------------------
          * Invokes the Editor and pre-configures the editor with various editor tools
@@ -406,21 +427,17 @@ export default {
             this.$refs.title.focus()
         },
 
-        processShortcutKey: function (event) {
-            this.initiateSave()
-
-            if (event) {
-                event.preventDefault()
-            }
-        },
+        
 
 
     }, // end of methods
 
     computed: {
-        url: function () {
+        url() {
             return 'https://yoursite.com/' + this.id + '-' + this.title.replace(/\W+/g, '-').toLowerCase(); 
-        }
+        },
+
+        
     } 
 }
 </script>

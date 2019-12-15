@@ -183,6 +183,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -203,20 +220,9 @@ __webpack_require__.r(__webpack_exports__);
       metakey: '',
       metadesc: '',
       category_id: 1,
-      categories: [{
-        id: 1,
-        name: 'Orange'
-      }, {
-        id: 2,
-        name: 'Blue'
-      }, {
-        id: 3,
-        name: 'Green'
-      }, {
-        id: 4,
-        name: 'Cyan'
-      }],
-      tab: 'content',
+      status: 'Draft',
+      categories: [],
+      tab: 'setting',
       isSaving: false
     };
   },
@@ -226,7 +232,8 @@ __webpack_require__.r(__webpack_exports__);
    * for the first time only.
    */
   created: function created() {
-    this.fetchContentDataFromServer();
+    this.fetchContentAndLoadEditor();
+    this.fetchCategoryListFromServer();
   },
   // end of created
   mounted: function mounted() {
@@ -259,7 +266,8 @@ __webpack_require__.r(__webpack_exports__);
             body_json: JSON.stringify(bodyJson),
             metakey: p.metakey,
             metadesc: p.metadesc,
-            category_id: p.category_id
+            category_id: p.category_id,
+            status: p.status
           }, _this.postSaveProcessing);
         })["catch"](function (error) {
           console.log('Saving failed: ', error);
@@ -299,7 +307,7 @@ __webpack_require__.r(__webpack_exports__);
      * then this method will make an AJAX query in the server to fetch the 
      * contents of the article from the database when Vue is created.
      */
-    fetchContentDataFromServer: function fetchContentDataFromServer() {
+    fetchContentAndLoadEditor: function fetchContentAndLoadEditor() {
       if (typeof this.$route.params.id != 'undefined' && parseInt(this.$route.params.id) > 0) {
         // download data from server...
         // console.log('Page Id = ' + this.$route.params.id + ' passed via router param. Downloading contents...')
@@ -312,6 +320,7 @@ __webpack_require__.r(__webpack_exports__);
           _p.metakey = data.metakey;
           _p.metadesc = data.metadesc;
           _p.category_id = data.category_id;
+          _p.status = data.status;
           _p.body = JSON.parse(data.content.body_json);
           _p.editor = _p.loadEditorTool();
         });
@@ -319,7 +328,14 @@ __webpack_require__.r(__webpack_exports__);
         this.editor = this.loadEditorTool();
       }
     },
-    // end of fetchContentDataFromServer
+    // end of fetchContentAndLoadEditor
+    fetchCategoryListFromServer: function fetchCategoryListFromServer() {
+      var p = this;
+      util.ajax('get', '/api/lov/categories', {}, function (data) {
+        p.categories = data;
+      });
+    },
+    // end of fetchCategoryListFromServer
 
     /**--------------------------------------------------------------------------
      * Invokes the Editor and pre-configures the editor with various editor tools
@@ -387,13 +403,6 @@ __webpack_require__.r(__webpack_exports__);
     // end of loadEditorTool
     focusInput: function focusInput() {
       this.$refs.title.focus();
-    },
-    processShortcutKey: function processShortcutKey(event) {
-      this.initiateSave();
-
-      if (event) {
-        event.preventDefault();
-      }
     }
   },
   // end of methods
@@ -524,27 +533,20 @@ var render = function() {
     {
       staticClass: "w-full",
       on: {
-        keydown: [
-          function($event) {
-            if (
-              !$event.type.indexOf("key") &&
-              $event.keyCode !== 83 &&
-              _vm._k($event.keyCode, "cmd", undefined, $event.key, undefined)
-            ) {
-              return null
-            }
-            return _vm.processShortcutKey($event)
-          },
-          function($event) {
-            if (!$event.type.indexOf("key") && $event.keyCode !== 83) {
-              return null
-            }
-            if (!$event.ctrlKey) {
-              return null
-            }
-            return _vm.processShortcutKey($event)
+        keydown: function($event) {
+          if (!$event.type.indexOf("key") && $event.keyCode !== 83) {
+            return null
           }
-        ]
+          if (!$event.ctrlKey) {
+            return null
+          }
+          if ($event.shiftKey || $event.altKey || $event.metaKey) {
+            return null
+          }
+          $event.preventDefault()
+          $event.stopPropagation()
+          return _vm.initiateSave($event)
+        }
       }
     },
     [
@@ -599,7 +601,7 @@ var render = function() {
                   _c(
                     "span",
                     { staticClass: "hidden sm:inline-block tracking-wider" },
-                    [_vm._v("Contents")]
+                    [_vm._v("Content")]
                   )
                 ]
               ),
@@ -692,7 +694,7 @@ var render = function() {
                   _c(
                     "span",
                     { staticClass: "hidden sm:inline-block tracking-wider" },
-                    [_vm._v("Settings")]
+                    [_vm._v("Setting")]
                   )
                 ]
               )
@@ -744,7 +746,7 @@ var render = function() {
                     }
                   ],
                   staticClass:
-                    "uppercase text-xs tracking-wider text-gray-700 block pb-2"
+                    "px-6 uppercase text-xs tracking-wider text-gray-700 block pb-2"
                 },
                 [_vm._v("\n                    Title\n                ")]
               ),
@@ -760,7 +762,7 @@ var render = function() {
                 ],
                 ref: "title",
                 staticClass:
-                  "bg-transparent border-b-2 border-gray-400 h-24 outline-none text-blue-800 text-3xl tracking-wide w-full",
+                  "px-6 bg-transparent border-b-2 border-gray-400 h-24 outline-none text-blue-800 text-3xl tracking-wide w-full",
                 attrs: { name: "title", placeholder: "Title of your story" },
                 domProps: { value: _vm.title },
                 on: {
@@ -787,7 +789,7 @@ var render = function() {
                     }
                   ],
                   staticClass:
-                    "uppercase text-xs tracking-wider text-gray-700 block pb-2"
+                    "px-6 uppercase text-xs tracking-wider text-gray-700 block pb-2"
                 },
                 [_vm._v("\n                    Intro\n                ")]
               ),
@@ -802,7 +804,7 @@ var render = function() {
                   }
                 ],
                 staticClass:
-                  "bg-transparent h-24 outline-none text-gray-700 text-lg tracking-wide w-full",
+                  "px-6 bg-transparent h-24 outline-none text-gray-700 text-lg tracking-wide w-full",
                 attrs: {
                   name: "intro",
                   placeholder:
@@ -1013,34 +1015,23 @@ var render = function() {
                         }
                       }
                     },
-                    [
-                      _c(
+                    _vm._l(_vm.categories, function(category) {
+                      return _c(
                         "option",
                         {
-                          attrs: { selected: "selected" },
-                          domProps: { value: 1 }
+                          key: category.key,
+                          domProps: { value: category.key }
                         },
-                        [_vm._v("Uncategorised")]
-                      ),
-                      _vm._v(" "),
-                      _vm._l(_vm.categories, function(category) {
-                        return _c(
-                          "option",
-                          {
-                            key: category.id,
-                            domProps: { value: category.id }
-                          },
-                          [
-                            _vm._v(
-                              "                        \n                                " +
-                                _vm._s(category.name) +
-                                "\n                        "
-                            )
-                          ]
-                        )
-                      })
-                    ],
-                    2
+                        [
+                          _vm._v(
+                            "                        \n                                " +
+                              _vm._s(category.value) +
+                              "\n                        "
+                          )
+                        ]
+                      )
+                    }),
+                    0
                   ),
                   _vm._v(" "),
                   _c(
@@ -1129,6 +1120,67 @@ var render = function() {
             ]
           )
         ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.tab === "setting",
+              expression: "tab==='setting'"
+            }
+          ],
+          staticClass: "w-full max-w-4xl mx-auto px-4 xl:px-0 pb-20",
+          attrs: { id: "page-setting" }
+        },
+        [
+          _c(
+            "div",
+            { staticClass: "text-sm text-gray-600 pt-10 pb-3 uppercase" },
+            [_vm._v("Publication")]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass:
+                "bg-white rounded w-full py-6 px-4 border-t-2 border-blue-400 shadow"
+            },
+            [
+              _c(
+                "t-toggle",
+                {
+                  staticClass: "mb-4",
+                  attrs: { "true-value": "Live", "false-value": "Draft" },
+                  model: {
+                    value: _vm.status,
+                    callback: function($$v) {
+                      _vm.status = $$v
+                    },
+                    expression: "status"
+                  }
+                },
+                [
+                  _c("div", { staticClass: "ml-2 text-gray-700 text-sm" }, [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(_vm.status) +
+                        "\n                    "
+                    )
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "w-full mb-2 text-xs text-gray-700" }, [
+                _vm._v("Only Live page will be accessible to site visitors. ")
+              ])
+            ],
+            1
+          )
+        ]
       )
     ]
   )
@@ -1147,8 +1199,7 @@ var staticRenderFns = [
         },
         [
           _c("div", {
-            staticClass:
-              "mt-4 mx-auto text-gray-700 py-4 te-typo bg-white -mr-2",
+            staticClass: "mx-auto text-gray-700 pb-4 te-typo bg-white -mr-2",
             attrs: { id: "tensor-editor" }
           })
         ]

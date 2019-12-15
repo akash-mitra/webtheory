@@ -9,6 +9,7 @@ Vue.use(VueRouter);
 
 Vue.component('t-loader', require('./ui/TensorLoader.vue').default);
 Vue.component('t-button', require('./ui/TensorButton.vue').default);
+Vue.component('t-toggle', require('./ui/TensorToggle.vue').default);
 
 let app = new Vue({
     el: '#app',

@@ -2026,6 +2026,7 @@ __webpack_require__.r(__webpack_exports__);
 
       return this.pages.filter(function (page) {
         if (_this2.tab === 'draft' && page.status != 'Draft') return false;
+        if (_this2.tab === 'byme' && page.author.id != window.authUser.id) return false;
         if (_this2.tab === 'deleted' && page.deleted_at == null) return false;
         if (_this2.searchPhrase.length > 0 && page.title.indexOf(_this2.searchPhrase) === -1 && page.summary.indexOf(_this2.searchPhrase) === -1 && page.author.name.indexOf(_this2.searchPhrase) === -1) return false;
         return true;
@@ -2122,6 +2123,74 @@ __webpack_require__.r(__webpack_exports__);
       required: true,
       type: String,
       "default": "24"
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/ui/TensorToggle.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/ui/TensorToggle.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    value: {
+      type: String,
+      "default": 'yes'
+    },
+    trueValue: {
+      type: String,
+      "default": 'yes'
+    },
+    falseValue: {
+      type: String,
+      "default": 'no'
+    } // disabled: {
+    //     type: Boolean,
+    //     default: false
+    // },
+
+  },
+  // computed:  {
+  //     compVal () {
+  //         return this.trueVal === this.value
+  //     }
+  // },
+  // data() {
+  //     return {
+  //         toggled: this.value
+  //     };
+  // },
+  methods: {
+    toggle: function toggle() {
+      // if (this.disabled || e.keyCode === 9) { // not if disabled or tab is pressed
+      //     e.stop();
+      // }
+      // this.toggled = ! this.toggled;
+      var newValue = this.value === this.trueValue ? this.falseValue : this.trueValue;
+      this.$emit("input", newValue);
     }
   }
 });
@@ -3397,6 +3466,23 @@ var render = function() {
             }
           },
           [_vm._v("Draft")]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "px-4 text-sm uppercase cursor-pointer",
+            class:
+              _vm.tab === "byme"
+                ? "text-gray-700 py-2 border-b-4 border-blue-500"
+                : "text-gray-500 py-2",
+            on: {
+              click: function($event) {
+                _vm.tab = "byme"
+              }
+            }
+          },
+          [_vm._v("By Me")]
         )
       ]
     ),
@@ -3441,7 +3527,8 @@ var render = function() {
                 _c(
                   "h3",
                   {
-                    staticClass: "px-6 pt-2 text-gray-700 font-semibold text-sm"
+                    staticClass:
+                      "px-6 pt-2 text-blue-800 font-semibold text-sm1"
                   },
                   [_vm._v(_vm._s(page.title))]
                 ),
@@ -3524,7 +3611,7 @@ var staticRenderFns = [
       "div",
       { staticClass: "px-6 my-6 w-full flex justify-between items-center" },
       [
-        _c("h2", { staticClass: "text-gray-500 text-2xl" }, [_vm._v("Pages")]),
+        _c("h2", { staticClass: "text-gray-600 text-2xl" }, [_vm._v("Pages")]),
         _vm._v(" "),
         _c(
           "a",
@@ -3613,6 +3700,55 @@ var render = function() {
       style: "height: " + _vm.size + "px; width: " + _vm.size + "px"
     },
     [_c("div"), _c("div"), _c("div"), _c("div")]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/ui/TensorToggle.vue?vue&type=template&id=0b9ca68c&":
+/*!*******************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/ui/TensorToggle.vue?vue&type=template&id=0b9ca68c& ***!
+  \*******************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "flex items-center cursor-pointer",
+      on: { click: _vm.toggle }
+    },
+    [
+      _c(
+        "div",
+        {
+          staticClass:
+            "w-12 h-4 bg-gray-200 border border-blue-200 rounded-lg flex items-center",
+          class: _vm.value === _vm.trueValue ? "justify-end" : "justify-start"
+        },
+        [
+          _c("div", {
+            staticClass: "rounded-full h-4 w-4 shadow",
+            class: _vm.value === _vm.trueValue ? "bg-blue-400" : "bg-gray-400"
+          })
+        ]
+      ),
+      _vm._v(" "),
+      _vm._t("default")
+    ],
+    2
   )
 }
 var staticRenderFns = []
@@ -18643,6 +18779,7 @@ __webpack_require__(/*! ./util.js */ "./resources/js/util.js");
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('t-loader', __webpack_require__(/*! ./ui/TensorLoader.vue */ "./resources/js/ui/TensorLoader.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('t-button', __webpack_require__(/*! ./ui/TensorButton.vue */ "./resources/js/ui/TensorButton.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('t-toggle', __webpack_require__(/*! ./ui/TensorToggle.vue */ "./resources/js/ui/TensorToggle.vue")["default"]);
 var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   el: '#app',
   router: new vue_router__WEBPACK_IMPORTED_MODULE_2__["default"](_routes_js__WEBPACK_IMPORTED_MODULE_0__["default"]),
@@ -18997,6 +19134,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TensorLoader_vue_vue_type_template_id_3eb1a9f9___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TensorLoader_vue_vue_type_template_id_3eb1a9f9___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/ui/TensorToggle.vue":
+/*!******************************************!*\
+  !*** ./resources/js/ui/TensorToggle.vue ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _TensorToggle_vue_vue_type_template_id_0b9ca68c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TensorToggle.vue?vue&type=template&id=0b9ca68c& */ "./resources/js/ui/TensorToggle.vue?vue&type=template&id=0b9ca68c&");
+/* harmony import */ var _TensorToggle_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TensorToggle.vue?vue&type=script&lang=js& */ "./resources/js/ui/TensorToggle.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _TensorToggle_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _TensorToggle_vue_vue_type_template_id_0b9ca68c___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _TensorToggle_vue_vue_type_template_id_0b9ca68c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/ui/TensorToggle.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/ui/TensorToggle.vue?vue&type=script&lang=js&":
+/*!*******************************************************************!*\
+  !*** ./resources/js/ui/TensorToggle.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TensorToggle_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./TensorToggle.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/ui/TensorToggle.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TensorToggle_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/ui/TensorToggle.vue?vue&type=template&id=0b9ca68c&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/ui/TensorToggle.vue?vue&type=template&id=0b9ca68c& ***!
+  \*************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TensorToggle_vue_vue_type_template_id_0b9ca68c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./TensorToggle.vue?vue&type=template&id=0b9ca68c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/ui/TensorToggle.vue?vue&type=template&id=0b9ca68c&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TensorToggle_vue_vue_type_template_id_0b9ca68c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TensorToggle_vue_vue_type_template_id_0b9ca68c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

@@ -15,21 +15,21 @@ class PagesTableSeeder extends Seeder
     public function run()
     {
         $pages1 = factory(Page::class, 3)->create([
-            'category_id' => 0,
+            'category_id' => 1,
             'user_id' => 1,
         ])->each(function ($page) {
             $page->content()->save(factory(PageContent::class)->make());
         });
 
         $pages2 = factory(Page::class, 5)->create([
-            'category_id' => rand(1, 5),
+            'category_id' => rand(2, 5),
             'user_id' => 1,
         ])->each(function ($page) {
             $page->content()->save(factory(PageContent::class)->make());
         });
 
         $pages3 = factory(Page::class, 5)->create([
-            'category_id' => rand(1, 5),
+            'category_id' => rand(2, 5),
             'user_id' => 1,
         ])->each(function ($page) {
             $page->content()->save(factory(PageContent::class)->make());
