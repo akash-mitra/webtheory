@@ -90,16 +90,26 @@
         },
 
         methods: {
+
+            // opens specific page in editor
             openPageEditor (id) {
                 this.$router.push({ path: `/app/pages/${id}` })
             },
 
+
+
+            // change the status (Draft / Live) of a specific page
             changeStatus (page, status) {
                 
-                page.status = status
+                util.ajax ('put', '/api/pages/' + page.id + '/status', { "status": status }, (response) => {
 
-                util.ajax ('put', '/api/pages/' + page.id + '/status', { status: page.status }, (response) => {
-                    console.log(response)
+                    page.status = status
+                    
+                    Toast.fire({
+                        icon: 'success',
+                        titleText: 'Done',
+                        text: 'Status changed to ' + status 
+                    })
                 }) 
             },
 
