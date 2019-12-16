@@ -2047,10 +2047,10 @@ __webpack_require__.r(__webpack_exports__);
         "status": status
       }, function (response) {
         page.status = status;
-        Toast.fire({
+        util.toast({
           icon: 'success',
-          titleText: 'Done',
-          text: 'Status changed to ' + status
+          titleText: 'Status Updated',
+          text: ' Page in ' + status + ' mode now.'
         });
       });
     }
@@ -21874,20 +21874,9 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
- * Sweetalert plugins and related config
+ * Sweetalert plugins 
  */
 window.Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-window.Toast = Swal.mixin({
-  toast: true,
-  position: 'top',
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  onOpen: function onOpen(toast) {
-    toast.addEventListener('mouseenter', Swal.stopTimer);
-    toast.addEventListener('mouseleave', Swal.resumeTimer);
-  }
-});
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -22351,6 +22340,67 @@ __webpack_require__.r(__webpack_exports__);
 
     document.body.appendChild(form);
     form.submit();
+  };
+  /**
+   * ---------------------------------------------------------------
+   * Creates an alert as a toast notification
+   * ---------------------------------------------------------------
+   **/
+
+
+  util.toast = function (param) {
+    var toastConfig = Swal.mixin({
+      toast: true,
+      position: 'top',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      onOpen: function onOpen(toast) {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      }
+    });
+    toastConfig.fire(param);
+  };
+
+  util.confirm = function (title) {
+    var text = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    var fnConfirm = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+    var fnCancelled = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+    var swalWithTailWindButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'mx-3 py-1 px-3 bg-green-500 text-white rounded hover:bg-green-700',
+        cancelButton: 'mx-3 py-1 px-3 bg-red-500 text-white rounded hover:bg-red-700'
+      },
+      buttonsStyling: false
+    });
+    swalWithTailWindButtons.fire({
+      title: title,
+      text: text,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Confirm',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true
+    }).then(function (result) {
+      if (result.value) {
+        if (fnConfirm) fnConfirm();
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        if (fnCancelled) fnCancelled();
+      }
+    });
+  };
+
+  util.notify = function (params) {
+    Swal.fire(params);
+  };
+
+  util.notifySuccess = function (title, text) {
+    this.notify({
+      icon: 'success',
+      title: title,
+      text: text
+    });
   };
   /**
    * ---------------------------------------------------------------

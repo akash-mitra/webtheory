@@ -312,6 +312,12 @@ export default {
             //     "ID returned": id
             // })
             this.isSaving = false
+
+            Toast.fire({
+                icon: 'success',
+                titleText: 'Page Saved Successfully',
+                // text: 'The page has been saved successfully'
+            })
             
         }, // end of postSaveProcessing
 
@@ -357,14 +363,20 @@ export default {
 
         deletePage () {
 
-            if (confirm('Are you sure to delete this page?')) {
-                
-                util.ajax ('delete', '/api/pages/' + this.id, {}, (response) => {
-                    alert ('Page Deleted')
+            let p = this
 
-                    this.$router.push('/app/pages')
+            util.confirm ("Delete this page?", "This action can not be reverted", function () {
+
+                util.ajax ('delete', '/api/pages/' + p.id, {}, (response) => {
+                    
+                    util.notifySuccess ('Deleted', 'The page has been successfully deleted')
+
+                    p.$router.push('/app/pages')
                 })
-            }
+
+                
+            })
+            
         },
 
         /**--------------------------------------------------------------------------

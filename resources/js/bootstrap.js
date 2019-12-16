@@ -1,19 +1,9 @@
 
 /**
- * Sweetalert plugins and related config
+ * Sweetalert plugins 
  */
 window.Swal = require('sweetalert2');
-window.Toast = Swal.mixin({
-    toast: true,
-    position: 'top',
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    onOpen: (toast) => {
-      toast.addEventListener('mouseenter', Swal.stopTimer)
-      toast.addEventListener('mouseleave', Swal.resumeTimer)
-    }
-  })
+
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

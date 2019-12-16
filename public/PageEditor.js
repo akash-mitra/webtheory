@@ -302,6 +302,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
       this.isSaving = false;
+      Toast.fire({
+        icon: 'success',
+        titleText: 'Page Saved Successfully' // text: 'The page has been saved successfully'
+
+      });
     },
     // end of postSaveProcessing
     isJustCreated: function isJustCreated() {
@@ -343,15 +348,13 @@ __webpack_require__.r(__webpack_exports__);
     },
     // end of fetchCategoryListFromServer
     deletePage: function deletePage() {
-      var _this2 = this;
-
-      if (confirm('Are you sure to delete this page?')) {
-        util.ajax('delete', '/api/pages/' + this.id, {}, function (response) {
-          alert('Page Deleted');
-
-          _this2.$router.push('/app/pages');
+      var p = this;
+      util.confirm("Delete this page?", "This action can not be reverted", function () {
+        util.ajax('delete', '/api/pages/' + p.id, {}, function (response) {
+          util.notifySuccess('Deleted', 'The page has been successfully deleted');
+          p.$router.push('/app/pages');
         });
-      }
+      });
     },
 
     /**--------------------------------------------------------------------------

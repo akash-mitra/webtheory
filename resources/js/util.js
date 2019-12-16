@@ -81,6 +81,80 @@
             form.submit()
     }
 
+
+
+
+    /**
+     * ---------------------------------------------------------------
+     * Creates an alert as a toast notification
+     * ---------------------------------------------------------------
+     **/
+    util.toast = function (param) {
+
+        let toastConfig = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                onOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+        })
+
+        toastConfig.fire(param)
+    }
+
+
+
+
+    util.confirm = function (title, text = null, fnConfirm = null, fnCancelled = null) {
+
+        let swalWithTailWindButtons = Swal.mixin({
+                customClass: {
+                  confirmButton: 'mx-3 py-1 px-3 bg-green-500 text-white rounded hover:bg-green-700',
+                  cancelButton: 'mx-3 py-1 px-3 bg-red-500 text-white rounded hover:bg-red-700'
+                },
+                buttonsStyling: false
+        })
+              
+        swalWithTailWindButtons.fire({
+                title: title,
+                text: text,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Confirm',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true
+
+        }).then((result) => {
+                if (result.value) {
+                        if (fnConfirm) fnConfirm()
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        if (fnCancelled) fnCancelled()
+                }
+        })
+    }
+
+
+
+    util.notify = function (params) {
+            Swal.fire(params)
+    }
+
+
+    util.notifySuccess = function (title, text) {
+            this.notify ({
+                icon: 'success',
+                title: title,
+                text: text,
+            })
+    }
+
+
+
+
     /**
      * ---------------------------------------------------------------
      * Makes ajax request to the URL with or without the given data

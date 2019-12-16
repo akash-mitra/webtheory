@@ -104,11 +104,11 @@
                 util.ajax ('put', '/api/pages/' + page.id + '/status', { "status": status }, (response) => {
 
                     page.status = status
-                    
-                    Toast.fire({
+
+                    util.toast({
                         icon: 'success',
-                        titleText: 'Done',
-                        text: 'Status changed to ' + status 
+                        titleText: 'Status Updated',
+                        text: ' Page in ' + status + ' mode now.'
                     })
                 }) 
             },
