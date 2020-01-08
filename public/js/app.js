@@ -2029,11 +2029,22 @@ __webpack_require__.r(__webpack_exports__);
         if (_this2.tab === 'draft' && page.status != 'Draft') return false;
         if (_this2.tab === 'byme' && page.author.id != window.authUser.id) return false;
         if (_this2.tab === 'deleted' && page.deleted_at == null) return false;
-        if (_this2.searchPhrase.length > 0 && page.title.indexOf(_this2.searchPhrase) === -1 && page.summary.indexOf(_this2.searchPhrase) === -1 && page.author.name.indexOf(_this2.searchPhrase) === -1) return false;
+
+        if (!!_this2.searchPhrase) {
+          var title = page.title.toLowerCase();
+          var summary = page.summary.toLowerCase();
+          var authorName = page.author.name.toLowerCase();
+
+          var needle = _this2.searchPhrase.toLowerCase();
+
+          if (title.indexOf(needle) === -1 && summary.indexOf(needle) === -1 && authorName.indexOf(needle) === -1) return false;
+        }
+
         return true;
       });
     }
   },
+  // end of computed
   methods: {
     // opens specific page in editor
     openPageEditor: function openPageEditor(id) {
@@ -6418,7 +6429,33 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "max-w-4xl mx-auto" }, [
-    _vm._m(0),
+    _c(
+      "div",
+      { staticClass: "px-6 my-6 w-full flex justify-between items-center" },
+      [
+        _c("h2", { staticClass: "text-gray-600 text-2xl flex items-center" }, [
+          _vm._v("Pages "),
+          _c(
+            "span",
+            {
+              staticClass:
+                "ml-3 rounded-lg py-1 px-2 shadow-inner text-xs bg-gray-300"
+            },
+            [_vm._v(_vm._s(_vm.pages.length))]
+          )
+        ]),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass:
+              "bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow",
+            attrs: { href: "/app/pages/create" }
+          },
+          [_vm._v("Create")]
+        )
+      ]
+    ),
     _vm._v(" "),
     _c("div", { staticClass: "px-6" }, [
       _c("input", {
@@ -6649,30 +6686,7 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "px-6 my-6 w-full flex justify-between items-center" },
-      [
-        _c("h2", { staticClass: "text-gray-600 text-2xl" }, [_vm._v("Pages")]),
-        _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass:
-              "bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow",
-            attrs: { href: "/app/pages/create" }
-          },
-          [_vm._v("Create")]
-        )
-      ]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -22259,7 +22273,7 @@ __webpack_require__.r(__webpack_exports__);
   util.token = document.head.querySelector('meta[name="csrf-token"]'); //Public Methods
 
   /**
-   * Generic DOM Selector 
+   * Generic DOM Selector
    */
 
   util.get = function (selector) {
@@ -22402,6 +22416,14 @@ __webpack_require__.r(__webpack_exports__);
       text: text
     });
   };
+
+  util.notifyError = function (title, text) {
+    this.notify({
+      icon: 'error',
+      title: title,
+      text: text
+    });
+  };
   /**
    * ---------------------------------------------------------------
    * Makes ajax request to the URL with or without the given data
@@ -22467,7 +22489,7 @@ __webpack_require__.r(__webpack_exports__);
 
       } else if (error.request) {
         // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser 
+        // `error.request` is an instance of XMLHttpRequest in the browser
         other_error_handler('204', 'The request was made but no response was received. Please try again later.');
         console.log(error.request);
       } else {

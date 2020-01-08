@@ -2,7 +2,7 @@
 
     <div class="w-full" @keydown.ctrl.83.exact.prevent.stop="initiateSave">
 
-        
+
 
         <div class="w-full px-6 border-b bg-white">
 
@@ -31,20 +31,20 @@
 
 
 
-        <!-- content section -->        
+        <!-- content section -->
         <div v-show="tab==='content'" id="page-contents" class="w-full">
 
             <div class="pt-10 w-full p-6 pb-24">
-                <div class="mx-auto max-w-4xl"> 
-                    <label v-show="title.length===0" class="px-6 uppercase text-xs tracking-wider text-gray-700 block pb-2">
+                <div class="mx-auto max-w-4xl">
+                    <label v-show="!title" class="px-6 uppercase text-xs tracking-wider text-gray-700 block pb-2">
                         Title
                     </label>
-                    
+
                     <textarea name="title" v-model="title" ref="title" class="px-6 bg-transparent border-b-2 border-gray-400 h-24 outline-none text-blue-800 text-3xl tracking-wide w-full" placeholder="Title of your story"></textarea>
                 </div>
 
                 <div class="mt-12 mx-auto  max-w-4xl">
-                    <label v-show="intro.length===0" class="px-6 uppercase text-xs tracking-wider text-gray-700 block pb-2">
+                    <label v-show="!intro" class="px-6 uppercase text-xs tracking-wider text-gray-700 block pb-2">
                         Intro
                     </label>
                     <textarea name="intro" v-model="intro" class="px-6 bg-transparent h-24 outline-none text-gray-700 text-lg tracking-wide w-full" placeholder="Provide a 3/4 lines of introduction to your story..."></textarea>
@@ -53,7 +53,7 @@
 
             <div class="w-full p-2 bg-gray-100 pb-20">
                 <div class="max-w-4xl mx-auto bg-white -mt-16 shadow-xl px-6 pt-6 border-t-2 border-blue-400">
-                    <div id="tensor-editor" class="mx-auto text-gray-700 pb-4 te-typo bg-white -mr-2"></div>  
+                    <div id="tensor-editor" class="mx-auto text-gray-700 pb-4 te-typo bg-white -mr-2"></div>
                 </div>
             </div>
 
@@ -72,10 +72,10 @@
                     <div class="uppercase1 text-gray-800 text-sm">Meta Description</div>
                     <div class="h-20 flex items-center text-xs text-gray-600 overflow-y-scroll">
                         Good meta descriptions are short blurbs that describe accurately the content of the page.
-                        This gives Google and other search engines a summary of what the page is about. 
+                        This gives Google and other search engines a summary of what the page is about.
                     </div>
 
-                    <textarea v-model="metadesc" class="mt-2 w-full bg-gray-100 shadow-inner rounded-lg text-xs text-gray-800 p-4 border focus:outline-none" :class="metadesc.length === 0 ? 'border-red-400' : ''"></textarea>
+                    <textarea v-model="metadesc" class="mt-2 w-full bg-gray-100 shadow-inner rounded-lg text-xs text-gray-800 p-4 border focus:outline-none" :class="!metadesc ? 'border-red-400' : ''"></textarea>
                     <span class="mt-3 p-1 text-xs text-blue-700 cursor-pointer hover:text-blue-900" @click="metadesc=intro">Copy from Intro text</span>
 
                 </div>
@@ -101,13 +101,13 @@
                 <div class="w-full px-4">
                     <div class="uppercase1 text-gray-800 text-sm">Category</div>
                     <div class="py-3 flex items-center text-xs text-gray-600 overflow-y-scroll">
-                        You may organize your pages under various categories. 
+                        You may organize your pages under various categories.
                         Category names can be used to create menu items that can link all the pages under the same category.
                     </div>
 
                     <div class="inline-block relative w-64">
                         <select v-model="category_id" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
-                            <option v-for="category in categories" :value="category.key" v-bind:key="category.key">                        
+                            <option v-for="category in categories" :value="category.key" v-bind:key="category.key">
                                     {{ category.value }}
                             </option>
                         </select>
@@ -131,7 +131,7 @@
                     <div class="uppercase1 text-gray-800 text-sm">Google Search Preview</div>
                     <div class="py-3 flex items-center text-xs text-gray-600 overflow-y-scroll">
                         This is how this page will appear in Google search when using the page meta description.
-                        Search engines may use meta description as snippets for your pages or 
+                        Search engines may use meta description as snippets for your pages or
                         a more relevant section of your page's visible text, if that fits better with a user's query.
                     </div>
 
@@ -143,7 +143,7 @@
 
                 </div>
             </div> <!-- end of search preview -->
-            
+
         </div><!-- end of meta section -->
 
 
@@ -161,13 +161,13 @@
                     </div>
                 </t-toggle>
                 <div class="w-full mb-2 text-xs text-gray-700">
-                    Only Live page will be accessible to site visitors. 
+                    Only Live page will be accessible to site visitors.
                 </div>
             </div>
 
             <div class="pt-10 pb-3 text-right">
                 <span class="text-sm text-grey-600 hover:text-red-600 cursor-pointer" @click="deletePage">
-                    Delete this page 
+                    Delete this page
                 </span>
             </div>
 
@@ -194,20 +194,20 @@ import Embed from '@editorjs/embed';
 
 export default {
 
-    
+
     data: function () {
         return {
             editor: null,
 
             id: 0,
-            title: '',
-            intro: '',
+            title: null,
+            intro: null,
             body: {},
-            metakey: '',
-            metadesc: '',
+            metakey: null,
+            metadesc: null,
             category_id: 1,
             status: 'Draft',
-        
+
             categories: [],
 
             tab: 'content',
@@ -216,10 +216,10 @@ export default {
     },
 
     /**--------------------------------------------------------------------------
-     * Perform these functions when this component is created 
+     * Perform these functions when this component is created
      * for the first time only.
      */
-    created: function () { 
+    created: function () {
 
         this.fetchContentAndLoadEditor()
 
@@ -241,14 +241,31 @@ export default {
         // the saving process. Mandatory fields checking.
         validateBeforeSave: function () {
 
-            if (this.title.length ===0 
-                || this.title.length >= 100
-                || this.intro.length ===0 
-                || this.intro.length >= 1048)
-            return false
+            if (!this.title) {
+                util.notifyError('Page has no title', 'Provide a title to save this page')
+                return false
+            }
+
+            if (this.title.length >= 100) {
+                util.notifyError('Page title too long!', 'Keep page title within maximum 100 characters.')
+                return false
+            }
+
+            if (!this.intro) {
+                util.notifyError('Provide an Introduction', 'Write a few lines of intro for this page before saving.')
+                return false
+            }
+
+            if (this.intro.length >= 1048) {
+                util.notifyError('Intro too long', 'Keep page intro within about 1000 characters')
+                return false
+            }
+
 
             return true
         },
+
+
 
         getSaveUrl: function () {
             if (this.id > 0) return '/api/pages/' + this.id
@@ -280,7 +297,7 @@ export default {
                         category_id: p.category_id,
                         status: p.status,
                     }, this.postSaveProcessing)
-                    
+
                 }).catch((error) => {
                     console.log('Saving failed: ', error)
                 })
@@ -294,17 +311,17 @@ export default {
         postSaveProcessing: function (successResponse) {
 
             if (this.isJustCreated()) {
-                
+
                 // assign new Id
                 let id = parseInt(successResponse.id)
-                p.id = id
+                this.id = id
 
                 // change the address bar URL to en edit page url
-                p.$router.replace({ path: '/app/pages/' + id })
+                this.$router.replace({ path: '/app/pages/' + id })
 
-            } 
+            }
 
-                        
+
             // console.table({
             //     method: p.getSaveMethod(),
             //     url: p.getSaveUrl(),
@@ -313,12 +330,12 @@ export default {
             // })
             this.isSaving = false
 
-            Toast.fire({
+            util.toast({
                 icon: 'success',
                 titleText: 'Page Saved Successfully',
                 // text: 'The page has been saved successfully'
             })
-            
+
         }, // end of postSaveProcessing
 
         isJustCreated: function () {
@@ -326,8 +343,8 @@ export default {
         },
 
         /**--------------------------------------------------------------------------
-         * If the article ID is present (e.g. passed as a URL parameter via router), 
-         * then this method will make an AJAX query in the server to fetch the 
+         * If the article ID is present (e.g. passed as a URL parameter via router),
+         * then this method will make an AJAX query in the server to fetch the
          * contents of the article from the database when Vue is created.
          */
         fetchContentAndLoadEditor: function () {
@@ -337,6 +354,7 @@ export default {
                 // console.log('Page Id = ' + this.$route.params.id + ' passed via router param. Downloading contents...')
                 let p = this
                 util.ajax ('get', '/api/pages/' + this.$route.params.id, {}, function (data) {
+
                     p.id = data.id
                     p.title = data.title
                     p.intro = data.summary
@@ -357,7 +375,7 @@ export default {
 
                 let p = this
                 util.ajax ('get', '/api/lov/categories', {}, (data) => { p.categories = data })
-            
+
         }, // end of fetchCategoryListFromServer
 
 
@@ -368,15 +386,15 @@ export default {
             util.confirm ("Delete this page?", "This action can not be reverted", function () {
 
                 util.ajax ('delete', '/api/pages/' + p.id, {}, (response) => {
-                    
+
                     util.notifySuccess ('Deleted', 'The page has been successfully deleted')
 
                     p.$router.push('/app/pages')
                 })
 
-                
+
             })
-            
+
         },
 
         /**--------------------------------------------------------------------------
@@ -389,7 +407,7 @@ export default {
                 holder: 'tensor-editor',
                 data: this.body,
 
-                tools: { 
+                tools: {
 
                     // allows you to insert a header block
                     header: {
@@ -426,8 +444,8 @@ export default {
                         class: ImageTool,
                         config: {
                             endpoints: {
-                                byFile: '/server/media/uploadFile', // Backend file uploader endpoint
-                                byUrl: '/server/media/fetchUrl',    // Endpoint that provides uploading by Url
+                                byFile: '/api/media', // Backend file uploader endpoint
+                                byUrl: '/api/media/fetchUrl',    // Endpoint that provides uploading by Url
                             },
                             additionalRequestHeaders: {
                                 'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
@@ -449,7 +467,7 @@ export default {
 
                 } // end of tools
 
-            }) // end of return 
+            }) // end of return
 
         }, // end of loadEditorTool
 
@@ -458,18 +476,20 @@ export default {
             this.$refs.title.focus()
         },
 
-        
+
 
 
     }, // end of methods
 
     computed: {
         url() {
-            return 'https://yoursite.com/' + this.id + '-' + this.title.replace(/\W+/g, '-').toLowerCase(); 
+            return 'https://yoursite.com/' + this.id
+                + '-'
+                + (!!this.title ? this.title.replace(/\W+/g, '-').toLowerCase() : '');
         },
 
-        
-    } 
+
+    }
 }
 </script>
 
@@ -485,7 +505,7 @@ export default {
 
 .google-header {
     font-family: arial,sans-serif;
-    font-size: 20px; 
+    font-size: 20px;
     line-height: 1.3;
     cursor: pointer;
     color: #1a0dab
@@ -493,7 +513,7 @@ export default {
 
 .google-url {
     font-family: arial,sans-serif;
-    font-size: 16px; 
+    font-size: 16px;
     line-height: 1.5;
     padding-top: 1px;
     color: #006621
@@ -512,5 +532,3 @@ export default {
 <style lang="scss">
     @import '../../sass/typography.scss';
 </style>
-
-

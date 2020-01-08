@@ -220,11 +220,11 @@ __webpack_require__.r(__webpack_exports__);
     return {
       editor: null,
       id: 0,
-      title: '',
-      intro: '',
+      title: null,
+      intro: null,
       body: {},
-      metakey: '',
-      metadesc: '',
+      metakey: null,
+      metadesc: null,
       category_id: 1,
       status: 'Draft',
       categories: [],
@@ -234,7 +234,7 @@ __webpack_require__.r(__webpack_exports__);
   },
 
   /**--------------------------------------------------------------------------
-   * Perform these functions when this component is created 
+   * Perform these functions when this component is created
    * for the first time only.
    */
   created: function created() {
@@ -249,7 +249,26 @@ __webpack_require__.r(__webpack_exports__);
     // simple front-end validations before starting
     // the saving process. Mandatory fields checking.
     validateBeforeSave: function validateBeforeSave() {
-      if (this.title.length === 0 || this.title.length >= 100 || this.intro.length === 0 || this.intro.length >= 1048) return false;
+      if (!this.title) {
+        util.notifyError('Page has no title', 'Provide a title to save this page');
+        return false;
+      }
+
+      if (this.title.length >= 100) {
+        util.notifyError('Page title too long!', 'Keep page title within maximum 100 characters.');
+        return false;
+      }
+
+      if (!this.intro) {
+        util.notifyError('Provide an Introduction', 'Write a few lines of intro for this page before saving.');
+        return false;
+      }
+
+      if (this.intro.length >= 1048) {
+        util.notifyError('Intro too long', 'Keep page intro within about 1000 characters');
+        return false;
+      }
+
       return true;
     },
     getSaveUrl: function getSaveUrl() {
@@ -288,9 +307,9 @@ __webpack_require__.r(__webpack_exports__);
       if (this.isJustCreated()) {
         // assign new Id
         var id = parseInt(successResponse.id);
-        p.id = id; // change the address bar URL to en edit page url
+        this.id = id; // change the address bar URL to en edit page url
 
-        p.$router.replace({
+        this.$router.replace({
           path: '/app/pages/' + id
         });
       } // console.table({
@@ -302,7 +321,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
       this.isSaving = false;
-      Toast.fire({
+      util.toast({
         icon: 'success',
         titleText: 'Page Saved Successfully' // text: 'The page has been saved successfully'
 
@@ -314,26 +333,25 @@ __webpack_require__.r(__webpack_exports__);
     },
 
     /**--------------------------------------------------------------------------
-     * If the article ID is present (e.g. passed as a URL parameter via router), 
-     * then this method will make an AJAX query in the server to fetch the 
+     * If the article ID is present (e.g. passed as a URL parameter via router),
+     * then this method will make an AJAX query in the server to fetch the
      * contents of the article from the database when Vue is created.
      */
     fetchContentAndLoadEditor: function fetchContentAndLoadEditor() {
       if (typeof this.$route.params.id != 'undefined' && parseInt(this.$route.params.id) > 0) {
         // download data from server...
         // console.log('Page Id = ' + this.$route.params.id + ' passed via router param. Downloading contents...')
-        var _p = this;
-
+        var p = this;
         util.ajax('get', '/api/pages/' + this.$route.params.id, {}, function (data) {
-          _p.id = data.id;
-          _p.title = data.title;
-          _p.intro = data.summary;
-          _p.metakey = data.metakey;
-          _p.metadesc = data.metadesc;
-          _p.category_id = data.category_id;
-          _p.status = data.status;
-          _p.body = JSON.parse(data.content.body_json);
-          _p.editor = _p.loadEditorTool();
+          p.id = data.id;
+          p.title = data.title;
+          p.intro = data.summary;
+          p.metakey = data.metakey;
+          p.metadesc = data.metadesc;
+          p.category_id = data.category_id;
+          p.status = data.status;
+          p.body = JSON.parse(data.content.body_json);
+          p.editor = p.loadEditorTool();
         });
       } else {
         this.editor = this.loadEditorTool();
@@ -395,9 +413,9 @@ __webpack_require__.r(__webpack_exports__);
             "class": _editorjs_image__WEBPACK_IMPORTED_MODULE_7___default.a,
             config: {
               endpoints: {
-                byFile: '/server/media/uploadFile',
+                byFile: '/api/media',
                 // Backend file uploader endpoint
-                byUrl: '/server/media/fetchUrl' // Endpoint that provides uploading by Url
+                byUrl: '/api/media/fetchUrl' // Endpoint that provides uploading by Url
 
               },
               additionalRequestHeaders: {
@@ -418,7 +436,7 @@ __webpack_require__.r(__webpack_exports__);
           }
         } // end of tools
 
-      }); // end of return 
+      }); // end of return
     },
     // end of loadEditorTool
     focusInput: function focusInput() {
@@ -428,7 +446,7 @@ __webpack_require__.r(__webpack_exports__);
   // end of methods
   computed: {
     url: function url() {
-      return 'https://yoursite.com/' + this.id + '-' + this.title.replace(/\W+/g, '-').toLowerCase();
+      return 'https://yoursite.com/' + this.id + '-' + (!!this.title ? this.title.replace(/\W+/g, '-').toLowerCase() : '');
     }
   }
 });
@@ -761,8 +779,8 @@ var render = function() {
                     {
                       name: "show",
                       rawName: "v-show",
-                      value: _vm.title.length === 0,
-                      expression: "title.length===0"
+                      value: !_vm.title,
+                      expression: "!title"
                     }
                   ],
                   staticClass:
@@ -804,8 +822,8 @@ var render = function() {
                     {
                       name: "show",
                       rawName: "v-show",
-                      value: _vm.intro.length === 0,
-                      expression: "intro.length===0"
+                      value: !_vm.intro,
+                      expression: "!intro"
                     }
                   ],
                   staticClass:
@@ -888,7 +906,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                    Good meta descriptions are short blurbs that describe accurately the content of the page.\n                    This gives Google and other search engines a summary of what the page is about. \n                "
+                      "\n                    Good meta descriptions are short blurbs that describe accurately the content of the page.\n                    This gives Google and other search engines a summary of what the page is about.\n                "
                     )
                   ]
                 ),
@@ -904,7 +922,7 @@ var render = function() {
                   ],
                   staticClass:
                     "mt-2 w-full bg-gray-100 shadow-inner rounded-lg text-xs text-gray-800 p-4 border focus:outline-none",
-                  class: _vm.metadesc.length === 0 ? "border-red-400" : "",
+                  class: !_vm.metadesc ? "border-red-400" : "",
                   domProps: { value: _vm.metadesc },
                   on: {
                     input: function($event) {
@@ -1000,7 +1018,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                    You may organize your pages under various categories. \n                    Category names can be used to create menu items that can link all the pages under the same category.\n                "
+                      "\n                    You may organize your pages under various categories.\n                    Category names can be used to create menu items that can link all the pages under the same category.\n                "
                     )
                   ]
                 ),
@@ -1044,7 +1062,7 @@ var render = function() {
                         },
                         [
                           _vm._v(
-                            "                        \n                                " +
+                            "\n                                " +
                               _vm._s(category.value) +
                               "\n                        "
                           )
@@ -1112,7 +1130,7 @@ var render = function() {
                   },
                   [
                     _vm._v(
-                      "\n                    This is how this page will appear in Google search when using the page meta description.\n                    Search engines may use meta description as snippets for your pages or \n                    a more relevant section of your page's visible text, if that fits better with a user's query.\n                "
+                      "\n                    This is how this page will appear in Google search when using the page meta description.\n                    Search engines may use meta description as snippets for your pages or\n                    a more relevant section of your page's visible text, if that fits better with a user's query.\n                "
                     )
                   ]
                 ),
@@ -1196,7 +1214,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "w-full mb-2 text-xs text-gray-700" }, [
                 _vm._v(
-                  "\n                Only Live page will be accessible to site visitors. \n            "
+                  "\n                Only Live page will be accessible to site visitors.\n            "
                 )
               ])
             ],
@@ -1211,7 +1229,7 @@ var render = function() {
                   "text-sm text-grey-600 hover:text-red-600 cursor-pointer",
                 on: { click: _vm.deletePage }
               },
-              [_vm._v("\n                Delete this page \n            ")]
+              [_vm._v("\n                Delete this page\n            ")]
             )
           ])
         ]

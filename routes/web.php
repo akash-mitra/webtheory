@@ -11,10 +11,13 @@
 |
 */
 
+use Illuminate\Support\Facades\Auth;
+Auth::loginUsingId(1);
+
 Route::prefix('api')->group(function () {
     // Laravel AUTH Routes
-    // Auth::routes(['verify' => true]); 
-    
+    // Auth::routes(['verify' => true]);
+
     // Unauthenticated Routes
     Route::post('login', 'Api\Auth\LoginController@login');
 

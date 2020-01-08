@@ -8,7 +8,7 @@
     //Public Methods
 
     /**
-     * Generic DOM Selector 
+     * Generic DOM Selector
      */
     util.get = function (selector) {
             return document.querySelector(selector);
@@ -118,7 +118,7 @@
                 },
                 buttonsStyling: false
         })
-              
+
         swalWithTailWindButtons.fire({
                 title: title,
                 text: text,
@@ -153,6 +153,15 @@
     }
 
 
+    util.notifyError = function (title, text) {
+        this.notify ({
+            icon: 'error',
+            title: title,
+            text: text,
+        })
+}
+
+
 
 
     /**
@@ -160,12 +169,12 @@
      * Makes ajax request to the URL with or without the given data
      * ---------------------------------------------------------------*/
     util.ajax = function (
-            type, 
-            url, 
-            data, 
-            success_handler, 
-            client_error_handler, 
-            server_error_handler, 
+            type,
+            url,
+            data,
+            success_handler,
+            client_error_handler,
+            server_error_handler,
             other_error_handler
     ) {
             if (typeof type === 'undefined') type = 'post';
@@ -204,7 +213,7 @@
             }
 
             handler.then((response) => {
-                    
+
                     success_handler(response.data)
             });
 
@@ -223,7 +232,7 @@
                             // console.log(error.response.headers);
                     } else if (error.request) {
                             // The request was made but no response was received
-                            // `error.request` is an instance of XMLHttpRequest in the browser 
+                            // `error.request` is an instance of XMLHttpRequest in the browser
                             other_error_handler('204', 'The request was made but no response was received. Please try again later.')
                             console.log(error.request);
                     } else {
