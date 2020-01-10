@@ -9,7 +9,7 @@
         <title>WebTheory - Admin Panel</title>
 
         <link href="{{ mix('/css/app.css') }}" rel="stylesheet" />
-        
+
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
 
         @yield('css')
@@ -19,11 +19,11 @@
     <body class="bg-gray-200">
 
     <div class="w-full font-sans" id="app">
-       
+
         <div class="w-full bg-white border-b border-gray-400 py-3 md:flex items-center justify-between">
             <div class="md:flex justify-start items-center">
                 <div class="px-6 lg:px-8 flex items-center justify-between">
-                    <img src="/images/tensor.svg" alt="WebTheory Home" class="h-10 w-10 mr-6"> 
+                    <img src="/images/tensor.svg" alt="WebTheory Home" class="h-10 w-10 mr-6">
                     <p class="hidden md:block text-blue-400 font-thin mr-10">WebTheory</p>
 
                     <svg id="menu-toggle-button" class="md:hidden text-gray-500 fill-current w-6 h-6 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -38,7 +38,11 @@
                             Pages
                         </router-link>
                     </p>
-                    <p class="px-2 md:px-6 tracking-wide text-sm py-2 text-gray-500">Categories</p>
+                    <p class="px-2 md:px-6 tracking-wide text-sm py-2 text-gray-500">
+                        <router-link to="/app/templates">
+                            Templates
+                        </router-link>
+                    </p>
                     <p class="px-2 md:px-6 tracking-wide text-sm py-2 text-gray-500">Settings</p>
                 </nav>
 
@@ -49,11 +53,11 @@
             </div>
 
         </div>
-        
-        
+
+
 
         <div class="w-full">
-            
+
             <router-view></router-view>
         </div>
 
