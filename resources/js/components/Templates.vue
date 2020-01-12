@@ -18,22 +18,34 @@
 
             <div v-for="template in filteredTemplates" class="w-full sm:w-1/2 p-3 lg:p-6">
                 <div class="bg-white shadow-lg relative overflow-hidden">
-                    <div v-if="used.home === template.id" class="w-10 h-10 p-2 bg-green-500 text-white text-xs rounded-full shadow-lg font-bold border border-white uppercase" style="position: absolute; top: 20px; right: 30px;">
+                    <div v-if="template.active" class="w-10 h-10 p-2 bg-green-500 text-white text-xs rounded-full shadow-lg font-bold border border-white uppercase" style="position: absolute; top: 20px; right: 30px;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 469 469" class="fill-current"><path d="M463 96l-22-22c-9-8-24-8-33 0L180 302 61 183c-9-9-24-9-33 0L7 205c-9 9-9 23 0 32l157 158a23 23 0 0032 0l266-266c9-9 9-24 1-33z"/></svg>
 
                     </div>
 
-                    <img :src="template.image_url" style='min-height: 250px; min-width: 400px' class="w-full">
+                    <img :src="template.media_url" style='min-height: 250px; min-width: 400px' class="w-full">
 
-                    <div class="p-6 flex flex-col justify-around">
+                    <div class="w-full p-6 flex flex-col justify-around">
                         <h3 class="text-lg font-bold py-1">{{ template.name }}</h3>
                         <div class="text-sm text-gray-700 py-2 h-20 overflow-hidden">
                             {{ template.description }}
                         </div>
 
-                        <button v-if="used.home != template.id" class="bg-green-600 text-white text-sm rounded py-2 px-4 my-2 shadow">Apply Now</button>
-                        <button v-else class="bg-gray-600 text-white text-sm rounded py-2 px-4 my-2 shadow">In Use</button>
 
+                        <div class="w-full flex items-center">
+
+                            <div class="w-1/2">
+                                <a :href="'/app/templates/' + template.id" class="text-blue-600">Edit</a>
+                            </div>
+
+                            <div class="w-1/2 flex justify-end">
+                                <t-button v-if="!template.active" :loadingWheel="isSaving" @click.native="applyTemplate(template)" color="blue">
+                                    Apply Now
+                                </t-button>
+                                <button v-else class="bg-gray-400 text-white text-xs rounded py-2 px-6 shadow cursor-not-allowed">In Use</button>
+                            </div>
+
+                        </div>
                     </div>
 
                 </div>
@@ -51,11 +63,8 @@
         data() {
             return {
                 templates: [],
-                used: {
-                    home: 1,
-                    page: 1,
+                isSaving: false,
 
-                },
                 selected: null,
                 tab: 'home',
                 searchPhrase: ''
@@ -71,7 +80,8 @@
                     name: 'Pristine',
                     type: 'home',
                     description: 'A spotless template that provides a clean and simple user experience for the users of your blog.',
-                    image_url: 'https://source.unsplash.com/400x250/?white,blue,ocean,frost',
+                    media_url: 'https://source.unsplash.com/400x250/?white,blue,ocean,frost',
+                    active: true,
                     created: {
                         author: 'Akash Mitra',
                         released: '8 Jan 2020',
@@ -88,7 +98,8 @@
                     name: 'Kayana',
                     type: 'home',
                     description: 'Stunningly powerful, elegant and yet rebellious dark template that captures the attention of your readers in a fascinating way.',
-                    image_url: 'https://source.unsplash.com/400x250/?dark,elegance,black',
+                    media_url: 'https://source.unsplash.com/400x250/?dark,elegance,black',
+                    active: false,
                     created: {
                         author: 'Akash Mitra',
                         released: '8 Jan 2020',
@@ -105,7 +116,8 @@
                     name: 'Spark',
                     type: 'home',
                     description: 'Stunningly powerful, elegant and yet rebellious dark template that captures the attention of your readers in a fascinating way.',
-                    image_url: 'https://source.unsplash.com/400x250/?spark,light',
+                    media_url: 'https://source.unsplash.com/400x250/?spark,light',
+                    active: false,
                     created: {
                         author: 'Akash Mitra',
                         released: '8 Jan 2020',
@@ -141,7 +153,23 @@
             },
 
 
+            applyTemplate(template) {
+                this.isSaving = true
 
+                this.templates.map((template) => {
+                    template.active = false
+                })
+
+                let p = this
+
+                util.ajax('post', '/api/templates/' + template.id + '/activate', {}, (response) => {
+                    template.active = true
+
+                    util.notifySuccess('Template Changed', template.name + ' is now the default template for "' + template.type + '" pages.')
+
+                    p.isSaving = false
+                })
+            }
 
         }
 

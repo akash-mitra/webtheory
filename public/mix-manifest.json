@@ -3,7 +3,7 @@
     "/css/app.css": "/css/app.css",
     "/css/typography.css": "/css/typography.css",
     "/PageEditor.js": "/PageEditor.js",
-    "/vendors~PageEditor.js": "/vendors~PageEditor.js",
     "/TemplateEditor.js": "/TemplateEditor.js",
-    "/vendors~PageEditor~TemplateEditor.js": "/vendors~PageEditor~TemplateEditor.js"
+    "/vendors~PageEditor.js": "/vendors~PageEditor.js",
+    "/vendors~TemplateEditor.js": "/vendors~TemplateEditor.js"
 }

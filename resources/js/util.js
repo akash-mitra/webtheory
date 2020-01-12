@@ -3,7 +3,6 @@
     var isHot = true;
 
     // Public properties
-    util.token = document.head.querySelector('meta[name="csrf-token"]');
 
     //Public Methods
 
@@ -66,7 +65,7 @@
             const csrfField = document.createElement('input');
             csrfField.type = 'hidden';
             csrfField.name = '_token';
-            csrfField.value = util.token.content;
+            csrfField.value = window.token;
             form.appendChild(csrfField)
 
             if (method.toLowerCase() === 'delete' || method.toLowerCase() === 'patch' || method.toLowerCase() === 'put') {

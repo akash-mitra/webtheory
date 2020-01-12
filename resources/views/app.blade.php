@@ -33,17 +33,18 @@
                 </div>
 
                 <nav id="nav-menu" class="hidden md:block px-4 lg:px-8 md:flex py-4 md:py-0 w-full max-w-4xl">
-                    <p class="px-2 md:px-6 tracking-wide text-sm py-2 text-blue-700">
-                        <router-link to="/app/pages">
+                    <p class="px-2 md:px-6 tracking-wide text-sm py-2">
+                        <router-link active-class="font-bold text-blue-700" to="/app/pages">
                             Pages
                         </router-link>
                     </p>
-                    <p class="px-2 md:px-6 tracking-wide text-sm py-2 text-gray-500">
-                        <router-link to="/app/templates">
+                    <p class="px-2 md:px-6 tracking-wide text-sm py-2">
+                        <router-link active-class="font-bold text-blue-700" to="/app/templates">
                             Templates
                         </router-link>
                     </p>
-                    <p class="px-2 md:px-6 tracking-wide text-sm py-2 text-gray-500">Settings</p>
+                    
+                    <p class="px-2 md:px-6 tracking-wide text-sm py-2">Settings</p>
                 </nav>
 
             </div>

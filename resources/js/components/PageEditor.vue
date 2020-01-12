@@ -22,7 +22,7 @@
                         <span class="hidden sm:inline-block tracking-wider">Setting</span>
                     </div>
                 </div>
-                <t-button v-bind:isLoading="isSaving" @click.native="initiateSave">
+                <t-button :loadingWheel="isSaving" @click.native="initiateSave">
                     Save
                 </t-button>
             </div>
@@ -239,7 +239,7 @@ export default {
 
         // simple front-end validations before starting
         // the saving process. Mandatory fields checking.
-        validateBeforeSave: function () {
+        isValid: function () {
 
             if (!this.title) {
                 util.notifyError('Page has no title', 'Provide a title to save this page')
@@ -279,7 +279,7 @@ export default {
 
         initiateSave: function () {
 
-            if (this.validateBeforeSave()) {
+            if (this.isValid()) {
 
                 this.isSaving = true
 

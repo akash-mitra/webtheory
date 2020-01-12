@@ -4,7 +4,9 @@
 
         <div class="px-2 my-6 w-full flex justify-between items-center">
             <h2 class="text-gray-600 text-2xl flex items-center">Template Editor</h2>
-            <a href="#" class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow">Save</a>
+            <t-button :loadingWheel="isSaving" @click.native="initiateSave">
+                    Save
+            </t-button>
         </div>
 
 
@@ -18,7 +20,7 @@
 
             <div class="w-full sm:flex mb-4">
                 <label for="templateName" class="block w-full sm:w-1/4 text-sm py-1 px-3">Name</label>
-                <input type="text" id="templateName" v-model="name" class="w-full sm:w-3/4 max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                <input type="text" id="templateName" v-model="name" ref="name" class="w-full sm:w-3/4 max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
             </div>
 
             <div class="w-full sm:flex mb-8">
@@ -87,53 +89,189 @@
         </div>
 
 
-
+        <div v-show="tab==='source'" class="w-full rounded mb-12">
+            <editor v-model="sourceCode" @init="editorInit" lang="html" theme="twilight" width="100%" height="500"></editor>
+        </div>
 
     </div>
 
 </template>
 
+
+
 <script>
 
-//import EditorJS from '@editorjs/editorjs';
-
 export default {
-
 
     data: function () {
         return {
             tab: 'template',
+            isSaving: false,
+
+            id: 0,
             type: null,
             name: null,
             description: null,
-            url: 'https://source.unsplash.com/500x310/?blog,page'
+            url: 'https://source.unsplash.com/500x310/?blog,page',
+            sourceCode: null,
+            active: false,
         }
     },
 
+    created() {
 
-    created: function () {
-
-
-    }, // end of created
-
-
-    mounted: function () {
-
+        this.fetchContentAndLoadEditor()
     },
+
+    components: { editor: require('vue2-ace-editor') },
 
 
     methods: {
 
+        editorInit: function () {
+            // require('brace/ext/language_tools') //language extension prerequsite...
+            require('brace/mode/html')
+            // require('brace/mode/javascript')    //language
+            // require('brace/mode/less')
+            require('brace/theme/twilight')
+            // require('brace/snippets/javascript') //snippet
+        },
 
+        // simple front-end validations before starting
+        // the saving process. Mandatory fields checking.
+        isValid: function () {
+
+            if (!this.name) {
+                util.notifyError('Template has no name', 'Provide a name for this template')
+                return false
+            }
+
+            if (this.name.length >= 100) {
+                util.notifyError('Template name too long!', 'Keep name within maximum 100 characters.')
+                return false
+            }
+
+            if (!this.description) {
+                util.notifyError('Provide a description', 'Write a few lines of description for this template before saving.')
+                return false
+            }
+
+            if (this.description.length >= 1048) {
+                util.notifyError('Description too long', 'Keep description within about 1000 characters')
+                return false
+            }
+
+
+            if (!this.type) {
+                util.notifyError('Template must have a type', 'Select any one type for this template, e.g. "Home" or "Single" etc.')
+                return false
+            }
+
+
+            return true
+        },
+
+
+
+        getSaveUrl: function () {
+            if (this.id > 0) return '/api/templates/' + this.id
+            else return '/api/templates'
+        },
+
+        getSaveMethod: function () {
+            if (this.id > 0) return 'put'
+            else return 'post'
+        },
+
+        initiateSave: function () {
+
+            if (this.isValid()) {
+
+                this.isSaving = true
+
+
+                util.ajax (this.getSaveMethod(), this.getSaveUrl(), {
+                    id: this.id,
+                    name: this.name,
+                    description: this.description,
+                    code: this.sourceCode,
+                    type: this.type,
+                    media_url: this.url,
+                    active: this.active
+                }, this.postSaveProcessing)
+
+            }
+        },
+
+
+        /*--------------------------------------------------------------------------
+         * Processes the Id after a successful saving
+         */
+        postSaveProcessing: function (successResponse) {
+
+            if (this.isJustCreated()) {
+
+                // assign new Id
+                let id = parseInt(successResponse.id)
+                this.id = id
+
+                // change the address bar URL to en edit page url
+                this.$router.replace({ path: '/app/templates/' + id })
+
+            }
+
+            this.isSaving = false
+
+            util.toast({
+                icon: 'success',
+                titleText: 'Template Saved Successfully',
+                // text: 'The page has been saved successfully'
+            })
+
+        }, // end of postSaveProcessing
+
+        isJustCreated: function () {
+            return this.id === 0
+        },
+
+        /**--------------------------------------------------------------------------
+         * If the article ID is present (e.g. passed as a URL parameter via router),
+         * then this method will make an AJAX query in the server to fetch the
+         * contents of the article from the database when Vue is created.
+         */
+        fetchContentAndLoadEditor: function () {
+
+            if (typeof this.$route.params.id != 'undefined' && parseInt(this.$route.params.id) > 0) {
+
+                p.sourceCode = 'Retrieving information from the server....'
+                // download data from server...
+                let p = this
+                util.ajax ('get', '/api/templates/' + this.$route.params.id, {}, function (data) {
+                    p.id = data.id
+                    p.name = data.name
+                    p.description = data.description
+                    p.type = data.type
+                    p.url = data.media_url
+                    p.sourceCode = data.code
+                    p.active = data.active
+                })
+            }
+        }, // end of fetchContentAndLoadEditor
+
+
+        deletePage () {
+
+            let p = this
+            util.confirm ("Delete this template?", "This action can not be reverted", function () {
+
+                util.ajax ('delete', '/api/templates/' + p.id, {}, (response) => {
+
+                    util.notifySuccess ('Deleted', 'The template has been successfully deleted')
+
+                    p.$router.push('/app/templates')
+                })
+            })
+        },
     }
 }
 </script>
-
-
-<style>
-    .test { color: red }
-</style>
-
-<style lang="scss">
-    @import '../../sass/typography.scss';
-</style>

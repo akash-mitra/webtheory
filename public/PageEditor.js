@@ -248,7 +248,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     // simple front-end validations before starting
     // the saving process. Mandatory fields checking.
-    validateBeforeSave: function validateBeforeSave() {
+    isValid: function isValid() {
       if (!this.title) {
         util.notifyError('Page has no title', 'Provide a title to save this page');
         return false;
@@ -280,7 +280,7 @@ __webpack_require__.r(__webpack_exports__);
     initiateSave: function initiateSave() {
       var _this = this;
 
-      if (this.validateBeforeSave()) {
+      if (this.isValid()) {
         this.isSaving = true;
         this.editor.save().then(function (bodyJson) {
           var p = _this;
@@ -741,7 +741,7 @@ var render = function() {
             _c(
               "t-button",
               {
-                attrs: { isLoading: _vm.isSaving },
+                attrs: { loadingWheel: _vm.isSaving },
                 nativeOn: {
                   click: function($event) {
                     return _vm.initiateSave($event)

@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "" + ({"TemplateEditor":"TemplateEditor","vendors~PageEditor":"vendors~PageEditor","PageEditor":"PageEditor"}[chunkId]||chunkId) + ".js"
+/******/ 		return __webpack_require__.p + "" + ({"vendors~PageEditor":"vendors~PageEditor","PageEditor":"PageEditor","vendors~TemplateEditor":"vendors~TemplateEditor","TemplateEditor":"TemplateEditor"}[chunkId]||chunkId) + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -2126,14 +2126,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       templates: [],
-      used: {
-        home: 1,
-        page: 1
-      },
+      isSaving: false,
       selected: null,
       tab: 'home',
       searchPhrase: ''
@@ -2146,7 +2155,8 @@ __webpack_require__.r(__webpack_exports__);
       name: 'Pristine',
       type: 'home',
       description: 'A spotless template that provides a clean and simple user experience for the users of your blog.',
-      image_url: 'https://source.unsplash.com/400x250/?white,blue,ocean,frost',
+      media_url: 'https://source.unsplash.com/400x250/?white,blue,ocean,frost',
+      active: true,
       created: {
         author: 'Akash Mitra',
         released: '8 Jan 2020',
@@ -2162,7 +2172,8 @@ __webpack_require__.r(__webpack_exports__);
       name: 'Kayana',
       type: 'home',
       description: 'Stunningly powerful, elegant and yet rebellious dark template that captures the attention of your readers in a fascinating way.',
-      image_url: 'https://source.unsplash.com/400x250/?dark,elegance,black',
+      media_url: 'https://source.unsplash.com/400x250/?dark,elegance,black',
+      active: false,
       created: {
         author: 'Akash Mitra',
         released: '8 Jan 2020',
@@ -2178,7 +2189,8 @@ __webpack_require__.r(__webpack_exports__);
       name: 'Spark',
       type: 'home',
       description: 'Stunningly powerful, elegant and yet rebellious dark template that captures the attention of your readers in a fascinating way.',
-      image_url: 'https://source.unsplash.com/400x250/?spark,light',
+      media_url: 'https://source.unsplash.com/400x250/?spark,light',
+      active: false,
       created: {
         author: 'Akash Mitra',
         released: '8 Jan 2020',
@@ -2207,6 +2219,18 @@ __webpack_require__.r(__webpack_exports__);
     openCategoryEditor: function openCategoryEditor(id) {
       this.$router.push({
         path: "/app/pages/".concat(id)
+      });
+    },
+    applyTemplate: function applyTemplate(template) {
+      this.isSaving = true;
+      this.templates.map(function (template) {
+        template.active = false;
+      });
+      var p = this;
+      util.ajax('post', '/api/templates/' + template.id + '/activate', {}, function (response) {
+        template.active = true;
+        util.notifySuccess('Template Changed', template.name + ' is now the default template for "' + template.type + '" pages.');
+        p.isSaving = false;
       });
     }
   }
@@ -2251,14 +2275,14 @@ __webpack_require__.r(__webpack_exports__);
       type: String,
       "default": 'xs'
     },
-    isLoading: {
+    loadingWheel: {
       type: Boolean,
       "default": false
     }
   },
   computed: {
     compColor: function compColor() {
-      return this.isLoading ? 'gray' : this.color;
+      return this.loadingWheel ? 'gray' : this.color;
     }
   }
 });
@@ -6949,7 +6973,7 @@ var render = function() {
             "div",
             { staticClass: "bg-white shadow-lg relative overflow-hidden" },
             [
-              _vm.used.home === template.id
+              template.active
                 ? _c(
                     "div",
                     {
@@ -6987,47 +7011,82 @@ var render = function() {
               _c("img", {
                 staticClass: "w-full",
                 staticStyle: { "min-height": "250px", "min-width": "400px" },
-                attrs: { src: template.image_url }
+                attrs: { src: template.media_url }
               }),
               _vm._v(" "),
-              _c("div", { staticClass: "p-6 flex flex-col justify-around" }, [
-                _c("h3", { staticClass: "text-lg font-bold py-1" }, [
-                  _vm._v(_vm._s(template.name))
-                ]),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "text-sm text-gray-700 py-2 h-20 overflow-hidden"
-                  },
-                  [
-                    _vm._v(
-                      "\n                        " +
-                        _vm._s(template.description) +
-                        "\n                    "
+              _c(
+                "div",
+                { staticClass: "w-full p-6 flex flex-col justify-around" },
+                [
+                  _c("h3", { staticClass: "text-lg font-bold py-1" }, [
+                    _vm._v(_vm._s(template.name))
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass:
+                        "text-sm text-gray-700 py-2 h-20 overflow-hidden"
+                    },
+                    [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(template.description) +
+                          "\n                    "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w-full flex items-center" }, [
+                    _c("div", { staticClass: "w-1/2" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "text-blue-600",
+                          attrs: { href: "/app/templates/" + template.id }
+                        },
+                        [_vm._v("Edit")]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "w-1/2 flex justify-end" },
+                      [
+                        !template.active
+                          ? _c(
+                              "t-button",
+                              {
+                                attrs: {
+                                  loadingWheel: _vm.isSaving,
+                                  color: "blue"
+                                },
+                                nativeOn: {
+                                  click: function($event) {
+                                    return _vm.applyTemplate(template)
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                Apply Now\n                            "
+                                )
+                              ]
+                            )
+                          : _c(
+                              "button",
+                              {
+                                staticClass:
+                                  "bg-gray-400 text-white text-xs rounded py-2 px-6 shadow cursor-not-allowed"
+                              },
+                              [_vm._v("In Use")]
+                            )
+                      ],
+                      1
                     )
-                  ]
-                ),
-                _vm._v(" "),
-                _vm.used.home != template.id
-                  ? _c(
-                      "button",
-                      {
-                        staticClass:
-                          "bg-green-600 text-white text-sm rounded py-2 px-4 my-2 shadow"
-                      },
-                      [_vm._v("Apply Now")]
-                    )
-                  : _c(
-                      "button",
-                      {
-                        staticClass:
-                          "bg-gray-600 text-white text-sm rounded py-2 px-4 my-2 shadow"
-                      },
-                      [_vm._v("In Use")]
-                    )
-              ])
+                  ])
+                ]
+              )
             ]
           )
         ])
@@ -7070,7 +7129,7 @@ var render = function() {
         "div",
         { staticClass: "flex items-center" },
         [
-          _vm.isLoading
+          _vm.loadingWheel
             ? _c("t-loader", {
                 staticStyle: { position: "relative", top: "0" },
                 attrs: { size: "24" }
@@ -22238,7 +22297,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
- * Sweetalert plugins 
+ * Sweetalert plugins
  */
 window.Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /**
@@ -22258,7 +22317,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 var token = document.head.querySelector('meta[name="csrf-token"]');
 
 if (token) {
-  window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+  window.token = window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {
   console.error('CSRF token not found');
 }
@@ -22441,7 +22500,7 @@ var PageEditor = function PageEditor() {
 };
 
 var TemplateEditor = function TemplateEditor() {
-  return __webpack_require__.e(/*! import() | TemplateEditor */ "TemplateEditor").then(__webpack_require__.bind(null, /*! ./components/TemplateEditor.vue */ "./resources/js/components/TemplateEditor.vue"));
+  return Promise.all(/*! import() | TemplateEditor */[__webpack_require__.e("vendors~TemplateEditor"), __webpack_require__.e("TemplateEditor")]).then(__webpack_require__.bind(null, /*! ./components/TemplateEditor.vue */ "./resources/js/components/TemplateEditor.vue"));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -22712,8 +22771,7 @@ __webpack_require__.r(__webpack_exports__);
 (function (util, undefined) {
   //Private Property
   var isHot = true; // Public properties
-
-  util.token = document.head.querySelector('meta[name="csrf-token"]'); //Public Methods
+  //Public Methods
 
   /**
    * Generic DOM Selector
@@ -22784,7 +22842,7 @@ __webpack_require__.r(__webpack_exports__);
     var csrfField = document.createElement('input');
     csrfField.type = 'hidden';
     csrfField.name = '_token';
-    csrfField.value = util.token.content;
+    csrfField.value = window.token;
     form.appendChild(csrfField);
 
     if (method.toLowerCase() === 'delete' || method.toLowerCase() === 'patch' || method.toLowerCase() === 'put') {
