@@ -35,6 +35,7 @@ class RegisterController extends Controller
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
+            'role' => 'guest',
         ]);
 
         $user->notify(new VerifyEmail());
