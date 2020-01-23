@@ -224,7 +224,7 @@ __webpack_require__.r(__webpack_exports__);
      */
     fetchContentAndLoadEditor: function fetchContentAndLoadEditor() {
       if (typeof this.$route.params.id != 'undefined' && parseInt(this.$route.params.id) > 0) {
-        p.sourceCode = 'Retrieving information from the server....'; // download data from server...
+        this.sourceCode = 'Retrieving information from the server....'; // download data from server...
 
         var p = this;
         util.ajax('get', '/api/templates/' + this.$route.params.id, {}, function (data) {
