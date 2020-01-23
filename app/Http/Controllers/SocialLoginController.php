@@ -13,7 +13,7 @@ class SocialLoginController extends Controller
     /**
      * list of social drivers enabled for Social Auth
      */
-    protected $providers = ['github', 'gitlab', 'bitbucket', 'google'];
+    protected $providers = ['twitter', 'facebook', 'instagram', 'google'];
 
     public function login($provider)
     {
@@ -38,11 +38,9 @@ class SocialLoginController extends Controller
         if ($existingUser) {
             $existingUser->createOrUpdateProvider($provider, $authenticatedUser);
             Auth::login($existingUser, true);
-            $user = $this->setAccessToken();
         } else {
             $user = $this->createUserWithProvider($provider, $authenticatedUser);
             Auth::login($user, true);
-            $user = $this->setAccessToken();
             // return response()->json(['message' => 'User does not exist in our system'], 404);
         }
 
@@ -102,19 +100,5 @@ class SocialLoginController extends Controller
             || empty($authenticatedUser->getAvatar())) {
                 return response()->json(['message' => 'Must provide name, email and profile picture'], 406);
         }
-    }
-
-    private function setAccessToken()
-    {
-        $user = Auth::user();
-        $tokenResult = $user->createToken($user->email.'-'.now()->format('YmdHis'));
-        $token = $tokenResult->token;
-        $token->save();
-
-        $user->token_type = 'Bearer';
-        $user->access_token = $tokenResult->accessToken;
-        $user->expires_at = Carbon::parse($tokenResult->token->expires_at)->toDateTimeString();
-    
-        return $user;
     }
 }

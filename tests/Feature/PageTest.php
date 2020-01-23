@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Tests\TestDataSetup;
-use Laravel\Passport\Passport;
 use App\Page;
 use App\PageContent;
 use App\PageComment;
@@ -41,9 +40,6 @@ class PageTest extends TestDataSetup
         $this->assertDatabaseHas('pages', ['title' => $page['title']]);
 
         /* Authenticated user can view pages listing */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->get('/api/pages');
-
         $response = $this->actingAs($this->adminUser)->get('/api/pages');
         $response->assertStatus(200)
             ->assertJsonStructureExact([
@@ -101,9 +97,6 @@ class PageTest extends TestDataSetup
         $this->assertDatabaseHas('pages', ['title' => $page->title]);
 
         /* Authenticated user can view page */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->get('/api/pages/' . $page->id);
-
         $response = $this->actingAs($this->adminUser)->get('/api/pages/' . $page->id);
         $response->assertStatus(200)
             ->assertJsonFragment(['title' => $page->title])
@@ -137,9 +130,6 @@ class PageTest extends TestDataSetup
         $pagecontent = factory(PageContent::class)->create(['page_id' => $page->id]);
         
         /* Authenticated user can view page */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->get('/api/pages/' . $page->id);
-
         $response = $this->actingAs($this->adminUser)->get('/api/pages/' . $page->id);
         $response->assertStatus(200)
             ->assertJsonFragment(['title' => $page->title])
@@ -187,9 +177,6 @@ class PageTest extends TestDataSetup
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can save page */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->post('/api/pages', $page);
-
         $response = $this->actingAs($this->adminUser)->post('/api/pages', $page, ['Accept' => 'application/json']);
         $response->assertStatus(200)
             ->assertJsonFragment(['title' => $page['title']])
@@ -230,9 +217,6 @@ class PageTest extends TestDataSetup
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can update page */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->put('/api/pages/' . $page->id, $page->toArray());
-
         $response = $this->actingAs($this->adminUser)->put('/api/pages/' . $page->id, $page->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['title' => 'Test Title Updated'])
@@ -268,9 +252,6 @@ class PageTest extends TestDataSetup
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can update page status */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->put('/api/pages/' . $page->id . '/status', $page->toArray());
-
         $response = $this->actingAs($this->adminUser)->put('/api/pages/' . $page->id . '/status', $page->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['status' => 'Published'])
@@ -302,9 +283,6 @@ class PageTest extends TestDataSetup
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can update page owner */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->put('/api/pages/' . $page->id . '/owner', $page->toArray());
-
         $response = $this->actingAs($this->adminUser)->put('/api/pages/' . $page->id . '/owner', $page->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['user_id' => $this->authorUser2->id])
@@ -335,9 +313,6 @@ class PageTest extends TestDataSetup
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can delete page */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->delete('/api/pages/' . $page->id);
-
         $response = $this->actingAs($this->adminUser)->delete('/api/pages/' . $page->id);
         $response->assertStatus(204);
         $this->assertSoftDeleted('pages', ['title' => $page->title]);
@@ -379,9 +354,6 @@ class PageTest extends TestDataSetup
         $this->assertDatabaseHas('page_comments', ['reference_id' => $page->id]);
 
         /* Authenticated user can view page comments */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->get('/api/pages/' . $page->id . '/comments');
-        
         $response = $this->actingAs($this->adminUser)->get('/api/pages/' . $page->id . '/comments');
         $response->assertStatus(200)
             ->assertJsonFragment(['body' => $pagecomment->body])

@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Tests\TestDataSetup;
-use Laravel\Passport\Passport;
 
 class LoginTest extends TestDataSetup
 {
@@ -20,8 +19,7 @@ class LoginTest extends TestDataSetup
             ->assertJsonStructureExact([
                 'id', 'name', 'email', 
                 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-                'created_at', 'updated_at', 'deleted_at', 
-                'token_type', 'access_token', 'expires_at'
+                'created_at', 'updated_at', 'deleted_at'
             ]);
         $this->assertDatabaseHas('users', ['email' => $body['email']]);
 
@@ -40,9 +38,6 @@ class LoginTest extends TestDataSetup
     /* Logout Test */
     public function test_logout()
     {
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->post('/api/logout', [], ['Accept' => 'application/json']);
-        
         $response = $this->actingAs($this->adminUser)->post('/api/logout', [], ['Accept' => 'application/json']);
         $response->assertStatus(200)
             ->assertJson([
