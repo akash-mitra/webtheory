@@ -147,6 +147,7 @@ return [
                 'balance' => 'simple',
                 'processes' => 10,
                 'tries' => 1,
+                'timeout' => 300 // Timeout after 5 minutes
             ],
             'supervisor-long-running' => [
                 'connection' => 'redis-long-running',
@@ -165,6 +166,7 @@ return [
                 'balance' => 'simple',
                 'processes' => 3,
                 'tries' => 1,
+                'timeout' => 300 // Timeout after 5 minutes
             ],
             'supervisor-long-running' => [
                 'connection' => 'redis-long-running',

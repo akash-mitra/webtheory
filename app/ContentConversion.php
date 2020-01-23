@@ -62,7 +62,11 @@ class ContentConversion
 
     private static function processImage($data)
     {
-        return '<img src="' . $data->file->url . '" alt="' . $data->caption . '"></img>';
+        $classes = $data->withBorder ? ' border' : '';
+        $classes .= $data->stretched ? ' stretched' : '';
+        $classes .= $data->withBackground ? ' background' : '';
+
+        return '<img src="' . $data->file->url . '" alt="' . $data->caption . '" class="' . $classes . '"></img>';
     }
 
     private static function processContent($type, $data)

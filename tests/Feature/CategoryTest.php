@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Tests\TestDataSetup;
-use Laravel\Passport\Passport;
 use App\Category;
 use App\CategoryComment;
 
@@ -33,9 +32,6 @@ class CategoryTest extends TestDataSetup
         $this->assertDatabaseHas('categories', ['name' => $category->name]);
 
         /* Authenticated user can view categories listing */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->get('/api/categories');
-        
         $response = $this->actingAs($this->adminUser)->get('/api/categories');
         $response->assertStatus(200)
             ->assertJsonStructureExact([
@@ -75,9 +71,6 @@ class CategoryTest extends TestDataSetup
         $this->assertDatabaseHas('categories', ['name' => $category->name]);
 
         /* Authenticated user can view category */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->get('/api/categories/' . $category->id);
-        
         $response = $this->actingAs($this->adminUser)->get('/api/categories/' . $category->id);
         $response->assertStatus(200)
             ->assertJsonFragment(['name' => $category->name])
@@ -99,9 +92,6 @@ class CategoryTest extends TestDataSetup
         ]);
         
         /* Authenticated user can view category */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->get('/api/categories/' . $category->id);
-        
         $response = $this->actingAs($this->adminUser)->get('/api/categories/' . $category->id);
         $response->assertStatus(200)
             ->assertJsonFragment(['name' => $category->name])
@@ -133,9 +123,6 @@ class CategoryTest extends TestDataSetup
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can save category */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->post('/api/categories', $category->toArray());
-
         $response = $this->actingAs($this->adminUser)->post('/api/categories', $category->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['name' => $category->name])
@@ -162,9 +149,6 @@ class CategoryTest extends TestDataSetup
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can update category */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->put('/api/categories/' . $category->id, $category->toArray());
-
         $response = $this->actingAs($this->adminUser)->put('/api/categories/' . $category->id, $category->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['name' => 'Test Category Updated'])
@@ -190,9 +174,6 @@ class CategoryTest extends TestDataSetup
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can delete category */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->delete('/api/categories/' . $category->id);
-
         $response = $this->actingAs($this->adminUser)->delete('/api/categories/' . $category->id);
         $response->assertStatus(204);
         $this->assertSoftDeleted('categories', ['name' => $category->name]);
@@ -233,9 +214,6 @@ class CategoryTest extends TestDataSetup
         $this->assertDatabaseHas('category_comments', ['reference_id' => $category->id]);
 
         /* Authenticated user can view category comments */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->get('/api/categories/' . $category->id . '/comments');
-        
         $response = $this->actingAs($this->adminUser)->get('/api/categories/' . $category->id . '/comments');
         $response->assertStatus(200)
             ->assertJsonFragment(['body' => $categorycomment->body])

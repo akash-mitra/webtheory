@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Tests\TestDataSetup;
-use Laravel\Passport\Passport;
 use App\CategoryComment;
 
 class CategoryCommentTest extends TestDataSetup
@@ -39,9 +38,6 @@ class CategoryCommentTest extends TestDataSetup
         $this->assertDatabaseHas('category_comments', ['body' => $categorycomment->body]);
 
         /* Authenticated user can view categorycomments listing */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->get('/api/comments/categories');
-        
         $response = $this->actingAs($this->adminUser)->get('/api/comments/categories');
         $response->assertStatus(200)
             ->assertJsonStructureExact([
@@ -83,9 +79,6 @@ class CategoryCommentTest extends TestDataSetup
         $this->assertDatabaseHas('category_comments', ['body' => $categorycomment->body]);
 
         /* Authenticated user can view categorycomment */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->get('/api/comments/categories/' . $categorycomment->id);
-        
         $response = $this->actingAs($this->adminUser)->get('/api/comments/categories/' . $categorycomment->id);
         $response->assertStatus(200)
             ->assertJsonFragment(['body' => $categorycomment->body])
@@ -109,9 +102,6 @@ class CategoryCommentTest extends TestDataSetup
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can save categorycomment */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->post('/api/comments/categories', $categorycomment->toArray());
-
         $response = $this->actingAs($this->adminUser)->post('/api/comments/categories', $categorycomment->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['body' => $categorycomment->body])
@@ -138,9 +128,6 @@ class CategoryCommentTest extends TestDataSetup
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can update categorycomment */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->put('/api/comments/categories/' . $categorycomment->id, $categorycomment->toArray());
-
         $response = $this->actingAs($this->adminUser)->put('/api/comments/categories/' . $categorycomment->id, $categorycomment->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['body' => 'Test CategoryComment Updated'])
@@ -166,9 +153,6 @@ class CategoryCommentTest extends TestDataSetup
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can delete categorycomment */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->delete('/api/comments/categories/' . $categorycomment->id);
-
         $response = $this->actingAs($this->adminUser)->delete('/api/comments/categories/' . $categorycomment->id);
         $response->assertStatus(204);
         $this->assertSoftDeleted('category_comments', ['body' => $categorycomment->body]);
@@ -193,9 +177,6 @@ class CategoryCommentTest extends TestDataSetup
         // $this->assertDatabaseHas('category_comments', ['likes' => $categorycomment->likes + 1]);
 
         /* Authenticated user can give categorycomment like */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->put('/api/comments/categories/' . $categorycomment->id . '/like');
-        
         $response = $this->actingAs($this->adminUser)->put('/api/comments/categories/' . $categorycomment->id . '/like');
         $response->assertStatus(200)
             ->assertJsonFragment(['likes' => $categorycomment->likes + 1])
@@ -225,9 +206,6 @@ class CategoryCommentTest extends TestDataSetup
         // $this->assertDatabaseHas('category_comments', ['body' => $categorycomment->body]);
 
         /* Authenticated user can give categorycomment dislike */
-        // Passport::actingAs($this->adminUser);
-        // $this->assertDatabaseHas('category_comments', ['dislikes' => $categorycomment->dislikes + 1]);
-        
         $response = $this->actingAs($this->adminUser)->put('/api/comments/categories/' . $categorycomment->id . '/dislike');
         $response->assertStatus(200)
             ->assertJsonFragment(['dislikes' => $categorycomment->dislikes + 1])

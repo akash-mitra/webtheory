@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Tests\TestDataSetup;
-use Laravel\Passport\Passport;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use App\Media;
@@ -20,9 +19,8 @@ class MediaTest extends TestDataSetup
         // $response->assertStatus(401)
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
-        // Authenticated user can view media listing
-        // Passport::actingAs($this->user);
-        $response = $this->get('/api/media');
+        /* Authenticated user can view media listing */
+        $response = $this->actingAs($this->adminUser)->get('/api/media');
         $response->assertStatus(200)
             ->assertJsonStructureExact([
                 '*' => [
@@ -48,9 +46,8 @@ class MediaTest extends TestDataSetup
         // $response->assertStatus(401)
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
-        // Authenticated user can view media
-        // Passport::actingAs($this->user);
-        $response = $this->get('/api/media/' . $media->id);
+        /* Authenticated user can view media */
+        $response = $this->actingAs($this->adminUser)->get('/api/media/' . $media->id);
         $response->assertStatus(200)
             ->assertJsonFragment(['name' => $media->name])
             ->assertJsonStructureExact([
@@ -78,10 +75,8 @@ class MediaTest extends TestDataSetup
         // $response->assertStatus(401)
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
-        // Authenticated user can save media
-        // Passport::actingAs($this->user);
-        // $response = $this->post('/api/media', $media);
-        $response = $this->actingAs($this->user)->post('/api/media', $media, ['Accept' => 'application/json']);
+        /* Authenticated user can save media */
+        $response = $this->actingAs($this->adminUser)->post('/api/media', $media, ['Accept' => 'application/json']);
         $media_id = $response->getOriginalContent()['file']['id'];
         $file_path = $response->getOriginalContent()['file']['path'];
         $response->assertStatus(200)
@@ -111,9 +106,8 @@ class MediaTest extends TestDataSetup
         // $response->assertStatus(401)
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
-        // Authenticated user can delete media
-        // Passport::actingAs($this->user);
-        $response = $this->delete('/api/media/' . $media->id);
+        /* Authenticated user can delete media */
+        $response = $this->actingAs($this->adminUser)->delete('/api/media/' . $media->id);
         $response->assertStatus(204);
         $this->assertDatabaseMissing('media', ['name' => $media->name]);
     }

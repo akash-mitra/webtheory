@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Tests\TestDataSetup;
-use Laravel\Passport\Passport;
 use App\User;
 use App\CategoryComment;
 use App\PageComment;
@@ -29,9 +28,6 @@ class ProfileTest extends TestDataSetup
         $this->assertDatabaseHas('users', ['name' => $user->name]);
 
         /* Authenticated user can view user profile */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->get('/api/users/' . $user->id);
-
         $response = $this->actingAs($this->adminUser)->get('/api/users/' . $user->id);
         $response->assertStatus(200)
             ->assertJsonFragment(['name' => $user->name])
@@ -60,9 +56,6 @@ class ProfileTest extends TestDataSetup
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can update user */
-        // Passport::actingAs($user);
-        // $response = $this->put('/api/users/' . $user->id, $user->toArray());
-
         $response = $this->actingAs($user)->put('/api/users/' . $user->id, $user->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['about_me' => 'I am a registered user'])
@@ -90,9 +83,6 @@ class ProfileTest extends TestDataSetup
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can update user */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->put('/api/users/' . $user->id  . '/role', $user->toArray());
-
         $response = $this->actingAs($this->adminUser)->put('/api/users/' . $user->id  . '/role', $user->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['role' => 'author'])
@@ -118,9 +108,6 @@ class ProfileTest extends TestDataSetup
         ]);
 
         /* Authenticated user can view auth user comments */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->get('/api/users/comments');
-        
         $response = $this->actingAs($this->adminUser)->get('/api/users/comments');
         $response->assertStatus(200)
             ->assertJsonFragment(['body' => $pagecomment->body])

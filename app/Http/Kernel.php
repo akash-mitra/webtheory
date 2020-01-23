@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Laravel\Airlock\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
 class Kernel extends HttpKernel
 {
@@ -19,7 +20,6 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \Barryvdh\Cors\HandleCors::class
     ];
 
     /**
@@ -39,9 +39,9 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            'throttle:1000,1',
-            'bindings',
-            'cors'
+            EnsureFrontendRequestsAreStateful::class,
+            'throttle:60,1',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
 
@@ -65,7 +65,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'check.permission' => \App\Http\Middleware\CheckPermission::class,
         'check.subscription' => \App\Http\Middleware\CheckSubscription::class,
-        'cors' => \Barryvdh\Cors\HandleCors::class
     ];
 
     /**

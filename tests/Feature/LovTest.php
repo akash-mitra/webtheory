@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Tests\TestDataSetup;
-use Laravel\Passport\Passport;
 use App\Category;
 use App\User;
 
@@ -27,9 +26,6 @@ class LovTest extends TestDataSetup
         $this->assertDatabaseHas('categories', ['name' => $category->name]);
 
         /* Authenticated user can view categories lov listing */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->get('/api/lov/categories');
-        
         $response = $this->actingAs($this->adminUser)->get('/api/lov/categories');
         $response->assertStatus(200)
             ->assertJsonStructureExact([
@@ -53,9 +49,6 @@ class LovTest extends TestDataSetup
             ]);
         
         /* Authenticated user can view authors lov listing */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->get('/api/lov/authors');
-        
         $response = $this->actingAs($this->adminUser)->get('/api/lov/authors');
         $response->assertStatus(200)
             ->assertJsonStructureExact([

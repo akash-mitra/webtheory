@@ -26,7 +26,6 @@ class TestDataSetup extends TestCase
     {
         parent::setUp();
         Notification::fake();
-        \Artisan::call('passport:install');
 
         $this->setUpAssertJson();
         $this->generate_testdata();

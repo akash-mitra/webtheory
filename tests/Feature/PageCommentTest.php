@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Tests\TestDataSetup;
-use Laravel\Passport\Passport;
 use App\PageComment;
 
 class PageCommentTest extends TestDataSetup
@@ -39,9 +38,6 @@ class PageCommentTest extends TestDataSetup
         $this->assertDatabaseHas('page_comments', ['body' => $pagecomment->body]);
 
         /* Authenticated user can view pagecomments listing */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->get('/api/comments/pages');
-        
         $response = $this->actingAs($this->adminUser)->get('/api/comments/pages');
         $response->assertStatus(200)
             ->assertJsonStructureExact([
@@ -83,9 +79,6 @@ class PageCommentTest extends TestDataSetup
         $this->assertDatabaseHas('page_comments', ['body' => $pagecomment->body]);
 
         /* Authenticated user can view pagecomment */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->get('/api/comments/pages/' . $pagecomment->id);
-        
         $response = $this->actingAs($this->adminUser)->get('/api/comments/pages/' . $pagecomment->id);
         $response->assertStatus(200)
             ->assertJsonFragment(['body' => $pagecomment->body])
@@ -109,9 +102,6 @@ class PageCommentTest extends TestDataSetup
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can save pagecomment */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->post('/api/comments/pages', $pagecomment->toArray());
-
         $response = $this->actingAs($this->adminUser)->post('/api/comments/pages', $pagecomment->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['body' => $pagecomment->body])
@@ -138,9 +128,6 @@ class PageCommentTest extends TestDataSetup
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can update pagecomment */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->put('/api/comments/pages/' . $pagecomment->id, $pagecomment->toArray());
-
         $response = $this->actingAs($this->adminUser)->put('/api/comments/pages/' . $pagecomment->id, $pagecomment->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['body' => 'Test PageComment Updated'])
@@ -166,9 +153,6 @@ class PageCommentTest extends TestDataSetup
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can delete pagecomment */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->delete('/api/comments/pages/' . $pagecomment->id);
-
         $response = $this->actingAs($this->adminUser)->delete('/api/comments/pages/' . $pagecomment->id);
         $response->assertStatus(204);
         $this->assertSoftDeleted('page_comments', ['body' => $pagecomment->body]);
@@ -193,9 +177,6 @@ class PageCommentTest extends TestDataSetup
         // $this->assertDatabaseHas('page_comments', ['likes' => $pagecomment->likes + 1]);
 
         /* Authenticated user can give pagecomment like */
-        // Passport::actingAs($this->adminUser);
-        // $response = $this->put('/api/comments/pages/' . $pagecomment->id . '/like');
-        
         $response = $this->actingAs($this->adminUser)->put('/api/comments/pages/' . $pagecomment->id . '/like');
         $response->assertStatus(200)
             ->assertJsonFragment(['likes' => $pagecomment->likes + 1])
@@ -225,9 +206,6 @@ class PageCommentTest extends TestDataSetup
         // $this->assertDatabaseHas('page_comments', ['body' => $pagecomment->body]);
 
         /* Authenticated user can give pagecomment dislike */
-        // Passport::actingAs($this->adminUser);
-        // $this->assertDatabaseHas('page_comments', ['dislikes' => $pagecomment->dislikes + 1]);
-        
         $response = $this->actingAs($this->adminUser)->put('/api/comments/pages/' . $pagecomment->id . '/dislike');
         $response->assertStatus(200)
             ->assertJsonFragment(['dislikes' => $pagecomment->dislikes + 1])
