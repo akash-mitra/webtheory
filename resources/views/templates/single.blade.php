@@ -1,5 +1,1 @@
-<html>
-    <body>
-        Kleopetra template
-    </body>
-</html>
+<html>Single Page Template updated</html>
