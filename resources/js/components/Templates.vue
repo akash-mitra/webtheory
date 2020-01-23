@@ -39,7 +39,7 @@
                             </div>
 
                             <div class="w-1/2 flex justify-end">
-                                <t-button v-if="!template.active" :loadingWheel="isSaving" @click.native="applyTemplate(template)" color="blue">
+                                <t-button v-if="!template.active" :loadingWheel="isSaving" @click.native="activate(template)" color="blue">
                                     Apply Now
                                 </t-button>
                                 <button v-else class="bg-gray-400 text-white text-xs rounded py-2 px-6 shadow cursor-not-allowed">In Use</button>
@@ -72,64 +72,9 @@
         },
 
         created() {
-            //util.ajax ('get', '/api/templates', {},  (response) => { this.templates = response })
+            util.ajax ('get', '/api/templates', {},  (response) => { this.templates = response })
 
-            this.templates = [
-                {
-                    id: 1,
-                    name: 'Pristine',
-                    type: 'home',
-                    description: 'A spotless template that provides a clean and simple user experience for the users of your blog.',
-                    media_url: 'https://source.unsplash.com/400x250/?white,blue,ocean,frost',
-                    active: true,
-                    created: {
-                        author: 'Akash Mitra',
-                        released: '8 Jan 2020',
-                        website: 'example.com'
-                    },
-                    size: 10,
-                    version: 1,
-                    repository: null,
-                    updatable: true,
-                    public: true,
-                },
-                {
-                    id: 2,
-                    name: 'Kayana',
-                    type: 'home',
-                    description: 'Stunningly powerful, elegant and yet rebellious dark template that captures the attention of your readers in a fascinating way.',
-                    media_url: 'https://source.unsplash.com/400x250/?dark,elegance,black',
-                    active: false,
-                    created: {
-                        author: 'Akash Mitra',
-                        released: '8 Jan 2020',
-                        website: 'example.com'
-                    },
-                    size: 10,
-                    version: 1,
-                    repository: null,
-                    updatable: true,
-                    public: true,
-                },
-                {
-                    id: 3,
-                    name: 'Spark',
-                    type: 'home',
-                    description: 'Stunningly powerful, elegant and yet rebellious dark template that captures the attention of your readers in a fascinating way.',
-                    media_url: 'https://source.unsplash.com/400x250/?spark,light',
-                    active: false,
-                    created: {
-                        author: 'Akash Mitra',
-                        released: '8 Jan 2020',
-                        website: 'example.com'
-                    },
-                    size: 10,
-                    version: 1,
-                    repository: null,
-                    updatable: true,
-                    public: true,
-                },
-            ]
+
         },
 
         computed: {
@@ -153,11 +98,12 @@
             },
 
 
-            applyTemplate(template) {
+            activate(template) {
                 this.isSaving = true
 
-                this.templates.map((template) => {
-                    template.active = false
+                // deactivate all the templates of same type
+                this.templates.map((t) => {
+                    if(template.type === t.type) t.active = false
                 })
 
                 let p = this

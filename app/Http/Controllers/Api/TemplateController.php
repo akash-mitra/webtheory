@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
+
 class TemplateController extends Controller
 {
     /**
@@ -30,8 +31,10 @@ class TemplateController extends Controller
     public function store(Request $request)
     {
         $request['user_id'] = Auth::id();
+        $template = Template::create($request->input());
+        $template->createBladeFile($request->code);
 
-        return Template::create($request->input());
+        return $template;
     }
 
     /**
@@ -42,6 +45,8 @@ class TemplateController extends Controller
      */
     public function show(Template $template)
     {
+        $template['code'] = $template->getBladeFile();
+
         return response()->json($template);
     }
 
@@ -58,6 +63,10 @@ class TemplateController extends Controller
     {
         $template->fill(request(['name', 'description', 'type', 'media_url']))->save();
 
+        $code = $request->code;
+
+        $template->updateBladeFile($code);
+
         return response()->json($template);
     }
 
@@ -66,11 +75,13 @@ class TemplateController extends Controller
     public function activate(Template $template)
     {
 
-        Template::where('active', true)->update(['active' => false]);
+        Template::where('type', $template->type)->update(['active' => false]);
 
         $template->active = true;
 
         $template->save();
+
+        $template->loadBladeFile();
 
         return response()->json($template);
     }

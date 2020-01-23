@@ -1,5 +1,6 @@
 
 import Pages from './components/Pages.vue';
+import Topics from './components/Topics.vue';
 import Templates from './components/Templates.vue';
 
 /* dynamic components */
@@ -28,6 +29,17 @@ export default {
         { path: '/app/pages/create', component: PageEditor },
 
         { path: '/app/pages/:id', component: PageEditor },
+
+
+        /*
+         * Category related routes
+         */
+        { path: '/app/topics', component: Topics },
+
+        // { path: '/app/topics/create', component: TopicEditor },
+
+        // { path: '/app/topics/:id', component: TopicEditor },
+
 
         /*
          * Templates related routes
