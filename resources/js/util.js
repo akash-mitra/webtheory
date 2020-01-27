@@ -24,16 +24,16 @@
     }
 
 
-    util.confirm = function (message, positiveCallback = null, negativeCallback = null) {
-            if (typeof positiveCallback != 'function') {
-                    positiveCallback = function () {}
-            }
-            if (typeof negativeCallback != 'function') {
-                    negativeCallback = function () { }
-            }
-            if (confirm(message)) positiveCallback()
-            else negativeCallback()
-    }
+//     util.confirm = function (message, positiveCallback = null, negativeCallback = null) {
+//             if (typeof positiveCallback != 'function') {
+//                     positiveCallback = function () {}
+//             }
+//             if (typeof negativeCallback != 'function') {
+//                     negativeCallback = function () { }
+//             }
+//             if (confirm(message)) positiveCallback()
+//             else negativeCallback()
+//     }
 
     /**
      * ---------------------------------------------------------------
@@ -139,12 +139,12 @@
 
 
     util.notify = function (params) {
-            Swal.fire(params)
+            return Swal.fire(params)
     }
 
 
     util.notifySuccess = function (title, text) {
-            this.notify ({
+            return this.notify ({
                 icon: 'success',
                 title: title,
                 text: text,
@@ -153,7 +153,7 @@
 
 
     util.notifyError = function (title, text) {
-        this.notify ({
+        return this.notify ({
             icon: 'error',
             title: title,
             text: text,

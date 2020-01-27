@@ -28,6 +28,6 @@ return [
 
     'expiration' => null,
 
-    'prefix' => 'api',
+    'prefix' => 'api/airlock',
 
 ];

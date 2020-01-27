@@ -2,6 +2,7 @@
 import Pages from './components/Pages.vue';
 import Topics from './components/Topics.vue';
 import Templates from './components/Templates.vue';
+import Login from './components/Login.vue';
 
 /* dynamic components */
 const PageEditor = () => import (
@@ -24,11 +25,11 @@ export default {
         /*
          * Page related routes
          */
-        { path: '/app/pages', component: Pages },
+        { path: '/app/pages', component: Pages, name: 'pages.index',meta: { requiresAuth: true } },
 
-        { path: '/app/pages/create', component: PageEditor },
+        { path: '/app/pages/create', component: PageEditor, name: 'pages.create', meta: { requiresAuth: true } },
 
-        { path: '/app/pages/:id', component: PageEditor },
+        { path: '/app/pages/:id', component: PageEditor, name: 'pages.edit', meta: { requiresAuth: true } },
 
 
         /*
@@ -44,11 +45,17 @@ export default {
         /*
          * Templates related routes
          */
-        { path: '/app/templates', component: Templates },
+        { path: '/app/templates', component: Templates, meta: { requiresAuth: true } },
 
-        { path: '/app/templates/create', component: TemplateEditor },
+        { path: '/app/templates/create', component: TemplateEditor, meta: { requiresAuth: true } },
 
-        { path: '/app/templates/:id', component: TemplateEditor },
+        { path: '/app/templates/:id', component: TemplateEditor, meta: { requiresAuth: true } },
+
+
+        /*
+         * Login routes
+         */
+        { path: '/app/login', component: Login },
 
     ]
 
