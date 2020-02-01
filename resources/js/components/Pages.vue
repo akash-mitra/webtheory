@@ -1,9 +1,6 @@
 <template>
 
-
-
     <div class="max-w-4xl mx-auto">
-
 
         <div class="px-6 my-6 w-full flex justify-between items-center">
             <h2 class="text-gray-600 text-2xl flex items-center">Pages <span class="ml-3 rounded-lg py-1 px-2 shadow-inner text-xs bg-gray-300">{{ pages.length }}</span></h2>
@@ -51,6 +48,9 @@
 </template>
 
 <script>
+
+    import { getLocalUser } from '../auth.js'
+
     export default {
 
         data() {
@@ -72,7 +72,7 @@
 
                     if(this.tab === 'draft' && page.status != 'Draft') return false
 
-                    if(this.tab === 'byme' && page.author.id != window.authUser.id) return false
+                    if(this.tab === 'byme' && page.author.id != this.authUserId()) return false
 
                     if(this.tab === 'deleted' && page.deleted_at == null) return false
 
@@ -117,6 +117,12 @@
                 })
             },
 
+            authUserId () {
+                let authUser = getLocalUser()
+                if (Object.keys(authUser).length > 0)
+                    return authUser.id
+                else return -1
+            }
 
         }
 

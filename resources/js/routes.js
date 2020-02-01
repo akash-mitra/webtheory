@@ -3,6 +3,7 @@ import Pages from './components/Pages.vue';
 import Topics from './components/Topics.vue';
 import Templates from './components/Templates.vue';
 import Login from './components/Login.vue';
+import TopicEditor from './components/TopicEditor.vue';
 
 /* dynamic components */
 const PageEditor = () => import (
@@ -25,21 +26,50 @@ export default {
         /*
          * Page related routes
          */
-        { path: '/app/pages', component: Pages, name: 'pages.index',meta: { requiresAuth: true } },
+        {
+            path: '/app/pages',
+            component: Pages,
+            name: 'pages.index',
+            meta: { requiresAuth: true }
+        },
 
-        { path: '/app/pages/create', component: PageEditor, name: 'pages.create', meta: { requiresAuth: true } },
-
-        { path: '/app/pages/:id', component: PageEditor, name: 'pages.edit', meta: { requiresAuth: true } },
+        {
+            path: '/app/pages/create',
+            component: PageEditor,
+            name: 'pages.create',
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/app/pages/:id',
+            component: PageEditor,
+            name: 'pages.edit',
+            meta: { requiresAuth: true }
+        },
 
 
         /*
          * Category related routes
          */
-        { path: '/app/topics', component: Topics },
+        {
+            path: '/app/topics',
+            component: Topics,
+            name: 'topics.index',
+            meta: { requiresAuth: true }
+        },
 
-        // { path: '/app/topics/create', component: TopicEditor },
+        {
+            path: '/app/topics/create',
+            component: TopicEditor,
+            name: 'topics.create',
+            meta: { requiresAuth: true }
+        },
 
-        // { path: '/app/topics/:id', component: TopicEditor },
+        {
+            path: '/app/topics/:id',
+            component: TopicEditor ,
+            name: 'topics.edit',
+            meta: { requiresAuth: true }
+        },
 
 
         /*

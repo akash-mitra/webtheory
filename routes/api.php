@@ -73,6 +73,7 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     Route::put('users/{user}', 'Api\ProfileController@update')->name('users.update');
     Route::put('users/{user}/role', 'Api\ProfileController@updateRole')->name('users.updaterole');
 
+    Route::get('templates', 'Api\TemplateController@index')->name('templates.index');
     Route::post('templates', 'Api\TemplateController@store')->name('templates.store');
     Route::put('templates/{template}', 'Api\TemplateController@update')->name('templates.update');
     Route::post('templates/{template}/activate', 'Api\TemplateController@activate')->name('templates.activate');

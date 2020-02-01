@@ -2,7 +2,7 @@
 
     <div class="absolute top-0 left-0 h-screen w-screen flex items-center justify-center bg-pattern">
         <div class="max-w-md mx-auto w-full bg-white border rounded-lg p-8 shadow-2xl">
-            <form v-on:submit.prevent="onSubmit">
+            <form v-on:submit.prevent="attemptLogin">
                 <h3 class="text-2xl flex items-center mb-6">
                     <img src="/images/tensor.svg" alt="WebTheory Home" class="h-16 w-16 mr-6">
                     WebTheory
@@ -27,7 +27,7 @@
 
 <script>
 
-
+    import { storeLocalCredential, getDefaultRedirectRoute } from './../auth.js';
 
     export default {
 
@@ -38,25 +38,17 @@
             }
         },
 
-        mounted() {
-            // util.ajax ('get', '/api/categories', {},  (response) => {
-            //     this.topics = response
-            //     console.log(this.unflatten(this.topics))
-            // })
-
-            // this.$refs.emailfield.$el.focus()
-        },
-
 
         methods: {
 
-            onSubmit() {
+            attemptLogin() {
                 window.axios.get('/api/airlock/csrf-cookie').then ((response) => {
                     window.axios.post('/api/login', {"email": this.email, "password": this.password})
                     .then(this.onAuthSuccess)
                     .catch(this.onAuthFail)
                 })
             },
+
 
             onAuthSuccess (response) {
 
@@ -67,9 +59,7 @@
 
                 let authUser = response.data
 
-                window.localStorage.setItem('userIsAuthenticated', true)
-                window.localStorage.setItem('lastLoginAt', (new Date()).getTime())
-                window.localStorage.setItem('authUser', JSON.stringify(authUser))
+                storeLocalCredential(authUser)
 
                 this.$emit('login', authUser)
 
@@ -77,7 +67,7 @@
                 if (!!redirectPath)
                     this.$router.replace(redirectPath)
                 else
-                    this.$router.replace({name: 'pages.index'})
+                    this.$router.replace({name: getDefaultRedirectRoute()})
             },
 
             onAuthFail (error) {
@@ -87,7 +77,6 @@
                 }
             }
         }
-
     };
 
 </script>
