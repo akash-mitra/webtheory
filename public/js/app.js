@@ -2017,6 +2017,8 @@ __webpack_require__.r(__webpack_exports__);
     onAuthFail: function onAuthFail(error) {
       if (error.response.status == 401) {
         util.notifyError('Invalid Login', error.response.data.message);
+      } else if (error.response.status == 422) {
+        util.notifyError('Account Locked', error.response.data.message);
       }
     }
   }
