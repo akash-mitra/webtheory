@@ -1,20 +1,28 @@
-export function isProtected (route) {
+/**
+ * A collection of some helper functions to
+ * handle authentication related tasks.
+ */
+
+
+export function isProtected (route)
+{
     return route.matched.some(record => record.meta.requiresAuth)
 }
 
-export function loginValid () {
-
+export function loginValid ()
+{
     return isAuthenticated() && isFresh()
 }
 
 
-export function isAuthenticated () {
+export function isAuthenticated ()
+{
     return window.localStorage.getItem('userIsAuthenticated')
 }
 
 
-export function isFresh () {
-
+export function isFresh ()
+{
     // retrieve the last logged in time
     let lastLoginAt = parseInt(window.localStorage.getItem('lastLoginAt'));
 
@@ -24,11 +32,7 @@ export function isFresh () {
     let freshPeriod = 120;
     let loginValidTill = new Date(lastLoginAt + freshPeriod * 60 * 1000);
 
-    // console.log('Login valid till: ' + loginValidTill);
-    // console.log('Current: ' + new Date());
-
     return (new Date()) < loginValidTill
-
 }
 
 
@@ -51,6 +55,14 @@ export function removeLocalCredential ()
 export function getLocalUser ()
 {
     return JSON.parse(window.localStorage.getItem('authUser'))
+}
+
+
+export function getAuthUserId ()
+{
+    let authUser = getLocalUser()
+    if (authUser) return authUser.id
+    return null
 }
 
 

@@ -10,7 +10,6 @@ Vue.use(VueRouter);
 Vue.component('t-loader', require('./ui/TensorLoader.vue').default);
 Vue.component('t-button', require('./ui/TensorButton.vue').default);
 Vue.component('t-toggle', require('./ui/TensorToggle.vue').default);
-Vue.component('hierarchy-node', require('./components/Node.vue').default);
 
 
 // define the route files for the vue-router

@@ -86,12 +86,12 @@
         </div>
 
 
-
+        <!--
         <h2 class="mt-4 text-gray-600 text-2xl flex items-center">Pages</h2>
         <div  class="w-full md:flex bg-white px-6 py-10 border-t border-blue-400 rounded my-8">
 
         </div>
-
+        -->
 
     </div>
 
