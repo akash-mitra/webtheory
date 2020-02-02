@@ -21,18 +21,19 @@ import { loginValid, isProtected, removeLocalCredential, getLocalUser } from './
 
 // check for authentication status before navigation
 router.beforeEach((route, from, next) => {
-
-    if (isProtected(route)) {
-
-        if(loginValid()) {
+    if (isProtected(route))
+    {
+        if(loginValid())
+        {
             next();
         }
-        else {
+        else
+        {
             // if login is not valid, ask to login explicitly
             next({path: "/app/login", query: { redirect: route.fullPath }});
         }
-
-    } else {
+    }
+    else {
         // this route does not require auth
         // but make sure to always call next()
         next();
@@ -60,9 +61,9 @@ let app = new Vue({
 
         onUserLogin (user) { this.authUser = user },
 
-        logout () {
+        logout ()
+        {
             let p = this
-
             util.confirm('Logout?', 'Do you want to logout now?', function () {
 
                 removeLocalCredential()
@@ -74,7 +75,6 @@ let app = new Vue({
                     .catch(e => { console.log(e) })
 
                 p.$router.push('/app/login')
-
             })
 
         }

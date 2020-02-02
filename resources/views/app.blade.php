@@ -54,9 +54,9 @@
 
             </div>
 
-            <div id="user-menu" class="hidden md:block relative px-6 lg:px-8 justify-end py-2 md:py-0" v-if="authUser !== null">
-                <img :src="authUser.avatar" :alt="authUser.name" :title="authUser.name" class="h-10 w-10 border rounded-full cursor-pointer" @click='showDropdownMenu = !showDropdownMenu'/>
-                <div class="w-56 md:absolute z-50 right-0 mt-3 mr-6 bg-white border-t shadow-lg" v-if="showDropdownMenu">
+            <div id="user-menu" class="hidden md:block relative md:px-6 lg:px-8 justify-end md:py-0" v-if="authUser !== null">
+                <img :src="authUser.avatar" :alt="authUser.name" :title="authUser.name" class="ml-6 md:ml-0 h-10 w-10 border rounded-full cursor-pointer" @click='showDropdownMenu = !showDropdownMenu'/>
+                <div class="w-full md:w-56 md:absolute z-50 right-0 mt-3 mr-6 bg-white border-t md:shadow-lg" v-if="showDropdownMenu">
                     <div class="px-6 py-2 border-b cursor-pointer bg-gray-100">
                         <p v-text="authUser.name" class="text-sm font-bold truncate"></p>
                         <p v-text="authUser.role" class="text-sm font-mono"></p>
@@ -100,6 +100,5 @@
 
     @yield('script')
 
-        <script>/*window.authUser = @json($user)*/</script>
     </body>
 </html>
