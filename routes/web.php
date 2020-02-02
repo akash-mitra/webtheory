@@ -12,8 +12,10 @@
 */
 
 // Frontend Routes
-Route::get('/', 'IndexController@root')->name('root');
-Route::get('/home', 'IndexController@home')->name('home');
+Route::get('/', 'HomeController@root')->name('root');
+Route::get('/home', 'HomeController@index')->name('index');
+
+Auth::routes(['verify' => true]);
 
 Route::get('pages', 'PageController@index')->name('pages.index');
 Route::get('pages/{page}', 'PageController@show')->name('pages.show');
