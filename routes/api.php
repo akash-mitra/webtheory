@@ -19,6 +19,7 @@ Route::post('register', 'Api\Auth\RegisterController@register');
 
 Route::get('categories', 'Api\CategoryController@index')->name('categories.index');
 Route::get('categories/{category}', 'Api\CategoryController@show')->name('categories.show');
+Route::get('categories/{category}/pages', 'Api\CategoryController@pages')->name('categories.pages');
 Route::get('categories/{category}/comments', 'Api\CategoryController@comments')->name('categories.comments');
 
 Route::get('pages', 'Api\PageController@index')->name('pages.index');

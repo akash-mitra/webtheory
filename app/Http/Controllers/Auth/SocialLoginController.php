@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use Socialite;
 use App\User;
 use Illuminate\Support\Facades\Auth;
@@ -18,17 +19,17 @@ class SocialLoginController extends Controller
     public function login($provider)
     {
         if (!in_array($provider, $this->providers)) {
-            return response()->json(['message' => 'Provider not supported'], 404);
+            return abort(404, 'Provider not supported');
         }
         
-        return ['url' => Socialite::driver($provider)->stateless()->redirect()->getTargetUrl()];
+        return Socialite::driver($provider)->redirect();
     }
 
 
     public function callback($provider)
     {
         if (!in_array($provider, $this->providers)) {
-            return response()->json(['message' => 'Provider not supported'], 404);
+            return abort(404, 'Provider not supported');
         }
 
         $authenticatedUser = $this->getAuthenticatedUser($provider);
@@ -41,10 +42,9 @@ class SocialLoginController extends Controller
         } else {
             $user = $this->createUserWithProvider($provider, $authenticatedUser);
             Auth::login($user, true);
-            // return response()->json(['message' => 'User does not exist in our system'], 404);
         }
 
-        return response()->json($user, 200);
+        return redirect()->route('home');
     }
 
 
@@ -72,9 +72,9 @@ class SocialLoginController extends Controller
     private function getAuthenticatedUser($provider)
     {
         try {
-            return Socialite::driver($provider)->stateless()->user();
+            return Socialite::driver($provider)->user();
         } catch (Exception $e) {
-            return response()->json(['message' => 'Unable to authenticate user'], 400);
+            return abort(400, 'Unable to authenticate user');
         }
     }
 
@@ -98,7 +98,7 @@ class SocialLoginController extends Controller
         if (empty($authenticatedUser->getEmail())
             || empty($authenticatedUser->getName())
             || empty($authenticatedUser->getAvatar())) {
-                return response()->json(['message' => 'Must provide name, email and profile picture'], 406);
+                abort(406, "Must provide name, email and profile picture");
         }
     }
 }

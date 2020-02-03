@@ -12,6 +12,11 @@
 */
 
 // Frontend Routes
+Route::get('/', 'HomeController@root')->name('root');
+Route::get('/home', 'HomeController@home')->name('home');
+
+Auth::routes(['verify' => true]);
+
 Route::get('pages', 'PageController@index')->name('pages.index');
 Route::get('pages/{page}', 'PageController@show')->name('pages.show');
 
@@ -19,8 +24,8 @@ Route::get('categories', 'CategoryController@index')->name('categories.index');
 Route::get('categories/{category}', 'CategoryController@show')->name('categories.show');
 
 
-Route::get('social/login/{provider}', 'SocialLoginController@login')->name('social.login');
-Route::get('social/login/{provider}/callback', 'SocialLoginController@callback')->name('social.callback');
+Route::get('social/login/{provider}', 'Auth\SocialLoginController@login')->name('social.login');
+Route::get('social/login/{provider}/callback', 'Auth\SocialLoginController@callback')->name('social.callback');
 
 Route::get('ui/email/verify/{id}', function () { return 1; })->name('ui-email.verificationlink');
 

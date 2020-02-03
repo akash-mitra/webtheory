@@ -96,6 +96,19 @@ class CategoryController extends Controller
      * @param  Category  $category
      * @return \Illuminate\Http\Response
      */
+    public function pages(Category $category)
+    {
+        $category->load('pages.author');
+        
+        return response()->json($category);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  Category  $category
+     * @return \Illuminate\Http\Response
+     */
     public function comments(Category $category)
     {
         $category->load('comments.user', 'comments.subcomments');
