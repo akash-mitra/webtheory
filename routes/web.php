@@ -13,7 +13,7 @@
 
 // Frontend Routes
 Route::get('/', 'HomeController@root')->name('root');
-Route::get('/home', 'HomeController@home')->name('home');
+// Route::get('/home', 'HomeController@home')->name('home');
 
 Auth::routes(['verify' => true]);
 
