@@ -1,10 +1,16 @@
+/* purgecss start ignore */
 @tailwind base;
 
 @tailwind components;
+/* purgecss end ignore */
 
 @tailwind utilities;
 
-/* This provides a styling for the editor cursor plus button*/
+
+@import './typography.scss';
+
+
+/* This provides a styling for the left-side plus button of editor */
 .ce-toolbar__plus {
     @apply bg-blue-500 text-white;
 }
