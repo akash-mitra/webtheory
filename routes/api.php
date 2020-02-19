@@ -84,4 +84,6 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     Route::post('templates/{template}/activate', 'Api\TemplateController@activate')->name('templates.activate');
     Route::delete('templates/{template}', 'Api\TemplateController@destroy')->name('templates.destroy');
 
+    Route::get('parameters/get/{key}', 'Api\ParameterController@get')->name('parameters.get');
+    Route::post('parameters/set/{key}', 'Api\ParameterController@set')->name('parameters.set');
 });
