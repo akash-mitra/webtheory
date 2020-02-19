@@ -1,5 +1,11 @@
-.te-typo {
-    
+/**
+ * This file stores the CSS rules for the blog typography of single page.
+ * This includes the CSS rules for all the tags that are currently defined
+ * by the Editor JS plugin. No other CSS rules should be defined here.
+ *
+ */
+.wt-typography {
+
     // HEADERS
     & h1, h2, h3, h4, h5, h6 {
         @apply text-blue-900 antialiased;
@@ -22,11 +28,11 @@
     }
 
     // PARAGRAPHS
-    & ul>li, ol>li, 
-    // above specific ul> or ol> is used to make sure that 
-    // this style does not interfere with the toolbox of editor js 
+    & ul>li, ol>li,
+    // above specific ul> or ol> is used to make sure that
+    // this style does not interfere with the toolbox of editor js
     // where <li> is used directly under <div>
-    .ce-paragraph, 
+    .ce-paragraph,
     p  {
         line-height: 1.6em;
         @apply antialiased text-gray-800;

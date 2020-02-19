@@ -1,1 +1,0 @@
-<html>Single Page Template updated</html>

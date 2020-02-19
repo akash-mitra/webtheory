@@ -23,7 +23,7 @@ class HomeController extends Controller
      */
     public function root()
     {
-        return view('home');
+        return view('templates.home');
     }
 
     // /**

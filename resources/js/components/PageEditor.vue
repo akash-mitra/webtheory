@@ -53,7 +53,7 @@
 
             <div class="w-full p-2 bg-gray-100 pb-20">
                 <div class="max-w-4xl mx-auto bg-white -mt-16 shadow-xl px-6 pt-6 border-t-2 border-blue-400">
-                    <div id="tensor-editor" class="mx-auto text-gray-700 pb-4 te-typo bg-white -mr-2"></div>
+                    <div id="tensor-editor" class="mx-auto text-gray-700 pb-4 bg-white -mr-2 wt-typography"></div>
                 </div>
             </div>
 
@@ -527,8 +527,4 @@ export default {
     font-size: 14px;
 }
 
-</style>
-
-<style lang="scss">
-    @import '../../sass/typography.scss';
 </style>
