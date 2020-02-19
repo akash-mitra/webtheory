@@ -17,6 +17,9 @@ use Illuminate\Http\Request;
 Route::post('login', 'Api\Auth\LoginController@login');
 Route::post('register', 'Api\Auth\RegisterController@register');
 
+Route::get('social/login/{provider}', 'Api\Auth\SocialLoginController@login');
+Route::get('social/login/{provider}/callback', 'Api\Auth\SocialLoginController@callback');
+
 Route::get('categories', 'Api\CategoryController@index')->name('categories.index');
 Route::get('categories/{category}', 'Api\CategoryController@show')->name('categories.show');
 Route::get('categories/{category}/pages', 'Api\CategoryController@pages')->name('categories.pages');

@@ -44,7 +44,7 @@ class SocialLoginController extends Controller
             Auth::login($user, true);
         }
 
-        return redirect()->route('home');
+        return redirect()->route('root');
     }
 
 
