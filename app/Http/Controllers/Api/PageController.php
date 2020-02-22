@@ -22,7 +22,7 @@ class PageController extends Controller
     {
         // $this->middleware(['auth']);
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -42,6 +42,9 @@ class PageController extends Controller
     public function store(PageRequest $request)
     {
         $page = null;
+
+        Page::invalidateCache();
+
         DB::transaction(function () use ($request, &$page) {
             $page = new Page([
                 'category_id' => $request->category_id,
@@ -67,6 +70,8 @@ class PageController extends Controller
         return response()->json($page);
     }
 
+
+
     /**
      * Display the specified resource.
      *
@@ -76,9 +81,11 @@ class PageController extends Controller
     public function show(Page $page)
     {
         $page->load('content', 'category', 'author', 'media');
-        
+
         return response()->json($page);
     }
+
+
 
     /**
      * Update the specified resource in storage.
@@ -89,6 +96,8 @@ class PageController extends Controller
      */
     public function update(PageRequest $request, Page $page)
     {
+        Page::invalidateCache();
+
         DB::transaction(function () use ($request, &$page) {
             $page->fill(request(['category_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status']))->save();
             $page->content()->update([
@@ -96,11 +105,13 @@ class PageController extends Controller
                 'body_html' => ContentConversion::getHtml($request->body_json)
             ]);
         });
-        
+
         $page->load('content');
-        
+
         return response()->json($page);
     }
+
+
 
     /**
      * Update the page status.
@@ -111,10 +122,14 @@ class PageController extends Controller
      */
     public function updateStatus(Request $request, Page $page)
     {
+        Page::invalidateCache();
+
         $page->fill(request(['status']))->save();
-        
+
         return response()->json($page);
     }
+
+
 
     /**
      * Update the page owner.
@@ -125,10 +140,14 @@ class PageController extends Controller
      */
     public function updateOwner(Request $request, Page $page)
     {
+        Page::invalidateCache();
+
         $page->fill(request(['user_id']))->save();
-        
+
         return response()->json($page);
     }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -138,10 +157,14 @@ class PageController extends Controller
      */
     public function destroy(Page $page)
     {
+        Page::invalidateCache();
+
         $page->delete();
-        
+
         return response()->json("success", 204);
     }
+
+
 
     /**
      * Display the specified resource.
@@ -152,7 +175,7 @@ class PageController extends Controller
     public function comments(Page $page)
     {
         $page->load('comments.user', 'comments.subcomments');
-        
+
         return response()->json($page);
     }
 }

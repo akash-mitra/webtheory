@@ -2,6 +2,7 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/css/style.css": "/css/style.css",
+    "/css/typography.css": "/css/typography.css",
     "/PageEditor.js": "/PageEditor.js",
     "/TemplateEditor.js": "/TemplateEditor.js",
     "/vendors~PageEditor.js": "/vendors~PageEditor.js",

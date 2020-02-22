@@ -71,7 +71,7 @@ mix.sass('resources/sass/style.scss', 'public/css', {}, postCssPluginsFrontEnd)
 /*
  * Setup common Mix files for both front-end and backend apps.
  */
-// mix.sass('resources/sass/typography.scss', 'public/css')
+mix.sass('resources/sass/typography.scss', 'public/css')
 
 
 // This is added to give webpack the ability to do dynamic import

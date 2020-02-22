@@ -2,8 +2,9 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
@@ -11,7 +12,7 @@ class Category extends Model
     use SoftDeletes;
 
     protected $fillable = ['name', 'description', 'parent_id', 'metakey', 'metadesc', 'media_id', 'user_id'];
-    
+
     protected $appends = ['url', 'created_ago', 'updated_ago'];
 
     public function parent()
@@ -53,9 +54,16 @@ class Category extends Model
     {
         return empty($this->created_at)? null : $this->created_at->diffForHumans();
     }
-    
+
     public function getUpdatedAgoAttribute()
     {
         return empty($this->updated_at)? null : $this->updated_at->diffForHumans();
+    }
+
+
+    public static function invalidateCache()
+    {
+        Cache::forget('categories');
+        Cache::forget('categories.lov');
     }
 }

@@ -14,7 +14,8 @@
                 <div @click="tab='category'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='category'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Category</div>
                 <div @click="tab='single'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='single'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Single</div>
             </div>
-            <div @click="tab='constants'" class="px-2 text-sm tracking-wide py-2 text-blue-600 font-bold cursor-pointer" :class="tab==='constants'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Template Constants</div>
+            <div v-if="constantLoaded" @click="tab='constants'" class="px-2 text-sm tracking-wide py-2  cursor-pointer" :class="tab==='constants'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Constants</div>
+            <div v-else class="px-2 text-sm tracking-wide text-gray-600 py-2">Loading Constants...</div>
         </div>
 
         <div class="px-6 sm:flex sm:flex-wrap" v-if="tab!='constants'">
@@ -43,7 +44,7 @@
 
                             <div class="w-1/2 flex justify-end">
                                 <t-button v-if="!template.active" :loadingWheel="isSaving" @click.native="activate(template)" color="blue">
-                                    Apply Now
+                                    Use Me
                                 </t-button>
                                 <button v-else class="bg-gray-400 text-white text-xs rounded py-2 px-6 shadow cursor-not-allowed">In Use</button>
                             </div>
@@ -53,10 +54,10 @@
             </div>
         </div>
 
-        <div class="px-6" v-else>
+        <div class="px-6 pb-10" v-else>
 
             <p class="text-sm text-gray-700 pb-3 uppercase">Site Information</p>
-            <div class="bg-white rounded w-full p-6 border-t-2 border-blue-400 shadow">
+            <div class="bg-white rounded w-full max-w-21xl p-6 mb-6 shadow">
                 <div class="pb-4">
                     <label for="sitename" class="block">Website Name</label>
                     <input type="text" id="sitename" v-model="sitename" ref="sitename" placeholder="My Personal Blog" class="w-full max-w-2xl p-2 my-2 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
@@ -75,13 +76,11 @@
                     <textarea id="sitedesc" v-model="sitedesc" ref="sitedesc" placeholder="Daily journals, ideas, viewpoints and photos of Mr. John Doe" class="w-full max-w-2xl p-2 my-2 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none"></textarea>
                     <p class="text-xs text-gray-600">Provide a short but accurate description about what this site is about. This information may be utilised by search bots.</p>
                 </div>
-
-
-                <t-button :loadingWheel="isSaving" @click.native="initiateSave">
-                    Save
-                </t-button>
             </div>
 
+            <t-button :loadingWheel="isSaving" @click.native="initiateSave">
+                Save Constants
+            </t-button>
 
         </div>
 
@@ -97,7 +96,7 @@
                 isSaving: false,
 
                 selected: null,
-                tab: 'constants',
+                tab: 'home',
                 searchPhrase: '',
 
                 sitetitle: '',
@@ -105,12 +104,21 @@
                 sitedesc: '',
 
                 isSaving: false,
+                constantLoaded: false,
             }
         },
 
         created() {
             util.ajax ('get', '/api/templates', {},  (response) => { this.templates = response })
 
+            util.ajax ('get', '/api/parameters/siteinfo', {},  (response) => {
+                let siteinfo = JSON.parse(response)
+                this.sitetitle = siteinfo.title
+                this.sitename = siteinfo.name
+                this.sitedesc = siteinfo.desc
+
+                this.constantLoaded = true
+            })
 
         },
 
@@ -155,11 +163,12 @@
             },
 
             initiateSave () {
-                util.ajax ('post', '', {
-                    sitename: this.sitename,
-                    sitetitle: this.sitetitle,
-                    sitedesc: this.sitedesc,
-                }, function () {
+                let data = {
+                    name: this.sitename,
+                    title: this.sitetitle,
+                    desc: this.sitedesc,
+                }
+                util.ajax ('post', '/api/parameters/siteinfo', { "value": JSON.stringify(data) }, function () {
                     util.notifySuccess ('Saved', 'Template constants have been successfully saved.')
                 })
             }

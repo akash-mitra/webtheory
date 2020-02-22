@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CategoryRequest;
-use App\Category;
 
 class CategoryController extends Controller
 {
@@ -18,7 +18,9 @@ class CategoryController extends Controller
     {
         // $this->middleware(['auth']);
     }
-    
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -29,6 +31,8 @@ class CategoryController extends Controller
         return response()->json(Category::with('media', 'author')->get());
     }
 
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -37,6 +41,8 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
+        Category::invalidateCache();
+
         $category = new Category([
             'name' => $request->name,
             'parent_id' => $request->parent_id,
@@ -51,6 +57,8 @@ class CategoryController extends Controller
         return response()->json($category);
     }
 
+
+
     /**
      * Display the specified resource.
      *
@@ -63,6 +71,8 @@ class CategoryController extends Controller
         return response()->json($category);
     }
 
+
+
     /**
      * Update the specified resource in storage.
      *
@@ -72,10 +82,14 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
+        Category::invalidateCache();
+
         $category->fill(request(['name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id']))->save();
 
         return response()->json($category);
     }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -85,10 +99,14 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        Category::invalidateCache();
+
         $category->delete();
-        
+
         return response()->json("success", 204);
     }
+
+
 
     /**
      * Display the specified resource.
@@ -99,7 +117,7 @@ class CategoryController extends Controller
     public function pages(Category $category)
     {
         $category->load('pages.author');
-        
+
         return response()->json($category);
     }
 
@@ -112,7 +130,7 @@ class CategoryController extends Controller
     public function comments(Category $category)
     {
         $category->load('comments.user', 'comments.subcomments');
-        
+
         return response()->json($category);
     }
 }

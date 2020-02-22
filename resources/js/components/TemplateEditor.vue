@@ -13,17 +13,17 @@
         <div class="px-2 w-full flex justify-start items-center mt-8">
             <div @click="tab='template'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='template'? 'text-gray-700 py-2 1border-b-4 border-blue-500': 'text-gray-500 py-2'">Template</div>
             <div @click="tab='source'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='source'? 'text-gray-700 py-2 1border-b-4 border-blue-500': 'text-gray-500 py-2'">Source</div>
-
+            <div @click="tab='parameters'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='parameters'? 'text-gray-700 py-2 1border-b-4 border-blue-500': 'text-gray-500 py-2'">Parameters</div>
         </div>
 
-        <div v-show="tab==='template'" class="w-full bg-white px-6 py-10 border-t border-blue-400 rounded mb-12">
+        <div v-show="tab==='template'" class="w-full bg-white border-t border-blue-400 rounded mb-12">
 
-            <div class="w-full sm:flex mb-4">
+            <div class="w-full sm:flex mb-4 px-6 pt-8">
                 <label for="templateName" class="block w-full sm:w-1/4 text-sm py-1 px-3">Name</label>
                 <input type="text" id="templateName" v-model="name" ref="name" class="w-full sm:w-3/4 max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
             </div>
 
-            <div class="w-full sm:flex mb-8">
+            <div class="w-full sm:flex mb-8 px-6 py-4">
                 <div class="w-full sm:w-1/4 text-sm py-1 px-3">
                     <label for="templateDescription">Description</label>
                     <p class="text-xs text-gray-600 py-2">Describe the motivation behind this template</p>
@@ -31,10 +31,10 @@
                 <textarea id="templateDescription" v-model="description" class="w-full sm:w-3/4 text-sm max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none"></textarea>
             </div>
 
-            <div class="w-full sm:flex mb-8">
+            <div class="w-full sm:flex mb-8 px-6 py-6 border-t">
                 <div class="w-full sm:w-1/4 text-sm py-1 px-3">
                     <p>Type</p>
-                    <p class="text-xs text-gray-600 py-2">What kind of blog pages should use this template design?</p>
+                    <p class="text-xs text-gray-600 py-2">What type of web page is this template design for?</p>
                 </div>
                 <div class="w-full sm:w-3/4 flex flex-wrap">
                         <div class="w-40 m-3 p-4 border cursor-pointer rounded-lg shadow-md relative" @click="type='home'" :class="type==='home'? 'bg-green-100 border-green-400':''">
@@ -75,7 +75,32 @@
                 </div>
             </div>
 
-            <div class="w-full sm:flex mb-4">
+
+            <div class="w-full sm:flex my-4 border-t px-6 py-6">
+                <div class="w-full sm:w-1/4 text-sm py-1 px-3">
+                    <label for="templateUrl">Parameters</label>
+                    <p class="text-xs text-gray-600 py-2">Provide the values for all the below paramters.</p>
+                </div>
+
+                <div class="w-full sm:w-3/4">
+                    <div v-for="(param, key) in parameters" class="w-full md:flex bg-gray-100 p-3 mb-2">
+                        <div class="w-full md:w-1/3">
+                            <span class="text-gray-400 text-xs p-2 md:text-right">Parameter</span><code>{{ param.name }}</code>
+                        </div>
+                        <div class="w-full md:w-2/3">
+                            <input v-if="param.type==='text'" type="text" v-model="param.value" class="w-full max-w-lg text-sm px-2 py-1 my-1 rounded bg-white border focus:outline-none">
+                            <select v-else v-model="param.value" class="w-full max-w-lg text-sm px-2 py-1 my-1 rounded bg-white border focus:outline-none">
+                                <option disabled value="">Select</option>
+                                <option v-for="option in param.options.split(',').map(o => o.trim())" :value="option">{{ option }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="w-full sm:flex mb-4 border-t px-6 py-6 bg-gray-100">
                 <div class="w-full sm:w-1/4 text-sm py-1 px-3">
                     <label for="templateUrl">Template Image URL</label>
                     <p class="text-xs text-gray-600 py-2">Provide an image URL to be used as template icon image</p>
@@ -83,9 +108,10 @@
 
                 <div class="w-full sm:w-3/4">
                     <input type="text" id="templateUrl" v-model="url" class="w-full max-w-lg text-sm max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
-
                 </div>
             </div>
+
+
         </div>
 
 
@@ -93,6 +119,42 @@
             <editor v-model="sourceCode" @init="editorInit" lang="html" theme="twilight" width="100%" height="500"></editor>
         </div>
 
+
+        <div v-show="tab==='parameters'" class="w-full bg-white px-6 py-6 border-t border-blue-400 rounded overflow-scroll mb-12">
+            <div class="text-lg text-gray-800 pb-2">Create or Edit Template Parameters</div>
+            <div class="text-sm text-gray-800 pb-4">
+                Template parameters can be used to avoid hard-coding certain values in the template and replace them with parameters.
+            </div>
+            <table class="table-auto w-full text-xs mb-2">
+                <thead>
+                    <tr>
+                        <th class="pr-2 py-2 border-b text-left">
+                            <p>Parameter</p>
+                        </th>
+                        <th class="pr-2 py-2 border-b text-left">Type</th>
+                        <th class="pr-2 py-2 border-b text-left">List Items</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="row in parameters">
+                        <td class="pr-2 py-2 border-b">
+                            <input type="text" v-model="row.name" class="font-mono rounded w-full bg-gray-200 p-2" title="Only lowercase letters" pattern="^[a-z]+(?:_+[a-z]+)*$" />
+                        </td>
+                        <td class="pr-2 py-2 border-b">
+                            <select v-model="row.type" class="text-gray-800 w-full">
+                                <option value="text">Text</option>
+                                <option value="list">List</option>
+                            </select>
+                        </td>
+                        <td class="pr-2 py-2 border-b">
+                            <input v-show="row.type==='list'" type="text" v-model="row.options" class="font-mono rounded w-full bg-gray-200 p-2" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="text-xs font-normal">No space is allowed in parameter name.</p>
+            <div class="py-2 px-4 inline-block mt-4 border rounded cursor-pointer text-sm shado1w border-blue-400 text-blue-500" @click="addParam">Add Parameter</div>
+        </div>
     </div>
 
 </template>
@@ -115,6 +177,10 @@ export default {
             url: 'https://source.unsplash.com/500x310/?blog,page',
             sourceCode: null,
             active: false,
+
+            parameters: [
+                // {name: "", type: "list", options: "", value: "" },
+            ],
         }
     },
 
@@ -135,6 +201,11 @@ export default {
             // require('brace/mode/less')
             require('brace/theme/twilight')
             // require('brace/snippets/javascript') //snippet
+        },
+
+
+        addParam() {
+            this.parameters.push ({name: '', type: 'text', options: '', value: '' },)
         },
 
         // simple front-end validations before starting
@@ -197,7 +268,8 @@ export default {
                     code: this.sourceCode,
                     type: this.type,
                     media_url: this.url,
-                    active: this.active
+                    active: this.active,
+                    parameters: JSON.stringify(this.parameters),
                 }, this.postSaveProcessing)
 
             }
@@ -244,7 +316,6 @@ export default {
             if (typeof this.$route.params.id != 'undefined' && parseInt(this.$route.params.id) > 0) {
 
                 this.sourceCode = 'Retrieving information from the server....'
-                // download data from server...
                 let p = this
                 util.ajax ('get', '/api/templates/' + this.$route.params.id, {}, function (data) {
                     p.id = data.id
@@ -254,6 +325,7 @@ export default {
                     p.url = data.media_url
                     p.sourceCode = data.code
                     p.active = data.active
+                    p.parameters = JSON.parse(data.parameters)
                 })
             }
         }, // end of fetchContentAndLoadEditor

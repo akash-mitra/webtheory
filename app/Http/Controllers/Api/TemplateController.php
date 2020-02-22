@@ -6,6 +6,7 @@ use App\Template;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 
 class TemplateController extends Controller
@@ -61,10 +62,11 @@ class TemplateController extends Controller
      */
     public function update(Request $request, Template $template)
     {
-        $template->fill(request(['name', 'description', 'type', 'media_url']))->save();
+        $template->fill(request(['name', 'description', 'type', 'media_url', 'parameters']))->save();
+
+        Cache::forget('templates.' . $request->input('type'));
 
         $code = $request->code;
-
         $template->updateBladeFile($code);
 
         return response()->json($template);
@@ -78,8 +80,9 @@ class TemplateController extends Controller
         Template::where('type', $template->type)->update(['active' => false]);
 
         $template->active = true;
-
         $template->save();
+
+        Cache::forget('templates.' . $template->type);
 
         $template->loadBladeFile();
 

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Template extends Model
 {
-    protected $fillable = ['name', 'description', 'type', 'active', 'media_url', 'user_id'];
+    protected $fillable = ['name', 'description', 'type', 'active', 'parameters', 'media_url', 'user_id'];
 
 
 

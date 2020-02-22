@@ -17,8 +17,9 @@ class CreateTemplatesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name', 100);
             $table->string('type', 30);
-            $table->string('description', 1048);
-            $table->string('media_url', 1048);
+            $table->string('description', 1048)->nullable();
+            $table->string('media_url', 1048)->nullable();
+            $table->text('parameters')->nullable();
             $table->boolean('active')->default(false);
             $table->unsignedBigInteger('user_id');
             $table->timestamps();

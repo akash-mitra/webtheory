@@ -2,19 +2,13 @@
 
 namespace App\Http\Controllers;
 
+
+use App\DataProvider;
 use Illuminate\Http\Request;
+
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth')->except('root');
-    }
 
     /**
      * Display a landing page.
@@ -23,16 +17,24 @@ class HomeController extends Controller
      */
     public function root()
     {
-        return view('templates.home');
+        $data = DataProvider::home();
+
+        return view('templates.home', compact('data'));
     }
 
-    // /**
-    //  * Show the application dashboard.
-    //  *
-    //  * @return \Illuminate\Contracts\Support\Renderable
-    //  */
-    // public function index()
-    // {
-    //     return view('home');
-    // }
+
+
+    /**
+     * Display the single page view.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function single($page)
+    {
+        $data = DataProvider::single($page);
+        // return (array)$data;
+        return view('templates.single', compact('data'));
+    }
+
+
 }
