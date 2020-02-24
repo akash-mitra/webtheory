@@ -43,6 +43,13 @@ if (mix.inProduction()) {
 }
 
 
+mix.webpackConfig({
+  output: {
+    chunkFilename: "js/chunks/[id].chunk.[chunkhash].js"
+  }
+});
+
+
 /*
  * Since we will be using CSS preprocessors (SASS), we will use
  * Laravel Mix's options method to add tailwindcss as a PostCSS

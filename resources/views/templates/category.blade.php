@@ -11,7 +11,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="canonical" href="{{ $data->category->url }}">
-  <link href="/css/style.css" rel="stylesheet">
+  <link href="/css/style-{{$data->ref->template->primaryColor}}.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
 
   <style>
