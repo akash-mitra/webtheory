@@ -39,6 +39,19 @@ class DataProvider {
 
 
 
+    public static function category($id)
+    {
+        $category = Category::with(['author', 'subcategories', 'pages', 'parent'])->findOrFail($id);
+
+        return (object) [
+            "ref" => self::ref('category'),
+            "category" => $category,
+            "user" => auth()->user()
+        ];
+    }
+
+
+
     public static function topics ()
     {
         return Cache::rememberForever('categories', function () {

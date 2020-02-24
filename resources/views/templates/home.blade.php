@@ -56,7 +56,7 @@
 
         <div class="w-full mt-4">
             <nav>
-                <div class="flex flex-no-wrap flex-col md:flex-row overflow-auto rounded-t-lg">
+                <div class="flex flex-no-wrap flex-col md:flex-row overflow-auto rounded-t-lg shadow-inner">
                     <span onclick="moduleMenuToggle()" class="text-{{$data->ref->template->primaryColor}}-500 border border-{{$data->ref->template->primaryColor}}-500 text-center mt-2 font-bold tracking-wide uppercase cursor-pointer p-4 rounded md:hidden">
                         Menu
                     </span>
@@ -84,7 +84,11 @@
 
         <div class="border-t-4 border-{{$data->ref->template->primaryColor}}-500 w-full pattern rounded-b-lg px-10 py-8 overflow-scroll md:flex justify-center md:justify-between items-center">
             <div class="w-full md:w-1/3 max-w-lg flex justify-center md:justify-start">
-                <img src="https://source.unsplash.com/500x500/?gene,sequence,data" class="shadow-lg rounded-lg">
+                @if(! empty($data->pages[0]->media))
+                <img src="{{$data->pages[0]->media->url}}" class="shadow-lg rounded-lg">
+                @else
+                <img src="https://source.unsplash.com/800x600?abstract,{{$data->ref->template->primaryColor}}" class="shadow-lg rounded-lg">
+                @endif
             </div>
             <div class="w-full md:w-2/3 max-w-4xl px-0 md:px-8">
                 <div class="mb-2 text-gray-600 px-2 mt-4 md:mt-0">Latest Post</div>
@@ -113,8 +117,8 @@
                         {{ $page->summary }}
                     </div>
                     <footer>
-                        <div class="text-sm mt-3 text-{{$data->ref->template->primaryColor}}-600">
-                            Published {{ $page->created_ago }} under <a href="{{ $page->category->url }}" class="text-indigo-500 p-1 hover:text-indigo-600 font-semibold">{{ $page->category->name }}</a>
+                        <div class="text-sm mt-3">
+                            Published {{ $page->created_ago }} under <a href="{{ $page->category->url }}" class="text-{{$data->ref->template->primaryColor}}-600 p-1 hover:text-{{$data->ref->template->primaryColor}}-800 font-semibold">{{ $page->category->name }}</a>
                         </div>
                     </footer>
                 </section>

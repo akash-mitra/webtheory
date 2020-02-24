@@ -18,7 +18,8 @@
         "laravel/helpers": "^1.1",
         "laravel/horizon": "^3.4",
         "laravel/socialite": "^4.3",
-        "laravel/tinker": "^1.0"
+        "laravel/tinker": "^1.0",
+        "scrivo/highlight.php": "^9.18"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.6",

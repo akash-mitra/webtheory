@@ -2,19 +2,22 @@
 
 namespace App;
 
+use Highlight\Highlighter;
+
 class ContentConversion
 {
     private static $body_json;
+    private static $langSearchSpace = ['java', 'python', 'javascript', 'php', 'sql'];
 
     public static function getHtml(String $body_json)
     {
         self::$body_json = json_decode($body_json);
-        
+
         $body_html = '';
         foreach (self::$body_json->blocks as $block) {
             $body_html .= self::processContent($block->type, $block->data);
         }
-        
+
         return $body_html;
     }
 
@@ -41,13 +44,13 @@ class ContentConversion
 
     private static function processTable($data)
     {
-        $table = '<table><tbody>';
+        $table = '<table class="w-full table-auto my-4"><tbody>';
         $content = $data->content;
         foreach ($content as $rows) {
-            $table .= '<tr>';
+            $table .= '<tr class="border-b">';
             foreach ($rows as $row) {
                 $value = strip_tags($row);
-                $table .= '<td>' . $value . '</td>';
+                $table .= '<td class="py-2">' . $value . '</td>';
             }
             $table .= '<tr>';
         }
@@ -57,7 +60,8 @@ class ContentConversion
 
     private static function processCode($data)
     {
-        return '<code>' . $data->code . '</code>';
+        return self::getCodeHighLighted($data->code);
+
     }
 
     private static function processImage($data)
@@ -72,14 +76,42 @@ class ContentConversion
     private static function processContent($type, $data)
     {
         $processor = [
-            'header' => 'processHeader', 
-            'paragraph' => 'processParagraph', 
-            'list' => 'processList', 
-            'table' => 'processTable', 
+            'header' => 'processHeader',
+            'paragraph' => 'processParagraph',
+            'list' => 'processList',
+            'table' => 'processTable',
             'code' => 'processCode',
             'image' => 'processImage'
         ];
-        $method = $processor[$type];    
+        $method = $processor[$type];
         return self::$method($data);
+    }
+
+
+
+    private static function getCodeHighLighted ($code, $language = null)
+    {
+        $highlighter = new Highlighter();
+
+        try {
+
+            if ($language != null)
+            {
+                $highlighted = $highlighter->highlight($language, $code);
+            }
+            else
+            {
+                $highlighter->setAutodetectLanguages(self::$langSearchSpace);
+
+                $highlighted = $highlighter->highlightAuto($code);
+            }
+
+            return '<pre><code class="hljs ' . $highlighted->language . '">' . $highlighted->value . '</code></pre>';
+
+        }
+        catch (\Exception $e) {
+
+            return '<pre><code class="hljs">' . $code . '</code></pre>';
+        }
     }
 }

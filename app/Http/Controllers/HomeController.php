@@ -32,9 +32,22 @@ class HomeController extends Controller
     public function single($page)
     {
         $data = DataProvider::single($page);
-        // return (array)$data;
+
         return view('templates.single', compact('data'));
     }
 
 
+
+    /**
+     * Display the single page view.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function category($category)
+    {
+
+        $data = DataProvider::category($category);
+
+        return view('templates.category', compact('data'));
+    }
 }

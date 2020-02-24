@@ -18,8 +18,8 @@ Auth::routes(['verify' => true]);
 
 
 Route::get('/', 'HomeController@root')->name('root');
-Route::get('pages/{page}/{any?}', 'HomeController@single')->name('pages.show');
-Route::get('categories/{category}', 'HomeController@category')->name('categories.show');
+Route::get('pages/{page}/{slug?}', 'HomeController@single')->name('pages.show');
+Route::get('categories/{category}/{slug?}', 'HomeController@category')->name('categories.show');
 
 
 Route::get('social/login/{provider}', 'Auth\SocialLoginController@login')->name('social.login');

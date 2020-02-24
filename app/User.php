@@ -18,7 +18,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
+        'name', 'email', 'password', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
         'stripe_id', 'card_brand', 'card_last_four', 'trial_ends_at',
     ];
 
@@ -104,5 +104,12 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->avatar = $providerUser->getAvatar();
 
         return $this->save();
+    }
+
+
+    public function photo ($class = null)
+    {
+        $class = $class ?? 'w-10 h-10 rounded-full m-1';
+        return '<img src="' . $this->avatar . '" class="' . $class . '">';
     }
 }
