@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Media;
-use Illuminate\Http\Request;
+use App\Http\Requests\MediaRequest;
 
 class MediaController extends Controller
 {
@@ -34,15 +34,9 @@ class MediaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function upload(Request $request)
+    public function upload(MediaRequest $request)
     {
-        if (!$request->hasFile('image')) {
-            return [
-                "success" => 0,
-                "file" => [ 'id' => null, 'path' => null, 'url' => null ]
-            ];
-        }
-        else if ($request->file('image')->isValid()) {
+        if ($request->file('image')->isValid()) {
             $uploadedFile = $request->file('image');
             $media =  Media::store($uploadedFile);
             return [
