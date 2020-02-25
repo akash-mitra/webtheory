@@ -106,7 +106,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->save();
     }
 
-
+    // deprecated method as purgecss won't work
     public function photo ($class = null)
     {
         $class = $class ?? 'w-10 h-10 rounded-full m-1';

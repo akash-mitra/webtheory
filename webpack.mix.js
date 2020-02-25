@@ -42,7 +42,11 @@ if (mix.inProduction()) {
   );
 }
 
-
+/*
+ * This is to circumvent an odd browser cache issue
+ * when using dynamic import.
+ * Refer this issue - https://github.com/JeffreyWay/laravel-mix/issues/2064#issuecomment-590296532
+ */
 mix.webpackConfig({
   output: {
     chunkFilename: "js/chunks/[id].chunk.[chunkhash].js"
