@@ -32,7 +32,7 @@ class TemplateTest extends TestDataSetup
             'name' => $randomName
         ]);
 
-        Storage::disk('local')->assertExists('file-000001');
+        Storage::disk('store')->assertExists('file-000001');
 
         // edit for not active templates
         $this->actingAs($this->adminUser)
@@ -63,7 +63,7 @@ class TemplateTest extends TestDataSetup
 
         Storage::disk('template')->assertExists('single.blade.php');
 
-        $this->assertFileEquals(storage_path('app/file-000001'), resource_path('views/templates/single.blade.php'));
+        $this->assertFileEquals(storage_path('store/file-000001'), resource_path('views/templates/single.blade.php'));
 
 
         // update an already active template and check both files are reflecting changes
