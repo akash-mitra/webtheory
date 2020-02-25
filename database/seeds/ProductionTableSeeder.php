@@ -27,10 +27,13 @@ class ProductionTableSeeder extends Seeder
     private function addAdminUser ()
     {
         factory(User::class)->create([
-            'name' => env('ADMIN_USER_NAME'),
-            'email' => env('ADMIN_USER_EMAIL'),
+            // 'name' => env('ADMIN_USER_NAME'),
+            // 'email' => env('ADMIN_USER_EMAIL'),
+            'name' => 'Naveen',
+            'email' => 'admin@example.com',
             'email_verified_at' => now(),
-            'password' => Hash::make(env('ADMIN_USER_PASSWORD')),
+            // 'password' => Hash::make(env('ADMIN_USER_PASSWORD')),
+            'password' => Hash::make('Passwo7d'),
             'role' => 'admin',
         ]);
     }
