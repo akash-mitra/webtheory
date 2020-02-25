@@ -20,7 +20,7 @@ class Template extends Model
     public function createBladeFile($contents)
     {
         $name = self::bladeFileName($this->id);
-        Storage::disk('local')->put($name, $contents);
+        Storage::disk('store')->put($name, $contents);
     }
 
 
@@ -28,8 +28,8 @@ class Template extends Model
     {
         $name = self::bladeFileName($this->id);
 
-        if (Storage::disk('local')->exists($name)) {
-            return Storage::disk('local')->get($name);
+        if (Storage::disk('store')->exists($name)) {
+            return Storage::disk('store')->get($name);
         }
         else {
             return '';
@@ -40,7 +40,7 @@ class Template extends Model
     public function deleteBladeFile()
     {
         $name = self::bladeFileName($this->id);
-        Storage::disk('local')->delete($name);
+        Storage::disk('store')->delete($name);
     }
 
 
@@ -48,8 +48,8 @@ class Template extends Model
     {
         $name = self::bladeFileName($this->id);
 
-        Storage::disk('local')->delete($name);
-        Storage::disk('local')->put($name, $content);
+        Storage::disk('store')->delete($name);
+        Storage::disk('store')->put($name, $content);
 
         // after we change a blade file, if the blade file
         // is an active blade, i.e. currently in use,
@@ -76,7 +76,7 @@ class Template extends Model
         try {
             Storage::disk('template')->writeStream(
                 $targetBladeFileName,
-                Storage::disk('local')->readStream($name)
+                Storage::disk('store')->readStream($name)
             );
 
             // delete the backup file after successful completion of above file copy

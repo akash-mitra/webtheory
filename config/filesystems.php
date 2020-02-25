@@ -60,6 +60,11 @@ return [
             'root' => resource_path('views/templates'),
         ],
 
+        'store' => [
+            'driver' => 'local',
+            'root' => storage_path('store'),
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
