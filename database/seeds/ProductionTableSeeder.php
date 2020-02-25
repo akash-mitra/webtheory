@@ -1,6 +1,7 @@
 <?php
 
 use App\User;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -26,14 +27,16 @@ class ProductionTableSeeder extends Seeder
 
     private function addAdminUser ()
     {
+        /*
+         * If environment variables are not set, it will create
+         * password of the format "Password-09Jan", where
+         * the date is the date of installation.
+         */
         factory(User::class)->create([
-            // 'name' => env('ADMIN_USER_NAME'),
-            // 'email' => env('ADMIN_USER_EMAIL'),
-            'name' => 'Naveen',
-            'email' => 'admin@example.com',
+            'name' => env('ADMIN_USER_NAME', 'Administrator'),
+            'email' => env('ADMIN_USER_EMAIL', 'admin@example.com'),
             'email_verified_at' => now(),
-            // 'password' => Hash::make(env('ADMIN_USER_PASSWORD')),
-            'password' => Hash::make('Passwo7d'),
+            'password' => Hash::make(env('ADMIN_USER_PASSWORD', 'Password-' . now()->format('dM'))),
             'role' => 'admin',
         ]);
     }
@@ -61,7 +64,7 @@ class ProductionTableSeeder extends Seeder
     {
         DB::table('parameters')->insert([
             'key' => 'siteinfo',
-            'value' => '{"name":"","title":"","desc":""}',
+            'value' => '{"name":"' . Str::title(Str::before(env('DOMAIN', 'My Blog'), '.')) . '","title":"","desc":""}',
             'created_at' => now(),
             'updated_at' => now()
         ]);
