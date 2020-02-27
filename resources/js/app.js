@@ -77,6 +77,10 @@ let app = new Vue({
                 p.$router.push('/app/login')
             })
 
+        },
+
+        hideOverlayMenu (e) {
+            if(e.target.id != 'auth-user-avatar') this.showDropdownMenu = false;
         }
     }
 })

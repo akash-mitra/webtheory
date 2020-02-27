@@ -18,7 +18,7 @@
                     <input type="password" v-model="password" name="password" id="pass_field" class="px-2 py-1 w-full border bg-gray-200 rounded" autocomplete="current-password"/>
                 </div>
 
-                <button class="mt-8 w-full bg-blue-500 text-white px-6 py-2 rounded shadow hover:bg-blue-800">Login Now</button>
+                <input type="submit" class="mt-8 w-full bg-blue-500 text-white px-6 py-2 rounded shadow hover:bg-blue-800" value="Login Now">
             </form>
         </div>
     </div>
