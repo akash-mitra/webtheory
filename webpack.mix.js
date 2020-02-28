@@ -16,6 +16,7 @@ const pathsToBackEndAppFiles = [
   './resources/views/app.blade.php',
   './resources/js/components/*.vue',
   './resources/js/ui/*.vue',
+  './resources/js/util.js',
 ];
 
 const pathsToFrontEndTemplateFiles = [

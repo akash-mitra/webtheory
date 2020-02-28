@@ -41,6 +41,7 @@
                     </label>
 
                     <textarea name="title" v-model="title" ref="title" class="px-6 bg-transparent border-b-2 border-gray-400 h-24 outline-none text-blue-800 text-3xl tracking-wide w-full" placeholder="Title of your story"></textarea>
+                    <t-error-message :errors="errors" field="title"></t-error-message>
                 </div>
 
                 <div class="mt-12 mx-auto  max-w-4xl">
@@ -48,6 +49,7 @@
                         Intro
                     </label>
                     <textarea name="intro" v-model="intro" class="px-6 bg-transparent h-24 outline-none text-gray-700 text-lg tracking-wide w-full" placeholder="Provide a 3/4 lines of introduction to your story..."></textarea>
+                    <t-error-message :errors="errors" field="summary"></t-error-message>
                 </div>
             </div>
 
@@ -75,6 +77,8 @@
                         This gives Google and other search engines a summary of what the page is about.
                     </div>
 
+                    <t-error-message :errors="errors" field="metadesc"></t-error-message>
+
                     <textarea v-model="metadesc" class="mt-2 w-full bg-gray-100 shadow-inner rounded-lg text-xs text-gray-800 p-4 border focus:outline-none" :class="!metadesc ? 'border-red-400' : ''"></textarea>
                     <span class="mt-3 p-1 text-xs text-blue-700 cursor-pointer hover:text-blue-900" @click="metadesc=intro">Copy from Intro text</span>
 
@@ -86,6 +90,9 @@
                         A series of keywords you deem relevant to the page in question. These are used to automatically generate tags for the page.
                         Note that Google doesn’t use meta keywords in its ranking algorithm.
                     </div>
+
+                    <t-error-message :errors="errors" field="metakey"></t-error-message>
+
                     <textarea v-model="metakey" class="mt-2 w-full bg-gray-100 shadow-inner rounded-lg text-xs text-gray-800 p-4 border focus:outline-none"></textarea>
                 </div>
             </div>
@@ -212,6 +219,9 @@ export default {
 
             tab: 'content',
             isSaving: false,
+            errors: {
+                title: [], summary: [], metadesc: [], metakey: []
+            },
         }
     },
 
@@ -281,24 +291,29 @@ export default {
 
             if (this.isValid()) {
 
+                this.errors = {}
+
                 this.isSaving = true
 
                 this.editor
                 .save()
                 .then((bodyJson) => {
-                    let p = this
+
                     util.ajax (this.getSaveMethod(), this.getSaveUrl(), {
                         id: this.id,
-                        title: p.title,
-                        summary: p.intro,
+                        title: this.title,
+                        summary: this.intro,
                         body_json: JSON.stringify(bodyJson),
-                        metakey: p.metakey,
-                        metadesc: p.metadesc,
-                        category_id: p.category_id,
-                        status: p.status,
-                    }, this.postSaveProcessing)
-
-                }).catch((error) => {
+                        metakey: this.metakey,
+                        metadesc: this.metadesc,
+                        category_id: this.category_id,
+                        status: this.status,
+                    },
+                    this.postSaveProcessing,
+                    this.handle4xxError,
+                    this.handle5xxError)
+                })
+                .catch((error) => {
                     console.log('Saving failed: ', error)
                 })
             }
@@ -337,6 +352,23 @@ export default {
             })
 
         }, // end of postSaveProcessing
+
+
+        handle4xxError(status, data) {
+
+            this.isSaving = false
+
+            util.notifyError ("Ouch! Couldn't save that...", data.message)
+
+            if (status === 422) {
+                this.errors = data.errors
+            }
+        },
+
+        handle5xxError(status, data) {
+
+            console.log(data);
+        },
 
         isJustCreated: function () {
             return this.id === 0

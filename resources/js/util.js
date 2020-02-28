@@ -158,7 +158,16 @@
             title: title,
             text: text,
         })
-}
+    }
+
+
+    util.notifyInfo = function (title, text) {
+        return this.notify ({
+            icon: 'info',
+            title: title,
+            text: text,
+        })
+    }
 
 
 
@@ -223,7 +232,13 @@
                             // that falls out of the range of 2xx
 
                             if (error.response.status >= 400 && error.response.status < 500) {
-                                    client_error_handler(error.response.status, error.response.data)
+                                    if (error.response.status === 419) {
+                                            util.notifyInfo('Do I know you?', 'Looks like you are logged out. Please login again')
+                                            .then (function () {
+                                                location.reload()
+                                            })
+                                    }
+                                    else client_error_handler(error.response.status, error.response.data)
                             }
                             if (error.response.status >= 500) {
                                     server_error_handler(error.response.status, error.response.data)
