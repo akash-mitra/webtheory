@@ -13,7 +13,7 @@ class Category extends Model
 
     protected $fillable = ['name', 'description', 'parent_id', 'metakey', 'metadesc', 'media_id', 'user_id'];
 
-    protected $appends = ['url', 'created_ago', 'updated_ago'];
+    protected $appends = ['url', 'permalink', 'created_ago', 'updated_ago'];
 
     public function parent()
     {
@@ -48,6 +48,11 @@ class Category extends Model
     public function getUrlAttribute()
     {
         return url('categories/' . $this->id . '/' . Str::slug($this->name));
+    }
+
+    public function getPermalinkAttribute()
+    {
+        return url('categories/' . $this->id);
     }
 
     public function getCreatedAgoAttribute()

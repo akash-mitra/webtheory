@@ -13,7 +13,7 @@ class Page extends Model
 
     protected $fillable = ['category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'status', 'media_id'];
 
-    protected $appends = ['url', 'created_ago', 'updated_ago'];
+    protected $appends = ['url', 'permalink', 'created_ago', 'updated_ago'];
 
     public function content()
     {
@@ -55,6 +55,12 @@ class Page extends Model
     public function getUrlAttribute()
     {
         return url('pages/' . $this->id . '/' . Str::slug($this->title));
+    }
+
+
+    public function getPermalinkAttribute()
+    {
+        return url('pages/' . $this->id);
     }
 
     public function getCreatedAgoAttribute()
