@@ -24,11 +24,11 @@ class PageTest extends TestDataSetup
                 '*' => [
                     'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
                     'created_at', 'updated_at', 'deleted_at', 
-                    'url', 'created_ago', 'updated_ago',
+                    'url', 'permalink', 'created_ago', 'updated_ago',
                     'category' => [
                         'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
                         'created_at', 'updated_at', 'deleted_at', 
-                        'url', 'created_ago', 'updated_ago'
+                        'url', 'permalink', 'created_ago', 'updated_ago'
                     ],
                     'author' => [
                         'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
@@ -46,11 +46,11 @@ class PageTest extends TestDataSetup
                 '*' => [
                     'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
                     'created_at', 'updated_at', 'deleted_at', 
-                    'url', 'created_ago', 'updated_ago',
+                    'url', 'permalink', 'created_ago', 'updated_ago',
                     'category' => [
                         'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
                         'created_at', 'updated_at', 'deleted_at', 
-                        'url', 'created_ago', 'updated_ago'
+                        'url', 'permalink', 'created_ago', 'updated_ago'
                     ],
                     'author' => [
                         'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
@@ -78,7 +78,7 @@ class PageTest extends TestDataSetup
             ->assertJsonStructureExact([
                 'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
                 'created_at', 'updated_at', 'deleted_at', 
-                'url', 'created_ago', 'updated_ago',
+                'url', 'permalink', 'created_ago', 'updated_ago',
                 'content' => [
                     'id', 'page_id', 'body_json', 'body_html', 
                     'created_at', 'updated_at'
@@ -86,7 +86,7 @@ class PageTest extends TestDataSetup
                 'category' => [
                     'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
                     'created_at', 'updated_at', 'deleted_at', 
-                    'url', 'created_ago', 'updated_ago'
+                    'url', 'permalink', 'created_ago', 'updated_ago'
                 ],
                 'author' => [
                     'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
@@ -103,7 +103,7 @@ class PageTest extends TestDataSetup
             ->assertJsonStructureExact([
                 'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
                 'created_at', 'updated_at', 'deleted_at', 
-                'url', 'created_ago', 'updated_ago',
+                'url', 'permalink', 'created_ago', 'updated_ago',
                 'content' => [
                     'id', 'page_id', 'body_json', 'body_html', 
                     'created_at', 'updated_at'
@@ -111,7 +111,7 @@ class PageTest extends TestDataSetup
                 'category' => [
                     'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
                     'created_at', 'updated_at', 'deleted_at', 
-                    'url', 'created_ago', 'updated_ago'
+                    'url', 'permalink', 'created_ago', 'updated_ago'
                 ],
                 'author' => [
                     'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
@@ -136,7 +136,7 @@ class PageTest extends TestDataSetup
             ->assertJsonStructureExact([
                 'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
                 'created_at', 'updated_at', 'deleted_at', 
-                'url', 'created_ago', 'updated_ago',
+                'url', 'permalink', 'created_ago', 'updated_ago',
                 'content' => [
                     'id', 'page_id', 'body_json', 'body_html', 
                     'created_at', 'updated_at'
@@ -144,7 +144,7 @@ class PageTest extends TestDataSetup
                 'category' => [
                     'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
                     'created_at', 'updated_at', 'deleted_at', 
-                    'url', 'created_ago', 'updated_ago'
+                    'url', 'permalink', 'created_ago', 'updated_ago'
                 ],
                 'author' => [
                     'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
@@ -183,7 +183,7 @@ class PageTest extends TestDataSetup
             ->assertJsonStructureExact([
                 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
                 'updated_at', 'created_at', 
-                'id', 'url', 'created_ago', 'updated_ago',
+                'id', 'url', 'permalink', 'created_ago', 'updated_ago',
                 'content' => [
                     'id', 'page_id', 'body_json', 'body_html', 
                     'created_at', 'updated_at'
@@ -223,7 +223,7 @@ class PageTest extends TestDataSetup
             ->assertJsonStructureExact([
                 'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
                 'created_at', 'updated_at', 'deleted_at', 
-                'url', 'created_ago', 'updated_ago',
+                'url', 'permalink', 'created_ago', 'updated_ago',
                 'content' => [
                     'id', 'page_id', 'body_json', 'body_html',
                     'created_at', 'updated_at'
@@ -258,7 +258,7 @@ class PageTest extends TestDataSetup
             ->assertJsonStructureExact([
                 'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
                 'created_at', 'updated_at', 'deleted_at', 
-                'url', 'created_ago', 'updated_ago'
+                'url', 'permalink', 'created_ago', 'updated_ago'
             ]);
         $this->assertDatabaseHas('pages', ['status' => 'Published']);
         $this->assertDatabaseMissing('pages', ['id' => $page->id, 'status' => 'Draft']);
@@ -289,7 +289,7 @@ class PageTest extends TestDataSetup
             ->assertJsonStructureExact([
                 'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
                 'created_at', 'updated_at', 'deleted_at', 
-                'url', 'created_ago', 'updated_ago'
+                'url', 'permalink', 'created_ago', 'updated_ago'
             ]);
         $this->assertDatabaseHas('pages', ['user_id' => $this->authorUser2->id]);
         $this->assertDatabaseMissing('pages', ['id' => $page->id, 'user_id' => $this->authorUser1->id]);
@@ -338,7 +338,7 @@ class PageTest extends TestDataSetup
             ->assertJsonStructureExact([
                 'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
                 'created_at', 'updated_at', 'deleted_at', 
-                'url', 'created_ago', 'updated_ago', 
+                'url', 'permalink', 'created_ago', 'updated_ago', 
                 'comments' => [
                     '*' => [
                         'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 
@@ -360,7 +360,7 @@ class PageTest extends TestDataSetup
             ->assertJsonStructureExact([
                 'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
                 'created_at', 'updated_at', 'deleted_at', 
-                'url', 'created_ago', 'updated_ago', 
+                'url', 'permalink', 'created_ago', 'updated_ago', 
                 'comments' => [
                     '*' => [
                         'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 

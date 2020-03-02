@@ -116,7 +116,7 @@ class ProfileTest extends TestDataSetup
                     '*' => [
                         'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
                         'created_at', 'updated_at', 'deleted_at', 
-                        'url', 'created_ago', 'updated_ago', 
+                        'url', 'permalink', 'created_ago', 'updated_ago', 
                         'comments' => [
                             '*' => [
                                 'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 
@@ -129,7 +129,7 @@ class ProfileTest extends TestDataSetup
                     '*' => [
                         'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
                         'created_at', 'updated_at', 'deleted_at', 
-                        'url', 'created_ago', 'updated_ago', 
+                        'url', 'permalink', 'created_ago', 'updated_ago', 
                         'comments' => [
                             '*' => [
                                 'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 

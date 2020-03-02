@@ -22,7 +22,7 @@ class CategoryTest extends TestDataSetup
                 '*' => [
                     'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
                     'created_at', 'updated_at', 'deleted_at', 
-                    'url', 'created_ago', 'updated_ago', 'media', 
+                    'url', 'permalink', 'created_ago', 'updated_ago', 'media', 
                     'author' => [
                         'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
                         'created_at', 'updated_at', 'deleted_at'
@@ -38,7 +38,7 @@ class CategoryTest extends TestDataSetup
                 '*' => [
                     'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
                     'created_at', 'updated_at', 'deleted_at', 
-                    'url', 'created_ago', 'updated_ago', 'media', 
+                    'url',  'permalink', 'created_ago', 'updated_ago', 'media', 
                     'author' => [
                         'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
                         'created_at', 'updated_at', 'deleted_at'
@@ -62,7 +62,7 @@ class CategoryTest extends TestDataSetup
             ->assertJsonStructureExact([
                 'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
                 'created_at', 'updated_at', 'deleted_at', 
-                'url', 'created_ago', 'updated_ago', 'media', 
+                'url', 'permalink', 'created_ago', 'updated_ago', 'media', 
                 'author' => [
                     'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
                     'created_at', 'updated_at', 'deleted_at'
@@ -77,7 +77,7 @@ class CategoryTest extends TestDataSetup
             ->assertJsonStructureExact([
                 'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
                 'created_at', 'updated_at', 'deleted_at', 
-                'url', 'created_ago', 'updated_ago', 'media', 
+                'url', 'permalink', 'created_ago', 'updated_ago', 'media', 
                 'author' => [
                     'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
                     'created_at', 'updated_at', 'deleted_at'
@@ -98,7 +98,7 @@ class CategoryTest extends TestDataSetup
             ->assertJsonStructureExact([
                 'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
                 'created_at', 'updated_at', 'deleted_at', 
-                'url', 'created_ago', 'updated_ago', 
+                'url', 'permalink', 'created_ago', 'updated_ago', 
                 'media' => [
                     'id', 'name', 'type', 'size', 'path', 'url', 'storage', 'user_id', 
                     'created_at', 'updated_at', 
@@ -129,7 +129,7 @@ class CategoryTest extends TestDataSetup
             ->assertJsonStructureExact([
                 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
                 'updated_at', 'created_at',  
-                'id', 'url', 'created_ago', 'updated_ago' 
+                'id', 'url', 'permalink', 'created_ago', 'updated_ago' 
             ]);
         $this->assertDatabaseHas('categories', ['name' => $category->name]);
     }
@@ -155,7 +155,7 @@ class CategoryTest extends TestDataSetup
             ->assertJsonStructureExact([
                 'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
                 'created_at', 'updated_at', 'deleted_at', 
-                'url', 'created_ago', 'updated_ago' 
+                'url', 'permalink', 'created_ago', 'updated_ago' 
             ]);
         $this->assertDatabaseHas('categories', ['name' => 'Test Category Updated']);
         $this->assertDatabaseMissing('categories', ['name' => 'Test Category']);
@@ -198,7 +198,7 @@ class CategoryTest extends TestDataSetup
             ->assertJsonStructureExact([
                 'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
                 'created_at', 'updated_at', 'deleted_at', 
-                'url', 'created_ago', 'updated_ago', 
+                'url', 'permalink', 'created_ago', 'updated_ago', 
                 'comments' => [
                     '*' => [
                         'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 
@@ -220,7 +220,7 @@ class CategoryTest extends TestDataSetup
             ->assertJsonStructureExact([
                 'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
                 'created_at', 'updated_at', 'deleted_at', 
-                'url', 'created_ago', 'updated_ago', 
+                'url', 'permalink', 'created_ago', 'updated_ago', 
                 'comments' => [
                     '*' => [
                         'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 
