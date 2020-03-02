@@ -37,6 +37,11 @@ class Category extends Model
 
     public function pages()
     {
+        return $this->hasMany('App\Page')->published();
+    }
+
+    public function pagesWithDrafts()
+    {
         return $this->hasMany('App\Page');
     }
 

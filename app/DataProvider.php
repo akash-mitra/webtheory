@@ -27,7 +27,7 @@ class DataProvider {
 
     public static function single($id)
     {
-        $page = Page::with(['content', 'author', 'category'])->findOrFail($id);
+        $page = Page::with(['content', 'author', 'category'])->published()->findOrFail($id);
 
         return (object) [
             "ref" => self::ref('single'),
@@ -41,7 +41,14 @@ class DataProvider {
 
     public static function category($id)
     {
-        $category = Category::with(['author', 'subcategories', 'pages', 'parent'])->findOrFail($id);
+        $category = Category::with([
+            'author',
+            'subcategories',
+            'pages' => function ($q) {
+                $q->published();
+            },
+            'parent'
+        ])->findOrFail($id);
 
         return (object) [
             "ref" => self::ref('category'),
@@ -81,12 +88,12 @@ class DataProvider {
 
             return Cache::rememberForever('pages', function () use ($howMany) {
 
-                return Page::with(['author', 'category'])->paginate($howMany);
+                return Page::with(['author', 'category'])->published()->paginate($howMany);
 
             });
         }
 
-        return Page::with(['author', 'category'])->paginate($howMany);
+        return Page::with(['author', 'category'])->published()->paginate($howMany);
 
     }
 

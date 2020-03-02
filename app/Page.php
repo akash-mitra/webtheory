@@ -15,6 +15,13 @@ class Page extends Model
 
     protected $appends = ['url', 'permalink', 'created_ago', 'updated_ago'];
 
+
+    public function scopePublished($query)
+    {
+        return $query->where('status', 'Live');
+    }
+
+
     public function content()
     {
         return $this->hasOne('App\PageContent');
