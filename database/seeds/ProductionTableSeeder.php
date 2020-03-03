@@ -36,7 +36,7 @@ class ProductionTableSeeder extends Seeder
             'name' => env('ADMIN_USER_NAME', 'Administrator'),
             'email' => env('ADMIN_USER_EMAIL', 'admin@example.com'),
             'email_verified_at' => now(),
-            'password' => Hash::make(env('ADMIN_USER_PASSWORD', 'secret')),
+            'password' => Hash::make(env('ADMIN_USER_PASSWORD', 'Passw0rd')),
             'role' => 'admin',
         ]);
     }
