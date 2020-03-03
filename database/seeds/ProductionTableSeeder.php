@@ -27,17 +27,14 @@ class ProductionTableSeeder extends Seeder
 
     private function addAdminUser ()
     {
-        /*
-         * If environment variables are not set, it will create
-         * password of the format "Password-09Jan", where
-         * the date is the date of installation.
-         */
-        factory(User::class)->create([
+        DB::table('users')->insert([
             'name' => env('ADMIN_USER_NAME', 'Administrator'),
             'email' => env('ADMIN_USER_EMAIL', 'admin@example.com'),
             'email_verified_at' => now(),
             'password' => Hash::make(env('ADMIN_USER_PASSWORD', 'Passw0rd')),
             'role' => 'admin',
+            'created_at' => now(),
+            'updated_at' => now()
         ]);
     }
 
