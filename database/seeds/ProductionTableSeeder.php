@@ -33,6 +33,7 @@ class ProductionTableSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make(env('ADMIN_USER_PASSWORD', 'Passw0rd')),
             'role' => 'admin',
+            'avatar' => 'https://i.pravatar.cc/100?u=admin@example.com',
             'created_at' => now(),
             'updated_at' => now()
         ]);

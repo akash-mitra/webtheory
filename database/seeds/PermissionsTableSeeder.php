@@ -1,7 +1,8 @@
 <?php
 
+
 use Illuminate\Database\Seeder;
-use App\Permission;
+
 
 class PermissionsTableSeeder extends Seeder
 {
@@ -16,68 +17,68 @@ class PermissionsTableSeeder extends Seeder
         /********************
          * CATEGORY
          *******************/
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'categories', 'action' => 'index', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'categories', 'action' => 'show', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'categories', 'action' => 'comments', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'categories', 'action' => 'store', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'categories', 'action' => 'update', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'categories', 'action' => 'destroy', 'permission' => true]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'categories', 'action' => 'index', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'categories', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'categories', 'action' => 'comments', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'categories', 'action' => 'store', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'categories', 'action' => 'update', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'categories', 'action' => 'destroy', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
 
-        factory(Permission::class)->create(['role' => 'author', 'resource' => 'categories', 'action' => 'index', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'author', 'resource' => 'categories', 'action' => 'show', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'author', 'resource' => 'categories', 'action' => 'comments', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'author', 'resource' => 'categories', 'action' => 'store', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'author', 'resource' => 'categories', 'action' => 'update', 'permission' => true]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'categories', 'action' => 'index', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'categories', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'categories', 'action' => 'comments', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'categories', 'action' => 'store', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'categories', 'action' => 'update', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
 
-        // factory(Permission::class)->create(['role' => 'registered', 'resource' => 'categories', 'action' => 'index', 'permission' => true]);
-        // factory(Permission::class)->create(['role' => 'registered', 'resource' => 'categories', 'action' => 'show', 'permission' => true]);
-        // factory(Permission::class)->create(['role' => 'registered', 'resource' => 'categories', 'action' => 'comments', 'permission' => true]);
-        // factory(Permission::class)->create(['role' => 'guest', 'resource' => 'categories', 'action' => 'index', 'permission' => true]);
-        // factory(Permission::class)->create(['role' => 'guest', 'resource' => 'categories', 'action' => 'show', 'permission' => true]);
-        // factory(Permission::class)->create(['role' => 'guest', 'resource' => 'categories', 'action' => 'comments', 'permission' => true]);
+        // DB::table('permissions')->insert(['role' => 'registered', 'resource' => 'categories', 'action' => 'index', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        // DB::table('permissions')->insert(['role' => 'registered', 'resource' => 'categories', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        // DB::table('permissions')->insert(['role' => 'registered', 'resource' => 'categories', 'action' => 'comments', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        // DB::table('permissions')->insert(['role' => 'guest', 'resource' => 'categories', 'action' => 'index', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        // DB::table('permissions')->insert(['role' => 'guest', 'resource' => 'categories', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        // DB::table('permissions')->insert(['role' => 'guest', 'resource' => 'categories', 'action' => 'comments', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
 
         /********************
          * PAGE
          *******************/
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'pages', 'action' => 'index', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'pages', 'action' => 'show', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'pages', 'action' => 'comments', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'pages', 'action' => 'store', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'pages', 'action' => 'update', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'pages', 'action' => 'updatestatus', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'pages', 'action' => 'updateowner', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'pages', 'action' => 'destroy', 'permission' => true]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'pages', 'action' => 'index', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'pages', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'pages', 'action' => 'comments', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'pages', 'action' => 'store', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'pages', 'action' => 'update', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'pages', 'action' => 'updatestatus', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'pages', 'action' => 'updateowner', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'pages', 'action' => 'destroy', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
 
-        factory(Permission::class)->create(['role' => 'author', 'resource' => 'pages', 'action' => 'index', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'author', 'resource' => 'pages', 'action' => 'show', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'author', 'resource' => 'pages', 'action' => 'comments', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'author', 'resource' => 'pages', 'action' => 'store', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'author', 'resource' => 'pages', 'action' => 'update', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'author', 'resource' => 'pages', 'action' => 'updatestatus', 'permission' => true]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'pages', 'action' => 'index', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'pages', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'pages', 'action' => 'comments', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'pages', 'action' => 'store', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'pages', 'action' => 'update', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'pages', 'action' => 'updatestatus', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
 
-        // factory(Permission::class)->create(['role' => 'registered', 'resource' => 'pages', 'action' => 'index', 'permission' => true]);
-        // factory(Permission::class)->create(['role' => 'registered', 'resource' => 'pages', 'action' => 'show', 'permission' => true]);
-        // factory(Permission::class)->create(['role' => 'registered', 'resource' => 'pages', 'action' => 'comments', 'permission' => true]);
-        // factory(Permission::class)->create(['role' => 'guest', 'resource' => 'pages', 'action' => 'index', 'permission' => true]);
-        // factory(Permission::class)->create(['role' => 'guest', 'resource' => 'pages', 'action' => 'show', 'permission' => true]);
-        // factory(Permission::class)->create(['role' => 'guest', 'resource' => 'pages', 'action' => 'comments', 'permission' => true]);
+        // DB::table('permissions')->insert(['role' => 'registered', 'resource' => 'pages', 'action' => 'index', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        // DB::table('permissions')->insert(['role' => 'registered', 'resource' => 'pages', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        // DB::table('permissions')->insert(['role' => 'registered', 'resource' => 'pages', 'action' => 'comments', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        // DB::table('permissions')->insert(['role' => 'guest', 'resource' => 'pages', 'action' => 'index', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        // DB::table('permissions')->insert(['role' => 'guest', 'resource' => 'pages', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        // DB::table('permissions')->insert(['role' => 'guest', 'resource' => 'pages', 'action' => 'comments', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
 
         /********************
          * MEDIA
          *******************/
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'media', 'action' => 'index', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'media', 'action' => 'show', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'media', 'action' => 'upload', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'admin', 'resource' => 'media', 'action' => 'remove', 'permission' => true]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'media', 'action' => 'index', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'media', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'media', 'action' => 'upload', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'media', 'action' => 'remove', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
 
-        factory(Permission::class)->create(['role' => 'author', 'resource' => 'media', 'action' => 'index', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'author', 'resource' => 'media', 'action' => 'show', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'author', 'resource' => 'media', 'action' => 'comments', 'permission' => true]);
-        factory(Permission::class)->create(['role' => 'author', 'resource' => 'media', 'action' => 'upload', 'permission' => true]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'media', 'action' => 'index', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'media', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'media', 'action' => 'comments', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'media', 'action' => 'upload', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
 
-        // factory(Permission::class)->create(['role' => 'registered', 'resource' => 'media', 'action' => 'index', 'permission' => true]);
-        // factory(Permission::class)->create(['role' => 'registered', 'resource' => 'media', 'action' => 'show', 'permission' => true]);
-        // factory(Permission::class)->create(['role' => 'guest', 'resource' => 'media', 'action' => 'index', 'permission' => true]);
-        // factory(Permission::class)->create(['role' => 'guest', 'resource' => 'media', 'action' => 'show', 'permission' => true]);
+        // DB::table('permissions')->insert(['role' => 'registered', 'resource' => 'media', 'action' => 'index', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        // DB::table('permissions')->insert(['role' => 'registered', 'resource' => 'media', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        // DB::table('permissions')->insert(['role' => 'guest', 'resource' => 'media', 'action' => 'index', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        // DB::table('permissions')->insert(['role' => 'guest', 'resource' => 'media', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
     }
 }
