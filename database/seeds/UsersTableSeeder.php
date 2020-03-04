@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\User;
+
 
 class UsersTableSeeder extends Seeder
 {
@@ -12,21 +12,15 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        // create a system admin user
-        factory(User::class)->create([
-            'name' => 'Administrator',
-            'email' => 'admin@example.com',
+        DB::table('users')->insert([
+            'name' => env('ADMIN_USER_NAME', 'Administrator'),
+            'email' => env('ADMIN_USER_EMAIL', 'admin@example.com'),
             'email_verified_at' => now(),
-            // 'password' => Hash::make(str_random(8)),
+            'password' => Hash::make(env('ADMIN_USER_PASSWORD', 'Passw0rd')),
             'role' => 'admin',
-        ]);
-
-        factory(User::class, 2)->create([
-            'role' => 'author',
-        ]);
-        
-        factory(User::class, 10)->create([
-            'role' => 'registered',
+            'avatar' => 'https://i.pravatar.cc/100?u=admin@example.com',
+            'created_at' => now(),
+            'updated_at' => now()
         ]);
     }
 }

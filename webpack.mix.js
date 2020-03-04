@@ -12,15 +12,17 @@ const tailwindClassExtractor = function (content) { return content.match(/[\w-/:
  * Since we generate 2 different css files for front and backend,
  * we must specify 2 different locations to search for css uses.
  */
-const pathsToBackEndAppFiles = [
+const backendScanPaths = [
   './resources/views/app.blade.php',
   './resources/js/components/*.vue',
   './resources/js/ui/*.vue',
   './resources/js/util.js',
+  './resources/sass/typography.scss',
 ];
 
-const pathsToFrontEndTemplateFiles = [
+const frontendScanPaths = [
   './resources/views/templates/*.php',
+  './resources/sass/typography.scss',
 ];
 
 
@@ -30,14 +32,14 @@ const pathsToFrontEndTemplateFiles = [
 if (mix.inProduction()) {
   postCssPluginsBackEnd.push (
     purgecss({
-      content: pathsToBackEndAppFiles,
+      content: backendScanPaths,
       defaultExtractor: tailwindClassExtractor
     })
   );
 
   postCssPluginsFrontEnd.push (
     purgecss({
-      content: pathsToFrontEndTemplateFiles,
+      content: frontendScanPaths,
       defaultExtractor: tailwindClassExtractor
     })
   );
@@ -83,7 +85,7 @@ mix.sass('resources/sass/style.scss', 'public/css', {}, postCssPluginsFrontEnd)
 /*
  * Setup common Mix files for both front-end and backend apps.
  */
-mix.sass('resources/sass/typography.scss', 'public/css', {}, [tailwindcss])
+// mix.sass('resources/sass/typography.scss', 'public/css', {}, [tailwindcss])
 
 
 // This is added to give webpack the ability to do dynamic import

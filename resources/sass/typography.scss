@@ -27,6 +27,7 @@
         @apply text-xl leading-snug;
     }
 
+    // h5, h6 currently not in use
     & h5, h6 {
         @apply text-lg;
     }
@@ -39,17 +40,15 @@
     // above specific ul> or ol> is used to make sure that
     // this style does not interfere with the toolbox of editor js
     // where <li> is used directly under <div>
-        @apply text-lg ml-3;
-
-        line-height: 2.25;
+        @apply text-lg ml-4 leading-relaxed;
     }
 
     & ul, .cdx-list--unordered {
-        @apply list-disc mt-4 mb-6 pl-3 list-inside;
+        @apply list-disc mt-4 ml-4 mb-6 pl-3;
     }
 
     & ol, .cdx-list--ordered {
-        @apply list-decimal mt-4 mb-6 pl-3 list-inside;
+        @apply list-decimal mt-4 ml-4 mb-6 pl-3;
     }
 
     & .ce-paragraph, p {
@@ -75,5 +74,10 @@
 
     & code.hljs {
         @apply p-6 my-6 -ml-6;
+    }
+
+
+    & .ce-settings {
+        min-width: 120px;
     }
 }

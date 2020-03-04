@@ -70,7 +70,7 @@ class ContentConversion
         $classes .= $data->stretched ? ' stretched' : '';
         $classes .= $data->withBackground ? ' background' : '';
 
-        return '<img src="' . $data->file->url . '" alt="' . $data->caption . '" class="' . $classes . '"></img>';
+        return '<div class="'. $classes .'"><img src="' . $data->file->url . '" alt="' . $data->caption . '"></img></div>';
     }
 
     private static function processContent($type, $data)

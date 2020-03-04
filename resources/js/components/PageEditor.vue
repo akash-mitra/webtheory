@@ -445,7 +445,8 @@ export default {
                     header: {
                         class: Header,
                         config: {
-                            placeholder: 'Enter a sub-heading...'
+                            placeholder: 'Enter a sub-heading...',
+                            levels: [2, 3, 4],
                         },
                     },
 

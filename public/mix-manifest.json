@@ -2,9 +2,8 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/css/style.css": "/css/style.css",
-    "/css/typography.css": "/css/typography.css",
-    "/js/chunks/1.chunk.5593edc8e00fbf82c5d8.js": "/js/chunks/1.chunk.5593edc8e00fbf82c5d8.js",
-    "/js/chunks/2.chunk.022575841c1042d6abc6.js": "/js/chunks/2.chunk.022575841c1042d6abc6.js",
-    "/js/chunks/3.chunk.b54e64659fd6d4d84d63.js": "/js/chunks/3.chunk.b54e64659fd6d4d84d63.js",
-    "/js/chunks/4.chunk.8347fd5a3b7aa98ae4ed.js": "/js/chunks/4.chunk.8347fd5a3b7aa98ae4ed.js"
+    "/js/chunks/PageEditor.chunk.aad6ddb6b47bd49ecffd.js": "/js/chunks/PageEditor.chunk.aad6ddb6b47bd49ecffd.js",
+    "/js/chunks/TemplateEditor.chunk.e11514e011a4121156e1.js": "/js/chunks/TemplateEditor.chunk.e11514e011a4121156e1.js",
+    "/js/chunks/vendors~PageEditor.chunk.dbbe55cc21538fba3fe6.js": "/js/chunks/vendors~PageEditor.chunk.dbbe55cc21538fba3fe6.js",
+    "/js/chunks/vendors~TemplateEditor.chunk.29f307a80bf3e1c0f69f.js": "/js/chunks/vendors~TemplateEditor.chunk.29f307a80bf3e1c0f69f.js"
 }
