@@ -11,23 +11,23 @@
 
 
 /* This provides a styling for the left-side plus button of editor */
-.ce-toolbar__plus {
+.wt-typography .ce-toolbar__plus {
     @apply text-orange-500 bg-yellow-100
 }
 
 @screen md {
-    .ce-toolbar__plus {
+    .wt-typography .ce-toolbar__plus {
         @apply -ml-6 shadow rounded-l-full
     }
 }
 
 
-.ce-toolbox--opened {
-    @apply  bg-yellow-100 px-6
+.wt-typography .ce-toolbox--opened  {
+    @apply  bg-yellow-100 px-6;
 }
 
 @screen md {
-    .ce-toolbox--opened {
+    .wt-typography .ce-toolbox--opened {
         @apply -ml-6 shadow rounded-r-full
     }
 }
