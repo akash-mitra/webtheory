@@ -6,7 +6,15 @@
  */
 .wt-typography {
 
-    // HEADERS
+    // ------------------------------------------------
+    // Headers and Paragraph styles
+    // ------------------------------------------------
+
+    & .ce-paragraph, p {
+
+        @apply mt-3 text-lg leading-relaxed;
+    }
+
     & h1, h2, h3, h4, h5, h6 {
         @apply mt-8 antialiased;
     }
@@ -28,13 +36,15 @@
     }
 
     // h5, h6 currently not in use
-    & h5, h6 {
-        @apply text-lg;
-    }
+    // & h5, h6 {
+    //     @apply text-lg;
+    // }
 
 
 
-    // PARAGRAPHS
+    // ------------------------------------------------
+    // List styles (UL/OL)
+    // ------------------------------------------------
 
     & ul>li, ol>li {
     // above specific ul> or ol> is used to make sure that
@@ -51,25 +61,74 @@
         @apply list-decimal mt-4 ml-4 mb-6 pl-3;
     }
 
-    & .ce-paragraph, p {
 
-        @apply mt-3 text-lg leading-relaxed;
+
+    // ------------------------------------------------
+    // Image styles
+    // ------------------------------------------------
+
+    & .img-container-stretched {
+        @apply w-full;
     }
 
-    & img {
-        @apply mt-4;
+    & .img-self-stretched {
+        @apply w-full;
     }
+
+    & .img-container-background {
+        @apply w-full flex items-center justify-center bg-gray-100;
+    }
+
+    & .img-self-border {
+        @apply  border p-6 shadow-lg;
+    }
+
+    & .image-tool--withBackground {
+        @apply bg-gray-100;
+    }
+
+
+
+
+    // ------------------------------------------------
+    // Table styles
+    // ------------------------------------------------
+
+    & .wt-table {
+        @apply w-full table-auto my-8;
+    }
+
+    & .wt-table-tr {
+        @apply border-b;
+    }
+
+    & .wt-table-td {
+        @apply py-2;
+    }
+
+
+
+
+    // ------------------------------------------------
+    // Inline Tag styles
+    // ------------------------------------------------
 
     & b {
         @apply font-bold;
     }
 
-    & code:not(.hljs) {
-        @apply bg-red-100 text-red-700 px-2  mx-1 rounded-sm font-mono;
-    }
-
     & mark {
         @apply bg-yellow-200 py-1;
+    }
+
+
+
+    // ------------------------------------------------
+    // Code Block styling
+    // ------------------------------------------------
+
+    & code:not(.hljs) {
+        @apply bg-red-100 text-red-700 px-2  mx-1 rounded-sm font-mono;
     }
 
     & code.hljs {
@@ -77,7 +136,21 @@
     }
 
 
+
+
+    // ------------------------------------------------
+    // Page Editor related styles
+    // ------------------------------------------------
+
     & .ce-settings {
+
+        // right-hand side setting menu width
         min-width: 120px;
+    }
+
+
+    & .ce-code__textarea {
+        height: 100px;
+        min-height: 60px;
     }
 }

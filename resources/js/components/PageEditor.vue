@@ -444,6 +444,7 @@ export default {
                     // allows you to insert a header block
                     header: {
                         class: Header,
+                        inlineToolbar: true,
                         config: {
                             placeholder: 'Enter a sub-heading...',
                             levels: [2, 3, 4],
@@ -461,6 +462,7 @@ export default {
 
                     // allows you to embed code
                     code: CodeTool,
+
                     inlineCode: InlineCode,
 
                     // allows you to add table in the text

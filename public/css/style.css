@@ -13939,6 +13939,12 @@ video {
  *
  */
 
+.wt-typography .ce-paragraph, .wt-typography p {
+  margin-top: 0.75rem;
+  font-size: 1.125rem;
+  line-height: 1.625;
+}
+
 .wt-typography h1, .wt-typography h2, .wt-typography h3, .wt-typography h4, .wt-typography h5, .wt-typography h6 {
   margin-top: 2rem;
   -webkit-font-smoothing: antialiased;
@@ -13965,10 +13971,6 @@ video {
   line-height: 1.375;
 }
 
-.wt-typography h5, .wt-typography h6 {
-  font-size: 1.125rem;
-}
-
 .wt-typography ul > li, .wt-typography ol > li {
   font-size: 1.125rem;
   margin-left: 1rem;
@@ -13991,18 +13993,59 @@ video {
   padding-left: 0.75rem;
 }
 
-.wt-typography .ce-paragraph, .wt-typography p {
-  margin-top: 0.75rem;
-  font-size: 1.125rem;
-  line-height: 1.625;
+.wt-typography .img-container-stretched {
+  width: 100%;
 }
 
-.wt-typography img {
-  margin-top: 1rem;
+.wt-typography .img-self-stretched {
+  width: 100%;
+}
+
+.wt-typography .img-container-background {
+  width: 100%;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  background-color: #f7fafc;
+}
+
+.wt-typography .img-self-border {
+  border-width: 1px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.wt-typography .image-tool--withBackground {
+  background-color: #f7fafc;
+}
+
+.wt-typography .wt-table {
+  width: 100%;
+  table-layout: auto;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.wt-typography .wt-table-tr {
+  border-bottom-width: 1px;
+}
+
+.wt-typography .wt-table-td {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .wt-typography b {
   font-weight: 700;
+}
+
+.wt-typography mark {
+  background-color: #fefcbf;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }
 
 .wt-typography code:not(.hljs) {
@@ -14016,12 +14059,6 @@ video {
   font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
-.wt-typography mark {
-  background-color: #fefcbf;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-}
-
 .wt-typography code.hljs {
   padding: 1.5rem;
   margin-top: 1.5rem;
@@ -14031,6 +14068,11 @@ video {
 
 .wt-typography .ce-settings {
   min-width: 120px;
+}
+
+.wt-typography .ce-code__textarea {
+  height: 100px;
+  min-height: 60px;
 }
 
 @media (min-width: 640px){

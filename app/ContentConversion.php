@@ -44,13 +44,13 @@ class ContentConversion
 
     private static function processTable($data)
     {
-        $table = '<table class="w-full table-auto my-4"><tbody>';
+        $table = '<table class="wt-table"><tbody>';
         $content = $data->content;
         foreach ($content as $rows) {
-            $table .= '<tr class="border-b">';
+            $table .= '<tr class="wt-table-tr">';
             foreach ($rows as $row) {
                 $value = strip_tags($row);
-                $table .= '<td class="py-2">' . $value . '</td>';
+                $table .= '<td class="wt-table-td">' . $value . '</td>';
             }
             $table .= '<tr>';
         }
@@ -66,11 +66,25 @@ class ContentConversion
 
     private static function processImage($data)
     {
-        $classes = $data->withBorder ? ' border' : '';
-        $classes .= $data->stretched ? ' stretched' : '';
-        $classes .= $data->withBackground ? ' background' : '';
+        $containerClass = 'my-4';
+        $imgClass = '';
 
-        return '<div class="'. $classes .'"><img src="' . $data->file->url . '" alt="' . $data->caption . '"></img></div>';
+        if ($data->stretched) {
+            $containerClass = ' img-container-stretched ';
+            $imgClass = 'img-self-stretched ';
+        }
+
+        if ($data->withBackground) {
+            $containerClass .= ' img-container-background';
+        }
+
+        if ($data->withBorder) {
+            $imgClass .= 'img-self-border';
+        }
+
+        return '<div class="' . $containerClass .'">'
+                . '<img src="' . $data->file->url . '" alt="' . $data->caption . '" class="' . $imgClass .'"></img>'
+            .'</div>';
     }
 
     private static function processContent($type, $data)
