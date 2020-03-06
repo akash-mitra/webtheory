@@ -66,7 +66,7 @@ class ContentConversion
 
     private static function processImage($data)
     {
-        $containerClass = 'my-4';
+        $containerClass = 'my-6';
         $imgClass = '';
 
         if ($data->stretched) {
@@ -83,7 +83,10 @@ class ContentConversion
         }
 
         return '<div class="' . $containerClass .'">'
-                . '<img src="' . $data->file->url . '" alt="' . $data->caption . '" class="' . $imgClass .'"></img>'
+                . '<figure class="img-fig">'
+                    . '<img src="' . $data->file->url . '" alt="' . $data->caption . '" class="' . $imgClass .'"></img>'
+                    . '<figcaption class="text-sm mt-3 img-fig-caption">' . $data->caption . '</figcaption>'
+                . '</figure>'
             .'</div>';
     }
 

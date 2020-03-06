@@ -32,7 +32,7 @@
     }
 
     & h4 {
-        @apply text-xl leading-snug;
+        @apply text-xl font-bold leading-snug;
     }
 
     // h5, h6 currently not in use
@@ -67,6 +67,10 @@
     // Image styles
     // ------------------------------------------------
 
+    & .img-fig {
+        @apply w-full;
+    }
+
     & .img-container-stretched {
         @apply w-full;
     }
@@ -76,11 +80,11 @@
     }
 
     & .img-container-background {
-        @apply w-full flex items-center justify-center bg-gray-100;
+        @apply w-full flex items-center justify-center;
     }
 
     & .img-self-border {
-        @apply  border p-6 shadow-lg;
+        @apply  border p-4 shadow;
     }
 
     & .image-tool--withBackground {

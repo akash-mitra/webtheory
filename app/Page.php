@@ -35,11 +35,6 @@ class Page extends Model
     public function category()
     {
         return $this->belongsTo('App\Category', 'category_id');
-
-        // return $this->belongsTo('App\Category', 'category_id')->withDefault([
-        //     'name' => 'Uncategorized',
-        //     'description' => null
-        // ]);
     }
 
     public function media()
