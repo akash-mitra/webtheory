@@ -531,9 +531,7 @@ export default {
 
 
 <style>
-.image-tool__caption {
-    min-height: 45px
-}
+
 
 .primary {
     fill: #A5B3BB

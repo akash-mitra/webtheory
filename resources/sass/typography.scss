@@ -32,7 +32,7 @@
     }
 
     & h4 {
-        @apply text-xl font-bold leading-snug;
+        @apply text-lg font-semibold leading-snug;
     }
 
     // h5, h6 currently not in use
@@ -68,7 +68,11 @@
     // ------------------------------------------------
 
     & .img-fig {
-        // @apply w-full;
+        @apply mt-6;
+    }
+
+    & .img-container-stretched .img-fig {
+        @apply w-full;
     }
 
     & .img-container-stretched {
@@ -87,9 +91,10 @@
         @apply  border p-4 shadow;
     }
 
-    & .image-tool--withBackground {
-        @apply bg-gray-100;
-    }
+
+    // & .image-tool--withBackground {
+    //     @apply bg-gray-100;
+    // }
 
 
 
@@ -142,21 +147,7 @@
 
 
 
-    // ------------------------------------------------
-    // Page Editor related styles
-    // ------------------------------------------------
 
-    & .ce-settings {
-
-        // right-hand side setting menu width
-        min-width: 120px;
-    }
-
-
-    & .ce-code__textarea {
-        height: 100px;
-        min-height: 60px;
-    }
 
 
 }
