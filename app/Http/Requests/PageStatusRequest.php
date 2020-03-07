@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PageRequest extends FormRequest
+class PageStatusRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,18 +25,12 @@ class PageRequest extends FormRequest
     public function rules()
     {
         return [
-            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
-            'title' => ['required', 'string', 'max:100'],
-            'summary' => ['nullable', 'string', 'max:1048'],
-            'metakey' => ['nullable', 'string', 'max:255'],
-            'metadesc' => ['nullable', 'string', 'max:255'],
-            'media_id' => ['nullable', 'integer', 'exists:media,id'],
-            'body_json' => ['required', 'json'],
+
             'status' => [
                 'required',
                 Rule::in(['Draft', 'Live'])
             ],
-            'editor' => ['required', 'string', 'max:50'],
+
         ];
     }
 

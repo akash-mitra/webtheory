@@ -35,13 +35,13 @@ Route::get('/app/{any}', 'AdminController@app')->where('any', '.*')->name('app')
 
 
 // Testing Route
-Route::get('test', function () {
-    $page = \App\Page::findOrFail(35);
-    $content = $page->content;
-    $body_json = $content->body_json;
-    $body_html = \App\ContentConversion::getHtml($body_json);
-    return $body_html;
-});
+// Route::get('test', function () {
+//     $page = \App\Page::findOrFail(35);
+//     $content = $page->content;
+//     $body_json = $content->body_json;
+//     $body_html = \App\ContentConversion::getHtml($body_json);
+//     return $body_html;
+// });
 
 // all cache keys - to be removed later
 Route::get('cache/keys', function () {

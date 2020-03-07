@@ -222,6 +222,8 @@ export default {
             errors: {
                 title: [], summary: [], metadesc: [], metakey: []
             },
+
+            EDITOR_IDENTITY: 'editorjs',
         }
     },
 
@@ -234,8 +236,6 @@ export default {
         this.fetchContentAndLoadEditor()
 
         this.fetchCategoryListFromServer()
-
-
 
     }, // end of created
 
@@ -308,6 +308,7 @@ export default {
                         metadesc: this.metadesc,
                         category_id: this.category_id,
                         status: this.status,
+                        editor: this.EDITOR_IDENTITY,
                     },
                     this.postSaveProcessing,
                     this.handle4xxError,

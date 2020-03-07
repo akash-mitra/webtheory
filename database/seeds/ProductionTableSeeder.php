@@ -45,7 +45,14 @@ class ProductionTableSeeder extends Seeder
     {
         DB::table('parameters')->insert([
             'key' => 'siteinfo',
-            'value' => '{"name":"' . Str::title(Str::before(env('DOMAIN', 'My Blog'), '.')) . '","title":"","desc":""}',
+            'value' => '{"name": "My Blog", "title": "My Blog Title", "desc": ""}',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('parameters')->insert([
+            'key' => 'editor',
+            'value' => 'editorjs',
             'created_at' => now(),
             'updated_at' => now()
         ]);

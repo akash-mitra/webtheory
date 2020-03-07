@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use DB;
-use App\Http\Requests\PageRequest;
-use App\ContentConversion;
 use App\Page;
 use App\PageContent;
+use Illuminate\Http\Request;
+use App\Http\Requests\PageRequest;
+use App\Http\Requests\PageStatusRequest;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Converters\ContentsConverter;
 
 class PageController extends Controller
 {
@@ -23,6 +24,8 @@ class PageController extends Controller
         // $this->middleware(['auth']);
     }
 
+
+
     /**
      * Display a listing of the resource.
      *
@@ -32,6 +35,8 @@ class PageController extends Controller
     {
         return response()->json(Page::with('category', 'author', 'media')->get());
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -46,6 +51,7 @@ class PageController extends Controller
         Page::invalidateCache();
 
         DB::transaction(function () use ($request, &$page) {
+
             $page = new Page([
                 'category_id' => $request->category_id,
                 'user_id' => Auth::id(),
@@ -54,14 +60,19 @@ class PageController extends Controller
                 'metakey' => $request->metakey,
                 'metadesc' => $request->metadesc,
                 'media_id' => $request->media_id,
-                'status' => 'Draft'
+                'status' => $request->status
             ]);
+
             $page->save();
+
+            $converter = new ContentsConverter($request->body_json, $request->editor);
 
             $pagecontent = new PageContent([
                 'body_json' => $request->body_json,
-                'body_html' => ContentConversion::getHtml($request->body_json)
+                'body_html' => $converter->getHtml(),
+                'editor' => $request->editor,
             ]);
+
             $page->content()->save($pagecontent);
         });
 
@@ -99,10 +110,17 @@ class PageController extends Controller
         Page::invalidateCache();
 
         DB::transaction(function () use ($request, &$page) {
-            $page->fill(request(['category_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status']))->save();
+
+            $page->fill(request([
+                'category_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status'
+            ]))->save();
+
+            $converter = new ContentsConverter($request->body_json, $request->editor);
+
             $page->content()->update([
                 'body_json' => $request->body_json,
-                'body_html' => ContentConversion::getHtml($request->body_json)
+                'body_html' => $converter->getHtml(),
+                'editor' => $request->editor,
             ]);
         });
 
@@ -120,11 +138,13 @@ class PageController extends Controller
      * @param  Page  $page
      * @return \Illuminate\Http\Response
      */
-    public function updateStatus(Request $request, Page $page)
+    public function updateStatus(PageStatusRequest $request, Page $page)
     {
         Page::invalidateCache();
 
-        $page->fill(request(['status']))->save();
+        $page->fill([
+            'status' => $request->status
+        ])->save();
 
         return response()->json($page);
     }

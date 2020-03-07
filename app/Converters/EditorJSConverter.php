@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Converters;
 
 use Highlight\Highlighter;
 
-class ContentConversion
+class EditorJSConverter
 {
     private static $body_json;
     private static $langSearchSpace = ['java', 'python', 'javascript', 'php', 'sql'];

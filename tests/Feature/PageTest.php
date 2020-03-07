@@ -168,7 +168,9 @@ class PageTest extends TestDataSetup
             'summary' => 'Test Summary',
             'metakey' => 'Test, Meta, Key',
             'metadesc' => 'Test Meta Description',
-            'body_json' => '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading."}},{"type":"paragraph","data":{"text":"Test Paragraph"}}]}'
+            'body_json' => '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading."}},{"type":"paragraph","data":{"text":"Test Paragraph"}}]}',
+            'status' => 'Live',
+            'editor' => 'editorjs',
         ];
 
         /* Unauthenticated user cannot save page */
@@ -202,22 +204,28 @@ class PageTest extends TestDataSetup
             'summary' => 'Test Summary',
             'metakey' => 'Test, Meta, Key',
             'metadesc' => 'Test Meta Description',
+            'status' => 'Live',
         ]);
-        $pagecontent = factory(PageContent::class)->create([
+
+        factory(PageContent::class)->create([
             'page_id' => $page->id,
-            'body_json' => '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading."}},{"type":"paragraph","data":{"text":"Test Paragraph"}}]}'
+            'body_json' => '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading."}},{"type":"paragraph","data":{"text":"Test Paragraph"}}]}',
+            'editor' => 'editorjs',
         ]);
 
         $page->title = 'Test Title Updated';
         $page->body_json = '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading Updated."}},{"type":"paragraph","data":{"text":"Test Paragraph Updated"}}]}';
+        $updateRequestInfo = array_merge($page->toArray(), ['editor' => 'editorjs']);
 
         /* Unauthenticated user cannot update page */
-        // $response = $this->put('/api/pages/' . $page->id, $page->toArray(), ['Accept' => 'application/json']);
-        // $response->assertStatus(401)
-        //     ->assertJson(['message' => 'Unauthenticated.']);
+        $response = $this->put('/api/pages/' . $page->id, $updateRequestInfo);
+        $response->assertStatus(302);
+
 
         /* Authenticated user can update page */
-        $response = $this->actingAs($this->adminUser)->put('/api/pages/' . $page->id, $page->toArray());
+        $response = $this->actingAs($this->adminUser)
+                ->put('/api/pages/' . $page->id, $updateRequestInfo);
+
         $response->assertStatus(200)
             ->assertJsonFragment(['title' => 'Test Title Updated'])
             ->assertJsonStructure([
@@ -238,30 +246,41 @@ class PageTest extends TestDataSetup
     {
         $page = factory(Page::class)->create([
             'category_id' => $this->category->id,
-            'user_id' => $this->authorUser1->id
-        ]);
-        $pagecontent = factory(PageContent::class)->create([
-            'page_id' => $page->id
+            'user_id' => $this->authorUser1->id,
+            'status' => 'Draft',
         ]);
 
-        $page->status = 'Published';
+        $this->assertDatabaseHas('pages', [
+            'id' => $page->id,
+            'status' => 'Draft'
+        ]);
 
-        /* Unauthenticated user cannot update page status */
-        // $response = $this->put('/api/pages/' . $page->id . '/status', $page->toArray(), ['Accept' => 'application/json']);
-        // $response->assertStatus(401)
-        //     ->assertJson(['message' => 'Unauthenticated.']);
+        /* unauthenticated users cannot update page status */
+        $response = $this->put('/api/pages/' . $page->id . '/status', [
+            'status' => 'Live'
+        ]);
+        $response->assertStatus(302);
+
 
         /* Authenticated user can update page status */
-        $response = $this->actingAs($this->adminUser)->put('/api/pages/' . $page->id . '/status', $page->toArray());
+        $response = $this->actingAs($this->adminUser)
+            ->put('/api/pages/' . $page->id . '/status', [
+                'status' => 'Live'
+            ]);
+
+
         $response->assertStatus(200)
-            ->assertJsonFragment(['status' => 'Published'])
+            ->assertJsonFragment(['status' => 'Live'])
             ->assertJsonStructureExact([
                 'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
                 'created_at', 'updated_at', 'deleted_at',
                 'url', 'permalink', 'created_ago', 'updated_ago'
             ]);
-        $this->assertDatabaseHas('pages', ['status' => 'Published']);
-        $this->assertDatabaseMissing('pages', ['id' => $page->id, 'status' => 'Draft']);
+
+        $this->assertDatabaseHas('pages', [
+            'id' => $page->id,
+            'status' => 'Live'
+        ]);
     }
 
     /* Page Owner Update */
