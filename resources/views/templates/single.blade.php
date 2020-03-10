@@ -12,7 +12,7 @@
 
   <link rel="canonical" href="{{ $data->page->permalink }}">
   <link href="/css/style-{{$data->ref->template->primaryColor}}.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
 
   <meta name="theme-color" content="#fafafa">
 </head>

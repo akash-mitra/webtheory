@@ -85,7 +85,7 @@ class EditorJSConverter
         return '<div class="' . $containerClass .'">'
                 . '<figure class="img-fig">'
                     . '<img src="' . $data->file->url . '" alt="' . $data->caption . '" class="' . $imgClass .'"></img>'
-                    . '<figcaption class="text-sm mt-3 img-fig-caption' . ($data->stretched ? ' text-center' :'') . '">'
+                    . '<figcaption class="text-sm mt-3 img-fig-caption' . (($data->stretched || $data->withBackground) ? ' text-center' :'') . '">'
                         . $data->caption
                     . '</figcaption>'
                 . '</figure>'
