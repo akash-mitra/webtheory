@@ -66,11 +66,11 @@ class EditorJSConverter
 
     private static function processImage($data)
     {
-        $containerClass = 'my-6';
+        $containerClass = 'my-4';
         $imgClass = '';
 
         if ($data->stretched) {
-            $containerClass = ' img-container-stretched ';
+            $containerClass .= ' img-container-stretched ';
             $imgClass = 'img-self-stretched ';
         }
 
@@ -85,7 +85,9 @@ class EditorJSConverter
         return '<div class="' . $containerClass .'">'
                 . '<figure class="img-fig">'
                     . '<img src="' . $data->file->url . '" alt="' . $data->caption . '" class="' . $imgClass .'"></img>'
-                    . '<figcaption class="text-sm mt-3 img-fig-caption">' . $data->caption . '</figcaption>'
+                    . '<figcaption class="text-sm mt-3 img-fig-caption' . ($data->stretched ? ' text-center' :'') . '">'
+                        . $data->caption
+                    . '</figcaption>'
                 . '</figure>'
             .'</div>';
     }

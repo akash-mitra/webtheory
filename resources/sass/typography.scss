@@ -1,45 +1,56 @@
 /**
- * This file stores the CSS rules for the blog typography of single page.
- * This includes the CSS rules for all the tags that are currently defined
- * by the Editor JS plugin. No other CSS rules should be defined here.
+ * Typography for the Default Templates
  *
  */
+
+
+
 .wt-typography {
 
     // ------------------------------------------------
     // Headers and Paragraph styles
     // ------------------------------------------------
 
-    & .ce-paragraph, p {
-
-        @apply mt-3 text-lg leading-relaxed;
-    }
-
-    & h1, h2, h3, h4, h5, h6 {
-        @apply mt-8 antialiased;
-    }
-
     & h1 {
-        @apply text-4xl leading-tight;
+        @apply text-4xl pt-3 pb-1 my-0 font-serif antialiased tracking-tight leading-tight text-gray-700;
+      }
+
+     @media (min-width: 640px) {
+        & h1 {
+            @apply text-5xl pt-4;
+        }
     }
+
+    & p {
+        @apply pt-2 pb-3 px-2 text-base leading-relaxed text-gray-700;
+    }
+
+    & h2, h3, h4 {
+
+        @apply pt-4 pb-1 my-0 font-serif antialiased text-gray-800;
+
+    }
+
 
     & h2 {
-        @apply text-3xl leading-tight;
+        @apply text-3xl leading-tight font-semibold py-4 text-gray-700 tracking-tight;
+
     }
+
 
     & h3 {
-        @apply text-2xl leading-snug;
+        @apply text-3xl leading-snug tracking-tight;
     }
+
 
     & h4 {
-        @apply text-lg font-semibold leading-snug;
+        @apply text-xl font-bold leading-snug tracking-normal pb-1;
     }
 
-    // h5, h6 currently not in use
-    // & h5, h6 {
-    //     @apply text-lg;
-    // }
 
+    & .wt-summary {
+        @apply py-4 px-6 rounded -mx-6 text-xl;
+    }
 
 
     // ------------------------------------------------
@@ -47,9 +58,6 @@
     // ------------------------------------------------
 
     & ul>li, ol>li {
-    // above specific ul> or ol> is used to make sure that
-    // this style does not interfere with the toolbox of editor js
-    // where <li> is used directly under <div>
         @apply text-lg ml-4 leading-relaxed;
     }
 
@@ -80,22 +88,19 @@
     }
 
     & .img-self-stretched {
-        @apply w-full;
+        width: 120%;
+        max-width: 120%;
+        margin-left: -10%;
     }
 
     & .img-container-background {
         @apply w-full flex items-center justify-center;
     }
 
+    // Image Border
     & .img-self-border {
         @apply  border p-4 shadow;
     }
-
-
-    // & .image-tool--withBackground {
-    //     @apply bg-gray-100;
-    // }
-
 
 
 

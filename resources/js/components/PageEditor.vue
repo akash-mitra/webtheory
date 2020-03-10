@@ -10,11 +10,11 @@
 
                 <div class="flex justify-start items-center">
                     <div @click="tab='content'" class="pr-6 py-4 text-xs uppercase text-gray-800 cursor-pointer" :class="tab==='content'?'px-6 text-blue-600 font-bold border-b-4 border-blue-500':''">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-6 w-6 sm:hidden"><path class="primary" d="M6 2h6v6c0 1.1.9 2 2 2h6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2zm2 11a1 1 0 0 0 0 2h8a1 1 0 0 0 0-2H8zm0 4a1 1 0 0 0 0 2h4a1 1 0 0 0 0-2H8z"/><polygon class="secondary" points="14 2 20 8 14 8"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-6 w-6 sm:hidden"><path class="bg-icon-primary" d="M6 2h6v6c0 1.1.9 2 2 2h6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2zm2 11a1 1 0 0 0 0 2h8a1 1 0 0 0 0-2H8zm0 4a1 1 0 0 0 0 2h4a1 1 0 0 0 0-2H8z"/><polygon class="secondary" points="14 2 20 8 14 8"/></svg>
                         <span class="hidden sm:inline-block tracking-wider">Content</span>
                     </div>
                     <div @click="tab='meta'" class="px-6 py-4 text-xs uppercase text-gray-800 cursor-pointer" :class="tab==='meta'?'text-blue-600 font-bold border-b-4 border-blue-500':''">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-6 w-6 sm:hidden"><path class="primary" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z"/><path class="secondary" d="M11 12a1 1 0 0 1 0-2h2a1 1 0 0 1 .96 1.27L12.33 17H13a1 1 0 0 1 0 2h-2a1 1 0 0 1-.96-1.27L11.67 12H11zm2-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-6 w-6 sm:hidden"><path class="bg-icon-primary" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z"/><path class="secondary" d="M11 12a1 1 0 0 1 0-2h2a1 1 0 0 1 .96 1.27L12.33 17H13a1 1 0 0 1 0 2h-2a1 1 0 0 1-.96-1.27L11.67 12H11zm2-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>
                         <span class="hidden sm:inline-block tracking-wider">Meta</span>
                     </div>
                     <div @click="tab='setting'" class="px-6 py-4 text-xs uppercase text-gray-800 cursor-pointer" :class="tab==='setting'?'text-blue-600 font-bold border-b-4 border-blue-500':''">
@@ -54,7 +54,7 @@
             </div>
 
             <div class="w-full p-2 bg-gray-100 pb-20">
-                <div class="max-w-4xl mx-auto bg-white -mt-16 shadow-xl px-6 pt-6 border-t-2 border-blue-400">
+                <div class="max-w-4xl mx-auto bg-white -mt-16 shadow-xl px-6 pt-12 border-t-2 border-blue-400">
                     <div id="tensor-editor" class="mx-auto text-gray-700 pb-4 bg-white -mr-2 wt-typography"></div>
                 </div>
             </div>
@@ -530,35 +530,196 @@ export default {
 </script>
 
 
+
 <style>
 
+    /**
+     * Background color for the icons of "content", "meta", "seetings"
+     * during the mobile responsive mode
+     */
+    .bg-icon-primary {
+        fill: #A5B3BB
+    }
 
-.primary {
-    fill: #A5B3BB
-}
 
-.google-header {
-    font-family: arial,sans-serif;
-    font-size: 20px;
-    line-height: 1.3;
-    cursor: pointer;
-    color: #1a0dab
-}
+    div.ce-paragraph {
+        /*
+            top and bottom padding must be equal to
+            ensure correct positioning of "+"
+            sign on left margin
+        */
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
 
-.google-url {
-    font-family: arial,sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
-    padding-top: 1px;
-    color: #006621
-}
+        font-size: 1rem;
+        line-height: 1.625;
 
-.google-desc {
-    line-height: 1.57;
-    word-wrap: break-word;
-    color: #545454;
-    font-family: arial,sans-serif;
-    font-size: 14px;
-}
+    }
+
+    h2.ce-header, h3.ce-header, h4.ce-header {
+
+        padding-top: 1rem;
+        padding-bottom: 0.25rem;
+        margin-bottom: 0;
+        margin-top: 0;
+        font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+
+
+    h2.ce-header {
+
+        font-size: 1.875rem;
+        line-height: 1.25;
+        font-weight: 600;
+        padding-bottom: 1rem;
+        padding-top: 1rem;
+    }
+
+    h3.ce-header {
+
+        font-size: 1.875rem;
+        line-height: 1.35;
+    }
+
+    h4.ce-header {
+
+        font-size: 1.2rem;
+        font-weight: 700;
+        line-height: 1.375;
+        letter-spacing: 0.025em;
+        padding-bottom: 0.25rem;
+    }
+
+    li.cdx-list__item {
+        padding: 0.3rem 0 0.3rem 0.5rem;
+        line-height: 1.625;
+    }
+
+
+    /**
+     * IMAGE BORDER Styles.
+     *
+     * Disable the original 1px border that comes with editorjs.
+     * Create a new 1rem border with shadow.
+     */
+    .image-tool--withBorder div.image-tool__image {
+        border-style: none;
+    }
+
+    .image-tool--withBorder img {
+        /* equivalent to border p-4 shadow; */
+
+        border: 1px solid #ccc;
+        padding: 1rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    }
+
+
+    /**
+     * IMAGE STRETCHED Styles.
+     *
+     * The image should stretch 100% of the container.
+     */
+    .ce-block--stretched, .ce-block--stretched img {
+        width: 100%;
+    }
+
+    /* On screens that are 768px or more, set the padding */
+    @media screen and (min-width: 768px) {
+
+        .ce-block--stretched {
+            padding-right: 6rem;
+            padding-left: 6rem;
+        }
+    }
+
+
+    /**
+     * IMAGE BACKGROUND
+     *
+     * Following css will reprogram the editorjs background
+     * to work more like a image centering tool.
+     */
+    .image-tool--withBackground div.image-tool__image {
+        /* bg-white p-0; */
+        background-color: #fff;
+        padding: 0;
+    }
+
+    .image-tool--withBackground img.image-tool__image-picture {
+        max-width: 100%;
+    }
+
+
+    /**
+     * IMAGE CAPTION BOX
+     *
+     * Design for the caption box below image.
+     */
+    .image-tool__caption {
+        /* equivalent to bg-gray-100 rounded p-2 shadow-inner border */
+        background-color: #f7fafc;
+        border-radius: 0.25rem;
+        padding: 0.5rem;
+        box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+        border-width: 1px;
+    }
+
+
+
+    /* Right Side Settings Menu
+     *
+     * Settings menu width.
+     */
+    .ce-settings {
+        min-width: 120px;
+    }
+
+
+    /**
+     * CODE BOX
+     * Make sure that the code box height is not too high by default
+     * Set the height to 100px.
+     */
+    .ce-code__textarea {
+        height: 100px;
+        min-height: 60px;
+    }
+
+
+
+
+
+    /*
+     * Google SERP styles for Search preview
+     */
+    .google-header {
+        font-family: arial,sans-serif;
+        font-size: 20px;
+        line-height: 1.3;
+        cursor: pointer;
+        color: #1a0dab
+    }
+
+    .google-url {
+        font-family: arial,sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        padding-top: 1px;
+        color: #006621
+    }
+
+    .google-desc {
+        line-height: 1.57;
+        word-wrap: break-word;
+        color: #545454;
+        font-family: arial,sans-serif;
+        font-size: 14px;
+    }
 
 </style>

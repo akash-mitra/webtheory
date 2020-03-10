@@ -12,26 +12,16 @@
 
   <link rel="canonical" href="{{ $data->page->permalink }}">
   <link href="/css/style-{{$data->ref->template->primaryColor}}.css" rel="stylesheet">
-  {{-- <link href="/css/style.css" rel="stylesheet"> --}}
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
-
-  <style>
-    .font-reading {
-        font-family: 'Open Sans', sans-serif;
-    }
-
-  </style>
-
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400&display=swap" rel="stylesheet">
 
   <meta name="theme-color" content="#fafafa">
-
 </head>
 
 <body>
 
     <div class="w-full h-1 bg-{{$data->ref->template->primaryColor}}-600 fixed top-0 shadow-lg"></div>
 
-    <div class="w-full max-w-6xl mx-auto px-6 md:px-8 font-reading">
+    <div class="w-full max-w-6xl mx-auto px-6 md:px-8">
 
         <div class="w-full flex items-center justify-between pb-8 pt-10 border-b">
             <a href="/" class="flex items-center">
@@ -63,9 +53,9 @@
                         </div>
                     </div>
 
-                    <h3 class="italic py-4 px-6 rounded bg-{{$data->ref->template->primaryColor}}-100 -mx-6 text-xl">{{ $data->page->summary }}</h3>
+                    <div class="wt-summary bg-{{$data->ref->template->primaryColor}}-100">{{ $data->page->summary }}</div>
                 </header>
-                <div class="mt-4 font-reading text-base">
+                <div class="mt-4 text-base">
                     {!! $data->page->content->body_html !!}
                 </div>
             </article>

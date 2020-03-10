@@ -11,94 +11,51 @@
 
 
 /* This provides a styling for the left-side plus button of editor */
-.wt-typography .ce-toolbar__plus {
-    // @apply text-orange-500 bg-yellow-100
-}
+// .wt-typography .ce-toolbar__plus {
+//     // @apply text-orange-500 bg-yellow-100
+// }
 
-@screen md {
-    .wt-typography .ce-toolbar__plus {
-        // @apply -ml-6 shadow rounded-l-full
-    }
-}
-
-
-.wt-typography .ce-toolbox--opened  {
-    // @apply  bg-yellow-100 px-6;
-}
-
-@screen md {
-    .wt-typography .ce-toolbox--opened {
-        // @apply -ml-6 shadow rounded-r-full
-    }
-}
-
-// right-hand side setting menu width
-.ce-settings {
-    min-width: 120px;
-}
-
-// ensure that default code box height is 100px
-.ce-code__textarea {
-    height: 100px;
-    min-height: 60px;
-}
-
-// design for the caption box below image
-.image-tool__caption {
-    @apply bg-gray-100 rounded p-2 shadow-inner border;
-}
-
-// create a border around the image
-.image-tool--withBorder img {
-    @apply  border p-4 shadow;
-}
-
-.image-tool--withBorder div.image-tool__image {
-    @apply border-none;
-}
-
-// image stretched behavior
-.ce-block--stretched {
-    @apply w-full;
-}
-@screen md {
-    .ce-block--stretched {
-        @apply px-24;
-    }
-}
-.ce-block--stretched img {
-    @apply w-full;
-}
+// @screen md {
+//     .wt-typography .ce-toolbar__plus {
+//         // @apply -ml-6 shadow rounded-l-full
+//     }
+// }
 
 
-// background - centered
-.image-tool--withBackground div.image-tool__image {
-    @apply bg-white p-0;
-}
+// .wt-typography .ce-toolbox--opened  {
+//     // @apply  bg-yellow-100 px-6;
+// }
 
-.image-tool--withBackground img.image-tool__image-picture {
-    max-width: 100%;
-}
+// @screen md {
+//     .wt-typography .ce-toolbox--opened {
+//         // @apply -ml-6 shadow rounded-r-full
+//     }
+// }
 
 
 
-h2.ce-header {
-    @apply text-3xl font-serif;
-}
+// p.ce-paragraph {
+//     @apply text-sm;
+// }
 
-h3.ce-header {
-    @apply text-2xl font-serif;
-}
+// h2.ce-header {
+//     @apply text-3xl font-serif;
+// }
 
-h4.ce-header {
-    @apply text-lg font-serif font-semibold;
-}
+// h3.ce-header {
+//     @apply text-2xl font-serif;
+// }
 
-p.ce-paragraph {
-    @apply text-sm;
-}
+// h4.ce-header {
+//     @apply text-lg font-serif font-semibold;
+// }
+
+
+
+
+
+
 
 .pattern-wall {
-
     background-image: url("data:image/svg+xml,%3Csvg width='42' height='44' viewBox='0 0 42 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cg id='Page-1' fill='none' fill-rule='evenodd'%3E%3Cg id='brick-wall' fill='%234ea8d9' fill-opacity='0.37'%3E%3Cpath d='M0 0h42v44H0V0zm1 1h40v20H1V1zM0 23h20v20H0V23zm22 0h20v20H22V23z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }

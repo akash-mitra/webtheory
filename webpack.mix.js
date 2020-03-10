@@ -17,7 +17,7 @@ const backendScanPaths = [
   './resources/js/components/*.vue',
   './resources/js/ui/*.vue',
   './resources/js/util.js',
-  './resources/sass/typography.scss',
+
 ];
 
 const frontendScanPaths = [

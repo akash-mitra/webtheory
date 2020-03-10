@@ -1,1 +1,140 @@
-.wt-typography h1,.wt-typography h2,.wt-typography h3,.wt-typography h4,.wt-typography h5,.wt-typography h6{margin-top:2rem;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.wt-typography h1{font-size:2.25rem;line-height:1.25}.wt-typography h2{font-size:1.875rem;line-height:1.25}.wt-typography h3{font-size:1.5rem;line-height:1.375}.wt-typography h4{font-size:1.25rem;line-height:1.375}.wt-typography h5,.wt-typography h6{font-size:1.125rem}.wt-typography ol>li,.wt-typography ul>li{font-size:1.125rem;margin-left:.75rem;line-height:2.25}.wt-typography .cdx-list--unordered,.wt-typography ul{list-style-type:disc;margin-top:1rem;margin-bottom:1.5rem;padding-left:.75rem;list-style-position:inside}.wt-typography .cdx-list--ordered,.wt-typography ol{list-style-type:decimal;margin-top:1rem;margin-bottom:1.5rem;padding-left:.75rem;list-style-position:inside}.wt-typography .ce-paragraph,.wt-typography p{margin-top:.75rem;font-size:1.125rem;line-height:1.625}.wt-typography img{margin-top:1rem}.wt-typography b{font-weight:700}.wt-typography code:not(.hljs){background-color:#fff5f5;color:#c53030;padding-left:.5rem;padding-right:.5rem;margin-left:.25rem;margin-right:.25rem;border-radius:.125rem;font-family:Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace}.wt-typography mark{background-color:#fefcbf;padding-top:.25rem;padding-bottom:.25rem}.wt-typography code.hljs{padding:1.5rem;margin-top:1.5rem;margin-bottom:1.5rem;margin-left:-1.5rem}
+/**
+ * This file stores the CSS rules for the blog typography of single page.
+ * This includes the CSS rules for all the tags that are currently defined
+ * by the Editor JS plugin. No other CSS rules should be defined here.
+ *
+ */
+
+.wt-typography p.ce-paragraph, .wt-typography p {
+  padding-top: 2.5rem;
+  font-size: 0.875rem;
+  line-height: 1.625;
+  color: #fc8181;
+}
+
+.wt-typography h1, .wt-typography h2, .wt-typography h3, .wt-typography h4, .wt-typography h5, .wt-typography h6 {
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wt-typography h1 {
+  font-size: 2.25rem;
+  line-height: 1.25;
+}
+
+.wt-typography h2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.wt-typography h3 {
+  font-size: 1.875rem;
+  line-height: 1.25;
+}
+
+.wt-typography h4 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.375;
+  letter-spacing: 0.025em;
+}
+
+.wt-typography ul > li, .wt-typography ol > li {
+  font-size: 1.125rem;
+  margin-left: 1rem;
+  line-height: 1.625;
+}
+
+.wt-typography ul, .wt-typography .cdx-list--unordered {
+  list-style-type: disc;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  margin-bottom: 1.5rem;
+  padding-left: 0.75rem;
+}
+
+.wt-typography ol, .wt-typography .cdx-list--ordered {
+  list-style-type: decimal;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  margin-bottom: 1.5rem;
+  padding-left: 0.75rem;
+}
+
+.wt-typography .img-fig {
+  margin-top: 1.5rem;
+}
+
+.wt-typography .img-container-stretched .img-fig {
+  width: 100%;
+}
+
+.wt-typography .img-container-stretched {
+  width: 100%;
+}
+
+.wt-typography .img-self-stretched {
+  width: 100%;
+}
+
+.wt-typography .img-container-background {
+  width: 100%;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+}
+
+.wt-typography .img-self-border {
+  border-width: 1px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.wt-typography .wt-table {
+  width: 100%;
+  table-layout: auto;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.wt-typography .wt-table-tr {
+  border-bottom-width: 1px;
+}
+
+.wt-typography .wt-table-td {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.wt-typography b {
+  font-weight: 700;
+}
+
+.wt-typography mark {
+  background-color: #fefcbf;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.wt-typography code:not(.hljs) {
+  background-color: #fff5f5;
+  color: #c53030;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+  border-radius: 0.125rem;
+  font-family: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.wt-typography code.hljs {
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  margin-left: -1.5rem;
+}
