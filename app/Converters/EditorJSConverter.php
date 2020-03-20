@@ -100,7 +100,8 @@ class EditorJSConverter
             'list' => 'processList',
             'table' => 'processTable',
             'code' => 'processCode',
-            'image' => 'processImage'
+            'image' => 'processImage',
+            'embed' => '',
         ];
         $method = $processor[$type];
         return self::$method($data);

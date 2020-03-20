@@ -36,20 +36,29 @@
 
             <div class="pt-10 w-full p-6 pb-24">
                 <div class="mx-auto max-w-4xl">
-                    <label v-show="!title" class="px-6 uppercase text-xs tracking-wider text-gray-700 block pb-2">
+
+                    <label class="px-6 uppercase text-xs tracking-wider text-gray-700 block pb-2">
                         Title
+                        <span v-if="!! title" class="bg-gray-100 rounded-lg py-1 px-2 ml-4" :class="title.length>100 ? 'text-red-400': 'text-gray-600'"> {{ title.length }}</span>
                     </label>
 
-                    <textarea name="title" v-model="title" ref="title" class="px-6 bg-transparent border-b-2 border-gray-400 h-24 outline-none text-blue-800 text-3xl tracking-wide w-full" placeholder="Title of your story"></textarea>
+                    <textarea name="title" v-model="title" ref="title" class="autoheight h-8 px-6 bg-transparent border-b-2 border-gray-400 outline-none text-blue-800 text-3xl tracking-wide w-full placeholder-gray-700" placeholder="Title of your story" @input="resizeInput($event)"></textarea>
+
                     <t-error-message :errors="errors" field="title"></t-error-message>
+
                 </div>
 
                 <div class="mt-12 mx-auto  max-w-4xl">
-                    <label v-show="!intro" class="px-6 uppercase text-xs tracking-wider text-gray-700 block pb-2">
+
+                    <label class="px-6 uppercase text-xs tracking-wider text-gray-700 block pb-2">
                         Intro
+                        <span v-if="!! intro" class="bg-gray-100 rounded-lg py-1 px-2 ml-4" :class="intro.length>1048 ? 'text-red-400': 'text-gray-600'"> {{ intro.length }}</span>
                     </label>
-                    <textarea name="intro" v-model="intro" class="px-6 bg-transparent h-24 outline-none text-gray-700 text-lg tracking-wide w-full" placeholder="Provide a 3/4 lines of introduction to your story..."></textarea>
+
+                    <textarea name="intro" v-model="intro" ref="intro" class="autoheight h-8 px-6 bg-transparent  outline-none text-gray-700 text-lg tracking-wide w-full placeholder-gray-700" placeholder="Provide a 3/4 lines of introduction to your story..." @input="resizeInput($event)"></textarea>
+
                     <t-error-message :errors="errors" field="summary"></t-error-message>
+
                 </div>
             </div>
 
@@ -224,6 +233,9 @@ export default {
             },
 
             EDITOR_IDENTITY: 'editorjs',
+
+            timer: null,
+            autoSaveFreqSeconds: 120,
         }
     },
 
@@ -237,11 +249,19 @@ export default {
 
         this.fetchCategoryListFromServer()
 
+        this.timer = window.setInterval(this.autoSave, this.autoSaveFreqSeconds * 1000)
+
+
+
     }, // end of created
 
 
     mounted: function () {
         this.focusInput()
+
+        this.$refs.title.style.height = 'auto';
+        this.$refs.intro.style.height = 'auto';
+
     },
 
 
@@ -249,25 +269,27 @@ export default {
 
         // simple front-end validations before starting
         // the saving process. Mandatory fields checking.
-        isValid: function () {
+        isValid: function (showError) {
+
+            if (typeof showError === 'undefined') showError = false
 
             if (!this.title) {
-                util.notifyError('Page has no title', 'Provide a title to save this page')
+                (showError) && util.notifyError('Page has no title', 'Provide a title to save this page')
                 return false
             }
 
             if (this.title.length >= 100) {
-                util.notifyError('Page title too long!', 'Keep page title within maximum 100 characters.')
+                (showError) && util.notifyError('Page title too long!', 'Keep page title within maximum 100 characters.')
                 return false
             }
 
             if (!this.intro) {
-                util.notifyError('Provide an Introduction', 'Write a few lines of intro for this page before saving.')
+                (showError) && util.notifyError('Provide an Introduction', 'Write a few lines of intro for this page before saving.')
                 return false
             }
 
             if (this.intro.length >= 1048) {
-                util.notifyError('Intro too long', 'Keep page intro within about 1000 characters')
+                (showError) && util.notifyError('Intro too long', 'Keep page intro within about 1000 characters')
                 return false
             }
 
@@ -287,9 +309,16 @@ export default {
             else return 'post'
         },
 
+
+        autoSave () {
+
+            this.isValid(false) && this.initiateSave()
+
+        },
+
         initiateSave: function () {
 
-            if (this.isValid()) {
+            if (this.isValid(true)) {
 
                 this.errors = {}
 
@@ -348,7 +377,7 @@ export default {
 
             util.toast({
                 icon: 'success',
-                titleText: 'Page Saved Successfully',
+                titleText: 'Page Contents are Saved.',
                 // text: 'The page has been saved successfully'
             })
 
@@ -507,15 +536,24 @@ export default {
 
         }, // end of loadEditorTool
 
-        focusInput: function () {
+        focusInput() {
 
             this.$refs.title.focus()
         },
 
 
-
+        resizeInput(e) {
+            e.target.style.height = 'auto';
+            e.target.style.height = (e.target.scrollHeight)+"px";
+        },
 
     }, // end of methods
+
+    beforeDestroy () {
+
+        window.clearInterval(this.timer)
+    },
+
 
     computed: {
         url() {
@@ -720,6 +758,16 @@ export default {
         color: #545454;
         font-family: arial,sans-serif;
         font-size: 14px;
+    }
+
+
+
+    /* for autosizing the textareas */
+    .autoheight {
+        resize: none;
+        overflow: hidden;
+        min-height: 2em;
+        max-height: 10em;
     }
 
 </style>

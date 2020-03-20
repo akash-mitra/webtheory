@@ -1,20 +1,31 @@
 <template>
 
-    <div class="w-full bg-white shadow border-t border-blue-200 rounded my-4">
-        <div class="w-full relative cursor-pointer" @click="openPageEditor(page.id)">
-            <div v-if="page.status==='Draft'" class="absolute top-0 mt-4 right-0 mr-8 px-2 py-1 text-xs text-gray-500 bg-white flex items-center border rounded-lg border-gray-500">draft</div>
+    <div class="w-full bg-white shadow border-t border-blue-300 rounded my-4">
+        <div class="w-full relative">
+
+            <div class="absolute top-0 mt-4 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
+                @click="changeStatus(page, page.status==='Draft'?'Live':'Draft')">
+
+                <div class="flex items-center">
+                    <div :class="page.status==='Draft'? 'bg-gray-400':'bg-green-400'" class="rounded-full h-3 w-3 mr-2"></div>
+                    <span :class="page.status==='Draft'? 'text-gray-600':'text-green-600'">{{ page.status }}</span>
+                </div>
+            </div>
+
             <h3 class="px-6 pt-4 text-blue-400 text-sm">{{ page.category ? page.category.name : '' }}</h3>
-            <h3 class="px-6 pt-2 text-blue-800 font-semibold text-sm1">{{ page.title }}</h3>
-            <div class="px-6 py-4 text-sm text-gray-600">{{ page.summary }}</div>
+            <h3 class="px-6 pt-2 text-blue-800 font-semibold cursor-pointer" @click="openPageEditor(page)">{{ page.title }}</h3>
+            <div class="px-6 py-4 text-sm text-gray-700">{{ page.summary }}</div>
         </div>
 
-        <div class="px-6 py-2 bg-gray-100 text-xs flex justify-between items-center" @mouseover="selected = page.id" @mouseleave="selected = null">
+        <div class="px-6 py-2 bg-gray-100 text-xs flex justify-between items-center">
             <div class="mr-4 text-gray-700 flex items-center">
                 <img :src="page.author.avatar" class="h-6 w-6 rounded-full mr-4"/>
                 {{ page.author.name }} updated {{ page.updated_ago }}
             </div>
-            <div v-show="selected===page.id && page.status != 'Draft'" @click="changeStatus(page, 'Draft')" class="text-blue-600 mr-4 cursor-pointer hover:text-red-600">Unpublish</div>
-            <div v-show="selected===page.id && page.status === 'Draft'" @click="changeStatus(page, 'Live')" class="text-blue-600 mr-4 cursor-pointer hover:text-green-600">Publish</div>
+
+            <div @click="openPageInNewWindow(page)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-6 w-6 fill-current text-gray-300 hover:text-blue-700 cursor-pointer"><path class="primary" d="M12 8a1 1 0 0 1-1 1H5v10h10v-6a1 1 0 0 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9c0-1.1.9-2 2-2h6a1 1 0 0 1 1 1z"/><path class="secondary" d="M19 6.41L8.7 16.71a1 1 0 1 1-1.4-1.42L17.58 5H14a1 1 0 0 1 0-2h6a1 1 0 0 1 1 1v6a1 1 0 0 1-2 0V6.41z"/></svg>
+            </div>
         </div>
     </div>
 
@@ -41,9 +52,14 @@ export default {
     methods: {
 
         // open a specific page in editor
-        openPageEditor (id)
+        openPageEditor (page)
         {
-            this.$router.push({ path: '/app/pages/' + id })
+            this.$router.push({ path: '/app/pages/' + page.id })
+        },
+
+        openPageInNewWindow (page)
+        {
+            window.open(page.url,'_blank');
         },
 
 

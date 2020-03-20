@@ -33,7 +33,11 @@ class PageController extends Controller
      */
     public function index()
     {
-        return response()->json(Page::with('category', 'author', 'media')->get());
+        $pages = Page::with('category', 'author', 'media')
+            ->latest()
+            ->get();
+
+        return response()->json($pages);
     }
 
 
