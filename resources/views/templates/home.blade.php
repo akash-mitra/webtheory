@@ -87,7 +87,7 @@
                 @if(! empty($data->pages[0]->media))
                 <img src="{{$data->pages[0]->media->url}}" class="shadow-lg rounded-lg">
                 @else
-                <img src="https://source.unsplash.com/800x600?abstract,{{$data->ref->template->primaryColor}}" class="shadow-lg rounded-lg">
+                <img src="https://source.unsplash.com/400x300?abstract,{{$data->ref->template->primaryColor}}" class="shadow-lg rounded-lg">
                 @endif
             </div>
             <div class="w-full md:w-2/3 max-w-4xl px-0 md:px-8">

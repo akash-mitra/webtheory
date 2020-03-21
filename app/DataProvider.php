@@ -88,12 +88,12 @@ class DataProvider {
 
             return Cache::rememberForever('pages', function () use ($howMany) {
 
-                return Page::with(['author', 'category'])->published()->paginate($howMany);
+                return Page::with(['author', 'category'])->published()->latest()->paginate($howMany);
 
             });
         }
 
-        return Page::with(['author', 'category'])->published()->paginate($howMany);
+        return Page::with(['author', 'category'])->published()->latest()->paginate($howMany);
 
     }
 
