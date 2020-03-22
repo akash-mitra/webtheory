@@ -6,10 +6,12 @@ use App\Media;
 use Faker\Generator as Faker;
 
 $factory->define(Media::class, function (Faker $faker) {
-    $filename = $faker->colorName . '.png';
+    $fileExtension = $faker->randomElement(['jpeg', 'png', 'bmp', 'gif', 'svg', 'webp']);
+    $filename = $faker->domainWord . '.' . $fileExtension;
+    
     return [
         'name' => $filename,
-        'type' => 'png',
+        'type' => $fileExtension,
         'size' => rand(10, 50),
         'path' => 'media/' . $filename,
         'url' => '/storage/media/' . $filename,

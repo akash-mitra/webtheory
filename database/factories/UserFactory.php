@@ -31,10 +31,12 @@ $factory->define(User::class, function (Faker $faker) {
         'about_me' => $faker->paragraph(),
         'gender' => $faker->randomElement($array = [true, false]),
         'dob' => $faker->date($format = 'Y-m-d', $max = 'now'),
-        'preferences' => ["broadcast","email"],
+        'preferences' => ["broadcast","database","mail"],
         'stripe_id' => $faker->uuid,
         'card_brand' => $faker->creditCardType,
         'card_last_four' => $faker->numberBetween($min = 1000, $max = 9000),
         'trial_ends_at' => $faker->dateTimeBetween($startDate = "now", $endDate = "30 days"),
+        'created_at' => now(),
+        'updated_at' => now(),
     ];
 });
