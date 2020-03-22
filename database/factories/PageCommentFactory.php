@@ -10,7 +10,7 @@ $factory->define(PageComment::class, function (Faker $faker) {
         'parent_id' => null,
         'reference_id' => 1,
         'user_id' => 1,
-        'body' => $faker->paragraph,
+        'body' => $faker->realText(),
         'likes' => $faker->numberBetween($min = 100, $max = 500),
         'dislikes' => $faker->numberBetween($min = 100, $max = 200),
     ];
