@@ -46,18 +46,17 @@
             @endif
         </div>
 
-        @if(empty($data->category->media))
-            <div class="w-full bordeqr-b">&nbsp;</div>
-        @else
-            <img src="{{ $data->category->media->url }}" class="">
-        @endif
-
         <main class="w-full max-w-6xl mx-auto pb-10 px-6 text-gray-800">
             <header class="bg-{{$data->ref->template->primaryColor}}-100 w-full p-8">
                 @if(! empty($data->category->parent))
                     <a class="py-1 text-{{$data->ref->template->primaryColor}}-400" href="{{ $data->category->parent->url }}">{{ $data->category->parent->name }}</a>
                 @endif
                 <h1 class="text-4xl">{{ $data->category->name }}</h1>
+                @if(empty($data->category->media))
+                    <div class="w-full bordeqr-b">&nbsp;</div>
+                @else
+                    <img src="{{ $data->category->media->url }}" class="w-full rounded-lg mt-2 shadown">
+                @endif
                 <p class="mt-2 py-4 text-xl">{{ $data->category->description }}</p>
                 <div class="w-full flex">
                     <div class="bg-{{$data->ref->template->primaryColor}}-200 rounded-lg py-2 px-4 mr-3"><b>{{ count($data->category->pages) }}</b> Articles</div>
