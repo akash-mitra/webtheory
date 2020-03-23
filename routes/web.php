@@ -20,7 +20,7 @@ Auth::routes(['verify' => true]);
 Route::get('/', 'HomeController@root')->name('root');
 Route::get('pages/{page}/{slug?}', 'HomeController@single')->name('pages.show');
 Route::get('categories/{category}/{slug?}', 'HomeController@category')->name('categories.show');
-
+Route::get('sitemap', 'HomeController@sitemap')->name('sitemap');
 
 Route::get('social/login/{provider}', 'Auth\SocialLoginController@login')->name('social.login');
 Route::get('social/login/{provider}/callback', 'Auth\SocialLoginController@callback')->name('social.callback');
