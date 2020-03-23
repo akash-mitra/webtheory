@@ -92,6 +92,14 @@ class EditorJSConverter
             .'</div>';
     }
 
+    private static function processEmbeded($data)
+    {
+        if ($data->service == "youtube")
+            return '<iframe src="' . $data->embed . '" width="' . $data->width . '" height="' . $data->height . '" title="' . $data->caption . '" frameborder="0" allowfullscreen></iframe>';
+        else
+            return '<embed type="' . $data->type . '" src="' . $data->source . '" width="' . $data->width . '" height="' . $data->height . '" title="' . $data->caption . '">';
+    }
+
     private static function processContent($type, $data)
     {
         $processor = [
@@ -101,7 +109,7 @@ class EditorJSConverter
             'table' => 'processTable',
             'code' => 'processCode',
             'image' => 'processImage',
-            'embed' => '',
+            'embed' => 'processEmbeded',
         ];
         $method = $processor[$type];
         return self::$method($data);
