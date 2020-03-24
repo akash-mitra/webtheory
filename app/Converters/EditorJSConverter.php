@@ -52,7 +52,7 @@ class EditorJSConverter
                 $value = strip_tags($row);
                 $table .= '<td class="wt-table-td">' . $value . '</td>';
             }
-            $table .= '<tr>';
+            $table .= '</tr>';
         }
         $table .= '</tbody></table>';
         return $table;

@@ -9,6 +9,89 @@ use App\PageComment;
 
 class PageTest extends TestDataSetup
 {
+    private $page_attributes = [
+        'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
+        'created_at', 'updated_at', 'deleted_at',
+        'url', 'permalink', 'created_ago', 'updated_ago',
+        'category' => [
+            'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id',
+            'created_at', 'updated_at', 'deleted_at',
+            'url', 'permalink', 'created_ago', 'updated_ago'
+        ],
+        'author' => [
+            'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
+            'created_at', 'updated_at', 'deleted_at'
+        ],
+        'media'
+    ];
+
+    private $pagecontent_attributes = [
+        'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
+        'created_at', 'updated_at', 'deleted_at',
+        'url', 'permalink', 'created_ago', 'updated_ago',
+        'content' => [
+            'id', 'page_id', 'body_json', 'body_html',
+            'created_at', 'updated_at', 'editor'
+        ],
+        'category' => [
+            'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id',
+            'created_at', 'updated_at', 'deleted_at',
+            'url', 'permalink', 'created_ago', 'updated_ago'
+        ],
+        'author' => [
+            'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
+            'created_at', 'updated_at', 'deleted_at'
+        ],
+        'media'
+    ];
+
+    private $pagemedia_attributes = [
+        'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
+        'created_at', 'updated_at', 'deleted_at',
+        'url', 'permalink', 'created_ago', 'updated_ago',
+        'content' => [
+            'id', 'page_id', 'body_json', 'body_html',
+            'created_at', 'updated_at', 'editor'
+        ],
+        'category' => [
+            'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id',
+            'created_at', 'updated_at', 'deleted_at',
+            'url', 'permalink', 'created_ago', 'updated_ago'
+        ],
+        'author' => [
+            'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
+            'created_at', 'updated_at', 'deleted_at'
+        ],
+        'media' => [
+            'id', 'name', 'type', 'size', 'path', 'url', 'storage', 'user_id',
+            'created_at', 'updated_at',
+            'created_ago', 'updated_ago'
+        ]
+    ];
+
+    private $pageupdate_attributes = [
+        'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
+        'created_at', 'updated_at', 'deleted_at',
+        'url', 'permalink', 'created_ago', 'updated_ago'
+    ];
+
+    private $pagecomment_attributes = [
+        'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
+        'created_at', 'updated_at', 'deleted_at',
+        'url', 'permalink', 'created_ago', 'updated_ago',
+        'comments' => [
+            '*' => [
+                'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
+                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
+                'user' => [
+                    'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
+                    'created_at', 'updated_at', 'deleted_at'
+                ],
+                "subcomments"
+            ]
+        ]
+    ];
+
     /* Page Index */
     public function test_page_index()
     {
@@ -21,21 +104,7 @@ class PageTest extends TestDataSetup
         $response = $this->get('/api/pages');
         $response->assertStatus(200)
             ->assertJsonStructureExact([
-                '*' => [
-                    'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
-                    'created_at', 'updated_at', 'deleted_at',
-                    'url', 'permalink', 'created_ago', 'updated_ago',
-                    'category' => [
-                        'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id',
-                        'created_at', 'updated_at', 'deleted_at',
-                        'url', 'permalink', 'created_ago', 'updated_ago'
-                    ],
-                    'author' => [
-                        'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
-                        'created_at', 'updated_at', 'deleted_at'
-                    ],
-                    'media'
-                ]
+                '*' => $this->page_attributes
             ]);
         $this->assertDatabaseHas('pages', ['title' => $page['title']]);
 
@@ -43,21 +112,7 @@ class PageTest extends TestDataSetup
         $response = $this->actingAs($this->adminUser)->get('/api/pages');
         $response->assertStatus(200)
             ->assertJsonStructureExact([
-                '*' => [
-                    'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
-                    'created_at', 'updated_at', 'deleted_at',
-                    'url', 'permalink', 'created_ago', 'updated_ago',
-                    'category' => [
-                        'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id',
-                        'created_at', 'updated_at', 'deleted_at',
-                        'url', 'permalink', 'created_ago', 'updated_ago'
-                    ],
-                    'author' => [
-                        'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
-                        'created_at', 'updated_at', 'deleted_at'
-                    ],
-                    'media'
-                ]
+                '*' => $this->page_attributes
             ]);
         $this->assertDatabaseHas('pages', ['title' => $page['title']]);
     }
@@ -75,50 +130,14 @@ class PageTest extends TestDataSetup
         $response = $this->get('/api/pages/' . $page->id);
         $response->assertStatus(200)
             ->assertJsonFragment(['title' => $page->title])
-            ->assertJsonStructure([
-                'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
-                'created_at', 'updated_at', 'deleted_at',
-                'url', 'permalink', 'created_ago', 'updated_ago',
-                'content' => [
-                    'id', 'page_id', 'body_json', 'body_html',
-                    'created_at', 'updated_at', 'editor'
-                ],
-                'category' => [
-                    'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id',
-                    'created_at', 'updated_at', 'deleted_at',
-                    'url', 'permalink', 'created_ago', 'updated_ago'
-                ],
-                'author' => [
-                    'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
-                    'created_at', 'updated_at', 'deleted_at'
-                ],
-                'media'
-            ]);
+            ->assertJsonStructure($this->pagecontent_attributes);
         $this->assertDatabaseHas('pages', ['title' => $page->title]);
 
         /* Authenticated user can view page */
         $response = $this->actingAs($this->adminUser)->get('/api/pages/' . $page->id);
         $response->assertStatus(200)
             ->assertJsonFragment(['title' => $page->title])
-            ->assertJsonStructure([
-                'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
-                'created_at', 'updated_at', 'deleted_at',
-                'url', 'permalink', 'created_ago', 'updated_ago',
-                'content' => [
-                    'id', 'page_id', 'body_json', 'body_html',
-                    'created_at', 'updated_at', 'editor'
-                ],
-                'category' => [
-                    'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id',
-                    'created_at', 'updated_at', 'deleted_at',
-                    'url', 'permalink', 'created_ago', 'updated_ago'
-                ],
-                'author' => [
-                    'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
-                    'created_at', 'updated_at', 'deleted_at'
-                ],
-                'media'
-            ]);
+            ->assertJsonStructure($this->pagecontent_attributes);
         $this->assertDatabaseHas('pages', ['title' => $page->title]);
 
         /* Page with media */
@@ -133,29 +152,7 @@ class PageTest extends TestDataSetup
         $response = $this->actingAs($this->adminUser)->get('/api/pages/' . $page->id);
         $response->assertStatus(200)
             ->assertJsonFragment(['title' => $page->title])
-            ->assertJsonStructure([
-                'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
-                'created_at', 'updated_at', 'deleted_at',
-                'url', 'permalink', 'created_ago', 'updated_ago',
-                'content' => [
-                    'id', 'page_id', 'body_json', 'body_html',
-                    'created_at', 'updated_at', 'editor'
-                ],
-                'category' => [
-                    'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id',
-                    'created_at', 'updated_at', 'deleted_at',
-                    'url', 'permalink', 'created_ago', 'updated_ago'
-                ],
-                'author' => [
-                    'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
-                    'created_at', 'updated_at', 'deleted_at'
-                ],
-                'media' => [
-                    'id', 'name', 'type', 'size', 'path', 'url', 'storage', 'user_id',
-                    'created_at', 'updated_at',
-                    'created_ago', 'updated_ago'
-                ]
-            ]);
+            ->assertJsonStructure($this->pagemedia_attributes);
         $this->assertDatabaseHas('pages', ['title' => $page->title]);
     }
 
@@ -174,9 +171,9 @@ class PageTest extends TestDataSetup
         ];
 
         /* Unauthenticated user cannot save page */
-        // $response = $this->post('/api/pages', $page, ['Accept' => 'application/json']);
-        // $response->assertStatus(401)
-        //     ->assertJson(['message' => 'Unauthenticated.']);
+        $response = $this->post('/api/pages', $page, ['Accept' => 'application/json']);
+        $response->assertStatus(401)
+            ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can save page */
         $response = $this->actingAs($this->adminUser)->post('/api/pages', $page, ['Accept' => 'application/json']);
@@ -268,14 +265,9 @@ class PageTest extends TestDataSetup
                 'status' => 'Live'
             ]);
 
-
         $response->assertStatus(200)
             ->assertJsonFragment(['status' => 'Live'])
-            ->assertJsonStructureExact([
-                'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
-                'created_at', 'updated_at', 'deleted_at',
-                'url', 'permalink', 'created_ago', 'updated_ago'
-            ]);
+            ->assertJsonStructureExact($this->pageupdate_attributes);
 
         $this->assertDatabaseHas('pages', [
             'id' => $page->id,
@@ -297,19 +289,15 @@ class PageTest extends TestDataSetup
         $page->user_id = $this->authorUser2->id;
 
         /* Unauthenticated user cannot update page owner */
-        // $response = $this->put('/api/pages/' . $page->id . '/owner', $page->toArray(), ['Accept' => 'application/json']);
-        // $response->assertStatus(401)
-        //     ->assertJson(['message' => 'Unauthenticated.']);
+        $response = $this->put('/api/pages/' . $page->id . '/owner', $page->toArray(), ['Accept' => 'application/json']);
+        $response->assertStatus(401)
+            ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can update page owner */
         $response = $this->actingAs($this->adminUser)->put('/api/pages/' . $page->id . '/owner', $page->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['user_id' => $this->authorUser2->id])
-            ->assertJsonStructureExact([
-                'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
-                'created_at', 'updated_at', 'deleted_at',
-                'url', 'permalink', 'created_ago', 'updated_ago'
-            ]);
+            ->assertJsonStructureExact($this->pageupdate_attributes);
         $this->assertDatabaseHas('pages', ['user_id' => $this->authorUser2->id]);
         $this->assertDatabaseMissing('pages', ['id' => $page->id, 'user_id' => $this->authorUser1->id]);
     }
@@ -319,17 +307,13 @@ class PageTest extends TestDataSetup
     {
         $page = factory(Page::class)->create([
             'category_id' => $this->category->id,
-            'user_id' => $this->adminUser->id,
-            'title' => 'Test Title',
-            'summary' => 'Test Summary',
-            'metakey' => 'Test, Meta, Key',
-            'metadesc' => 'Test Meta Description',
+            'user_id' => $this->adminUser->id
         ]);
 
         /* Unauthenticated user cannot delete page */
-        // $response = $this->delete('/api/pages/' . $page->id, [], ['Accept' => 'application/json']);
-        // $response->assertStatus(401)
-        //     ->assertJson(['message' => 'Unauthenticated.']);
+        $response = $this->delete('/api/pages/' . $page->id, [], ['Accept' => 'application/json']);
+        $response->assertStatus(401)
+            ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can delete page */
         $response = $this->actingAs($this->adminUser)->delete('/api/pages/' . $page->id);
@@ -354,44 +338,14 @@ class PageTest extends TestDataSetup
         $response = $this->get('/api/pages/' . $page->id . '/comments');
         $response->assertStatus(200)
             ->assertJsonFragment(['body' => $pagecomment->body])
-            ->assertJsonStructureExact([
-                'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
-                'created_at', 'updated_at', 'deleted_at',
-                'url', 'permalink', 'created_ago', 'updated_ago',
-                'comments' => [
-                    '*' => [
-                        'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
-                        'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
-                        'user' => [
-                            'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
-                            'created_at', 'updated_at', 'deleted_at'
-                        ],
-                        "subcomments"
-                    ]
-                ]
-            ]);
+            ->assertJsonStructureExact($this->pagecomment_attributes);
         $this->assertDatabaseHas('page_comments', ['reference_id' => $page->id]);
 
         /* Authenticated user can view page comments */
         $response = $this->actingAs($this->adminUser)->get('/api/pages/' . $page->id . '/comments');
         $response->assertStatus(200)
             ->assertJsonFragment(['body' => $pagecomment->body])
-            ->assertJsonStructureExact([
-                'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
-                'created_at', 'updated_at', 'deleted_at',
-                'url', 'permalink', 'created_ago', 'updated_ago',
-                'comments' => [
-                    '*' => [
-                        'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
-                        'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
-                        'user' => [
-                            'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
-                            'created_at', 'updated_at', 'deleted_at'
-                        ],
-                        "subcomments"
-                    ]
-                ]
-            ]);
+            ->assertJsonStructureExact($this->pagecomment_attributes);
         $this->assertDatabaseHas('page_comments', ['reference_id' => $page->id]);
     }
 }

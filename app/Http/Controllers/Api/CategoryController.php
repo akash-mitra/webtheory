@@ -16,7 +16,7 @@ class CategoryController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware(['auth']);
+        $this->middleware(['check.permission']);
     }
 
 
@@ -109,7 +109,7 @@ class CategoryController extends Controller
 
 
     /**
-     * Display the specified resource.
+     * Display the pages under a category.
      *
      * @param  Category  $category
      * @return \Illuminate\Http\Response
@@ -122,7 +122,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the comments under a category.
      *
      * @param  Category  $category
      * @return \Illuminate\Http\Response

@@ -36,12 +36,14 @@ class LoginTest extends TestDataSetup
     }
 
     /* Logout Test */
+    /*
     public function test_logout()
     {
-        // $response = $this->actingAs($this->adminUser)->post('/api/logout', [], ['Accept' => 'application/json']);
-        // $response->assertStatus(200)
-        //     ->assertJson([
-        //         'message' => 'Successfully logged out'
-        //     ]);
+        $response = $this->actingAs($this->adminUser)->post('/api/logout', [], ['Accept' => 'application/json']);
+        $response->assertStatus(200)
+            ->assertJson([
+                'message' => 'Successfully logged out'
+            ]);
     }
+    */
 }

@@ -21,7 +21,7 @@ class PageController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware(['auth']);
+        $this->middleware(['check.permission']);
     }
 
 
@@ -191,7 +191,7 @@ class PageController extends Controller
 
 
     /**
-     * Display the specified resource.
+     * Display the comments under a page.
      *
      * @param  Page  $page
      * @return \Illuminate\Http\Response
