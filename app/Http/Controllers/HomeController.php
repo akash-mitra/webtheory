@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use App\DataProvider;
 use Illuminate\Http\Request;
 use App\Page;
-
+use App\Jobs\CaptureViewEvent;
 
 class HomeController extends Controller
 {
@@ -33,6 +33,8 @@ class HomeController extends Controller
     public function single($page)
     {
         $data = DataProvider::single($page);
+        
+        CaptureViewEvent::dispatchAfterResponse($this->capture_analytics('App\Page', $page));
 
         return view('templates.single', compact('data'));
     }
@@ -48,6 +50,8 @@ class HomeController extends Controller
     {
 
         $data = DataProvider::category($category);
+
+        CaptureViewEvent::dispatchAfterResponse($this->capture_analytics('App\Category', $category));
 
         return view('templates.category', compact('data'));
     }
@@ -70,5 +74,21 @@ class HomeController extends Controller
         $content .= '</urlset>';
 
         return response($content, '200')->header('Content-Type', 'text/xml');
+    }
+
+    private function capture_analytics ($content_type, $content_id)
+    {
+        $id = optional(request()->user())->id;
+        
+        return [
+            'ip' => $_SERVER["REMOTE_ADDR"],
+            'user_id' => $id,
+            'at' => $_SERVER["REQUEST_TIME_FLOAT"],
+            'url' => $_SERVER["REQUEST_URI"],
+            'content_type' => $content_type,
+            'content_id' => $content_id,
+            'agent' => $_SERVER["HTTP_USER_AGENT"],
+            'referrer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null,
+        ];
     }
 }
