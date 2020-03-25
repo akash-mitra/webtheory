@@ -15,27 +15,9 @@ class PageCommentTest extends TestDataSetup
             'user_id' => $this->adminUser->id,
         ]);
 
-        /* Unauthenticated user can view pagecomments listing */
+        /* Unauthenticated user cannot view pagecomments listing */
         $response = $this->get('/api/comments/pages');
-        $response->assertStatus(200)
-            ->assertJsonStructureExact([
-                '*' => [
-                    'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
-                    'created_at', 'updated_at', 'deleted_at', 
-                    'url', 'permalink', 'created_ago', 'updated_ago', 
-                    'comments' => [
-                        '*' => [
-                            'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 
-                            'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago', 
-                            'user' => [
-                                'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-                                'created_at', 'updated_at', 'deleted_at'
-                            ]
-                        ]
-                    ]
-                ]
-            ]);
-        $this->assertDatabaseHas('page_comments', ['body' => $pagecomment->body]);
+        $response->assertStatus(302);
 
         /* Authenticated user can view pagecomments listing */
         $response = $this->actingAs($this->adminUser)->get('/api/comments/pages');
@@ -68,15 +50,9 @@ class PageCommentTest extends TestDataSetup
             'user_id' => $this->adminUser->id,
         ]);
 
-        /* Unauthenticated user can view pagecomment */
+        /* Unauthenticated user cannot view pagecomment */
         $response = $this->get('/api/comments/pages/' . $pagecomment->id);
-        $response->assertStatus(200)
-            ->assertJsonFragment(['body' => $pagecomment->body])
-            ->assertJsonStructureExact([
-                'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 
-                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago', 
-            ]);
-        $this->assertDatabaseHas('page_comments', ['body' => $pagecomment->body]);
+        $response->assertStatus(302);
 
         /* Authenticated user can view pagecomment */
         $response = $this->actingAs($this->adminUser)->get('/api/comments/pages/' . $pagecomment->id);

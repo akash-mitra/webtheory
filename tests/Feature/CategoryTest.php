@@ -60,13 +60,9 @@ class CategoryTest extends TestDataSetup
             'user_id' => $this->adminUser->id,
         ]);
 
-        /* Unauthenticated user can view categories listing */
+        /* Unauthenticated user cannot view categories listing */
         $response = $this->get('/api/categories');
-        $response->assertStatus(200)
-            ->assertJsonStructureExact([
-                '*' => $this->category_attributes
-            ]);
-        $this->assertDatabaseHas('categories', ['name' => $category->name]);
+        $response->assertStatus(302);
 
         /* Authenticated user can view categories listing */
         $response = $this->actingAs($this->adminUser)->get('/api/categories');
@@ -84,12 +80,9 @@ class CategoryTest extends TestDataSetup
             'user_id' => $this->adminUser->id,
         ]);
 
-        /* Unauthenticated user can view category */
+        /* Unauthenticated user cannot view category */
         $response = $this->get('/api/categories/' . $category->id);
-        $response->assertStatus(200)
-            ->assertJsonFragment(['name' => $category->name])
-            ->assertJsonStructureExact($this->category_attributes);
-        $this->assertDatabaseHas('categories', ['name' => $category->name]);
+        $response->assertStatus(302);
 
         /* Authenticated user can view category */
         $response = $this->actingAs($this->adminUser)->get('/api/categories/' . $category->id);
@@ -206,12 +199,9 @@ class CategoryTest extends TestDataSetup
             'user_id' => $this->adminUser->id,
         ]);
 
-        /* Unauthenticated user can view category pages */
+        /* Unauthenticated user cannot view category pages */
         $response = $this->get('/api/categories/' . $category->id . '/pages');
-        $response->assertStatus(200)
-            ->assertJsonStructureExact($this->categorypage_attributes);
-        $this->assertDatabaseHas('categories', ['id' => $category->id]);
-        $this->assertDatabaseHas('pages', ['id' => $categorypage->id]);
+        $response->assertStatus(302);
 
 
         /* Authenticated user can view category pages */
@@ -234,12 +224,9 @@ class CategoryTest extends TestDataSetup
             'user_id' => $this->adminUser->id,
         ]);
 
-        /* Unauthenticated user can view category comments */
+        /* Unauthenticated user cannot view category comments */
         $response = $this->get('/api/categories/' . $category->id . '/comments');
-        $response->assertStatus(200)
-            ->assertJsonFragment(['body' => $categorycomment->body])
-            ->assertJsonStructureExact($this->categorycomment_attributes);
-        $this->assertDatabaseHas('category_comments', ['reference_id' => $category->id]);
+        $response->assertStatus(302);
 
         /* Authenticated user can view category comments */
         $response = $this->actingAs($this->adminUser)->get('/api/categories/' . $category->id . '/comments');

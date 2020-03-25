@@ -100,13 +100,9 @@ class PageTest extends TestDataSetup
             'user_id' => $this->adminUser->id,
         ]);
 
-        /* Unauthenticated user can view pages listing */
+        /* Unauthenticated user cannot view pages listing */
         $response = $this->get('/api/pages');
-        $response->assertStatus(200)
-            ->assertJsonStructureExact([
-                '*' => $this->page_attributes
-            ]);
-        $this->assertDatabaseHas('pages', ['title' => $page['title']]);
+        $response->assertStatus(302);
 
         /* Authenticated user can view pages listing */
         $response = $this->actingAs($this->adminUser)->get('/api/pages');
@@ -126,12 +122,9 @@ class PageTest extends TestDataSetup
         ]);
         $pagecontent = factory(PageContent::class)->create(['page_id' => $page->id]);
 
-        /* Unauthenticated user can view page */
+        /* Unauthenticated user cannot view page */
         $response = $this->get('/api/pages/' . $page->id);
-        $response->assertStatus(200)
-            ->assertJsonFragment(['title' => $page->title])
-            ->assertJsonStructure($this->pagecontent_attributes);
-        $this->assertDatabaseHas('pages', ['title' => $page->title]);
+        $response->assertStatus(302);
 
         /* Authenticated user can view page */
         $response = $this->actingAs($this->adminUser)->get('/api/pages/' . $page->id);
@@ -334,12 +327,9 @@ class PageTest extends TestDataSetup
             'user_id' => $this->adminUser->id,
         ]);
 
-        /* Unauthenticated user can view page comments */
+        /* Unauthenticated user cannot view page comments */
         $response = $this->get('/api/pages/' . $page->id . '/comments');
-        $response->assertStatus(200)
-            ->assertJsonFragment(['body' => $pagecomment->body])
-            ->assertJsonStructureExact($this->pagecomment_attributes);
-        $this->assertDatabaseHas('page_comments', ['reference_id' => $page->id]);
+        $response->assertStatus(302);
 
         /* Authenticated user can view page comments */
         $response = $this->actingAs($this->adminUser)->get('/api/pages/' . $page->id . '/comments');

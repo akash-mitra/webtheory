@@ -17,15 +17,9 @@ class ProfileTest extends TestDataSetup
             'role' => 'registered'
         ]);
 
-        /* Unauthenticated user can view user profile */
+        /* Unauthenticated user cannot view user profile */
         $response = $this->get('/api/users/' . $user->id);
-        $response->assertStatus(200)
-            ->assertJsonFragment(['name' => $user->name])
-            ->assertJsonStructureExact([
-                'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-                'created_at', 'updated_at', 'deleted_at'
-            ]);
-        $this->assertDatabaseHas('users', ['name' => $user->name]);
+        $response->assertStatus(302);
 
         /* Authenticated user can view user profile */
         $response = $this->actingAs($this->adminUser)->get('/api/users/' . $user->id);

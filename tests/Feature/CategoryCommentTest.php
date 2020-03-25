@@ -15,27 +15,9 @@ class CategoryCommentTest extends TestDataSetup
             'user_id' => $this->adminUser->id,
         ]);
 
-        /* Unauthenticated user can view categorycomments listing */
+        /* Unauthenticated user cannot view categorycomments listing */
         $response = $this->get('/api/comments/categories');
-        $response->assertStatus(200)
-            ->assertJsonStructureExact([
-                '*' => [
-                    'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
-                    'created_at', 'updated_at', 'deleted_at', 
-                    'url', 'permalink', 'created_ago', 'updated_ago', 
-                    'comments' => [
-                        '*' => [
-                            'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 
-                            'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago', 
-                            'user' => [
-                                'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-                                'created_at', 'updated_at', 'deleted_at'
-                            ]
-                        ]
-                    ]
-                ]
-            ]);
-        $this->assertDatabaseHas('category_comments', ['body' => $categorycomment->body]);
+        $response->assertStatus(302);
 
         /* Authenticated user can view categorycomments listing */
         $response = $this->actingAs($this->adminUser)->get('/api/comments/categories');
@@ -68,15 +50,9 @@ class CategoryCommentTest extends TestDataSetup
             'user_id' => $this->adminUser->id,
         ]);
 
-        /* Unauthenticated user can view categorycomment */
+        /* Unauthenticated user cannot view categorycomment */
         $response = $this->get('/api/comments/categories/' . $categorycomment->id);
-        $response->assertStatus(200)
-            ->assertJsonFragment(['body' => $categorycomment->body])
-            ->assertJsonStructureExact([
-                'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 
-                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago', 
-            ]);
-        $this->assertDatabaseHas('category_comments', ['body' => $categorycomment->body]);
+        $response->assertStatus(302);
 
         /* Authenticated user can view categorycomment */
         $response = $this->actingAs($this->adminUser)->get('/api/comments/categories/' . $categorycomment->id);
