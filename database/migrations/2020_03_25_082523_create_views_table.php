@@ -24,7 +24,7 @@ class CreateViewsTable extends Migration
             $table->string('platform', 255);
             $table->string('browser', 255);
             $table->string('version', 255);
-            $table->string('referrer', 500);
+            $table->string('referrer', 500)->nullable();
             $table->timestamps();
         });
     }
