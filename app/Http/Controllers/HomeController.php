@@ -7,6 +7,7 @@ use App\DataProvider;
 use Illuminate\Http\Request;
 use App\Page;
 use App\Jobs\CaptureViewEvent;
+use App\Parameter;
 
 class HomeController extends Controller
 {
@@ -63,7 +64,6 @@ class HomeController extends Controller
      */
     public function sitemap()
     {
-
         $content = '<?xml version="1.0" encoding="UTF-8"?>';
         $content .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
         $content .= '<url><loc>' . env('APP_URL') . '</loc></url>';
@@ -72,6 +72,31 @@ class HomeController extends Controller
             $content .= '<url><loc>' . $page->url . '</loc><lastmod>' . $page->updated_at->tz('UTC')->toAtomString() . '</lastmod></url>';
 
         $content .= '</urlset>';
+
+        return response($content, '200')->header('Content-Type', 'text/xml');
+    }
+
+    /**
+     * Display the rss.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function rss()
+    {
+        $siteinfo = json_decode(Parameter::getKey('siteinfo'), true);
+        $content = '<?xml version="1.0" encoding="UTF-8"?>';
+        $content .= '<rss version="2.0">';
+        $content .= '<channel>';
+        $content .= '<title>' . $siteinfo['title'] . '</title>';
+        $content .= '<link>' . env('APP_URL') . '</link>';
+        $content .= '<description>' . $siteinfo['desc'] . '</description>';
+
+        $pages = Page::with('author', 'category')->published()->latest()->get();
+        foreach ($pages as $page)
+            $content .= '<item><title>' . $page->title . '</title><link>' . $page->url . '</link><description>' . $page->metadesc . '<description><author>' . $page->author->email . '</author><pubDate>' . $page->created_at->tz('UTC')->toAtomString() . '</pubDate><category>' . $page->category->name . '</category></item>';
+
+        $content .= '</channel>';
+        $content .= '</rss>';
 
         return response($content, '200')->header('Content-Type', 'text/xml');
     }
