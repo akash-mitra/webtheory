@@ -69,7 +69,7 @@ class HomeController extends Controller
         $content .= '<url><loc>' . env('APP_URL') . '</loc></url>';
         $pages = Page::published()->latest()->get();
         foreach ($pages as $page)
-            $content .= '<url><loc>' . $page->url . '</loc><lastmod>' . $page->updated_at->tz('UTC')->toAtomString() . '</lastmod></url>';
+            $content .= '<url><loc>' . $page->url . '</loc><lastmod>' . $page->updated_at->format('Y-m-d') . '</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>';
 
         $content .= '</urlset>';
 
