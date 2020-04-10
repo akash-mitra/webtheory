@@ -14,8 +14,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(ProductionTableSeeder::class);
 
-        $this->call(PermissionsTableSeeder::class);
-
         if (App::Environment() === 'local')
         {
             $this->call(LocalTableSeeder::class);

@@ -73,11 +73,16 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     Route::get('lov/authors', 'Api\LovController@authors')->name('lov.authors');
 
     Route::get('templates', 'Api\TemplateController@index')->name('templates.index');
-    Route::post('templates', 'Api\TemplateController@store')->name('templates.store');
     Route::get('templates/{template}', 'Api\TemplateController@show')->name('templates.show');
-    Route::put('templates/{template}', 'Api\TemplateController@update')->name('templates.update');
+    Route::post('templates', 'Api\TemplateController@store')->name('templates.store');
+    Route::post('templates/{template}/add', 'Api\TemplateController@add')->name('templates.add');
     Route::post('templates/{template}/activate', 'Api\TemplateController@activate')->name('templates.activate');
-    Route::delete('templates/{template}', 'Api\TemplateController@destroy')->name('templates.destroy');
+    Route::patch('templates/{template}', 'Api\TemplateController@update')->name('templates.update');
+
+
+    // Route::put('templates/{template}', 'Api\TemplateController@update')->name('templates.update');
+    // Route::post('templates/{template}/activate', 'Api\TemplateController@activate')->name('templates.activate');
+    // Route::delete('templates/{template}', 'Api\TemplateController@destroy')->name('templates.destroy');
 
     Route::get('parameters/{key}', 'Api\ParameterController@get')->name('parameters.get');
     Route::post('parameters/{key}', 'Api\ParameterController@set')->name('parameters.set');

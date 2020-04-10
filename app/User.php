@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Template;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -65,6 +66,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function pagecomments()
     {
         return $this->hasMany('App\PageComment');
+    }
+
+    public function templates()
+    {
+        return $this->hasMany(Template::class);
     }
 
     public function is_admin()

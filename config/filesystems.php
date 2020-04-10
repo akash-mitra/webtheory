@@ -55,16 +55,6 @@ return [
             'visibility' => 'public',
         ],
 
-        'template' => [
-            'driver' => 'local',
-            'root' => resource_path('views/templates'),
-        ],
-
-        'store' => [
-            'driver' => 'local',
-            'root' => storage_path('store'),
-        ],
-
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
@@ -74,6 +64,35 @@ return [
             'url' => env('AWS_URL'),
         ],
 
+        // ADDITIONAL DRIVERS
+
+        /*
+         * repo is a generic storage space for storing various non-static artefacts
+         * related to the application. Examples, are templates, modules etc. This
+         * folder is version controlled.
+         */
+        'repo' => [
+            'driver' => 'local',
+            'root' => storage_path('repo'),
+        ],
+
+        /*
+         * "templates" is used to store the local copies of the template. This is
+         * not-version controlled.
+         */
+        'templates' => [
+            'driver' => 'local',
+            'root' => resource_path('views/templates'),
+        ],
+
+        /*
+         * "active" folder is used to store the actual blade files that are
+         * used for the live site. This folder is not version-controlled.
+         */
+        'active' => [
+            'driver' => 'local',
+            'root' => resource_path('views/active'),
+        ],
     ],
 
 ];

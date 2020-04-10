@@ -7,15 +7,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
-
+use Illuminate\Validation\Rule;
 
 class TemplateController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         return response()->json(Template::get());
@@ -23,71 +19,68 @@ class TemplateController extends Controller
 
 
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $request['user_id'] = Auth::id();
-        $template = Template::create($request->input());
-        $template->createBladeFile($request->code);
+        $request->validate([
+            'name' => [
+                'required',
+                'max:100',
+                'regex:/^[\pL0-9\s\-_]+$/u',
+                'unique:templates'
+            ],
+        ]);
 
-        return $template;
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Template  $template
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Template $template)
-    {
-        $template['code'] = $template->getBladeFile();
-
-        return response()->json($template);
+        Template::createNewTemplate($request->input());
     }
 
 
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Template  $template
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Template $template)
+    public function add(Template $template, Request $request)
     {
-        $template->fill(request(['name', 'description', 'type', 'media_url', 'parameters']))->save();
+        $template->addFile(
+            $request->name,
+            $request->code
+        );
+    }
 
-        Cache::forget('templates.' . $request->input('type'));
 
-        $code = $request->code;
-        $template->updateBladeFile($code);
 
-        return response()->json($template);
+    public function update (Template $template, Request $request)
+    {
+        $request->validate([
+            'name' => [
+                'sometimes',
+                'required',
+                'max:100',
+                'regex:/^[\pL0-9\s\-_]+$/u',
+                Rule::unique('templates')->ignore($template->id),
+            ],
+        ]);
+
+        $template->updateTemplate($request->input());
     }
 
 
 
     public function activate(Template $template)
     {
-
-        Template::where('type', $template->type)->update(['active' => false]);
-
-        $template->active = true;
-        $template->save();
-
-        Cache::forget('templates.' . $template->type);
-
-        $template->loadBladeFile();
-
-        return response()->json($template);
+        $template->activate();
     }
+
+
+
+
+    public function show(Template $template)
+    {
+        return $template;
+    }
+
+
+
+
+
+
+
 
 
 
