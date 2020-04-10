@@ -20,7 +20,7 @@ class LoginTest extends DuskTestDataSetup
                     ->type('Email', $this->adminUser->email)
                     ->type('password', 'password')
                     ->press('Login Now')
-                    ->pause(200)
+                    ->pause(1000)
                     ->assertPathIs('/app/pages')
                     ->assertSee('Pages')
                     ->visit('/app/topics')
@@ -38,14 +38,14 @@ class LoginTest extends DuskTestDataSetup
     public function testAdminLogout()
     {
         $this->browse(function (Browser $browser) {
-            
+
             $browser->visit('/app/login')
                     ->waitForText('WebTheory')
                     ->type('Email', $this->adminUser->email)
                     ->type('password', 'password')
                     ->press('Login Now')
                     ->waitForText('Pages')
-                    ->pause(200)
+                    ->pause(1000)
                     ->click('#user-menu')
                     ->assertSee($this->adminUser->name)
                     ->click('#user-menu > div > div:nth-child(3)')
