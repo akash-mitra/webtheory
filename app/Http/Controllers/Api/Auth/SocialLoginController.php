@@ -14,15 +14,18 @@ class SocialLoginController extends Controller
     /**
      * list of social drivers enabled for Social Auth
      */
-    protected $providers = ['twitter', 'facebook', 'instagram', 'google'];
+    protected $providers = ['facebook', 'twitter', 'linkedin', 'google'];
 
     public function login($provider)
     {
         if (!in_array($provider, $this->providers)) {
             return response()->json(['message' => 'Provider not supported'], 404);
         }
-        
-        return ['url' => Socialite::driver($provider)->stateless()->redirect()->getTargetUrl()];
+
+        if ($provider == 'twitter')
+            return ['url' => Socialite::driver($provider)->redirect()->getTargetUrl()];
+        else
+            return ['url' => Socialite::driver($provider)->stateless()->redirect()->getTargetUrl()];
     }
 
 
@@ -34,11 +37,11 @@ class SocialLoginController extends Controller
 
         $authenticatedUser = $this->getAuthenticatedUser($provider);
         $this->abortIfInfoMissing($authenticatedUser);
-        $existingUser = $this->authenticatedUserExisting($authenticatedUser);
+        $user = $this->authenticatedUserExisting($authenticatedUser);
 
-        if ($existingUser) {
-            $existingUser->createOrUpdateProvider($provider, $authenticatedUser);
-            Auth::login($existingUser, true);
+        if ($user) {
+            $user->createOrUpdateProvider($provider, $authenticatedUser);
+            Auth::login($user, true);
         } else {
             $user = $this->createUserWithProvider($provider, $authenticatedUser);
             Auth::login($user, true);
@@ -54,7 +57,7 @@ class SocialLoginController extends Controller
         $user = new User([
             'name' => $authenticatedUser->getName(),
             'email' => $authenticatedUser->getEmail(),
-            'role' => 'registered',
+            'role' => 'admin',
             'avatar' => $authenticatedUser->getAvatar(),
             'email_verified_at' => \Carbon\Carbon::now()
         ]);
@@ -73,7 +76,10 @@ class SocialLoginController extends Controller
     private function getAuthenticatedUser($provider)
     {
         try {
-            return Socialite::driver($provider)->stateless()->user();
+            if ($provider == 'twitter')
+                return Socialite::driver($provider)->user();
+            else
+                return Socialite::driver($provider)->stateless()->user();
         } catch (Exception $e) {
             return response()->json(['message' => 'Unable to authenticate user'], 400);
         }

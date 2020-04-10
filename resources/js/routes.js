@@ -3,6 +3,7 @@ import Pages from './components/Pages.vue';
 import Topics from './components/Topics.vue';
 import Templates from './components/Templates.vue';
 import Login from './components/Login.vue';
+import SocialLogin from './components/SocialLogin.vue';
 import TopicEditor from './components/TopicEditor.vue';
 
 /* dynamic components */
@@ -85,6 +86,8 @@ export default {
          * Login routes
          */
         { path: '/app/login', component: Login },
+
+        { path: "/app/social/login/:provider/callback", component: SocialLogin },
 
     ]
 
