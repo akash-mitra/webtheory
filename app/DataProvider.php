@@ -119,7 +119,7 @@ class DataProvider {
     {
         return Cache::rememberForever('templates.' . $type, function () use ($type) {
 
-            $param = optional(Template::where('type', $type)->where('active', 1)->first())->parameters;
+            $param = optional(Template::where('active', 1)->first())->parameters;
 
             $array = (array) json_decode($param, true);
 

@@ -168,7 +168,6 @@ class TemplateTest extends TestDataSetup
         Storage::disk('templates')->files($template->name));
 
 
-
         // restore
         $this->restoreActiveDirBladeViewFiles();
 
@@ -254,7 +253,62 @@ class TemplateTest extends TestDataSetup
 
     public function test_user_can_delete_template()
     {
-        //
+
+        $template = $this->createNewTemplate();
+
+        $this->actingAs($this->adminUser)->delete('api/templates/' . $template->id)->assertSuccessful();
+
+        $this->assertDatabaseMissing('templates', [
+            'id' => $template->id
+        ]);
+
+        $this->assertFalse(Storage::disk('templates')->exists($template->name));
+
+        Storage::disk('templates')->deleteDirectory($template->name);
+    }
+
+
+
+    public function test_user_can_not_delete_active_template()
+    {
+        $template = $this->createNewTemplate([
+            'active' => true
+        ]);
+
+        $this->actingAs($this->adminUser)->delete('api/templates/' . $template->id)->assertSessionHasErrors();
+
+        $this->assertDatabaseHas('templates', [
+            'id' => $template->id
+        ]);
+
+        Storage::disk('templates')->deleteDirectory($template->name);
+    }
+
+
+
+    public function test_a_user_can_duplicate_a_template()
+    {
+        $template = $this->createNewTemplate();
+
+        $saveAs = $template->name . '_' . Str::random();
+
+        $this->actingAs($this->adminUser)->post('api/templates/' . $template->id . '/duplicate', [
+            'save_as' => $saveAs
+        ]);
+
+        $this->assertDatabaseHas('templates', [
+            'name' => $saveAs
+        ]);
+
+        $this->assertTrue(Storage::disk('templates')->exists($saveAs));
+
+        $this->assertEquals(
+            array_map(function ($file) { return basename($file); }, Storage::disk('templates')->allFiles($template->name)),
+            array_map(function ($file) { return basename($file); }, Storage::disk('templates')->allFiles($saveAs)),
+        );
+
+        Storage::disk('templates')->deleteDirectory($template->name);
+        Storage::disk('templates')->deleteDirectory($saveAs);
     }
 
 

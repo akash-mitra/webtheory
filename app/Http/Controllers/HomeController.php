@@ -3,15 +3,13 @@
 namespace App\Http\Controllers;
 
 
-use App\DataProvider;
-use Illuminate\Http\Request;
 use App\Page;
-use App\Jobs\CaptureViewEvent;
 use App\Parameter;
+use App\DataProvider;
+use App\Jobs\CaptureViewEvent;
 
 class HomeController extends Controller
 {
-
     /**
      * Display a landing page.
      *
@@ -21,7 +19,7 @@ class HomeController extends Controller
     {
         $data = DataProvider::home();
 
-        return view('templates.home', compact('data'));
+        return view('active.home', compact('data'));
     }
 
 
@@ -34,10 +32,10 @@ class HomeController extends Controller
     public function single($page)
     {
         $data = DataProvider::single($page);
-        
+
         CaptureViewEvent::dispatchAfterResponse($this->capture_analytics('App\Page', $page));
 
-        return view('templates.single', compact('data'));
+        return view('active.single', compact('data'));
     }
 
 
@@ -54,8 +52,10 @@ class HomeController extends Controller
 
         CaptureViewEvent::dispatchAfterResponse($this->capture_analytics('App\Category', $category));
 
-        return view('templates.category', compact('data'));
+        return view('active.category', compact('data'));
     }
+
+
 
     /**
      * Display the sitemap.
@@ -75,6 +75,8 @@ class HomeController extends Controller
 
         return response($content, '200')->header('Content-Type', 'text/xml');
     }
+
+
 
     /**
      * Display the rss.
@@ -104,7 +106,7 @@ class HomeController extends Controller
     private function capture_analytics ($content_type, $content_id)
     {
         $id = optional(request()->user())->id;
-        
+
         return [
             'ip' => $_SERVER["REMOTE_ADDR"],
             'user_id' => $id,
