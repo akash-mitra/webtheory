@@ -7,7 +7,7 @@ use Socialite;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Exception;
-use Carbon\Carbon;
+use App\Parameter;
 
 class SocialLoginController extends Controller
 {
@@ -15,6 +15,38 @@ class SocialLoginController extends Controller
      * list of social drivers enabled for Social Auth
      */
     protected $providers = ['facebook', 'twitter', 'linkedin', 'google'];
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $provider_redirect_urls = json_decode(Parameter::getKey('provider_redirect_urls'), true);
+
+        config(['services.facebook.client_id' => Parameter::getKey('FACEBOOK_CLIENT_ID')]);
+        config(['services.facebook.client_secret' => Parameter::getKey('FACEBOOK_CLIENT_SECRET')]);
+        config(['services.facebook.redirect' => $provider_redirect_urls['facebook']]);
+
+        config(['services.twitter.client_id' => Parameter::getKey('TWITTER_CLIENT_ID')]);
+        config(['services.twitter.client_secret' => Parameter::getKey('TWITTER_CLIENT_SECRET')]);
+        config(['services.twitter.redirect' => $provider_redirect_urls['twitter']]);
+
+        config(['services.linkedin.client_id' => Parameter::getKey('LINKEDIN_CLIENT_ID')]);
+        config(['services.linkedin.client_secret' => Parameter::getKey('LINKEDIN_CLIENT_SECRET')]);
+        config(['services.linkedin.redirect' => $provider_redirect_urls['linkedin']]);
+
+        config(['services.google.client_id' => Parameter::getKey('GOOGLE_CLIENT_ID')]);
+        config(['services.google.client_secret' => Parameter::getKey('GOOGLE_CLIENT_SECRET')]);
+        config(['services.google.redirect' => $provider_redirect_urls['google']]);
+    }
+
+    public function socialProviders()
+    {
+        $value = Parameter::getKey('providers');
+        return response()->json($value);
+    }
 
     public function login($provider)
     {
@@ -59,7 +91,7 @@ class SocialLoginController extends Controller
             'email' => $authenticatedUser->getEmail(),
             'role' => 'admin',
             'avatar' => $authenticatedUser->getAvatar(),
-            'email_verified_at' => \Carbon\Carbon::now()
+            'email_verified_at' => now()
         ]);
 
         $user->save();

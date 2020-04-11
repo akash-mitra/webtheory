@@ -58,8 +58,76 @@ class ProductionTableSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now()
         ]);
+
+        DB::table('parameters')->insert([
+            'key' => 'providers',
+            'value' => '{"facebook": "Disabled", "twitter": "Disabled", "linkedin": "Disabled", "google": "Disabled"}',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('parameters')->insert([
+            'key' => 'provider_redirect_urls',
+            'value' => '{"facebook": "' . $this->getUrl('facebook') . '", "twitter": "' . $this->getUrl('twitter') . '", "linkedin": "' . $this->getUrl('linkedin') . '", "google": "' . $this->getUrl('google') . '"}',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('parameters')->insert([
+            'key' => 'FACEBOOK_CLIENT_ID',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'FACEBOOK_CLIENT_SECRET',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'TWITTER_CLIENT_ID',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'TWITTER_CLIENT_SECRET',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'LINKEDIN_CLIENT_ID',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'LINKEDIN_CLIENT_SECRET',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'GOOGLE_CLIENT_ID',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'GOOGLE_CLIENT_SECRET',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
     }
 
+    private function getUrl($provider)
+    {
+        return env('APP_URL') . '/app/social/login/' .$provider . '/callback';
+    }
 
 
     private function addDefaultTemplates ()
@@ -139,6 +207,27 @@ class ProductionTableSeeder extends Seeder
         DB::table('permissions')->insert(['role' => 'author', 'resource' => 'media', 'action' => 'index', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'author', 'resource' => 'media', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'author', 'resource' => 'media', 'action' => 'upload', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+
+        /********************
+         * USER
+         *******************/
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'users', 'action' => 'index', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'users', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'users', 'action' => 'store', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'users', 'action' => 'update', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'users', 'action' => 'destroy', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'users', 'action' => 'index', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'users', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+
+
+        /********************
+         * SETTING
+         *******************/
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'settings', 'action' => 'loginprovider', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'settings', 'action' => 'loginprovider', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        
     }
 
 }
