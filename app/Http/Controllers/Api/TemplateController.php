@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Template;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
 
 class TemplateController extends Controller
 {
@@ -77,24 +75,31 @@ class TemplateController extends Controller
 
 
 
-
-
-
-
-
-
-
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Template  $template
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Template $template)
     {
-        $template->delete();
+        if($template->active) {
+            return redirect()->back()->withErrors([
+                'Unable to delete an active template.'
+            ]);
+        }
+
+        $template->deleteTemplate();
 
         return response()->json("success", 204);
+    }
+
+
+    public function duplicate(Template $template, Request $request)
+    {
+        $request->validate([
+            'save_as' => [
+                'required',
+                'max:100',
+                'regex:/^[\pL0-9\s\-_]+$/u',
+                'unique:templates'
+            ]
+        ]);
+
+        return $template->duplicate($request->save_as);
     }
 }

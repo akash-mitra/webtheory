@@ -70,8 +70,8 @@ class Template extends Model
 
         array_map(function ($file) {
 
-            // Do this operation for blade files only.
-            if(Str::endsWith($file, 'blade.php'))
+            // Exclude the hidden files starting with "."
+            if(! Str::startsWith($file, '.'))
             {
                 // Before copying, delete the file if it is already there.
                 if(Storage::disk('active')->exists($file))
@@ -100,7 +100,6 @@ class Template extends Model
 
 
 
-
     public function getFilesAttribute()
     {
         $files = Storage::disk('templates')->files($this->name);
@@ -117,84 +116,31 @@ class Template extends Model
     }
 
 
-    // public static function bladeFileName($id)
-    // {
-    //     return 'file-' . str_pad ($id, 6, "0", STR_PAD_LEFT);
-    // }
+
+    public function deleteTemplate()
+    {
+        Storage::disk('templates')->deleteDirectory($this->name);
+
+        $this->delete();
+    }
 
 
-    // public function createBladeFile($contents)
-    // {
-    //     $name = self::bladeFileName($this->id);
-    //     Storage::disk('store')->put($name, $contents);
-    // }
 
+    public function duplicate($saveAs)
+    {
+        self::createNewTemplate([
+            'name' => $saveAs,
+            'description' => $this->description,
+            'media_url' => $this->media_url,
+            'parameters' => $this->parameters,
+            'active' => false,
+        ]);
 
-    // public function getBladeFile()
-    // {
-    //     $name = self::bladeFileName($this->id);
+        array_map(function ($file) use ($saveAs) {
 
-    //     if (Storage::disk('store')->exists($name)) {
-    //         return Storage::disk('store')->get($name);
-    //     }
-    //     else {
-    //         return '';
-    //     }
-    // }
+            Storage::disk('templates')->copy($file, $saveAs . '/' . basename($file));
 
-
-    // public function deleteBladeFile()
-    // {
-    //     $name = self::bladeFileName($this->id);
-    //     Storage::disk('store')->delete($name);
-    // }
-
-
-    // public function updateBladeFile($content)
-    // {
-    //     $name = self::bladeFileName($this->id);
-
-    //     Storage::disk('store')->delete($name);
-    //     Storage::disk('store')->put($name, $content);
-
-    //     // after we change a blade file, if the blade file
-    //     // is an active blade, i.e. currently in use,
-    //     // then we will also need to reload it.
-    //     if ($this->active) {
-    //         $this->loadBladeFile();
-    //     }
-
-    // }
-
-
-    // public function loadBladeFile()
-    // {
-    //     $targetBladeFileName = $this->type . '.blade.php';
-
-    //     // take a temporary backup before replacing the target file
-    //     if (Storage::disk('template')->exists($targetBladeFileName)) {
-    //         Storage::disk('template')->move($targetBladeFileName, $targetBladeFileName . '.bkp');
-    //     }
-
-    //     $name = self::bladeFileName($this->id);
-
-    //     // attempt to copy the file from local
-    //     try {
-    //         Storage::disk('template')->writeStream(
-    //             $targetBladeFileName,
-    //             Storage::disk('store')->readStream($name)
-    //         );
-
-    //         // delete the backup file after successful completion of above file copy
-    //         Storage::disk('template')->delete($targetBladeFileName . '.bkp');
-
-    //     } catch (\Exception $e) {
-    //         // if unsuccessful, revert back the previous file
-    //         Storage::disk('template')->move($targetBladeFileName . '.bkp', $targetBladeFileName);
-
-    //         throw $e;
-    //     }
-    // }
-
+        }, Storage::disk('templates')->files($this->name));
+    }
 
 }
