@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 Route::post('login', 'Api\Auth\LoginController@login');
 Route::post('register', 'Api\Auth\RegisterController@register');
 
+Route::get('social/providers', 'Api\Auth\SocialLoginController@socialProviders');
 Route::get('social/login/{provider}', 'Api\Auth\SocialLoginController@login');
 Route::get('social/login/{provider}/callback', 'Api\Auth\SocialLoginController@callback');
 
@@ -86,4 +87,13 @@ Route::group(['middleware' => ['auth:airlock']], function () {
 
     Route::get('parameters/{key}', 'Api\ParameterController@get')->name('parameters.get');
     Route::post('parameters/{key}', 'Api\ParameterController@set')->name('parameters.set');
+
+    Route::get('users', 'Api\UserController@index')->name('users.index');
+    Route::get('users/{user}', 'Api\UserController@show')->name('users.show');
+    Route::post('users', 'Api\UserController@store')->name('users.store');
+    Route::put('users/{user}', 'Api\UserController@update')->name('users.update');
+    Route::delete('users/{user}', 'Api\UserController@destroy')->name('users.destroy');
+
+    Route::post('settings/loginprovider', 'Api\SettingController@loginprovider')->name('settings.loginprovider');
+
 });

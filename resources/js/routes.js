@@ -5,6 +5,9 @@ import Templates from './components/Templates.vue';
 import Login from './components/Login.vue';
 import SocialLogin from './components/SocialLogin.vue';
 import TopicEditor from './components/TopicEditor.vue';
+import Users from './components/Users.vue';
+import UserForm from './components/UserForm.vue';
+import Settings from './components/Settings.vue';
 
 /* dynamic components */
 const PageEditor = () => import (
@@ -80,6 +83,42 @@ export default {
         { path: '/app/templates/create', component: TemplateEditor, meta: { requiresAuth: true } },
 
         { path: '/app/templates/:id', component: TemplateEditor, meta: { requiresAuth: true } },
+
+
+        /*
+         * User related routes
+         */
+        {
+            path: '/app/users',
+            component: Users,
+            name: 'users.index',
+            meta: { requiresAuth: true }
+        },
+
+        {
+            path: '/app/users/create',
+            component: UserForm,
+            name: 'users.create',
+            meta: { requiresAuth: true }
+        },
+
+        {
+            path: '/app/users/:id',
+            component: UserForm ,
+            name: 'users.edit',
+            meta: { requiresAuth: true }
+        },
+
+
+        /*
+         * Setting related routes
+         */
+        {
+            path: '/app/settings',
+            component: Settings,
+            name: 'settings.index',
+            meta: { requiresAuth: true }
+        },
 
 
         /*
