@@ -5,6 +5,7 @@ import Templates from './components/Templates.vue';
 import Login from './components/Login.vue';
 import SocialLogin from './components/SocialLogin.vue';
 import TopicEditor from './components/TopicEditor.vue';
+import TemplateEditor from './components/TemplateEditor.vue';
 
 /* dynamic components */
 const PageEditor = () => import (
@@ -12,9 +13,9 @@ const PageEditor = () => import (
     './components/PageEditor.vue'
 );
 
-const TemplateEditor = () => import (
-    /* webpackChunkName: "TemplateEditor" */
-    './components/TemplateEditor.vue'
+const TemplateFileEditor = () => import (
+    /* webpackChunkName: "TemplateFileEditor" */
+    './components/TemplateFileEditor.vue'
 );
 
 export default {
@@ -78,6 +79,8 @@ export default {
         { path: '/app/templates', component: Templates, meta: { requiresAuth: true } },
 
         { path: '/app/templates/create', component: TemplateEditor, meta: { requiresAuth: true } },
+
+        { path: '/app/templates/:id/get/:file', component: TemplateFileEditor, meta: { requiresAuth: true } },
 
         { path: '/app/templates/:id', component: TemplateEditor, meta: { requiresAuth: true } },
 

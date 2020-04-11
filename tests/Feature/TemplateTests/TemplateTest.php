@@ -359,4 +359,10 @@ class TemplateTest extends TestDataSetup
 
         }, Storage::disk('active')->files());
     }
+
+
+    // public function test_correct_template_is_loaded_when_visiting_home()
+    // {
+    //     $this->get('/')->assertViewIs('active.home');
+    // }
 }

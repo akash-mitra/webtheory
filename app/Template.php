@@ -57,8 +57,10 @@ class Template extends Model
 
         $this->fill($attributes)->save();
 
-        Storage::disk('templates')->move($oldName, $this->name);
-
+        if($oldName != $this->name)
+        {
+            Storage::disk('templates')->move($oldName, $this->name);
+        }
     }
 
 
@@ -74,9 +76,9 @@ class Template extends Model
             if(! Str::startsWith($file, '.'))
             {
                 // Before copying, delete the file if it is already there.
-                if(Storage::disk('active')->exists($file))
+                if(Storage::disk('active')->exists(basename($file)))
                 {
-                    Storage::disk('active')->delete($file);
+                    Storage::disk('active')->delete(basename($file));
                 }
 
                 // Then copy the file.
@@ -91,9 +93,9 @@ class Template extends Model
 
         // activate the database
 
-        Template::update(['active' => 0]);
+        Template::query()->update(['active' => false]);
 
-        $this->active = 1;
+        $this->active = true;
 
         $this->save();
     }
@@ -106,11 +108,11 @@ class Template extends Model
 
         return array_map(function ($file) {
             return [
-                'name' => $file,
+                'name' => basename($file),
                 'updated' => \Carbon\Carbon::createFromTimestamp(
                     Storage::disk('templates')->lastModified($file)
-                ),
-                'size' => Storage::disk('templates')->size($file)
+                )->format('d M, Y. H:m'),
+                'size' => round(Storage::disk('templates')->size($file) / 1024, 1)
             ];
         }, $files);
     }

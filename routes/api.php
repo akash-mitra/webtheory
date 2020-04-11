@@ -75,11 +75,16 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     Route::get('templates', 'Api\TemplateController@index')->name('templates.index');
     Route::get('templates/{template}', 'Api\TemplateController@show')->name('templates.show');
     Route::post('templates', 'Api\TemplateController@store')->name('templates.store');
+
     Route::post('templates/{template}/add', 'Api\TemplateController@add')->name('templates.add');
+    Route::get('templates/{template}/get/{file}', 'Api\TemplateController@get')->name('templates.get');
+
     Route::post('templates/{template}/activate', 'Api\TemplateController@activate')->name('templates.activate');
     Route::patch('templates/{template}', 'Api\TemplateController@update')->name('templates.update');
     Route::delete('templates/{template}', 'Api\TemplateController@destroy')->name('templates.destroy');
     Route::post('templates/{template}/duplicate', 'Api\TemplateController@duplicate')->name('templates.duplicate');
+
+
 
 
     // Route::put('templates/{template}', 'Api\TemplateController@update')->name('templates.update');

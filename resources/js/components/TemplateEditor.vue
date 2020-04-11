@@ -2,8 +2,11 @@
 
     <div class="max-w-5xl mx-auto">
 
-        <div class="px-2 my-6 w-full flex justify-between items-center">
-            <h2 class="text-gray-600 text-2xl flex items-center">Template Editor</h2>
+        <div class="px-2 my-6 w-full flex justify-between items-baseline">
+            <div>
+                <h2 class="text-gray-600 text-2xl flex items-center">{{ name }}</h2>
+                <p class="text-gray-700 text-sm py-2">{{ description }}</p>
+            </div>
             <t-button :loadingWheel="isSaving" @click.native="initiateSave">
                     Save
             </t-button>
@@ -11,12 +14,48 @@
 
 
         <div class="px-2 w-full flex justify-start items-center mt-8">
-            <div @click="tab='template'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='template'? 'text-gray-700 py-2 1border-b-4 border-blue-500': 'text-gray-500 py-2'">Template</div>
-            <div @click="tab='source'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='source'? 'text-gray-700 py-2 1border-b-4 border-blue-500': 'text-gray-500 py-2'">Source</div>
-            <div @click="tab='parameters'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='parameters'? 'text-gray-700 py-2 1border-b-4 border-blue-500': 'text-gray-500 py-2'">Parameters</div>
+            <div @click="tab='general'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='general'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">general</div>
+            <div @click="tab='files'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='files'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Files</div>
+            <div @click="tab='parameters'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='parameters'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Parameters</div>
         </div>
 
-        <div v-show="tab==='template'" class="w-full bg-white border-t border-blue-400 rounded mb-12">
+        <div v-show="tab==='files'" class="w-full bg-white px-6 py-6 border-t border-blue-400 rounded overflow-scroll mb-12">
+            <div class="text-lg text-gray-800 pb-2">Edit Template Files</div>
+            <div class="text-sm text-gray-800 pb-4">
+                You can edit or add new files for this template.
+                Template files support <code>blade</code> syntax.
+            </div>
+            <table class="table-auto w-full text-sm mb-2">
+                <thead>
+                    <tr>
+                        <th class="pr-2 py-2 border-b text-left">
+                            <p>File</p>
+                        </th>
+                        <th class="hidden md:block pr-2 py-2 border-b text-left">Size</th>
+                        <th class="pr-2 py-2 border-b text-left">Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="file in files">
+                        <td class="pr-2 py-2 border-b cursor-pointer text-blue-600" @click="editTemplateFile(file)">
+                            {{ file.name }}
+                        </td>
+                        <td class="hidden md:block  pr-2 py-2 border-b">
+                            {{ file.size }}
+                        </td>
+                        <td class="pr-2 py-2 border-b">
+                            {{ file.updated }}
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="py-2 px-4 inline-block mt-4 border rounded cursor-pointer text-sm shado1w border-blue-400 text-blue-500" @click="addTemplateFile">Add File</div>
+        </div>
+
+
+        <div v-show="tab==='general'" class="w-full bg-white border-t border-blue-400 rounded mb-12">
 
             <div class="w-full sm:flex mb-4 px-6 pt-8">
                 <label for="templateName" class="block w-full sm:w-1/4 text-sm py-1 px-3">Name</label>
@@ -31,65 +70,23 @@
                 <textarea id="templateDescription" v-model="description" class="w-full sm:w-3/4 text-sm max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none"></textarea>
             </div>
 
-            <div class="w-full sm:flex mb-8 px-6 py-6 border-t">
-                <div class="w-full sm:w-1/4 text-sm py-1 px-3">
-                    <p>Type</p>
-                    <p class="text-xs text-gray-600 py-2">What type of web page is this template design for?</p>
-                </div>
-                <div class="w-full sm:w-3/4 flex flex-wrap">
-                        <div class="w-40 m-3 p-4 border cursor-pointer rounded-lg shadow-md relative" @click="type='home'" :class="type==='home'? 'bg-green-100 border-green-400':''">
-                            <div v-if="type==='home'" class="w-8 h-8 p-2 bg-green-500 text-white rounded-full border border-white" style="position: absolute; top: -10px; right: -10px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 469 469" class="fill-current"><path d="M463 96l-22-22c-9-8-24-8-33 0L180 302 61 183c-9-9-24-9-33 0L7 205c-9 9-9 23 0 32l157 158a23 23 0 0032 0l266-266c9-9 9-24 1-33z"/></svg>
-                            </div>
-                            <h3 class="text-sm uppercase">Home</h3>
-                            <div class="text-xs text-gray-700">Template for the home page of your blog</div>
-                        </div>
-                        <div class="w-40 h-32 m-3 p-4 border cursor-pointer rounded-lg shadow-md relative" @click="type='single'" :class="type==='single'? 'bg-green-100 border-green-400':''">
-                            <div v-if="type==='single'" class="w-8 h-8 p-2 bg-green-500 text-white rounded-full border border-white" style="position: absolute; top: -10px; right: -10px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 469 469" class="fill-current"><path d="M463 96l-22-22c-9-8-24-8-33 0L180 302 61 183c-9-9-24-9-33 0L7 205c-9 9-9 23 0 32l157 158a23 23 0 0032 0l266-266c9-9 9-24 1-33z"/></svg>
-                            </div>
-                            <h3 class="text-sm uppercase">Single</h3>
-                            <div class="text-xs text-gray-700">Template for a single blog article page</div>
-                        </div>
-                        <div class="w-40 h-32 m-3 p-4 border cursor-pointer rounded-lg shadow-md relative" @click="type='category'" :class="type==='category'? 'bg-green-100 border-green-400':''">
-                            <div v-if="type==='category'" class="w-8 h-8 p-2 bg-green-500 text-white rounded-full border border-white" style="position: absolute; top: -10px; right: -10px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 469 469" class="fill-current"><path d="M463 96l-22-22c-9-8-24-8-33 0L180 302 61 183c-9-9-24-9-33 0L7 205c-9 9-9 23 0 32l157 158a23 23 0 0032 0l266-266c9-9 9-24 1-33z"/></svg>
-                            </div>
-                            <h3 class="text-sm uppercase">Category</h3>
-                            <div class="text-xs text-gray-700">Template for showing all the pages from a category</div>
-                        </div>
-                        <div class="w-40 h-32 m-3 p-4 border cursor-pointer rounded-lg shadow-md relative" @click="type='profile'" :class="type==='profile'? 'bg-green-100 border-green-400':''">
-                            <div v-if="type==='profile'" class="w-8 h-8 p-2 bg-green-500 text-white rounded-full border border-white" style="position: absolute; top: -10px; right: -10px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 469 469" class="fill-current"><path d="M463 96l-22-22c-9-8-24-8-33 0L180 302 61 183c-9-9-24-9-33 0L7 205c-9 9-9 23 0 32l157 158a23 23 0 0032 0l266-266c9-9 9-24 1-33z"/></svg>
-                            </div>
-                            <h3 class="text-sm uppercase">Profile</h3>
-                            <div class="text-xs text-gray-700">Template for showing a user profile page</div>
-                        </div>
-                        <div class="w-40 h-32 m-3 p-4 border cursor-pointer rounded-lg shadow-md relative" @click="type='forum'" :class="type==='forum'? 'bg-green-100 border-green-400':''">
-                            <div v-if="type==='forum'" class="w-8 h-8 p-2 bg-green-500 text-white rounded-full border border-white" style="position: absolute; top: -10px; right: -10px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 469 469" class="fill-current"><path d="M463 96l-22-22c-9-8-24-8-33 0L180 302 61 183c-9-9-24-9-33 0L7 205c-9 9-9 23 0 32l157 158a23 23 0 0032 0l266-266c9-9 9-24 1-33z"/></svg>
-                            </div>
-                            <h3 class="text-sm uppercase">Forum</h3>
-                            <div class="text-xs text-gray-700">Template for showing a single forum post</div>
-                        </div>
-                </div>
-            </div>
+
 
 
             <div class="w-full sm:flex my-4 border-t px-6 py-6">
                 <div class="w-full sm:w-1/4 text-sm py-1 px-3">
-                    <label for="templateUrl">Parameters</label>
+                    <label for="templateUrl">Set Parameters</label>
                     <p class="text-xs text-gray-600 py-2">Provide the values for all the below paramters.</p>
                 </div>
 
                 <div class="w-full sm:w-3/4">
-                    <div v-for="(param, key) in parameters" class="w-full md:flex bg-gray-100 p-3 mb-2">
-                        <div class="w-full md:w-1/3">
-                            <span class="text-gray-400 text-xs p-2 md:text-right">Parameter</span><code>{{ param.name }}</code>
+                    <div v-for="(param, key) in parameters" class="w-full items-center border-b1 p-3">
+                        <div class="w-full">
+                            <code class="text-gray-700 p-2 rounded">{{ param.name }}</code>
                         </div>
-                        <div class="w-full md:w-2/3">
-                            <input v-if="param.type==='text'" type="text" v-model="param.value" class="w-full max-w-lg text-sm px-2 py-1 my-1 rounded bg-white border focus:outline-none">
-                            <select v-else v-model="param.value" class="w-full max-w-lg text-sm px-2 py-1 my-1 rounded bg-white border focus:outline-none">
+                        <div class="w-full my-2">
+                            <input v-if="param.type==='text'" type="text" v-model="param.value" class="w-full max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                            <select v-else v-model="param.value" class="w-full max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                                 <option disabled value="">Select</option>
                                 <option v-for="option in param.options.split(',').map(o => o.trim())" :value="option">{{ option }}</option>
                             </select>
@@ -114,10 +111,6 @@
 
         </div>
 
-
-        <div v-show="tab==='source'" class="w-full rounded mb-12">
-            <editor v-model="sourceCode" @init="editorInit" lang="html" theme="twilight" width="100%" height="500"></editor>
-        </div>
 
 
         <div v-show="tab==='parameters'" class="w-full bg-white px-6 py-6 border-t border-blue-400 rounded overflow-scroll mb-12">
@@ -153,7 +146,7 @@
                 </tbody>
             </table>
             <p class="text-xs font-normal">No space is allowed in parameter name.</p>
-            <div class="py-2 px-4 inline-block mt-4 border rounded cursor-pointer text-sm shado1w border-blue-400 text-blue-500" @click="addParam">Add Parameter</div>
+            <div class="py-2 px-4 inline-block mt-4 border rounded cursor-pointer text-sm shado1w border-blue-400 text-blue-500" @click="addTemplateParameter">Add Parameter</div>
         </div>
     </div>
 
@@ -167,15 +160,14 @@ export default {
 
     data: function () {
         return {
-            tab: 'template',
+            tab: 'files',
             isSaving: false,
 
             id: 0,
-            type: null,
+            files: [],
             name: null,
             description: null,
             url: 'https://source.unsplash.com/500x310/?blog,page',
-            sourceCode: null,
             active: false,
 
             parameters: [
@@ -189,23 +181,19 @@ export default {
         this.fetchContentAndLoadEditor()
     },
 
-    components: { editor: require('vue2-ace-editor') },
-
 
     methods: {
 
-        editorInit: function () {
-            // require('brace/ext/language_tools') //language extension prerequsite...
-            require('brace/mode/html')
-            // require('brace/mode/javascript')    //language
-            // require('brace/mode/less')
-            require('brace/theme/twilight')
-            // require('brace/snippets/javascript') //snippet
+        addTemplateParameter() {
+            this.parameters.push ({name: '', type: 'text', options: '', value: '' },)
         },
 
+        addTemplateFile() {
+            this.$router.push({ path: '/app/templates/' + this.id + '/get'})
+        },
 
-        addParam() {
-            this.parameters.push ({name: '', type: 'text', options: '', value: '' },)
+        editTemplateFile (file) {
+            this.$router.push({ path: '/app/templates/' + this.id + '/get/' + file.name })
         },
 
         // simple front-end validations before starting
@@ -232,13 +220,6 @@ export default {
                 return false
             }
 
-
-            if (!this.type) {
-                util.notifyError('Template must have a type', 'Select any one type for this template, e.g. "Home" or "Single" etc.')
-                return false
-            }
-
-
             return true
         },
 
@@ -250,7 +231,7 @@ export default {
         },
 
         getSaveMethod: function () {
-            if (this.id > 0) return 'put'
+            if (this.id > 0) return 'patch'
             else return 'post'
         },
 
@@ -260,13 +241,10 @@ export default {
 
                 this.isSaving = true
 
-
                 util.ajax (this.getSaveMethod(), this.getSaveUrl(), {
                     id: this.id,
                     name: this.name,
                     description: this.description,
-                    code: this.sourceCode,
-                    type: this.type,
                     media_url: this.url,
                     active: this.active,
                     parameters: JSON.stringify(this.parameters),
@@ -297,7 +275,6 @@ export default {
             util.toast({
                 icon: 'success',
                 titleText: 'Template Saved Successfully',
-                // text: 'The page has been saved successfully'
             })
 
         }, // end of postSaveProcessing
@@ -315,15 +292,13 @@ export default {
 
             if (typeof this.$route.params.id != 'undefined' && parseInt(this.$route.params.id) > 0) {
 
-                this.sourceCode = 'Retrieving information from the server....'
                 let p = this
                 util.ajax ('get', '/api/templates/' + this.$route.params.id, {}, function (data) {
                     p.id = data.id
                     p.name = data.name
                     p.description = data.description
-                    p.type = data.type
+                    p.files = data.files
                     p.url = data.media_url
-                    p.sourceCode = data.code
                     p.active = data.active
                     p.parameters = JSON.parse(data.parameters)
                 })
