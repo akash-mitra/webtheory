@@ -21,7 +21,7 @@ const backendScanPaths = [
 ];
 
 const frontendScanPaths = [
-  './resources/views/templates/*.php',
+  './resources/views/active/*.php',
   './resources/sass/typography.scss',
 ];
 
