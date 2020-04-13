@@ -67,8 +67,8 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     Route::put('comments/pages/{pagecomment}/dislike', 'Api\PageCommentController@dislike')->name('pagecomments.dislike');
 
     Route::get('users/comments', 'Api\ProfileController@comments')->name('users.comments');
-    Route::get('users/{user}', 'Api\ProfileController@show')->name('users.show');
-    Route::put('users/{user}', 'Api\ProfileController@update')->name('users.update');
+    Route::get('profile/{user}', 'Api\ProfileController@show')->name('profile.show');
+    Route::put('profile/{user}', 'Api\ProfileController@update')->name('profile.update');
     Route::put('users/{user}/role', 'Api\ProfileController@updateRole')->name('users.updaterole');
 
     Route::get('lov/categories', 'Api\LovController@categories')->name('lov.categories');

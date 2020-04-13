@@ -15,7 +15,7 @@ class MediaTest extends TestDataSetup
         'created_ago', 'updated_ago',
         'author' => [
             'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-            'created_at', 'updated_at', 'deleted_at', 
+            'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago'
         ]
     ];
     

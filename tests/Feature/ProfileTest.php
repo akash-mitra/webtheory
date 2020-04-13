@@ -18,16 +18,16 @@ class ProfileTest extends TestDataSetup
         ]);
 
         /* Unauthenticated user cannot view user profile */
-        $response = $this->get('/api/users/' . $user->id);
+        $response = $this->get('/api/profile/' . $user->id);
         $response->assertStatus(302);
 
         /* Authenticated user can view user profile */
-        $response = $this->actingAs($this->adminUser)->get('/api/users/' . $user->id);
+        $response = $this->actingAs($this->adminUser)->get('/api/profile/' . $user->id);
         $response->assertStatus(200)
             ->assertJsonFragment(['name' => $user->name])
             ->assertJsonStructureExact([
                 'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-                'created_at', 'updated_at', 'deleted_at'
+                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago'
             ]);
         $this->assertDatabaseHas('users', ['name' => $user->name]);
     }
@@ -45,17 +45,17 @@ class ProfileTest extends TestDataSetup
         $user->gender = true;
 
         /* Unauthenticated user cannot update profile */
-        // $response = $this->put('/api/users/' . $user->id, $user->toArray(), ['Accept' => 'application/json']);
+        // $response = $this->put('/api/profile/' . $user->id, $user->toArray(), ['Accept' => 'application/json']);
         // $response->assertStatus(401)
         //     ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can update user */
-        $response = $this->actingAs($user)->put('/api/users/' . $user->id, $user->toArray());
+        $response = $this->actingAs($user)->put('/api/profile/' . $user->id, $user->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['about_me' => 'I am a registered user'])
             ->assertJsonStructureExact([
                 'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-                'created_at', 'updated_at', 'deleted_at'
+                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago'
             ]);
         $this->assertDatabaseHas('users', ['about_me' => 'I am a registered user']);
         $this->assertDatabaseMissing('users', ['about_me' => 'I am a dummy user']);
@@ -82,7 +82,7 @@ class ProfileTest extends TestDataSetup
             ->assertJsonFragment(['role' => 'author'])
             ->assertJsonStructureExact([
                 'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-                'created_at', 'updated_at', 'deleted_at'
+                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago'
             ]);
         $this->assertDatabaseHas('users', ['role' => 'author']);
         $this->assertDatabaseMissing('users', ['id' => $user->id, 'role' => 'registered']);
