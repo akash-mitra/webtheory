@@ -3,10 +3,21 @@
     <div class="max-w-5xl mx-auto">
 
         <div class="px-2 my-6 w-full flex justify-between items-baseline">
-            <h2 class="text-gray-600 text-2xl flex items-center">{{ templateName }}</h2>
-            <t-button :loadingWheel="isSaving" @click.native="initiateSave">
+            <h2 v-if="mode==='edit'" class="text-gray-600 text-2xl flex items-center">{{ fileName }}</h2>
+            <input v-else type='text' v-model="fileName" class="text-gray-600 text-2xl border border-gray-400 p-1 border-b-2 rounded bg-transparent" placeholder="Enter file name"></input>
+
+            <div>
+                <t-button color="gray" @click.native="$router.go(-1)">
+                    Close
+                </t-button>
+
+                &nbsp;
+
+                <t-button :loadingWheel="isSaving" @click.native="initiateSave">
                     Save
-            </t-button>
+                </t-button>
+            </div>
+
         </div>
 
 
@@ -27,14 +38,19 @@ export default {
 
     data: function () {
         return {
-            templateName: this.$route.params.file,
+            templateId: null,
+            fileName: null,
             isSaving: false,
             sourceCode: '<html></html>',
-            id: 0,
+            mode: null,
         }
     },
 
     created() {
+
+        this.mode = typeof this.$route.params.file === 'undefined' ? 'create' : 'edit'
+
+        this.templateId = this.$route.params.id
 
         this.fetchContentAndLoadEditor()
     },
@@ -60,6 +76,8 @@ export default {
                 && parseInt(this.$route.params.id) > 0
                 && typeof this.$route.params.file != 'undefined') {
 
+                this.fileName = this.$route.params.file
+
                 util.ajax ('get',
                     '/api/templates/' + this.$route.params.id + '/get/' + this.$route.params.file,
                     {},
@@ -72,10 +90,10 @@ export default {
 
         isValid: function () {
 
-            // if (!this.type) {
-            //     util.notifyError('Template must have a type', 'Select any one type for this template, e.g. "Home" or "Single" etc.')
-            //     return false
-            // }
+            if (!this.fileName) {
+                util.notifyError('Name missing', 'Template file must have a name.')
+                return false
+            }
 
             return true
         },
@@ -89,7 +107,7 @@ export default {
                 this.isSaving = true
 
                 util.ajax ('post', '/api/templates/' + this.$route.params.id + '/add',  {
-                    name: this.$route.params.file,
+                    name: this.fileName,
                     code: this.sourceCode
                 }, this.postSaveProcessing)
             }
@@ -100,6 +118,13 @@ export default {
         postSaveProcessing: function (successResponse) {
 
             this.isSaving = false
+
+            if(this.mode === 'create')
+            {
+                this.mode = 'edit'
+
+                this.$router.replace({ path: '/app/templates/' + this.templateId + '/get/' + this.fileName })
+            }
 
             util.toast({
                 icon: 'success',

@@ -22,17 +22,17 @@ class CategoryCommentTest extends TestDataSetup
         /* Authenticated user can view categorycomments listing */
         $response = $this->actingAs($this->adminUser)->get('/api/comments/categories');
         $response->assertStatus(200)
-            ->assertJsonStructureExact([
+            ->assertJsonStructure([
                 '*' => [
-                    'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
-                    'created_at', 'updated_at', 'deleted_at', 
-                    'url', 'permalink', 'created_ago', 'updated_ago', 
+                    'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id',
+                    'created_at', 'updated_at', 'deleted_at',
+                    'url', 'permalink', 'created_ago', 'updated_ago',
                     'comments' => [
                         '*' => [
-                            'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 
-                            'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago', 
+                            'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
+                            'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
                             'user' => [
-                                'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
+                                'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
                                 'created_at', 'updated_at', 'deleted_at'
                             ]
                         ]
@@ -58,9 +58,9 @@ class CategoryCommentTest extends TestDataSetup
         $response = $this->actingAs($this->adminUser)->get('/api/comments/categories/' . $categorycomment->id);
         $response->assertStatus(200)
             ->assertJsonFragment(['body' => $categorycomment->body])
-            ->assertJsonStructureExact([
-                'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 
-                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago', 
+            ->assertJsonStructure([
+                'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
+                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
             ]);
         $this->assertDatabaseHas('category_comments', ['body' => $categorycomment->body]);
     }
@@ -81,9 +81,9 @@ class CategoryCommentTest extends TestDataSetup
         $response = $this->actingAs($this->adminUser)->post('/api/comments/categories', $categorycomment->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['body' => $categorycomment->body])
-            ->assertJsonStructureExact([
-                'parent_id', 'reference_id', 'user_id', 'body', 
-                'updated_at', 'created_at', 'id', 'created_ago', 'updated_ago', 
+            ->assertJsonStructure([
+                'parent_id', 'reference_id', 'user_id', 'body',
+                'updated_at', 'created_at', 'id', 'created_ago', 'updated_ago',
             ]);
         $this->assertDatabaseHas('category_comments', ['body' => $categorycomment->body]);
     }
@@ -107,9 +107,9 @@ class CategoryCommentTest extends TestDataSetup
         $response = $this->actingAs($this->adminUser)->put('/api/comments/categories/' . $categorycomment->id, $categorycomment->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['body' => 'Test CategoryComment Updated'])
-            ->assertJsonStructureExact([
-                'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 
-                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago', 
+            ->assertJsonStructure([
+                'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
+                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
             ]);
         $this->assertDatabaseHas('category_comments', ['body' => 'Test CategoryComment Updated']);
         $this->assertDatabaseMissing('category_comments', ['body' => 'Test CategoryComment']);
@@ -147,8 +147,8 @@ class CategoryCommentTest extends TestDataSetup
         // $response->assertStatus(200)
         //     ->assertJsonFragment(['body' => $categorycomment->body])
         //     ->assertJsonStructureExact([
-        //         'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 
-        //         'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago', 
+        //         'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
+        //         'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
         //     ]);
         // $this->assertDatabaseHas('category_comments', ['likes' => $categorycomment->likes + 1]);
 
@@ -156,9 +156,9 @@ class CategoryCommentTest extends TestDataSetup
         $response = $this->actingAs($this->adminUser)->put('/api/comments/categories/' . $categorycomment->id . '/like');
         $response->assertStatus(200)
             ->assertJsonFragment(['likes' => $categorycomment->likes + 1])
-            ->assertJsonStructureExact([
-                'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 
-                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago', 
+            ->assertJsonStructure([
+                'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
+                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
             ]);
         $this->assertDatabaseHas('category_comments', ['likes' => $categorycomment->likes + 1]);
     }
@@ -176,8 +176,8 @@ class CategoryCommentTest extends TestDataSetup
         // $response->assertStatus(200)
         //     ->assertJsonFragment(['body' => $categorycomment->body])
         //     ->assertJsonStructureExact([
-        //         'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 
-        //         'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago', 
+        //         'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
+        //         'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
         //     ]);
         // $this->assertDatabaseHas('category_comments', ['body' => $categorycomment->body]);
 
@@ -185,9 +185,9 @@ class CategoryCommentTest extends TestDataSetup
         $response = $this->actingAs($this->adminUser)->put('/api/comments/categories/' . $categorycomment->id . '/dislike');
         $response->assertStatus(200)
             ->assertJsonFragment(['dislikes' => $categorycomment->dislikes + 1])
-            ->assertJsonStructureExact([
-                'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 
-                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago', 
+            ->assertJsonStructure([
+                'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
+                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
             ]);
         $this->assertDatabaseHas('category_comments', ['dislikes' => $categorycomment->dislikes + 1]);
     }

@@ -85,6 +85,8 @@ export default {
 
         { path: '/app/templates/:id/get/:file', component: TemplateFileEditor, meta: { requiresAuth: true } },
 
+        { path: '/app/templates/:id/create', component: TemplateFileEditor, meta: { requiresAuth: true } },
+
         { path: '/app/templates/:id', component: TemplateEditor, meta: { requiresAuth: true } },
 
 

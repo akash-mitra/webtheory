@@ -217,7 +217,7 @@
                             handler = axios.put(url, data);
                             break;
                     case 'delete':
-                            handler = axios.delete(url);
+                            handler = axios.delete(url, { data: data });
             }
 
             handler.then((response) => {

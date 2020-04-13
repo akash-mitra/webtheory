@@ -17,7 +17,7 @@ class CheckSubscription
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (Auth::user()->is_admin() || Auth::user()->is_author()) {
+        if (Auth::user()->isAdmin() || Auth::user()->isAuthor()) {
             return $next($request);
         } else {
             $is_subscribed = Auth::user()->subscribed('main');

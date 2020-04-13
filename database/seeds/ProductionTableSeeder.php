@@ -1,10 +1,7 @@
 <?php
 
-use App\User;
-use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 class ProductionTableSeeder extends Seeder
 {
@@ -132,13 +129,34 @@ class ProductionTableSeeder extends Seeder
 
     private function addDefaultTemplates ()
     {
+        $templateParameters = [
+            [
+                "name" => "headingFont",
+                "type" => "list",
+                "options" => "Verdana, Arial, Playfair Display",
+                "value" => "Playfair Display"
+            ],
+            [
+                "name" => "primaryColor",
+                "type" => "list",
+                "options" => "gray,red,orange,yellow,green,teal,blue,indigo,purple,pink",
+                "value" => "orange"
+            ],
+            [
+                "name" => "centerContent",
+                "type" => "list",
+                "options" => "yes,no",
+                "value" => "yes"
+            ]
+        ];
+
         DB::table('templates')->insert([
             'name' => 'Serenity',
             'description' => 'A spotless template that provides a clean and simple user experience for the users of your blog.',
             'media_url' => 'https://source.unsplash.com/apax4M-4kFI',
             'active' => 1,
             'user_id' => 1,
-            'parameters' => '[{"name":"headingFont","type":"list","options":"Verdana, Arial, Playfair Display","value":"Playfair Display"},{"name":"primaryColor","type":"list","options":"gray,red,orange,yellow,green,teal,blue,indigo,purple,pink","value":"orange"}]',
+            'parameters' => json_encode($templateParameters),
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -225,9 +243,9 @@ class ProductionTableSeeder extends Seeder
          * SETTING
          *******************/
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'settings', 'action' => 'loginprovider', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
-        
+
         DB::table('permissions')->insert(['role' => 'author', 'resource' => 'settings', 'action' => 'loginprovider', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
-        
+
     }
 
 }

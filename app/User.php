@@ -43,6 +43,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'preferences' => 'array',
     ];
 
+    protected $appends = ['created_ago', 'updated_ago'];
+
     public function categories()
     {
         return $this->hasMany('App\Category');
@@ -73,15 +75,27 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Template::class);
     }
 
-    public function is_admin()
+    public function isAdmin()
     {
         return $this->role == 'admin';
     }
 
-    public function is_author()
+    public function isAuthor()
     {
         return $this->role == 'author';
     }
+
+
+    public function getCreatedAgoAttribute()
+    {
+        return optional($this->created_at)->diffForHumans();
+    }
+
+    public function getUpdatedAgoAttribute()
+    {
+        return optional($this->updated_at)->diffForHumans();
+    }
+
 
     public function providers($provider = null)
     {

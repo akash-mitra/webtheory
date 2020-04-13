@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\User;
-use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
+use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
@@ -27,7 +28,16 @@ class UserController extends Controller
      */
     public function index()
     {
-        return response()->json(User::all());
+        if (auth()->user()->isAdmin())
+        {
+            $users = User::withTrashed()->latest()->get();
+        }
+        else
+        {
+            $users = User::latest()->get();
+        }
+
+        return response()->json($users);
     }
 
 
@@ -45,6 +55,7 @@ class UserController extends Controller
             'email' => $request->email,
             'role' => $request->role,
         ]);
+
         $user->save();
 
         return response()->json($user);
@@ -88,11 +99,33 @@ class UserController extends Controller
      * @param  User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy($id, Request $request)
     {
-        $user->delete();
+        $user= User::withTrashed()->findOrFail($id);
 
-        return response()->json("success", 204);
+        // $request->validate([
+        //     'forceDelete' => 'sometimes|boolean'
+        // ]);
+
+        return [
+            "user" => $user,
+            "flag" => $request->forceDelete
+        ];
+
+        if ($request->has('forceDelete') && $request->forceDelete === true)
+        {
+            $user->forceDelete();
+        }
+        else
+        {
+            $user->delete();
+        }
+
+        return response()->json([
+            "status" => "success",
+            "operation" => $request->has('forceDelete') ? 'Delete' : 'Deactivate',
+            "user" => $user,
+        ], 204);
     }
 
 

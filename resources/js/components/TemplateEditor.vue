@@ -189,7 +189,7 @@ export default {
         },
 
         addTemplateFile() {
-            this.$router.push({ path: '/app/templates/' + this.id + '/get'})
+            this.$router.push({ path: '/app/templates/' + this.id + '/create'})
         },
 
         editTemplateFile (file) {

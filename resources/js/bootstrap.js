@@ -14,6 +14,7 @@ window.Swal = require('sweetalert2');
 window.axios = require('axios');
 window.axios.defaults.withCredentials = true;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.get('/api/airlock/csrf-cookie').then ((response) => {});
 
 
 /**
@@ -25,7 +26,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 let token = document.head.querySelector('meta[name="csrf-token"]');
 
 if (token) {
-    window.token = window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+    window.token = token.content;
 } else {
     console.error('CSRF token not found');
 }

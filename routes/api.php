@@ -98,7 +98,7 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     Route::get('users/{user}', 'Api\UserController@show')->name('users.show');
     Route::post('users', 'Api\UserController@store')->name('users.store');
     Route::put('users/{user}', 'Api\UserController@update')->name('users.update');
-    Route::delete('users/{user}', 'Api\UserController@destroy')->name('users.destroy');
+    Route::delete('users/{id}', 'Api\UserController@destroy')->name('users.destroy');
 
     Route::post('settings/loginprovider', 'Api\SettingController@loginprovider')->name('settings.loginprovider');
 

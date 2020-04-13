@@ -20,7 +20,7 @@
 
                 <input type="submit" class="mt-8 w-full bg-blue-500 text-white px-6 py-2 rounded shadow hover:bg-blue-800" value="Login Now">
             </form>
-            
+
             <div v-if="social" class="flex flex-row justify-center font-semibold py-2 px-6 mt-8">
                 <a href="javascript:void(0)" v-if="isFacebook" @click="onSocialLogin('facebook')" class="mr-6 facebook" title="Facebook">
                     <svg class="h-10 w-10 text-blue-500" viewBox="0 0 20 20">
