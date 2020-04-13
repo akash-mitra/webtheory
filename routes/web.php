@@ -23,6 +23,10 @@ Route::get('categories/{category}/{slug?}', 'HomeController@category')->name('ca
 Route::get('sitemap', 'HomeController@sitemap')->name('sitemap');
 Route::get('rss', 'HomeController@rss')->name('rss');
 
+Route::post('/register', 'Auth\RegisterController@register')->name('register');
+Route::post('/login', 'Auth\LoginController@login')->name('login');
+Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+
 Route::get('social/login/{provider}', 'Auth\SocialLoginController@login')->name('social.login');
 Route::get('social/login/{provider}/callback', 'Auth\SocialLoginController@callback')->name('social.callback');
 Route::get('ui/email/verify/{id}', function () { return 1; })->name('ui-email.verificationlink');

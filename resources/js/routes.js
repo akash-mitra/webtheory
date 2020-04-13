@@ -129,7 +129,7 @@ export default {
         /*
          * Login routes
          */
-        { path: '/app/login', component: Login },
+        { path: '/login', component: Login },
 
         { path: "/app/social/login/:provider/callback", component: SocialLogin },
 
