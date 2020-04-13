@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 
 // Unauthenticated Routes
 Route::post('login', 'Api\Auth\LoginController@login');
+Route::get('check', 'Api\Auth\LoginController@user');
 Route::post('register', 'Api\Auth\RegisterController@register');
 
 Route::get('social/providers', 'Api\Auth\SocialLoginController@socialProviders');

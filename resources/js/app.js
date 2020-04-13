@@ -72,10 +72,13 @@ let app = new Vue({
                 p.authUser = null
 
                 window.axios.post('/api/logout')
-                    .then(r => { console.log(r) })
+                    .then(r => { 
+                        console.log(r)
+                        p.$router.push('/app/login')
+                    })
                     .catch(e => { console.log(e) })
 
-                p.$router.push('/app/login')
+                
             })
 
         },

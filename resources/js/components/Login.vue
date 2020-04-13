@@ -77,6 +77,13 @@
                 this.isGoogle = providers.google == 'Enabled' ? true : false
                 this.social = this.isFacebook || this.isTwitter || this.isLinkedin || this.isGoogle
             })
+            window.axios.get('/api/check').then ((response) => {
+                console.log('User');
+                console.log(response.data);
+                if (Object.keys(response.data).length != 0 && response.data.constructor === Object) {
+                    this.onAuthSuccess(response);
+                }
+            });
 
         },
 
