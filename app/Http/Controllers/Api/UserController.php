@@ -103,18 +103,15 @@ class UserController extends Controller
     {
         $user= User::withTrashed()->findOrFail($id);
 
-        // $request->validate([
-        //     'forceDelete' => 'sometimes|boolean'
-        // ]);
-
-        return [
-            "user" => $user,
-            "flag" => $request->forceDelete
-        ];
+        $request->validate([
+            'forceDelete' => 'sometimes|boolean'
+        ]);
 
         if ($request->has('forceDelete') && $request->forceDelete === true)
         {
             $user->forceDelete();
+
+            //todo - should we change the ownership of user's resources?
         }
         else
         {
