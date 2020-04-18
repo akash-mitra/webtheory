@@ -7,9 +7,18 @@
                 <h2 class="text-gray-600 text-2xl flex items-center">{{ name }}</h2>
                 <p class="text-gray-700 text-sm py-2">{{ description }}</p>
             </div>
-            <t-button :loadingWheel="isSaving" @click.native="initiateSave">
+
+            <div>
+                <t-button color="gray" @click.native="$router.go(-1)">
+                    Close
+                </t-button>
+
+                &nbsp;
+
+                <t-button :loadingWheel="isSaving" @click.native="initiateSave">
                     Save
-            </t-button>
+                </t-button>
+            </div>
         </div>
 
 

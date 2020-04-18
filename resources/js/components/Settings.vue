@@ -5,6 +5,10 @@
         <div class="px-6 my-6 w-full flex justify-between items-center">
             <h2 class="text-gray-600 text-2xl flex items-center">Settings</h2>
             <!-- <a href="/app/settings/create" class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow">Create</a> -->
+
+            <t-button :loadingWheel="isSaving" @click.native="initiateSave">
+                Save Settings
+            </t-button>
         </div>
 
 
@@ -23,13 +27,14 @@
         </div>
 
 
-        <div class="px-6 pb-10" v-if="tab=='login'">
+        <div class="pb-10" v-if="tab=='login'">
 
             <p class="text-sm text-gray-700 pb-3 uppercase">Social Login</p>
-            <div v-if="providers!==null && providerRedirectUrls!==null" class="bg-white rounded w-full max-w-21xl p-6 mb-6 shadow">
-                
-                
-                <div class="px-6 py-6 border">
+
+            <div v-if="providers!==null && providerRedirectUrls!==null" class="rounded w-full">
+
+
+                <div class="px-6 py-3 mb-4 bg-white shadow rounded">
                     <div class="w-full relative">
                         <div class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
                             @click="changeStatus('facebook', providers.facebook==='Disabled'?'Enabled':'Disabled')">
@@ -39,7 +44,10 @@
                                 <span :class="providers.facebook==='Disabled'? 'text-gray-600':'text-green-600'">{{ providers.facebook }}</span>
                             </div>
                         </div>
-                        <h3 class="text-blue-800 font-semibold">Facebook</h3>
+                        <h3 class="text-blue-800 font-semibold flex items-center">
+                        <svg class="w-8 h-8 mr-4 fill-current text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M448 0H64C29 0 0 29 0 64v384c0 35 29 64 64 64h384c35 0 64-29 64-64V64c0-35-29-64-64-64z" fill="#1976d2"/><path d="M432 256h-80v-64c0-18 14-16 32-16h32V96h-64c-53 0-96 43-96 96v64h-64v80h64v176h96V336h48l32-80z" fill="#fafafa"/></svg>
+                        Facebook
+                        </h3>
                     </div>
 
                     <div v-if="providers.facebook=='Enabled'">
@@ -59,7 +67,7 @@
                 </div>
 
 
-                <div class="px-6 py-6 border">
+                <div class="px-6 py-3 mb-4 bg-white shadow rounded">
                     <div class="w-full relative">
                         <div class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
                             @click="changeStatus('twitter', providers.twitter==='Disabled'?'Enabled':'Disabled')">
@@ -69,7 +77,10 @@
                                 <span :class="providers.twitter==='Disabled'? 'text-gray-600':'text-green-600'">{{ providers.twitter }}</span>
                             </div>
                         </div>
-                        <h3 class="text-blue-800 font-semibold">Twitter</h3>
+                        <h3 class="text-blue-800 font-semibold flex items-center">
+                        <svg viewBox="0 0 512 512" class="w-8 h-8 mr-4 fill-current text-blue-400" xmlns="http://www.w3.org/2000/svg"><path d="M512 97c-19 9-39 14-60 17 21-13 38-34 46-58-21 12-43 20-67 25a105 105 0 00-179 96c-87-4-164-46-216-110a106 106 0 0032 140c-17 0-34-5-48-13v2c0 51 37 93 85 103a105 105 0 01-48 1c14 42 52 73 98 74A211 211 0 010 417c46 30 102 47 161 47a297 297 0 00298-312c21-15 39-34 53-55z" fill="#03a9f4"/></svg>
+                        Twitter
+                        </h3>
                     </div>
 
                     <div v-if="providers.twitter=='Enabled'">
@@ -89,7 +100,7 @@
                 </div>
 
 
-                <div class="px-6 py-6 border">
+                <div class="px-6 py-3 mb-4 bg-white shadow rounded">
                     <div class="w-full relative">
                         <div class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
                             @click="changeStatus('linkedin', providers.linkedin==='Disabled'?'Enabled':'Disabled')">
@@ -99,7 +110,10 @@
                                 <span :class="providers.linkedin==='Disabled'? 'text-gray-600':'text-green-600'">{{ providers.linkedin }}</span>
                             </div>
                         </div>
-                        <h3 class="text-blue-800 font-semibold">Linkedin</h3>
+                        <h3 class="text-blue-800 font-semibold flex items-center">
+                        <svg viewBox="0 0 512 512" class="w-8 h-8 mr-4 fill-current text-blue-400" xmlns="http://www.w3.org/2000/svg"><path d="M437 0H75C34 0 0 35 0 76v361c0 41 34 75 75 75h362c41 0 75-34 75-75V76c0-41-34-76-75-76zm0 0" fill="#25d9f8"/><path d="M512 76v361c0 41-34 75-75 75H256V0h181c41 0 75 35 75 76zm0 0" fill="#00c0f1"/><g fill="#ececf1"><path d="M121 196h60v211h-60zm0 0M121 106h60v60h-60zm0 0M391 276v131h-60V286c0-16-13-30-30-30s-30 14-30 30v121h-60V196h60v11c16-5 26-11 45-11 41 0 75 37 75 80zm0 0"/></g><path d="M391 276v131h-60V286c0-16-13-30-30-30s-30 14-30 30v121h-15V196h15v11c16-5 26-11 45-11 41 0 75 37 75 80zm0 0" fill="#e2e2e7"/></svg>
+                        Linkedin
+                        </h3>
                     </div>
 
                     <div v-if="providers.linkedin=='Enabled'">
@@ -119,7 +133,7 @@
                 </div>
 
 
-                <div class="px-6 py-6 border">
+                <div class="px-6 py-3 mb-4 bg-white shadow rounded">
                     <div class="w-full relative">
                         <div class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
                             @click="changeStatus('google', providers.google==='Disabled'?'Enabled':'Disabled')">
@@ -129,7 +143,10 @@
                                 <span :class="providers.google==='Disabled'? 'text-gray-600':'text-green-600'">{{ providers.google }}</span>
                             </div>
                         </div>
-                        <h3 class="text-blue-800 font-semibold">Google</h3>
+                        <h3 class="text-blue-800 font-semibold flex items-center">
+                        <svg viewBox="0 0 512 512" class="w-8 h-8 mr-4 fill-current text-blue-400" xmlns="http://www.w3.org/2000/svg"><path d="M332 150v15a166 166 0 01-332 0A166 166 0 01294 59l-43 43a106 106 0 00-191 63 106 106 0 00202 45h-81v-60zm0 0M512 135v60h-45v45h-60v-45h-45v-60h45V90h60v45zm0 0" fill="#ff3939"/><g fill="#c90232"><path d="M166 60V0c52 0 102 26 128 59l-43 43c-18-24-50-42-85-42zm0 0M332 150v15a166 166 0 01-166 165v-60c42 0 79-25 96-60h-81v-60zm0 0M512 135v60h-45v45h-30V90h30v45zm0 0"/></g></svg>
+                        Google
+                        </h3>
                     </div>
 
                     <div v-if="providers.google=='Enabled'">
@@ -151,9 +168,7 @@
 
             </div>
 
-            <t-button :loadingWheel="isSaving" @click.native="initiateSave">
-                Save Providers
-            </t-button>
+
 
         </div>
 
@@ -193,7 +208,7 @@
         },
 
         created() {
-            
+
             util.ajax ('get', '/api/parameters/providers', {},  (response) => {
                 this.providers = JSON.parse(response)
             })
@@ -241,7 +256,7 @@
                         { 'key': 'GOOGLE_CLIENT_ID', 'value': this.googleClientId },
                         { 'key': 'GOOGLE_CLIENT_SECRET', 'value': this.googleClientSecret },
                     ]
-                
+
                 util.ajax ('post', '/api/settings/loginprovider', { data }, function () {
                     util.notifySuccess ('Saved', 'Login provider constants have been successfully saved.')
                 })

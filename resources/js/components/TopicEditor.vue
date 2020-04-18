@@ -4,9 +4,18 @@
 
         <div class="px-2 my-6 w-full flex justify-between items-center">
             <h2 class="text-gray-600 text-2xl flex items-center">Topic Editor</h2>
-            <t-button :loadingWheel="isSaving" @click.native="initiateSave">
+
+            <div>
+                <t-button color="gray" @click.native="$router.go(-1)">
+                    Close
+                </t-button>
+
+                &nbsp;
+
+                <t-button :loadingWheel="isSaving" @click.native="initiateSave">
                     Save
-            </t-button>
+                </t-button>
+            </div>
         </div>
 
 
