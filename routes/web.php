@@ -13,8 +13,29 @@
 
 // Frontend Routes
 
+/*
+|--------------------------------------------------------------------------
+| AUTHENTICATION RELATED ROUTES
+|--------------------------------------------------------------------------
+*/
 
-Auth::routes(['verify' => true]);
+// Only keep the relevant routes to avoid unused route endpoints.
+// Auth::routes(['verify' => true]);
+
+Route::post('/register', 'Auth\RegisterController@register')->name('register');
+Route::post('/login', 'Auth\LoginController@login')->name('login');
+Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+// below 2 routes will be needed when we have the email issue sorted
+// Route::get('/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+// Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
+
+Route::post('/password/change', 'Api\UserController@changePassword')->name('password.change');
+
+Route::get('social/login/{provider}', 'Auth\SocialLoginController@login')->name('social.login');
+Route::get('social/login/{provider}/callback', 'Auth\SocialLoginController@callback')->name('social.callback');
+Route::get('ui/email/verify/{id}', function () { return 1; })->name('ui-email.verificationlink');
+
 
 
 Route::get('/', 'HomeController@root')->name('root');
@@ -23,20 +44,12 @@ Route::get('categories/{category}/{slug?}', 'HomeController@category')->name('ca
 Route::get('sitemap', 'HomeController@sitemap')->name('sitemap');
 Route::get('rss', 'HomeController@rss')->name('rss');
 
-Route::post('/register', 'Auth\RegisterController@register')->name('register');
-Route::post('/login', 'Auth\LoginController@login')->name('login');
-Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
-
-Route::get('social/login/{provider}', 'Auth\SocialLoginController@login')->name('social.login');
-Route::get('social/login/{provider}/callback', 'Auth\SocialLoginController@callback')->name('social.callback');
-Route::get('ui/email/verify/{id}', function () { return 1; })->name('ui-email.verificationlink');
-
 
 //-----------------------------------------------------------------------------
 // This is the main entry point for the SPA
 // (This routes needs to be protected by Admin auth later)
 //-----------------------------------------------------------------------------
-Route::get('/app/{any}', 'AdminController@app')->where('any', '.*')->name('app');
+Route::get('/app/{any}', 'AdminController@app')->where('any', '.*')->name('admin.app');
 
 
 // Testing Route

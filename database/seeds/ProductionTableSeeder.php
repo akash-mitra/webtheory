@@ -167,6 +167,11 @@ class ProductionTableSeeder extends Seeder
     {
         DB::table('permissions')->delete();
 
+        /********************
+         * APP
+         *******************/
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'admin', 'action' => 'app', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'admin', 'action' => 'app', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
 
         /********************
          * CATEGORY

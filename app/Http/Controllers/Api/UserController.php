@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -16,7 +17,7 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['check.permission']);
+        $this->middleware(['check.permission'])->except(['changePassword']);
     }
 
 
@@ -86,7 +87,7 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
-        $user->fill(request(['name', 'email', 'role']))->save();
+        $user->fill(request(['name', 'email', 'role', 'about_me']))->save();
 
         return response()->json($user);
     }
@@ -123,6 +124,46 @@ class UserController extends Controller
             "operation" => $request->has('forceDelete') ? 'Delete' : 'Deactivate',
             "user" => $user,
         ], 204);
+    }
+
+
+
+    public function changePassword(Request $request)
+    {
+        // return $request->only('email');
+
+        $request->validate([
+            'email' => ['required'],
+            'current_password' => ['required', 'min:8', 'max:255'],
+            'new_password' => ['required', 'min:8', 'max:255', 'confirmed'],
+        ]);
+
+        // make sure the user is changing own password only
+        if (auth()->user()->email != $request->email)
+        {
+            return response([
+                'status' => 'failure',
+                'message' => 'Unable to reset password for other account.'
+            ], 401);
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        // make sure user current password is correct
+        if(! Hash::check($request->current_password, $user->password))
+        {
+            return response([
+                'status' => 'failure',
+                'message' => 'Account password is incorrect.'
+            ], 401);
+        }
+
+
+        $user->password = Hash::make($request->new_password);
+
+        $user->save();
+
+        return back();
     }
 
 
