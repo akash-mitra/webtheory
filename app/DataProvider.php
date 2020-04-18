@@ -16,7 +16,7 @@ class DataProvider {
     public static function home()
     {
         return (object) [
-            "ref" => self::ref('home'),
+            "ref" => self::ref(),
             "pages" => self::pages(),
             "topics" => self::topics(),
             "user" => auth()->user()
@@ -30,7 +30,7 @@ class DataProvider {
         $page = Page::with(['content', 'author', 'category'])->published()->findOrFail($id);
 
         return (object) [
-            "ref" => self::ref('single'),
+            "ref" => self::ref(),
             "page" => $page,
             "topics" => self::topics(),
             "user" => auth()->user()
@@ -51,7 +51,7 @@ class DataProvider {
         ])->findOrFail($id);
 
         return (object) [
-            "ref" => self::ref('category'),
+            "ref" => self::ref(),
             "category" => $category,
             "user" => auth()->user()
         ];
@@ -100,24 +100,27 @@ class DataProvider {
 
 
 
-    public static function ref($type) : object
+    public static function ref() : object
     {
         return (object) [
 
-            "template" => self::template($type),
-            "site" => self::site()
+            "template" => self::template(),
+            "site" => self::site(),
+            "login" => (object) [
+                "providers" => json_decode(Parameter::getKey('providers'), false)
+            ]
         ];
     }
 
 
 
     /*
-     * Returns the template paramters pertaining
+     * Returns the template parameters pertaining
      * to the active template of the given type.
      */
-    public static function template ($type) : object
+    public static function template () : object
     {
-        return Cache::rememberForever('templates.' . $type, function () use ($type) {
+        return Cache::rememberForever('template.parameters', function () {
 
             $param = optional(Template::where('active', 1)->first())->parameters;
 
@@ -140,11 +143,7 @@ class DataProvider {
     public static function keylist () : array
     {
         return [
-            'templates.home',
-            'templates.single',
-            'templates.category',
-            'templates.profile',
-            'templates.forum',
+            'template.parameters',
 
             'parameters.siteinfo',
 

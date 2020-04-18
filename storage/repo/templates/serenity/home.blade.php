@@ -27,32 +27,16 @@
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 28' width='56' height='28'%3E%3Cpath fill='{{ $data->ref->template->primaryColor }}' fill-opacity='0.09' d='M56 26v2h-7.75c2.3-1.27 4.94-2 7.75-2zm-26 2a2 2 0 1 0-4 0h-4.09A25.98 25.98 0 0 0 0 16v-2c.67 0 1.34.02 2 .07V14a2 2 0 0 0-2-2v-2a4 4 0 0 1 3.98 3.6 28.09 28.09 0 0 1 2.8-3.86A8 8 0 0 0 0 6V4a9.99 9.99 0 0 1 8.17 4.23c.94-.95 1.96-1.83 3.03-2.63A13.98 13.98 0 0 0 0 0h7.75c2 1.1 3.73 2.63 5.1 4.45 1.12-.72 2.3-1.37 3.53-1.93A20.1 20.1 0 0 0 14.28 0h2.7c.45.56.88 1.14 1.29 1.74 1.3-.48 2.63-.87 4-1.15-.11-.2-.23-.4-.36-.59H26v.07a28.4 28.4 0 0 1 4 0V0h4.09l-.37.59c1.38.28 2.72.67 4.01 1.15.4-.6.84-1.18 1.3-1.74h2.69a20.1 20.1 0 0 0-2.1 2.52c1.23.56 2.41 1.2 3.54 1.93A16.08 16.08 0 0 1 48.25 0H56c-4.58 0-8.65 2.2-11.2 5.6 1.07.8 2.09 1.68 3.03 2.63A9.99 9.99 0 0 1 56 4v2a8 8 0 0 0-6.77 3.74c1.03 1.2 1.97 2.5 2.79 3.86A4 4 0 0 1 56 10v2a2 2 0 0 0-2 2.07 28.4 28.4 0 0 1 2-.07v2c-9.2 0-17.3 4.78-21.91 12H30zM7.75 28H0v-2c2.81 0 5.46.73 7.75 2zM56 20v2c-5.6 0-10.65 2.3-14.28 6h-2.7c4.04-4.89 10.15-8 16.98-8zm-39.03 8h-2.69C10.65 24.3 5.6 22 0 22v-2c6.83 0 12.94 3.11 16.97 8zm15.01-.4a28.09 28.09 0 0 1 2.8-3.86 8 8 0 0 0-13.55 0c1.03 1.2 1.97 2.5 2.79 3.86a4 4 0 0 1 7.96 0zm14.29-11.86c1.3-.48 2.63-.87 4-1.15a25.99 25.99 0 0 0-44.55 0c1.38.28 2.72.67 4.01 1.15a21.98 21.98 0 0 1 36.54 0zm-5.43 2.71c1.13-.72 2.3-1.37 3.54-1.93a19.98 19.98 0 0 0-32.76 0c1.23.56 2.41 1.2 3.54 1.93a15.98 15.98 0 0 1 25.68 0zm-4.67 3.78c.94-.95 1.96-1.83 3.03-2.63a13.98 13.98 0 0 0-22.4 0c1.07.8 2.09 1.68 3.03 2.63a9.99 9.99 0 0 1 16.34 0z'%3E%3C/path%3E%3C/svg%3E");
     }
 
-    .duration-300 {
-		transition-duration: 300ms;
-	}
-	.ease-in {
-		transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
-	}
-	.ease-out {
-		transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-	}
-	.scale-90 {
-		transform: scale(.9);
-	}
-	.scale-100 {
-		transform: scale(1);
-	}
-
   </style>
 
   <meta name="theme-color" content="#fafafa">
 
-  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v1.9.5/dist/alpine.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.0.1/dist/alpine.js" defer></script>
+
 
 </head>
 
-<body x-data="{ 'showLoginModal': false, 'showRegisterModal': false }"
-      @keydown.escape="showLoginModal = showRegisterModal = false">
+<body x-data="{ showLoginModal: false }" @keydown.escape="showLoginModal = false">
 
     <div class="w-full max-w-6xl mx-auto px-6 font-reading">
 
@@ -63,46 +47,8 @@
 
             </a>
 
-            @if( $data->user != null )
-                            <div x-data="{ userMenuOpen: false }" @keydown.escape="userMenuOpen = false" @click.away="userMenuOpen = false" class="relative inline-block text-left">
-                  <div>
-                    <span class="rounded-md shadow-sm">
-                      <button @click="userMenuOpen = !userMenuOpen" type="button" class="inline-flex justify-center items-center w-full rounded-md px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150">
-                        <span class="flex items-center border1 px-4 py-2 rounded-lg hover:bg-gray-100">
-                          <img src="{{ $data->user->avatar }}" class="h-12 w-12 rounded-full border" />
-                          <span class="hidden sm:flex ml-4 text-lg">{{ $data->user->name }}</span>
-                        </span>
-                        <svg class="-mr-1 ml-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                        </svg>
-                      </button>
-                    </span>
-                  </div>
-                  <div x-show="userMenuOpen" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg">
-                    <div class="rounded-md bg-white shadow-xs">
-                      <div class="py-1">
-                        <a href="{{ $data->user->url }}" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900">Profile</a>
-                      </div>
-                      <div class="border-t border-gray-100"></div>
-                      <div class="py-1">
+            @include('active.user-menu')
 
-
-                        <form action="/logout" method="POST">
-                          @csrf
-                          <button type="submit" class="block px-4 py-2 text-sm leading-5 w-full text-left text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900">Logout</button>
-                        </form>
-
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
-
-            @else
-            <span class="flex px-4 py-2 rounded-lg hover:bg-gray-100 cursor-pointer" @click="showLoginModal = true">
-                Login
-            </span>
-            @endif
         </div>
 
 
@@ -185,53 +131,8 @@
     </div>
 
 
-    <div
-        class="overflow-auto"
-        style="background-color: rgba(0,0,0,0.5)"
-        x-show="showLoginModal"
-        :class="{ 'absolute inset-0 z-10 flex items-center justify-center': showLoginModal }"
-    >
-      <!--Dialog-->
-      <div
-		class="bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg py-4 text-left px-6"
-		x-show="showLoginModal"
-		@click.away="showLoginModal = false"
-		x-transition:enter="ease-out duration-300"
-		x-transition:enter-start="opacity-0 scale-90"
-		x-transition:enter-end="opacity-100 scale-100"
-		x-transition:leave="ease-in duration-300"
-		x-transition:leave-start="opacity-100 scale-100"
-		x-transition:leave-end="opacity-0 scale-90"
-      >
+    @include('active.login-modal')
 
-		<p class="mt-6 text-sm text-2xl leading-5 text-center text-gray-900">Log in to Your Account</p>
-        <form class="mt-5" action="/login" method="POST">
-        @csrf
-        <input type="hidden" name="remember" value="true">
-        <div class="rounded-md shadow-sm">
-            <div>
-            <input aria-label="Email address" name="email" type="email" required="" class="placeholder-gray-600 appearance-none rounded-t relative block w-full px-3 py-2 border text-gray-900 bg-white focus:z-10 sm:text-sm sm:leading-5" placeholder="Email address" value="">
-            </div>
-            <div class="-mt-px relative">
-            <input aria-label="Password" name="password" type="password" required="" class="placeholder-gray-600 appearance-none rounded-b relative block w-full px-3 py-2 border text-gray-900 bg-white focus:z-10 sm:text-sm sm:leading-5" placeholder="Password">
-            <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
-                <a href="/password/reset" class="text-gray-900 underline">Forgot?</a>
-            </div>
-            </div>
-        </div>
-
-
-        <div class="mt-5">
-            <button type="submit" class="relative block w-full py-2 px-3 border border-transparent rounded-md text-white font-semibold bg-indigo-800 hover:bg-indigo-700 focus:bg-indigo-900 focus:outline-none focus:shadow-outline sm:text-sm sm:leading-5">
-            Log in
-            </button>
-
-        </div>
-        </form>
-        <p class="text-xs text-blue-600 p-2 mt-4 text-center">Don't have an account? Register Now.</p>
-
-      </div><!--/Dialog -->
-    </div><!-- /Overlay -->
 
 </body>
 </html>

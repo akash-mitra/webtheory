@@ -15,9 +15,12 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
 
   <meta name="theme-color" content="#fafafa">
+
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.0.1/dist/alpine.js" defer></script>
+
 </head>
 
-<body>
+<body x-data="{ showLoginModal: false }" @keydown.escape="showLoginModal = false">
 
     <div class="w-full h-1 bg-{{$data->ref->template->primaryColor}}-600 fixed top-0 shadow-lg"></div>
 
@@ -29,19 +32,15 @@
                 <span class="pl-2 cursor-pointer font-heading text-2xl md:text-3xl font-bold text-{{$data->ref->template->primaryColor}}-600 opacity-75">{{ $data->ref->site->name }}</span>
             </a>
 
-            @if( $data->user != null )
-            <a href="{{ $data->user->url }}" class="flex items-center border1 px-4 py-2 rounded-lg hover:bg-gray-100">
-                <span class="hidden sm:flex mr-4 text-base">{{ $data->user->name }}</span>
-                <img src="{{ $data->user->avatar }}" class="h-12 w-12 rounded-full border" />
-            </a>
-            @endif
+            @include('active.user-menu')
+
         </div>
 
 
         <main class="w-full max-w-3xl @if($data->ref->template->centerContent === 'yes') mx-auto @endif py-10 px-6 text-gray-800">
             <article class="wt-typography">
                 <header>
-                    <a href="{{ $data->page->category->url }}" class="text-gray-700">
+                    <a href="{{ $data->page->category->url }}" class="text-blue-400">
                         {{ $data->page->category->name }}
                     </a>
                     <h1 class="text-gray-800 text-4xl font-serif">{{ $data->page->title }}</h1>
@@ -49,7 +48,7 @@
                         <img src="{{ $data->page->author->avatar }}" class="h-12 w-12 rounded-full border" />
                         <div class="ml-4">
                             <div class="w-full">{{ $data->page->author->name }}</div>
-                            <div class="w-full">{{ $data->page->updated_at->format('M d, Y') }}</div>
+                            <div class="w-full">Updated on {{ $data->page->updated_at->format('M d, Y') }}</div>
                         </div>
                     </div>
 
@@ -67,6 +66,8 @@
                 &copy; <?php echo date('Y') ?> - All Rights Reserved. Made with&nbsp;<a href="https://webtheory.co">WebTheory</a>
         </footer>
     </div>
+
+    @include('active.login-modal')
 
 </body>
 </html>

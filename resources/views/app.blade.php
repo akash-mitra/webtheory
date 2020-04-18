@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>WebTheory - Admin Panel</title>
+        <title>WebTheory - Admin</title>
 
         <link href="{{ mix('/css/app.css') }}" rel="stylesheet" />
 
@@ -20,7 +20,7 @@
 
     <div class="w-full font-sans" id="app" @click="hideOverlayMenu">
 
-        <div class="w-full bg-white border-b border-gray-400 py-3 md:flex items-center justify-between">
+        <div v-if="authUser !== null && authUser.role != 'registered'" class="w-full bg-white border-b border-gray-400 py-3 md:flex items-center justify-between">
             <div class="md:flex justify-start items-center">
                 <div class="px-6 lg:px-8 flex items-center justify-between">
                     <img src="/images/tensor.svg" alt="WebTheory Home" class="h-10 w-10 mr-6">
@@ -63,7 +63,7 @@
 
             </div>
 
-            <div id="user-menu" class="hidden md:block relative md:px-6 lg:px-8 justify-end md:py-0" v-if="authUser !== null">
+            <div id="user-menu" class="hidden md:block relative md:px-6 lg:px-8 justify-end md:py-0">
                 <img :src="authUser.avatar" :alt="authUser.name" :title="authUser.name" id="auth-user-avatar" class="ml-6 md:ml-0 h-10 w-10 border rounded-full cursor-pointer" @click='showDropdownMenu = !showDropdownMenu'/>
                 <div class="w-full md:w-56 md:absolute z-50 right-0 mt-3 mr-6 bg-white border-t md:shadow-lg" v-if="showDropdownMenu">
                     <div class="px-6 py-2 border-b cursor-pointer bg-gray-100">
