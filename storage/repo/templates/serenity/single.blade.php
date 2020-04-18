@@ -20,7 +20,11 @@
 
 </head>
 
+@if ($errors->any() || $errors->hasBag('register') || $errors->hasBag('forgot'))
+<body x-data="{ showLoginModal: true }" @keydown.escape="showLoginModal = false">
+@else
 <body x-data="{ showLoginModal: false }" @keydown.escape="showLoginModal = false">
+@endif
 
     <div class="w-full h-1 bg-{{$data->ref->template->primaryColor}}-600 fixed top-0 shadow-lg"></div>
 

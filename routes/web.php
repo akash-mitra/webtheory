@@ -49,7 +49,7 @@ Route::get('rss', 'HomeController@rss')->name('rss');
 // This is the main entry point for the SPA
 // (This routes needs to be protected by Admin auth later)
 //-----------------------------------------------------------------------------
-Route::get('/app/{any}', 'AdminController@app')->where('any', '.*')->name('admin.app');
+Route::get('/app/{any?}', 'AdminController@app')->where('any', '.*')->name('admin.app');
 
 
 // Testing Route

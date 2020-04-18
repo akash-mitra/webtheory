@@ -4,21 +4,22 @@
 
         <div class="px-2 my-6 w-full sm:flex justify-between items-center">
             <div class="sm:ml-6 flex justify-center items-center flex-col sm:flex-row">
-                <img :src="avatar" class="rounded-full mr-4 h-32 w-32 border">
+                <img v-if="avatar" :src="avatar" class="rounded-full mr-4 h-32 w-32 border">
+                <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="rounded-full mr-4 h-32 w-32 fill-current"><g><path class="text-yellow-100" d="M3.66 17.52a10 10 0 1 1 16.68 0C19.48 16.02 17.86 16 16 16H8c-1.86 0-3.48.01-4.34 1.52z"/><path class="text-blue-200" d="M3.66 17.52A5 5 0 0 1 8 15h8a5 5 0 0 1 4.34 2.52 10 10 0 0 1-16.68 0zM12 13a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></g></svg>
                 <div>
                     <h2 class="text-gray-800 text-3xl flex items-center">{{ name }}</h2>
                     <p class="text-gray-600">
                         <span v-if="role==='registered'" class="mr-2 bg-gray-100 text-green-700 px-2 border border-green-500 rounded uppercase text-xs tracking-wider font-bold">{{ role }}</span>
                         <span v-if="role==='author'" class="mr-2 bg-gray-100 text-indigo-700 px-2 border border-indigo-500 rounded uppercase text-xs tracking-wider font-bold">{{ role }}</span>
                         <span v-if="role==='admin'" class="mr-2 bg-gray-100 text-red-700 px-2 border border-red-500 rounded uppercase text-xs tracking-wider font-bold">{{ role }}</span>
-                        <span>Joined {{ created_ago }}.</span>
+                        <span v-if="created_ago">Joined {{ created_ago }}.</span>
                     </p>
                 </div>
             </div>
 
 
             <div class="flex justify-center sm:justify-end mt-8 sm:mt-0">
-                <t-button color="gray" @click.native="$router.go(-1)">
+                <t-button color="gray" @click.native="$router.push({name: 'users.index'})">
                     Close
                 </t-button>
 
@@ -36,13 +37,21 @@
 
             <div class="w-full sm:flex px-6 pt-8">
                 <label for="userName" class="block w-full sm:w-1/6 sm:text-right text-sm py-1 px-3">Name</label>
-                <input type="text" id="userName" v-model="name" ref="name" class="w-full sm:w-5/6 max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+
+                <div class="w-full my-1 sm:w-5/6 max-w-lg">
+                    <input type="text" id="userName" v-model="name" ref="name" class="w-full px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                    <div v-if="errors && errors.hasOwnProperty('name')" class="w-full block text-xs text-red-400">{{ errors.name[0] }}</div>
+                </div>
             </div>
 
             <div class="w-full sm:flex px-6 pt-6">
                 <label for="userEmail" class="block w-full sm:w-1/6 sm:text-right text-sm py-1 px-3">Email</label>
-                <input type="email" id="userEmail" v-model="email" ref="email" class="w-full sm:w-5/6 max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                <div class="w-full my-1 sm:w-5/6 max-w-lg">
+                    <input type="email" id="userEmail" v-model="email" ref="email" class="w-full px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                    <div v-if="errors && errors.hasOwnProperty('email')" class="w-full block text-xs text-red-400">{{ errors.email[0] }}</div>
+                </div>
             </div>
+
 
             <div class="w-full sm:flex px-6 pt-6">
                 <label for="userRole" class="block w-full sm:w-1/6 sm:text-right text-sm py-1 px-3">Role</label>
@@ -64,9 +73,12 @@
 
 
             <div class="w-full sm:flex items-center px-6 pt-6 pb-12">
-                <label for="userAboutMe" class="block w-full sm:w-1/6 sm:text-right text-sm py-1 px-3">Password</label>
-                <span class="w-full sm:w-5/6 text-sm hover:underline text-blue-600 cursor-pointer" @click="resetPasswordModal=true">Reset Password</span>
+                <label class="block w-full sm:w-1/6 sm:text-right text-sm py-1 px-3"></label>
+                <div v-if="authUserId === id" class="sm:w-5/6">
+                    <span class="px-6 py-2 inline-block text-sm bg-blue-600 rounded hover:bg-blue-700 text-white cursor-pointer" @click="resetPasswordModal=true">Reset Password</span>
+                </div>
             </div>
+
 
 
         </div>
@@ -132,6 +144,8 @@
 
 <script>
 
+import { getAuthUserId } from '../auth.js';
+
 export default {
 
     data: function () {
@@ -156,11 +170,15 @@ export default {
 
             resetPasswordModal: false,
             token: token,
+            authUserId: null,
+            errors: null
         }
     },
 
 
     created() {
+
+        this.authUserId = getAuthUserId()
 
         this.fetchUserAndLoadForm()
     },
@@ -218,14 +236,18 @@ export default {
 
                 this.isSaving = true
 
-
+                let p = this
                 util.ajax (this.getSaveMethod(), this.getSaveUrl(), {
                     id: this.id,
                     name: this.name,
                     email: this.email,
                     role: this.role,
                     about_me: this.about_me,
-                }, this.postSaveProcessing)
+                }, this.postSaveProcessing, function (statusCode, data) {
+                    if (statusCode === 422) {
+                        p.errors = data.errors
+                    }
+                })
 
             }
         },

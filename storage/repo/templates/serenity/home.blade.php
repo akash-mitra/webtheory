@@ -36,7 +36,11 @@
 
 </head>
 
+@if ($errors->any() || $errors->hasBag('register') || $errors->hasBag('forgot'))
+<body x-data="{ showLoginModal: true }" @keydown.escape="showLoginModal = false">
+@else
 <body x-data="{ showLoginModal: false }" @keydown.escape="showLoginModal = false">
+@endif
 
     <div class="w-full max-w-6xl mx-auto px-6 font-reading">
 

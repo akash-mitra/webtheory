@@ -1,4 +1,4 @@
-
+import Dashboard from './components/Dashboard.vue';
 import Pages from './components/Pages.vue';
 import Topics from './components/Topics.vue';
 import Templates from './components/Templates.vue';
@@ -26,6 +26,13 @@ export default {
     mode: 'history',
 
     routes: [
+
+        {
+            path: '/app',
+            component: Dashboard,
+            name: 'dashboard',
+            meta: { requiresAuth: true }
+        },
 
         /*
          * Page related routes
