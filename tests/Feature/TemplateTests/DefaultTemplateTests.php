@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\TemplateTests;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -36,11 +37,14 @@ trait DefaultTemplateTests {
     {
         array_map(function ($file) {
 
-            $sourceFileContent = Storage::disk('templates')->get($file);
+            if (! Str::startsWith(basename($file), ".")) { // ignore hidden files
 
-            $targetFileContent = Storage::disk('active')->get(basename($file));
+                $sourceFileContent = Storage::disk('templates')->get($file);
 
-            $this->assertEquals($sourceFileContent, $targetFileContent, $file . ' is missing in the active directory.');
+                $targetFileContent = Storage::disk('active')->get(basename($file));
+
+                $this->assertEquals($sourceFileContent, $targetFileContent, $file . ' is missing in the active directory.');
+            }
         },
         Storage::disk('templates')->files($this->defaultTemplateName));
     }

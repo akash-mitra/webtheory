@@ -104,9 +104,9 @@ class TemplateTest extends TestDataSetup
 
         // also make sure that all the blade files are present in the response
         $response->assertJsonFragment([
-            'name' => $template->name . '/' . 'home.blade.php',
-            'name' => $template->name . '/' . 'single.blade.php',
-            'name' => $template->name . '/' . 'category.blade.php'
+            'name' => 'home.blade.php',
+            'name' => 'single.blade.php',
+            'name' => 'category.blade.php'
         ]);
 
         // cleanup
