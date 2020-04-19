@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,4 +65,14 @@ Route::get('/app/{any?}', 'AdminController@app')->where('any', '.*')->name('admi
 // all cache keys - to be removed later
 Route::get('cache/keys', function () {
     return App\DataProvider::keys();
+});
+
+Route::get('test', function () {
+    $data = array('name'=>"Virat Gandhi");
+   
+      Mail::send(['text'=>'mail'], $data, function($message) {
+         $message->to('abc@gmail.com', 'Tutorials Point')->subject
+            ('Laravel Basic Testing Mail');
+      });
+    return;
 });

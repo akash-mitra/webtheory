@@ -42,6 +42,7 @@ class ProductionTableSeeder extends Seeder
 
     private function addDefaultParameters ()
     {
+        // SITE
         DB::table('parameters')->insert([
             'key' => 'siteinfo',
             'value' => '{"name": "My Blog", "title": "My Blog Title", "desc": ""}',
@@ -49,6 +50,7 @@ class ProductionTableSeeder extends Seeder
             'updated_at' => now()
         ]);
 
+        // EDITOR
         DB::table('parameters')->insert([
             'key' => 'editor',
             'value' => 'editorjs',
@@ -56,15 +58,17 @@ class ProductionTableSeeder extends Seeder
             'updated_at' => now()
         ]);
 
+
+        // SOCIAL LOGIN
         DB::table('parameters')->insert([
-            'key' => 'providers',
+            'key' => 'socialprovider',
             'value' => '{"facebook": "Disabled", "twitter": "Disabled", "linkedin": "Disabled", "google": "Disabled"}',
             'created_at' => now(),
             'updated_at' => now()
         ]);
 
         DB::table('parameters')->insert([
-            'key' => 'provider_redirect_urls',
+            'key' => 'socialprovider_redirect_url',
             'value' => '{"facebook": "' . $this->getUrl('facebook') . '", "twitter": "' . $this->getUrl('twitter') . '", "linkedin": "' . $this->getUrl('linkedin') . '", "google": "' . $this->getUrl('google') . '"}',
             'created_at' => now(),
             'updated_at' => now()
@@ -114,6 +118,100 @@ class ProductionTableSeeder extends Seeder
         ]);
         DB::table('parameters')->insert([
             'key' => 'GOOGLE_CLIENT_SECRET',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+
+        // MAIL DRIVER
+        DB::table('parameters')->insert([
+            'key' => 'MAIL_DRIVER',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('parameters')->insert([
+            'key' => 'MAIL_FROM_ADDRESS',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'MAIL_FROM_NAME',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'MAIL_HOST',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'MAIL_PORT',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'MAIL_ENCRYPTION',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'MAIL_USERNAME',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'MAIL_PASSWORD',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'MAILGUN_DOMAIN',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'MAILGUN_SECRET',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'MAILGUN_ENDPOINT',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'POSTMARK_TOKEN',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'AWS_ACCESS_KEY_ID',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'AWS_SECRET_ACCESS_KEY',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'AWS_DEFAULT_REGION',
             'value' => '',
             'created_at' => now(),
             'updated_at' => now()
@@ -247,9 +345,10 @@ class ProductionTableSeeder extends Seeder
         /********************
          * SETTING
          *******************/
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'settings', 'action' => 'social', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'settings', 'action' => 'mail', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'settings', 'action' => 'loginprovider', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
-
-        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'settings', 'action' => 'loginprovider', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'settings', 'action' => 'mailprovider', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
 
     }
 

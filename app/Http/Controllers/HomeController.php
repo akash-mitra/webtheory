@@ -95,7 +95,7 @@ class HomeController extends Controller
 
         $pages = Page::with('author', 'category')->published()->latest()->get();
         foreach ($pages as $page)
-            $content .= '<item><title>' . $page->title . '</title><link>' . $page->url . '</link><description>' . $page->metadesc . '<description><author>' . $page->author->email . '</author><pubDate>' . $page->created_at->tz('UTC')->toAtomString() . '</pubDate><category>' . $page->category->name . '</category></item>';
+            $content .= '<item><title>' . $page->title . '</title><link>' . $page->url . '</link><description>' . $page->metadesc . '</description><author>' . $page->author->email . '</author><pubDate>' . $page->created_at->tz('UTC')->toAtomString() . '</pubDate><category>' . $page->category->name . '</category></item>';
 
         $content .= '</channel>';
         $content .= '</rss>';
