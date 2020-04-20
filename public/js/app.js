@@ -2720,9 +2720,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }, {
       key: 'postmark',
       value: 'Postmark'
-    }, {
-      key: 'mailtrap',
-      value: 'Mailtrap'
     }]), _defineProperty(_ref, "mailFromAddress", null), _defineProperty(_ref, "mailFromName", null), _defineProperty(_ref, "mailHost", null), _defineProperty(_ref, "mailPort", null), _defineProperty(_ref, "mailEncryption", null), _defineProperty(_ref, "mailEncryptions", [{
       key: '',
       value: 'NONE'
@@ -2868,7 +2865,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: {
     showSmtp: function showSmtp() {
-      if (this.mailDriver == 'sendmail' || this.mailDriver == 'smtp' || this.mailDriver == 'mailtrap') {
+      if (this.mailDriver == 'sendmail' || this.mailDriver == 'smtp') {
         return true;
       }
 

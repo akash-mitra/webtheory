@@ -314,7 +314,6 @@
                     { key: 'mailgun', value: 'Mailgun' },
                     { key: 'ses', value: 'Amazon SES' },
                     { key: 'postmark', value: 'Postmark' },
-                    { key: 'mailtrap', value: 'Mailtrap' },
                 ],
                 mailFromAddress: null,
                 mailFromName: null,
@@ -445,7 +444,7 @@
 
         computed: {
             showSmtp() {
-                if (this.mailDriver == 'sendmail' || this.mailDriver == 'smtp' || this.mailDriver == 'mailtrap') {
+                if (this.mailDriver == 'sendmail' || this.mailDriver == 'smtp') {
                     return true;
                 }
                 return false;
