@@ -1,0 +1,25 @@
+{
+    "name": "Serenity",
+    "description": "A spotless template that provides a clean and delightful user experience for your blog. ",
+    "media_url": "https://source.unsplash.com/nDd3dIkkOLo",
+    "parameters": [
+        {
+            "name":"headingFont",
+            "type":"list",
+            "options":"Verdana, Arial, Playfair Display",
+            "value":"Playfair Display"
+        },
+        {
+            "name":"primaryColor",
+            "type":"list",
+            "options":"gray,red,orange,yellow,green,teal,blue,indigo,purple,pink",
+            "value":"orange"
+        },
+        {
+            "name":"centerContent",
+            "type":"list",
+            "options":"yes,no",
+            "value":"yes"
+        }
+    ]
+}

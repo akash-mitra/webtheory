@@ -18,7 +18,12 @@ trait DefaultTemplateTests {
     public $requiredTemplateFiles = [
         'home.blade.php',
         'single.blade.php',
-        'category.blade.php'
+        'category.blade.php',
+        'profile.blade.php',
+
+        'login-modal.blade.php',
+        'user-menu.blade.php',
+
     ];
 
 
@@ -86,6 +91,21 @@ trait DefaultTemplateTests {
                 );
             }, $this->requiredTemplateFiles);
         }
+    }
+
+
+    public function test_all_repo_templates_contain_info_json()
+    {
+        $templateDirectories = Storage::disk('repo')->directories('templates');
+
+        array_map(function ($dir) {
+
+            $this->assertTrue(
+                Storage::disk('repo')->exists($dir . '/.info'),
+                'File .info is missing in ' . $dir
+            );
+
+        }, $templateDirectories);
     }
 
 

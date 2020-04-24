@@ -13,7 +13,10 @@ class TemplateController extends Controller
 
     public function index()
     {
-        return response()->json(Template::get());
+        return response()->json([
+            'available' => Template::getFromRepo(),
+            'installed' => Template::get()
+        ]);
     }
 
 
@@ -29,7 +32,9 @@ class TemplateController extends Controller
             ],
         ]);
 
-        Template::createNewTemplate($request->input());
+        Template::createNewTemplate($request->only([
+            'name', 'description', 'media_url', 'active', 'parameters'
+        ]));
     }
 
 
@@ -69,9 +74,16 @@ class TemplateController extends Controller
     public function destroy(Template $template)
     {
         if($template->active) {
-            return redirect()->back()->withErrors([
-                'Unable to delete an active template.'
-            ]);
+            // return redirect()->back()->withErrors([
+            //     'Unable to delete an active template.'
+            // ]);
+
+            return response([
+                'message' => 'Delete Failed.',
+                'errors' => [
+                    'active' => ['An active template can not be deleted.']
+                ]
+            ], 422);
         }
 
         $template->deleteTemplate();
@@ -92,6 +104,25 @@ class TemplateController extends Controller
         ]);
 
         return $template->duplicate($request->save_as);
+    }
+
+
+
+    public function import (Request $request)
+    {
+        $request->validate([
+            'from' => [
+                'required'
+            ],
+            'name' => [
+                'required',
+                'max:100',
+                'regex:/^[\pL0-9\s\-_]+$/u',
+                'unique:templates'
+            ]
+        ]);
+
+        return Template::import($request->from, $request->name);
     }
 
 

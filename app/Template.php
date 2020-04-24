@@ -2,9 +2,10 @@
 
 namespace App;
 
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class Template extends Model
 {
@@ -13,11 +14,55 @@ class Template extends Model
     protected $appends = ['files'];
 
 
+    /**
+     * Returns a list of templates from repository that can be imported
+     * or installed.
+     */
+    public static function getFromRepo()
+    {
+        $templateFiles = Storage::disk('repo')->allDirectories('templates');
+
+        return array_map(function ($templateFileName) {
+
+            $templateName = Str::after($templateFileName, 'templates/');
+
+            return self::getTemplateInfoFromFile($templateName);
+
+        }, $templateFiles);
+    }
+
+
+    /**
+     * Reads template info file if present and returns the data in an array
+     */
+    private static function getTemplateInfoFromFile($name)
+    {
+        $info = [
+            'name' => $name,
+            'description' => 'No description is available for this template.',
+            'media_url' => 'https://source.unsplash.com/random',
+            'parameters' => (object)[]
+        ];
+
+        if(Storage::disk('repo')->exists("templates/{$name}/.info"))
+        {
+            $fileData = json_decode(Storage::disk('repo')->get("templates/{$name}/.info"), true);
+
+            $info = array_replace_recursive($info, $fileData);
+        }
+
+        return (object) $info;
+    }
+
+
+
     public static function createNewTemplate (array $attributes = [])
     {
-        auth()->user()->templates()->create($attributes);
+        $template = auth()->user()->templates()->create($attributes);
 
         Storage::disk('templates')->makeDirectory($attributes['name']);
+
+        return $template;
     }
 
 
@@ -61,6 +106,8 @@ class Template extends Model
         {
             Storage::disk('templates')->move($oldName, $this->name);
         }
+
+        $this->clearTemplateParametersCache();
     }
 
 
@@ -98,6 +145,9 @@ class Template extends Model
         $this->active = true;
 
         $this->save();
+
+        // delete cache for template paramters
+        $this->clearTemplateParametersCache();
     }
 
 
@@ -107,6 +157,7 @@ class Template extends Model
         $files = Storage::disk('templates')->files($this->name);
 
         return array_map(function ($file) {
+
             return [
                 'name' => basename($file),
                 'updated' => \Carbon\Carbon::createFromTimestamp(
@@ -114,6 +165,7 @@ class Template extends Model
                 )->format('d M, Y. H:m'),
                 'size' => round(Storage::disk('templates')->size($file) / 1024, 1)
             ];
+
         }, $files);
     }
 
@@ -143,6 +195,41 @@ class Template extends Model
             Storage::disk('templates')->copy($file, $saveAs . '/' . basename($file));
 
         }, Storage::disk('templates')->files($this->name));
+    }
+
+
+
+    public static function import($from, $name)
+    {
+        $fromTemplate = self::getTemplateInfoFromFile($from);
+
+        $template = self::createNewTemplate([
+            'name' => $name,
+            'description' => $fromTemplate->description,
+            'media_url' => $fromTemplate->media_url,
+            'parameters' => json_encode($fromTemplate->parameters),
+            'active' => false,
+        ]);
+
+        array_map(function ($file) use ($name) {
+
+            if(! Str::startsWith(basename($file), '.'))
+            {
+                Storage::disk('templates')->writeStream(
+                    $name . '/' . basename($file),
+                    Storage::disk('repo')->readStream($file)
+                );
+            }
+
+        }, Storage::disk('repo')->allFiles('templates/' . $from));
+
+        return $template;
+    }
+
+
+    public static function clearTemplateParametersCache()
+    {
+        Cache::forget('template.parameters');
     }
 
 }

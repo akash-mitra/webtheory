@@ -85,6 +85,7 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     Route::patch('templates/{template}', 'Api\TemplateController@update')->name('templates.update');
     Route::delete('templates/{template}', 'Api\TemplateController@destroy')->name('templates.destroy');
     Route::post('templates/{template}/duplicate', 'Api\TemplateController@duplicate')->name('templates.duplicate');
+    Route::post('templates/import', 'Api\TemplateController@import')->name('templates.import');
 
 
 

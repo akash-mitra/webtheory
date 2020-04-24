@@ -106,7 +106,7 @@
 
 
 
-            <div class="w-full sm:flex mb-4 border-t px-6 py-6 bg-gray-100">
+            <div class="w-full sm:flex border-t px-6 py-6 bg-gray-100">
                 <div class="w-full sm:w-1/4 text-sm py-1 px-3">
                     <label for="templateUrl">Template Image URL</label>
                     <p class="text-xs text-gray-600 py-2">Provide an image URL to be used as template icon image</p>
@@ -115,6 +115,12 @@
                 <div class="w-full sm:w-3/4">
                     <input type="text" id="templateUrl" v-model="url" class="w-full max-w-lg text-sm max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                 </div>
+
+            </div>
+
+            <div class="border-t p-6 bg-gray-100 text-right">
+                <span v-if="active==0" class="text-sm text-blue-600 hover:text-red-500 cursor-pointer" @click="deleteTemplate()">Delete this template</span>
+                <span v-else class="text-gray-500 text-sm">Active template can not be deleted.</span>
             </div>
 
 
@@ -140,7 +146,7 @@
                 <tbody>
                     <tr v-for="row in parameters">
                         <td class="pr-2 py-2 border-b">
-                            <input type="text" v-model="row.name" class="font-mono rounded w-full bg-gray-200 p-2" title="Only lowercase letters" pattern="^[a-z]+(?:_+[a-z]+)*$" />
+                            <input type="text" v-model="row.name" class="font-mono rounded w-full bg-gray-200 p-2" title="Alphabets, numbers, dash and underscore only" pattern="^[a-zA-Z0-9_-]+(?:_+[a-zA-Z0-9_-]+)*$" />
                         </td>
                         <td class="pr-2 py-2 border-b">
                             <select v-model="row.type" class="text-gray-800 w-full">
@@ -169,7 +175,7 @@ export default {
 
     data: function () {
         return {
-            tab: 'files',
+            tab: 'general',
             isSaving: false,
 
             id: 0,
@@ -315,7 +321,7 @@ export default {
         }, // end of fetchContentAndLoadEditor
 
 
-        deletePage () {
+        deleteTemplate () {
 
             let p = this
             util.confirm ("Delete this template?", "This action can not be reverted", function () {

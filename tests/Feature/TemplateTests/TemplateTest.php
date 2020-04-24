@@ -93,14 +93,25 @@ class TemplateTest extends TestDataSetup
 
         // when we visit the index page,
         $response = $this->actingAs($this->adminUser)
-            ->getJson('api/templates');
+            ->getJson('api/templates')
+            ->assertSuccessful();
 
         // it must return 2 templates with the desired structure
-        $response->assertSuccessful()
-            ->assertJsonCount(2)
-            ->assertJsonStructure([
-                '*' =>    $this->templateStructureJson
+        $json = $response->decodeResponseJson();
+
+        $this->assertEquals(2, count($json['installed']));
+
+        $response->assertJsonStructure([
+                'installed' => [
+                    '*' => $this->templateStructureJson
+                ],
+                'available' => [
+                    '*' => [
+                        'name', 'description', 'media_url', 'parameters'
+                    ]
+                ],
             ]);
+
 
         // also make sure that all the blade files are present in the response
         $response->assertJsonFragment([
@@ -275,7 +286,7 @@ class TemplateTest extends TestDataSetup
             'active' => true
         ]);
 
-        $this->actingAs($this->adminUser)->delete('api/templates/' . $template->id)->assertSessionHasErrors();
+        $this->actingAs($this->adminUser)->delete('api/templates/' . $template->id)->assertJsonValidationErrors(['active']);
 
         $this->assertDatabaseHas('templates', [
             'id' => $template->id
@@ -311,6 +322,33 @@ class TemplateTest extends TestDataSetup
         Storage::disk('templates')->deleteDirectory($saveAs);
     }
 
+
+    public function test_a_user_can_import_a_template_from_repo()
+    {
+        $random = Str::random();
+
+        $response = $this->actingAs($this->adminUser)->post('api/templates/import', [
+            'from' => $this->defaultTemplateName,
+            'name' => $random
+        ]);
+
+        $this->assertDatabaseHas('templates', [
+            'name' => $random
+        ]);
+
+        $this->assertTrue(Storage::disk('templates')->exists($random));
+
+        array_map(function ($fileName) use($random){
+
+            $this->assertTrue(
+                Storage::disk('templates')->exists($random . '/' . $fileName),
+                $fileName . ' file is missing in ' . $random
+            );
+        }, $this->requiredTemplateFiles);
+
+
+        Storage::disk('templates')->deleteDirectory($random);
+    }
 
 
     private function createNewTemplate($name = null)

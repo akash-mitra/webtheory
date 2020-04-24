@@ -107,6 +107,10 @@
 
 
 
+//     util.swal() {
+
+//         return Swal;
+//     },
 
     util.confirm = function (title, text = null, fnConfirm = null, fnCancelled = null) {
 
@@ -135,6 +139,20 @@
                 }
         })
     }
+
+
+
+    util.prompt = async function (text, placeholder, callback) {
+
+        const { value: answer } =  await Swal.fire({
+                title: text,
+                input: 'text',
+                inputPlaceholder: placeholder
+        })
+
+        callback (answer);
+    }
+
 
 
 
@@ -232,13 +250,21 @@
                             // that falls out of the range of 2xx
 
                             if (error.response.status >= 400 && error.response.status < 500) {
-                                    if (error.response.status === 419) {
-                                            util.notifyInfo('Do I know you?', 'Looks like you are logged out. Please login again')
-                                            .then (function () {
+
+                                if (error.response.status === 419) { // login expired?
+                                        util.notifyInfo('Do I know you?', 'Looks like you are logged out. Please login again')
+                                        .then (function () {
                                                 location.reload()
-                                            })
-                                    }
-                                    else client_error_handler(error.response.status, error.response.data)
+                                        })
+                                }
+
+                                if(error.response.status === 422) { // validation error
+                                        let e = error.response.data.errors
+                                        let k = Object.keys(e)
+                                        util.notifyError (error.response.data.message, e[k[0]][0])
+                                }
+
+                                else client_error_handler(error.response.status, error.response.data)
                             }
                             if (error.response.status >= 500) {
                                     server_error_handler(error.response.status, error.response.data)
