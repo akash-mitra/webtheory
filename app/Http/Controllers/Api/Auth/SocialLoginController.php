@@ -23,28 +23,28 @@ class SocialLoginController extends Controller
      */
     public function __construct()
     {
-        $provider_redirect_urls = json_decode(Parameter::getKey('provider_redirect_urls'), true);
+        $socialprovider_redirect_url = json_decode(Parameter::getKey('socialprovider_redirect_url'), true);
 
         config(['services.facebook.client_id' => Parameter::getKey('FACEBOOK_CLIENT_ID')]);
         config(['services.facebook.client_secret' => Parameter::getKey('FACEBOOK_CLIENT_SECRET')]);
-        config(['services.facebook.redirect' => $provider_redirect_urls['facebook']]);
+        config(['services.facebook.redirect' => $socialprovider_redirect_url['facebook']]);
 
         config(['services.twitter.client_id' => Parameter::getKey('TWITTER_CLIENT_ID')]);
         config(['services.twitter.client_secret' => Parameter::getKey('TWITTER_CLIENT_SECRET')]);
-        config(['services.twitter.redirect' => $provider_redirect_urls['twitter']]);
+        config(['services.twitter.redirect' => $socialprovider_redirect_url['twitter']]);
 
         config(['services.linkedin.client_id' => Parameter::getKey('LINKEDIN_CLIENT_ID')]);
         config(['services.linkedin.client_secret' => Parameter::getKey('LINKEDIN_CLIENT_SECRET')]);
-        config(['services.linkedin.redirect' => $provider_redirect_urls['linkedin']]);
+        config(['services.linkedin.redirect' => $socialprovider_redirect_url['linkedin']]);
 
         config(['services.google.client_id' => Parameter::getKey('GOOGLE_CLIENT_ID')]);
         config(['services.google.client_secret' => Parameter::getKey('GOOGLE_CLIENT_SECRET')]);
-        config(['services.google.redirect' => $provider_redirect_urls['google']]);
+        config(['services.google.redirect' => $socialprovider_redirect_url['google']]);
     }
 
     public function socialProviders()
     {
-        $value = Parameter::getKey('providers');
+        $value = Parameter::getKey('socialprovider');
         return response()->json($value);
     }
 

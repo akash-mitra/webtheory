@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,4 +65,11 @@ Route::get('/app/{any?}', 'AdminController@app')->where('any', '.*')->name('admi
 // all cache keys - to be removed later
 Route::get('cache/keys', function () {
     return App\DataProvider::keys();
+});
+
+Route::get('testmail', function () {
+    Mail::raw('Hello World', function ($message){
+        $message->to('test@mail.com');
+    });
+    return;
 });

@@ -6,7 +6,10 @@
             <h2 class="text-gray-600 text-2xl flex items-center">Settings</h2>
             <!-- <a href="/app/settings/create" class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow">Create</a> -->
 
-            <t-button :loadingWheel="isSaving" @click.native="initiateSave">
+            <t-button v-if="tab=='login'" :loadingWheel="isSaving" @click.native="saveSocialLogin">
+                Save Settings
+            </t-button>
+            <t-button v-if="tab=='mail'" :loadingWheel="isSaving" @click.native="saveMail">
                 Save Settings
             </t-button>
         </div>
@@ -16,6 +19,9 @@
             <div class="flex justify-start">
                 <div @click="tab='login'" class="-ml-4 px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='login'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
                     Login
+                </div>
+                <div @click="tab='mail'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='mail'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
+                    Mail
                 </div>
                 <div @click="tab='ads'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='ads'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
                     Ad Sense
@@ -31,17 +37,17 @@
 
             <p class="text-sm text-gray-700 pb-3 uppercase">Social Login</p>
 
-            <div v-if="providers!==null && providerRedirectUrls!==null" class="rounded w-full">
+            <div v-if="socialprovider!==null && socialProviderRedirectUrl!==null" class="rounded w-full">
 
 
                 <div class="px-6 py-3 mb-4 bg-white shadow rounded">
                     <div class="w-full relative">
                         <div class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
-                            @click="changeStatus('facebook', providers.facebook==='Disabled'?'Enabled':'Disabled')">
+                            @click="changeStatus('facebook', socialprovider.facebook==='Disabled'?'Enabled':'Disabled')">
 
                             <div class="flex items-center">
-                                <div :class="providers.facebook==='Disabled'? 'bg-gray-400':'bg-green-400'" class="rounded-full h-3 w-3 mr-2"></div>
-                                <span :class="providers.facebook==='Disabled'? 'text-gray-600':'text-green-600'">{{ providers.facebook }}</span>
+                                <div :class="socialprovider.facebook==='Disabled'? 'bg-gray-400':'bg-green-400'" class="rounded-full h-3 w-3 mr-2"></div>
+                                <span :class="socialprovider.facebook==='Disabled'? 'text-gray-600':'text-green-600'">{{ socialprovider.facebook }}</span>
                             </div>
                         </div>
                         <h3 class="text-blue-800 font-semibold flex items-center">
@@ -50,10 +56,10 @@
                         </h3>
                     </div>
 
-                    <div v-if="providers.facebook=='Enabled'">
+                    <div v-if="socialprovider.facebook=='Enabled'">
                         <div class="w-full sm:flex mt-2">
                             <label for="facebook_redirect" class="block w-full sm:w-1/4 text-sm py-1 ">Redirect URL</label>
-                            <div class="text-blue-700 w-full sm:w-3/4 max-w-lg py-1 ">{{ providerRedirectUrls.facebook }}</div>
+                            <div class="text-blue-700 w-full sm:w-3/4 max-w-lg py-1 ">{{ socialProviderRedirectUrl.facebook }}</div>
                         </div>
                         <div class="w-full sm:flex mt-2">
                             <label for="facebookClientId" class="block w-full sm:w-1/4 text-sm py-1 ">Client Id</label>
@@ -70,11 +76,11 @@
                 <div class="px-6 py-3 mb-4 bg-white shadow rounded">
                     <div class="w-full relative">
                         <div class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
-                            @click="changeStatus('twitter', providers.twitter==='Disabled'?'Enabled':'Disabled')">
+                            @click="changeStatus('twitter', socialprovider.twitter==='Disabled'?'Enabled':'Disabled')">
 
                             <div class="flex items-center">
-                                <div :class="providers.twitter==='Disabled'? 'bg-gray-400':'bg-green-400'" class="rounded-full h-3 w-3 mr-2"></div>
-                                <span :class="providers.twitter==='Disabled'? 'text-gray-600':'text-green-600'">{{ providers.twitter }}</span>
+                                <div :class="socialprovider.twitter==='Disabled'? 'bg-gray-400':'bg-green-400'" class="rounded-full h-3 w-3 mr-2"></div>
+                                <span :class="socialprovider.twitter==='Disabled'? 'text-gray-600':'text-green-600'">{{ socialprovider.twitter }}</span>
                             </div>
                         </div>
                         <h3 class="text-blue-800 font-semibold flex items-center">
@@ -83,10 +89,10 @@
                         </h3>
                     </div>
 
-                    <div v-if="providers.twitter=='Enabled'">
+                    <div v-if="socialprovider.twitter=='Enabled'">
                         <div class="w-full sm:flex mt-2">
                             <label for="twitter_redirect" class="block w-full sm:w-1/4 text-sm py-1 ">Redirect URL</label>
-                            <div class="text-blue-700 w-full sm:w-3/4 max-w-lg py-1 ">{{ providerRedirectUrls.twitter }}</div>
+                            <div class="text-blue-700 w-full sm:w-3/4 max-w-lg py-1 ">{{ socialProviderRedirectUrl.twitter }}</div>
                         </div>
                         <div class="w-full sm:flex mt-2">
                             <label for="twitterClientId" class="block w-full sm:w-1/4 text-sm py-1 ">Client Id</label>
@@ -103,11 +109,11 @@
                 <div class="px-6 py-3 mb-4 bg-white shadow rounded">
                     <div class="w-full relative">
                         <div class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
-                            @click="changeStatus('linkedin', providers.linkedin==='Disabled'?'Enabled':'Disabled')">
+                            @click="changeStatus('linkedin', socialprovider.linkedin==='Disabled'?'Enabled':'Disabled')">
 
                             <div class="flex items-center">
-                                <div :class="providers.linkedin==='Disabled'? 'bg-gray-400':'bg-green-400'" class="rounded-full h-3 w-3 mr-2"></div>
-                                <span :class="providers.linkedin==='Disabled'? 'text-gray-600':'text-green-600'">{{ providers.linkedin }}</span>
+                                <div :class="socialprovider.linkedin==='Disabled'? 'bg-gray-400':'bg-green-400'" class="rounded-full h-3 w-3 mr-2"></div>
+                                <span :class="socialprovider.linkedin==='Disabled'? 'text-gray-600':'text-green-600'">{{ socialprovider.linkedin }}</span>
                             </div>
                         </div>
                         <h3 class="text-blue-800 font-semibold flex items-center">
@@ -116,10 +122,10 @@
                         </h3>
                     </div>
 
-                    <div v-if="providers.linkedin=='Enabled'">
+                    <div v-if="socialprovider.linkedin=='Enabled'">
                         <div class="w-full sm:flex mt-2">
                             <label for="linkedin_redirect" class="block w-full sm:w-1/4 text-sm py-1 ">Redirect URL</label>
-                            <div class="text-blue-700 w-full sm:w-3/4 max-w-lg py-1 ">{{ providerRedirectUrls.linkedin }}</div>
+                            <div class="text-blue-700 w-full sm:w-3/4 max-w-lg py-1 ">{{ socialProviderRedirectUrl.linkedin }}</div>
                         </div>
                         <div class="w-full sm:flex mt-2">
                             <label for="linkedinClientId" class="block w-full sm:w-1/4 text-sm py-1 ">Client Id</label>
@@ -136,11 +142,11 @@
                 <div class="px-6 py-3 mb-4 bg-white shadow rounded">
                     <div class="w-full relative">
                         <div class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
-                            @click="changeStatus('google', providers.google==='Disabled'?'Enabled':'Disabled')">
+                            @click="changeStatus('google', socialprovider.google==='Disabled'?'Enabled':'Disabled')">
 
                             <div class="flex items-center">
-                                <div :class="providers.google==='Disabled'? 'bg-gray-400':'bg-green-400'" class="rounded-full h-3 w-3 mr-2"></div>
-                                <span :class="providers.google==='Disabled'? 'text-gray-600':'text-green-600'">{{ providers.google }}</span>
+                                <div :class="socialprovider.google==='Disabled'? 'bg-gray-400':'bg-green-400'" class="rounded-full h-3 w-3 mr-2"></div>
+                                <span :class="socialprovider.google==='Disabled'? 'text-gray-600':'text-green-600'">{{ socialprovider.google }}</span>
                             </div>
                         </div>
                         <h3 class="text-blue-800 font-semibold flex items-center">
@@ -149,10 +155,10 @@
                         </h3>
                     </div>
 
-                    <div v-if="providers.google=='Enabled'">
+                    <div v-if="socialprovider.google=='Enabled'">
                         <div class="w-full sm:flex mt-2">
                             <label for="google_redirect" class="block w-full sm:w-1/4 text-sm py-1 ">Redirect URL</label>
-                            <div class="text-blue-700 w-full sm:w-3/4 max-w-lg py-1 ">{{ providerRedirectUrls.google }}</div>
+                            <div class="text-blue-700 w-full sm:w-3/4 max-w-lg py-1 ">{{ socialProviderRedirectUrl.google }}</div>
                         </div>
                         <div class="w-full sm:flex mt-2">
                             <label for="googleClientId" class="block w-full sm:w-1/4 text-sm py-1 ">Client Id</label>
@@ -169,6 +175,103 @@
             </div>
 
 
+
+        </div>
+
+
+        <div class="pb-10" v-if="tab=='mail'">
+
+            <p class="text-sm text-gray-700 pb-3 uppercase">Mail Setup</p>
+
+            <div class="rounded w-full">
+                <div class="px-6 py-3 mb-4 bg-white shadow rounded">
+                    <div>
+                        <div class="w-full sm:flex mt-2">
+                            <label for="mailDriver" class="block w-full sm:w-1/4 text-sm py-1">Mail Driver</label>
+                            <div class="inline-block relative w-64">
+                                <select id="mailDriver" v-model="mailDriver" ref="mailDriver" class="block appearance-none w-full bg-white px-2 py-1 pr-8 rounded border focus:outline-none">
+                                    <option v-for="mailDriver in mailDrivers" :value="mailDriver.key" :key="mailDriver.key" v-text="mailDriver.value"></option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg class="fill-current h-4 w-4" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-full sm:flex mt-2">
+                            <label for="mailFromAddress" class="block w-full sm:w-1/4 text-sm py-1">Mail From Email</label>
+                            <input type="email" id="mailFromAddress" v-model="mailFromAddress" ref="mailFromAddress" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                        </div>
+                        <div class="w-full sm:flex mt-2">
+                            <label for="mailFromName" class="block w-full sm:w-1/4 text-sm py-1">Mail From Name</label>
+                            <input type="text" id="mailFromName" v-model="mailFromName" ref="mailFromName" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                        </div>
+
+
+                        <div v-if="showSmtp" class="w-full sm:flex mt-2">
+                            <label for="mailHost" class="block w-full sm:w-1/4 text-sm py-1">Mail Host</label>
+                            <input type="text" id="mailHost" v-model="mailHost" ref="mailHost" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                        </div>
+                        <div v-if="showSmtp" class="w-full sm:flex mt-2">
+                            <label for="mailPort" class="block w-full sm:w-1/4 text-sm py-1">Mail Port</label>
+                            <input type="number" id="mailPort" v-model="mailPort" ref="mailPort" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                        </div>
+                        <div v-if="showSmtp" class="w-full sm:flex mt-2">
+                            <label for="mailEncryption" class="block w-full sm:w-1/4 text-sm py-1">Mail Encryption</label>
+                            <div class="inline-block relative w-64">
+                                <select id="mailEncryption" v-model="mailEncryption" ref="mailEncryption" class="block appearance-none w-full bg-white px-2 py-1 pr-8 rounded border focus:outline-none">
+                                    <option v-for="mailEncryption in mailEncryptions" :value="mailEncryption.key" :key="mailEncryption.key" v-text="mailEncryption.value"></option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg class="fill-current h-4 w-4" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-if="showSmtp" class="w-full sm:flex mt-2">
+                            <label for="mailUsername" class="block w-full sm:w-1/4 text-sm py-1">Mail Username</label>
+                            <input type="text" id="mailUsername" v-model="mailUsername" ref="mailUsername" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                        </div>
+                        <div v-if="showSmtp" class="w-full sm:flex mt-2 mb-4">
+                            <label for="mailPassword" class="block w-full sm:w-1/4 text-sm py-1">Mail Password</label>
+                            <input type="text" id="mailPassword" v-model="mailPassword" ref="mailPassword" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                        </div>
+
+
+                        <div v-if="showMailgun" class="w-full sm:flex mt-2">
+                            <label for="mailgunDomian" class="block w-full sm:w-1/4 text-sm py-1">Mailgun Domain</label>
+                            <input type="text" id="mailgunDomian" v-model="mailgunDomian" ref="mailgunDomian" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                        </div>
+                        <div v-if="showMailgun" class="w-full sm:flex mt-2">
+                            <label for="mailgunSecret" class="block w-full sm:w-1/4 text-sm py-1">Mailgun Secret</label>
+                            <input type="text" id="mailgunSecret" v-model="mailgunSecret" ref="mailgunSecret" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                        </div>
+                        <div v-if="showMailgun" class="w-full sm:flex mt-2 mb-4">
+                            <label for="mailgunEndpoint" class="block w-full sm:w-1/4 text-sm py-1">Mailgun Endpoint</label>
+                            <input type="text" id="mailgunEndpoint" v-model="mailgunEndpoint" ref="mailgunEndpoint" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                        </div>
+
+
+                        <div v-if="showPostmark" class="w-full sm:flex mt-2 mb-4">
+                            <label for="postmarkToken" class="block w-full sm:w-1/4 text-sm py-1">Postmark Token</label>
+                            <input type="text" id="postmarkToken" v-model="postmarkToken" ref="postmarkToken" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                        </div>
+
+
+                        <div v-if="showSes" class="w-full sm:flex mt-2">
+                            <label for="sesKey" class="block w-full sm:w-1/4 text-sm py-1">SES Key</label>
+                            <input type="text" id="sesKey" v-model="sesKey" ref="sesKey" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                        </div>
+                        <div v-if="showSes" class="w-full sm:flex mt-2">
+                            <label for="sesSecret" class="block w-full sm:w-1/4 text-sm py-1">SES Secret</label>
+                            <input type="text" id="sesSecret" v-model="sesSecret" ref="sesSecret" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                        </div>
+                        <div v-if="showSes" class="w-full sm:flex mt-2 mb-4">
+                            <label for="sesRegion" class="block w-full sm:w-1/4 text-sm py-1">SES Region</label>
+                            <input type="text" id="sesRegion" v-model="sesRegion" ref="sesRegion" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 
         </div>
 
@@ -193,8 +296,8 @@
 
                 isSaving: false,
 
-                providers: null,
-                providerRedirectUrls: null,
+                socialprovider: null,
+                socialProviderRedirectUrl: null,
                 facebookClientId: null,
                 facebookClientSecret: null,
                 twitterClientId: null,
@@ -204,40 +307,74 @@
                 googleClientId: null,
                 googleClientSecret: null,
 
+                mailDriver: null,
+                mailDrivers: [
+                    { key: 'sendmail', value: 'Sendmail' },
+                    { key: 'smtp', value: 'SMTP' },
+                    { key: 'mailgun', value: 'Mailgun' },
+                    { key: 'ses', value: 'Amazon SES' },
+                    { key: 'postmark', value: 'Postmark' },
+                ],
+                mailFromAddress: null,
+                mailFromName: null,
+                mailHost: null,
+                mailPort: null,
+                mailEncryption: null,
+                mailEncryptions: [
+                    { key: '', value: 'NONE' },
+                    { key: 'tls', value: 'TLS' },
+                    { key: 'ssl', value: 'SSL' },
+                ],
+                mailUsername: null,
+                mailPassword: null,
+                mailgunDomian: null,
+                mailgunSecret: null,
+                mailgunEndpoint: null,
+                postmarkToken: null,
+                sesKey: null,
+                sesSecret: null,
+                sesRegion: null,
+
+
             }
         },
 
         created() {
 
-            util.ajax ('get', '/api/parameters/providers', {},  (response) => {
-                this.providers = JSON.parse(response)
+            util.ajax ('get', '/api/parameters/socialprovider', {},  (response) => {
+                this.socialprovider = JSON.parse(response)
             })
-            util.ajax ('get', '/api/parameters/provider_redirect_urls', {},  (response) => {
-                this.providerRedirectUrls = JSON.parse(response)
+            util.ajax ('get', '/api/parameters/socialprovider_redirect_url', {},  (response) => {
+                this.socialProviderRedirectUrl = JSON.parse(response)
             })
-            util.ajax ('get', '/api/parameters/FACEBOOK_CLIENT_ID', {},  (response) => {
-                this.facebookClientId = response
+
+            util.ajax ('get', '/api/settings/social', {},  (response) => {
+                this.facebookClientId = response['FACEBOOK_CLIENT_ID']
+                this.facebookClientSecret = response['FACEBOOK_CLIENT_SECRET']
+                this.twitterClientId = response['TWITTER_CLIENT_ID']
+                this.twitterClientSecret = response['TWITTER_CLIENT_SECRET']
+                this.linkedinClientId = response['LINKEDIN_CLIENT_ID']
+                this.linkedinClientSecret = response['LINKEDIN_CLIENT_SECRET']
+                this.googleClientId = response['GOOGLE_CLIENT_ID']
+                this.googleClientSecret = response['GOOGLE_CLIENT_SECRET']
             })
-            util.ajax ('get', '/api/parameters/FACEBOOK_CLIENT_SECRET', {},  (response) => {
-                this.facebookClientSecret = response
-            })
-            util.ajax ('get', '/api/parameters/TWITTER_CLIENT_ID', {},  (response) => {
-                this.twitterClientId = response
-            })
-            util.ajax ('get', '/api/parameters/TWITTER_CLIENT_SECRET', {},  (response) => {
-                this.twitterClientSecret = response
-            })
-            util.ajax ('get', '/api/parameters/LINKEDIN_CLIENT_ID', {},  (response) => {
-                this.linkedinClientId = response
-            })
-            util.ajax ('get', '/api/parameters/LINKEDIN_CLIENT_SECRET', {},  (response) => {
-                this.linkedinClientSecret = response
-            })
-            util.ajax ('get', '/api/parameters/GOOGLE_CLIENT_ID', {},  (response) => {
-                this.googleClientId = response
-            })
-            util.ajax ('get', '/api/parameters/GOOGLE_CLIENT_SECRET', {},  (response) => {
-                this.googleClientSecret = response
+
+            util.ajax ('get', '/api/settings/mail', {},  (response) => {
+                this.mailDriver = response['MAIL_DRIVER']
+                this.mailFromAddress = response['MAIL_FROM_ADDRESS']
+                this.mailFromName = response['MAIL_FROM_NAME']
+                this.mailHost = response['MAIL_HOST']
+                this.mailPort = response['MAIL_PORT']
+                this.mailEncryption = response['MAIL_ENCRYPTION']
+                this.mailUsername = response['MAIL_USERNAME']
+                this.mailPassword = response['MAIL_PASSWORD']
+                this.mailgunDomian = response['MAILGUN_DOMAIN']
+                this.mailgunSecret = response['MAILGUN_SECRET']
+                this.mailgunEndpoint = response['MAILGUN_ENDPOINT']
+                this.postmarkToken = response['POSTMARK_TOKEN']
+                this.sesKey = response['AWS_ACCESS_KEY_ID']
+                this.sesSecret = response['AWS_SECRET_ACCESS_KEY']
+                this.sesRegion = response['AWS_DEFAULT_REGION']
             })
 
         },
@@ -245,7 +382,7 @@
 
         methods: {
 
-            initiateSave () {
+            saveSocialLogin () {
                 let data = [
                         { 'key': 'FACEBOOK_CLIENT_ID', 'value': this.facebookClientId },
                         { 'key': 'FACEBOOK_CLIENT_SECRET', 'value': this.facebookClientSecret },
@@ -265,19 +402,71 @@
             changeStatus (provider, status)
             {
                 if (provider == 'facebook')
-                    this.providers.facebook = status
+                    this.socialprovider.facebook = status
                 else if (provider == 'twitter')
-                    this.providers.twitter = status
+                    this.socialprovider.twitter = status
                 else if (provider == 'linkedin')
-                    this.providers.linkedin = status
+                    this.socialprovider.linkedin = status
                 else if (provider == 'google')
-                    this.providers.google = status
+                    this.socialprovider.google = status
 
-                util.ajax ('post', '/api/parameters/providers', { "value": JSON.stringify(this.providers) }, function () {
+                util.ajax ('post', '/api/parameters/socialprovider', { "value": JSON.stringify(this.socialprovider) }, function () {
                     util.notifySuccess ('Saved', 'Login provider have been ' + status)
                 })
             },
 
+            saveMail () {
+                let data = [
+                        { 'key': 'MAIL_DRIVER', 'value': this.mailDriver },
+                        { 'key': 'MAIL_FROM_ADDRESS', 'value': this.mailFromAddress },
+                        { 'key': 'MAIL_FROM_NAME', 'value': this.mailFromName },
+                        { 'key': 'MAIL_HOST', 'value': this.mailHost },
+                        { 'key': 'MAIL_PORT', 'value': this.mailPort },
+                        { 'key': 'MAIL_ENCRYPTION', 'value': this.mailEncryption },
+                        { 'key': 'MAIL_USERNAME', 'value': this.mailUsername },
+                        { 'key': 'MAIL_PASSWORD', 'value': this.mailPassword },
+                        { 'key': 'MAILGUN_DOMAIN', 'value': this.mailgunDomian },
+                        { 'key': 'MAILGUN_SECRET', 'value': this.mailgunSecret },
+                        { 'key': 'MAILGUN_ENDPOINT', 'value': this.mailgunEndpoint },
+                        { 'key': 'POSTMARK_TOKEN', 'value': this.postmarkToken },
+                        { 'key': 'AWS_ACCESS_KEY_ID', 'value': this.sesKey },
+                        { 'key': 'AWS_SECRET_ACCESS_KEY', 'value': this.sesSecret },
+                        { 'key': 'AWS_DEFAULT_REGION', 'value': this.sesRegion },
+                    ]
+
+                util.ajax ('post', '/api/settings/mailprovider', { data }, function () {
+                    util.notifySuccess ('Saved', 'Mail provider settings have been successfully saved.')
+                })
+            },
+
+        },
+
+
+        computed: {
+            showSmtp() {
+                if (this.mailDriver == 'sendmail' || this.mailDriver == 'smtp') {
+                    return true;
+                }
+                return false;
+            },
+            showMailgun() {
+                if (this.mailDriver == 'mailgun') {
+                    return true;
+                }
+                return false;
+            },
+            showSes() {
+                if (this.mailDriver == 'ses') {
+                    return true;
+                }
+                return false;
+            },
+            showPostmark() {
+                if (this.mailDriver == 'postmark') {
+                    return true;
+                }
+                return false;
+            },
         }
 
     };

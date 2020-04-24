@@ -107,7 +107,7 @@ class DataProvider {
             "template" => self::template(),
             "site" => self::site(),
             "login" => (object) [
-                "providers" => json_decode(Parameter::getKey('providers'), false)
+                "socialprovider" => json_decode(Parameter::getKey('socialprovider'), false)
             ]
         ];
     }
