@@ -169,7 +169,7 @@ class LocalTableSeeder extends Seeder
                         
                     }
 
-                    // Code
+                    // Code & Table
                     for ($k = 0; $k < mt_rand(0, 1); $k++) {
                         $email = $faker->safeEmail;
                         $body_json .= '{"type":"code","data":{"code":"' . str_replace('"', '\"', "SELECT * FROM users WHERE email = '" . $email . "'") . '"}},';
@@ -178,6 +178,7 @@ class LocalTableSeeder extends Seeder
                         $body_html .= '</code></pre>';
 
                         // Table
+                        /*
                         $name = $faker->name;
                         $member = $faker->randomElement($array = ['Platinum', 'Gold']);
                         $joined = $faker->date($format = 'Y-m-d', $max = 'now');
@@ -189,6 +190,7 @@ class LocalTableSeeder extends Seeder
                         $body_html .= '<tr class="wt-table-tr"><td class="wt-table-td">Name</td><td class="wt-table-td">Email</td><td class="wt-table-td">Member</td><td class="wt-table-td">Joined</td><tr>';
                         $body_html .= '<tr class="wt-table-tr"><td class="wt-table-td">' . $name . '</td><td class="wt-table-td">' . $email . '</td><td class="wt-table-td">' . $member  . '</td><td class="wt-table-td">'  . $joined . '</td><tr>';
                         $body_html .= '</tbody></table>';
+                        */
                     }
 
                     // Paragraph
