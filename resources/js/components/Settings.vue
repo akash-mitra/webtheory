@@ -232,7 +232,14 @@
                         </div>
                         <div v-if="showSmtp" class="w-full sm:flex mt-2 mb-4">
                             <label for="mailPassword" class="block w-full sm:w-1/4 text-sm py-1">Mail Password</label>
-                            <input type="text" id="mailPassword" v-model="mailPassword" ref="mailPassword" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                            <div class="w-full block sm:w-3/4 max-w-lg">
+                                <input type="text" id="mailPassword" v-model="mailPassword" ref="mailPassword" class="w-full px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                                <p class="mt-3 text-sm" v-show="mailHost.includes('gmail')">
+                                    For Gmail, you should not use your regular Gmail password above. Instead, please use App specific password.
+                                    Please <a href="https://support.google.com/accounts/answer/185833" target="_blank" class="text-blue-500 hover:underline">follow this link</a>
+                                    to obtain your Gmail App Password.
+                                </p>
+                            </div>
                         </div>
 
 

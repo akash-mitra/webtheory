@@ -1,4 +1,11 @@
-@if( $data->user != null )
+@if(empty(old('loginFormType') ))
+<div x-data="{ showLoginModal: false }" @keydown.escape="showLoginModal = false">
+@else
+<div x-data="{ showLoginModal: true }" @keydown.escape="showLoginModal = false">
+@endif
+
+
+@auth
     <div x-data="{ userMenuOpen: false }" @keydown.escape="userMenuOpen = false" @click.away="userMenuOpen = false" class="relative inline-block text-left">
         <div>
 
@@ -15,6 +22,21 @@
         </div>
         <div x-show="userMenuOpen" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="origin-top-right absolute right-0 w-56 rounded shadow-lg">
         <div class="rounded bg-white border shadow-xs">
+
+            @if(empty($data->user->email_verified_at))
+            <div class="border-b">
+                <div class="flex px-4 py-4 tracking-wide text-gray-700">
+                    <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24">
+                        <desc>Email Not Verified</desc>
+                        <title>Email Not Verified</title>
+                        <path class="text-red-200" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z"/>
+                        <path class="text-red-600" d="M12 18a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm1-5.9c-.13 1.2-1.88 1.2-2 0l-.5-5a1 1 0 0 1 1-1.1h1a1 1 0 0 1 1 1.1l-.5 5z"/>
+                    </svg>
+                    Email Not Verified
+                </div>
+            </div>
+            @endif
+
             <div class="border-b">
                 <a href="{{ $data->user->url }}" class="block px-4 py-4 tracking-wide text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900">Profile</a>
             </div>
@@ -25,7 +47,7 @@
             </div>
             @endif
 
-            @if(! empty($data->page))
+            @if(! empty($data->page) && ($data->user->id === $data->page->author->id || $data->user->role === 'admin'))
             <div class="border-b">
                 <a href="/app/pages/{{ $data->page->id }}" target="_blank" class="block px-4 py-4 tracking-wide text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900">Edit this page</a>
             </div>
@@ -42,8 +64,15 @@
         </div>
     </div>
 
-@else
-<span class="flex px-4 py-2 rounded-lg hover:bg-gray-100 cursor-pointer" @click="showLoginModal = true">
-    Login
-</span>
-@endif
+@endauth
+
+@guest
+    <span class="flex px-4 py-2 rounded-lg font-bold text-{{$data->ref->template->primaryColor}}-600 hover:bg-gray-100 cursor-pointer" @click="showLoginModal = true">
+        Login
+    </span>
+
+    @include('active.login-modal')
+
+@endguest
+
+</div>

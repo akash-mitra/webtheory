@@ -49,13 +49,20 @@ input:-webkit-autofill::first-line {
       x-transition:leave-end="opacity-0 scale-60"
     >
 
-    @if($errors->hasBag('register'))
+@switch(old('loginFormType'))
+
+    @case('registration')
     <div x-data="{ mode: 'signup' }">
-    @elseif($errors->hasBag('forgot'))
+    @break
+
+    @case('forgot')
     <div x-data="{ mode: 'forgot' }">
-    @else
+    @break
+
+    @default
     <div x-data="{ mode: 'login' }">
-    @endif
+
+@endswitch
 
         <div x-show="mode==='signup'">
             <div class="py-6 px-6 flex justify-between items-center border-b">
@@ -77,9 +84,12 @@ input:-webkit-autofill::first-line {
                 <form action="/register" method="POST">
                     @csrf
 
-                    @if ($errors->register->any())
+                    <input type="hidden" name="loginFormType" value="registration">
+
+                    @if ($errors->any() && old('loginFormType') === 'registration')
                         <div class="font-bold mb-2 text-xs">Please correct the errors below and re-try.</div>
                     @endif
+
                     <div class="w-full mb-4">
                         <label for="name" class="tracking-wider block text-gray-700 text-sm mb-2">Your Name</label>
                         <input aria-label="name" name="name" id="name" type="text" required autocomplete="off"
@@ -87,7 +97,7 @@ input:-webkit-autofill::first-line {
                             placeholder="John Doe"
                             value="{{ old('name') }}">
 
-                        @error('name', 'register')
+                        @error('name')
                             <div class="p-2 bg-red-100 text-red-700 mb-2 text-xs">{{ $message }}</div>
                         @enderror
                     </div>
@@ -106,20 +116,20 @@ input:-webkit-autofill::first-line {
                             placeholder="john@email.com"
                             value="{{ old('email_confirmation') }}">
 
-                        @error('email', 'register')
-                            <div class="p-2 bg-red-100 text-red-700 mb-2 text-xs">{{ $message }}</div>
-                        @enderror
+                        @if($errors->has('email') && old('loginFormType') === 'registration')
+                            <div class="p-2 bg-red-100 text-red-700 mb-2 text-xs">{{ $errors->first('email') }}</div>
+                        @endif
                     </div>
 
                     <div class="w-full">
                         <label for="register_password" class="tracking-wider block text-gray-700 text-sm mb-2">Choose a Password</label>
-                        <input aria-label="Password" name="password" id="register_password" type="password" required autocomplete="off"
+                        <input aria-label="Password" name="password" id="register_password" type="password" required autocomplete="new-password"
                             class="px-3 py-2 border text-gray-900 bg-gray-100 rounded placeholder-gray-600 appearance-none w-full sm:text-sm sm:leading-5 outline-none"
                             placeholder="********">
 
-                        @error('password', 'register')
-                            <div class="p-2 bg-red-100 text-red-700 mb-2 text-xs">{{ $message }}</div>
-                        @enderror
+                        @if($errors->has('password') && old('loginFormType') === 'registration')
+                            <div class="p-2 bg-red-100 text-red-700 mb-2 text-xs">{{ $errors->first('password') }}</div>
+                        @endif
                     </div>
 
                     <div class="mt-6">
@@ -155,6 +165,8 @@ input:-webkit-autofill::first-line {
                 <form action="/login" method="POST">
                     @csrf
 
+                    <input type="hidden" name="loginFormType" value="login">
+
                     <input type="hidden" name="remember" value="true">
 
                     <div class="w-full mb-4">
@@ -165,9 +177,9 @@ input:-webkit-autofill::first-line {
                             placeholder="john@email.com"
                             value="{{ old('email') }}">
 
-                        @error('email')
-                            <div class="p-2 bg-red-100 text-red-700 mb-2 text-xs">{{ $message }}</div>
-                        @enderror
+                        @if($errors->has('email') && old('loginFormType') === 'login')
+                            <div class="p-2 bg-red-100 text-red-700 mb-2 text-xs">{{ $errors->first('email') }}</div>
+                        @endif
 
                     </div>
 
@@ -179,9 +191,11 @@ input:-webkit-autofill::first-line {
                         <input aria-label="Password" name="password" id="password" type="password" required="" autocomplete="current-password"
                             class="px-3 py-2 border text-gray-900 bg-gray-100 rounded placeholder-gray-600 appearance-none w-full sm:text-sm sm:leading-5 outline-none"
                             placeholder="********">
-                        @error('password')
-                            <div class="p-2 bg-red-100 text-red-700 mb-2 text-xs">{{ $message }}</div>
-                        @enderror
+
+
+                        @if($errors->has('password') && old('loginFormType') === 'login')
+                            <div class="p-2 bg-red-100 text-red-700 mb-2 text-xs">{{ $errors->first('password') }}</div>
+                        @endif
 
                     </div>
 
@@ -217,6 +231,8 @@ input:-webkit-autofill::first-line {
                 <form action="/password/email" method="POST">
                     @csrf
 
+                    <input type="hidden" name="loginFormType" value="forgot">
+
                     <div class="w-full mb-4">
 
                         <label for="email" class="block text-gray-700 text-sm mb-2">Email Address</label>
@@ -225,9 +241,9 @@ input:-webkit-autofill::first-line {
                             placeholder="john@email.com"
                             value="{{ old('email') }}">
 
-                        @error('email', 'forgot')
-                            <div class="p-2 bg-red-100 text-red-700 mb-2 text-xs">{{ $message }}</div>
-                        @enderror
+                        @if($errors->has('email') && old('loginFormType') === 'forgot')
+                            <div class="p-2 bg-red-100 text-red-700 mb-2 text-xs">{{ $errors->first('email') }}</div>
+                        @endif
 
                     </div>
 

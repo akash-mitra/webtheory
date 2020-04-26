@@ -103,6 +103,8 @@ class HomeController extends Controller
         return response($content, '200')->header('Content-Type', 'text/xml');
     }
 
+
+
     private function capture_analytics ($content_type, $content_id)
     {
         $id = optional(request()->user())->id;

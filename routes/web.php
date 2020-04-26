@@ -1,5 +1,4 @@
 <?php
-use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,32 +11,39 @@ use Illuminate\Support\Facades\Mail;
 |
 */
 
-// Frontend Routes
 
 /*
-|--------------------------------------------------------------------------
 | AUTHENTICATION RELATED ROUTES
-|--------------------------------------------------------------------------
 */
-
-// Only keep the relevant routes to avoid unused route endpoints.
-// Auth::routes(['verify' => true]);
-
 Route::post('/register', 'Auth\RegisterController@register')->name('register');
+Route::get('/email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::post('/login', 'Auth\LoginController@login')->name('login');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
-Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-// below 2 routes will be needed when we have the email issue sorted
-// Route::get('/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
-// Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 
+/* Forgot passsword related links: */
+
+// Process the incoming password reset request.
+Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+// Show reset password form.
+Route::get('/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+// Post a reset password request.
+Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
+
+/* Change Password */
 Route::post('/password/change', 'Api\UserController@changePassword')->name('password.change');
+
+/*
+| SOCIAL AUTHENTICATION RELATED ROUTES
+*/
 
 Route::get('social/login/{provider}', 'Auth\SocialLoginController@login')->name('social.login');
 Route::get('social/login/{provider}/callback', 'Auth\SocialLoginController@callback')->name('social.callback');
 Route::get('ui/email/verify/{id}', function () { return 1; })->name('ui-email.verificationlink');
 
 
+/*
+| FRONT-END CONTROLLER
+*/
 
 Route::get('/', 'HomeController@root')->name('root');
 Route::get('pages/{page}/{slug?}', 'HomeController@single')->name('pages.show');
@@ -46,30 +52,8 @@ Route::get('sitemap', 'HomeController@sitemap')->name('sitemap');
 Route::get('rss', 'HomeController@rss')->name('rss');
 
 
-//-----------------------------------------------------------------------------
-// This is the main entry point for the SPA
-// (This routes needs to be protected by Admin auth later)
-//-----------------------------------------------------------------------------
+
+/*
+| BACK-END CONTROLLER
+*/
 Route::get('/app/{any?}', 'AdminController@app')->where('any', '.*')->name('admin.app');
-
-
-// Testing Route
-// Route::get('test', function () {
-//     $page = \App\Page::findOrFail(35);
-//     $content = $page->content;
-//     $body_json = $content->body_json;
-//     $body_html = \App\ContentConversion::getHtml($body_json);
-//     return $body_html;
-// });
-
-// all cache keys - to be removed later
-Route::get('cache/keys', function () {
-    return App\DataProvider::keys();
-});
-
-Route::get('testmail', function () {
-    Mail::raw('Hello World', function ($message){
-        $message->to('test@mail.com');
-    });
-    return;
-});

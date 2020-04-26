@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
@@ -19,4 +20,15 @@ class ForgotPasswordController extends Controller
     */
 
     use SendsPasswordResetEmails;
+
+
+    /**
+     * The below function is overwritted to add loginFormType in the error response.
+     */
+    protected function sendResetLinkFailedResponse(Request $request, $response)
+    {
+        return back()
+                ->withInput($request->only(['email', 'loginFormType']))
+                ->withErrors(['email' => trans($response)]);
+    }
 }
