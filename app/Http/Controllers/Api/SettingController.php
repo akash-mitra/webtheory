@@ -6,6 +6,9 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Parameter;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Jobs\UpdateSite;
 
 class SettingController extends Controller
 {
@@ -80,5 +83,34 @@ class SettingController extends Controller
         return response()->json("Saved", 200);
     }
 
+    public function testmail()
+    {
+        $mailDriver = Parameter::getKey('MAIL_DRIVER');
+        
+        if ($mailDriver != '') {
+            $siteinfo = json_decode(Parameter::getKey('siteinfo'), true);
+
+            try {
+                Mail::raw('Test Mail from ' . $siteinfo['title'], function ($message){
+                    $message->to(Auth::user()->email);
+                });
+
+                return response()->json("Mail Sent. Please check your email inbox", 200); 
+            } catch (Exception $e) {
+                return abort(400, $e);
+            }
+        }
+        
+        return response()->json("Mail Driver not set", 400);
+    }
+
+    public function update(Request $request)
+    {
+        $commitId = $request->commit_id;
+        
+        UpdateSite::dispatchAfterResponse($commitId);
+        
+        return response()->json("Site update is in progress", 200);
+    }
 
 }

@@ -29,6 +29,9 @@
                 <div @click="tab='payment'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='payment'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
                     Payment
                 </div>
+                <div @click="tab='update'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='update'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
+                    Update
+                </div>
             </div>
         </div>
 
@@ -276,10 +279,26 @@
                             <input type="text" id="sesRegion" v-model="sesRegion" ref="sesRegion" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                         </div>
 
+                        <div v-if="mailSaved" class="my-4">
+                            <button @click="testMail" class="px-4 py-2 text-white bg-indigo-600 rounded">Test Email</button>
+                        </div>
+
                     </div>
                 </div>
             </div>
 
+        </div>
+
+
+        <div class="pb-10" v-if="tab=='update'">
+
+            <p class="text-sm text-gray-700 pb-3 uppercase">Site Update</p>
+
+            <div class="rounded w-full">
+                <div class="px-6 py-3 mb-4 bg-white shadow rounded">
+                    <button @click="siteUpdate(XYZ)" class="px-4 py-2 text-white bg-indigo-600 rounded">Update To XYZ</button>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -314,6 +333,7 @@
                 googleClientId: null,
                 googleClientSecret: null,
 
+                mailSaved: false,
                 mailDriver: null,
                 mailDrivers: [
                     { key: 'sendmail', value: 'Sendmail' },
@@ -382,6 +402,9 @@
                 this.sesKey = response['AWS_ACCESS_KEY_ID']
                 this.sesSecret = response['AWS_SECRET_ACCESS_KEY']
                 this.sesRegion = response['AWS_DEFAULT_REGION']
+
+                if (response['MAIL_DRIVER'] != '')
+                    this.mailSaved = true
             })
 
         },
@@ -444,7 +467,30 @@
                 util.ajax ('post', '/api/settings/mailprovider', { data }, function () {
                     util.notifySuccess ('Saved', 'Mail provider settings have been successfully saved.')
                 })
+
+                this.mailSaved = true
             },
+
+            testMail () {
+                // this.saveMail()
+                window.axios.get('/api/settings/testmail/')
+                    .then(response => {
+                        util.notifySuccess ('Success', response.data)
+                    })
+                    .catch(error => {
+                        util.notifyError ('Test Mail Error', error)
+                    })
+            },
+
+            siteUpdate (commitId) {
+                window.axios.post('/api/settings/update/', {"commit_id": commitId})
+                    .then(response => {
+                        util.notifySuccess ('Success', response.data)
+                    })
+                    .catch(error => {
+                        util.notifyError ('Error', error)
+                    })
+            }
 
         },
 
