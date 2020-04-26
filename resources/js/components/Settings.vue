@@ -184,7 +184,10 @@
 
         <div class="pb-10" v-if="tab=='mail'">
 
-            <p class="text-sm text-gray-700 pb-3 uppercase">Mail Setup</p>
+            <div class="w-full flex justify-between">
+                <p class="ml-3 text-sm text-gray-700 pb-3 uppercase">Mail Setup</p>
+                <button v-if="mailSaved" @click="testMail" class="px-3 py-1 mb-2 mr-2 border border-blue-400 rounded text-blue-500 bg-transparent">Test Email</button>
+            </div>
 
             <div class="rounded w-full">
                 <div class="px-6 py-3 mb-4 bg-white shadow rounded">
@@ -279,9 +282,7 @@
                             <input type="text" id="sesRegion" v-model="sesRegion" ref="sesRegion" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                         </div>
 
-                        <div v-if="mailSaved" class="my-4">
-                            <button @click="testMail" class="px-4 py-2 text-white bg-indigo-600 rounded">Test Email</button>
-                        </div>
+
 
                     </div>
                 </div>
