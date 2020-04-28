@@ -1,1 +1,1 @@
-Test Email Successful.
+Test Email from {{$info}} Successful.

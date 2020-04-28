@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\User;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmail;
 use Illuminate\Http\Request;
 use App\Parameter;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use App\Jobs\UpdateSite;
+use App\Mail\TestMail;
 
 class SettingController extends Controller
 {
@@ -30,7 +30,7 @@ class SettingController extends Controller
             'LINKEDIN_CLIENT_ID', 'LINKEDIN_CLIENT_SECRET',
             'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET'
         ];
-        
+
         $social = [];
         foreach($keys as $key) {
             $value = Parameter::getKey($key);
@@ -49,7 +49,7 @@ class SettingController extends Controller
             'POSTMARK_TOKEN',
             'AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_DEFAULT_REGION'
         ];
-        
+
         $mail = [];
         foreach($keys as $key) {
             $value = Parameter::getKey($key);
@@ -65,9 +65,9 @@ class SettingController extends Controller
         foreach($data as $lov) {
             $key = $lov['key'];
             $value = is_null($lov['value']) ? '' : $lov['value'];
-            Parameter::setKey($key, $value);    
+            Parameter::setKey($key, $value);
         }
-        
+
         return response()->json("Saved", 200);
     }
 
@@ -77,39 +77,46 @@ class SettingController extends Controller
         foreach($data as $lov) {
             $key = $lov['key'];
             $value = is_null($lov['value']) ? '' : $lov['value'];
-            Parameter::setKey($key, $value);    
+            Parameter::setKey($key, $value);
         }
-        
+
         return response()->json("Saved", 200);
     }
 
     public function testmail()
     {
         $mailDriver = Parameter::getKey('MAIL_DRIVER');
-        
+
         if ($mailDriver != '') {
             $siteinfo = json_decode(Parameter::getKey('siteinfo'), true);
 
             try {
-                Mail::raw('Test Mail from ' . $siteinfo['title'], function ($message){
-                    $message->to(Auth::user()->email);
-                });
+                // Mail::raw('Test Mail from ' . $siteinfo['title'], function ($message){
+                //     $message->to(Auth::user()->email);
+                // });
 
-                return response()->json("Mail Sent. Please check your email inbox", 200); 
-            } catch (Exception $e) {
+
+                SendEmail::dispatch(
+                    Auth::user()->email,
+                    new TestMail($siteinfo['title'])
+                );
+
+                return response()->json("Mail Sent. Please check your email inbox", 200);
+
+            } catch (\Exception $e) {
                 return abort(400, $e);
             }
         }
-        
+
         return response()->json("Mail Driver not set", 400);
     }
 
     public function update(Request $request)
     {
         $commitId = $request->commit_id;
-        
+
         UpdateSite::dispatchAfterResponse($commitId);
-        
+
         return response()->json("Site update is in progress", 200);
     }
 

@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use Storage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -11,16 +10,16 @@ class TestMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user;
+    public $info;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user)
+    public function __construct($info)
     {
-        $this->user = $user;
+        $this->info = $info;
     }
 
     /**
@@ -30,6 +29,6 @@ class TestMail extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.VerifyEmailAddress');
+        return $this->view('emails.TestMail');
     }
 }
