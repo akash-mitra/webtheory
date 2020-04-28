@@ -11,7 +11,8 @@
 
             <button @click="userMenuOpen = !userMenuOpen" type="button" class="inline-flex justify-center items-center w-full rounded py-2 bg-white hover:bg-gray-1001 text-sm font-medium transition ease-in-out duration-150">
             <span class="flex items-center px-4">
-                <img src="{{ $data->user->avatar }}" class="h-12 w-12 rounded-full border" />
+                <img src="{{ $data->user->avatar }}" class="h-12 w-12 rounded-full border-2" />
+
                 <span class="hidden sm:flex ml-4 text-lg text-gray-800">{{ $data->user->name }}</span>
             </span>
             <svg class="ml-1 pr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
