@@ -4,8 +4,14 @@ namespace App;
 
 
 use App\Template;
+use App\Jobs\SendEmail;
 use Laravel\Cashier\Billable;
+use Illuminate\Support\Carbon;
+use App\Mail\ResetPasswordLink;
+use App\Mail\VerifyEmailAddress;
 use App\Plugins\EnableDummyAvatar;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Notifications\Notifiable;
 use App\Plugins\EnableDynamicEmailService;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,8 +24,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use Notifiable,
         SoftDeletes,
         Billable,
-        EnableDummyAvatar,
-        EnableDynamicEmailService;
+        EnableDummyAvatar;
 
     /**
      * The attributes that are mass assignable.
@@ -135,11 +140,55 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
-    // deprecated method as purgecss won't work
-    // public function photo ($class = null)
-    // {
-    //     $class = $class ?? 'w-10 h-10 rounded-full m-1';
-    //     return '<img src="' . $this->avatar . '" class="' . $class . '">';
-    // }
+
+
+    /**
+     * This method is a override of the originl method present in the
+     * Illuminate\Auth\MustVerifyEmail trait. This override has been
+     * done to make sure that verify user email is sent via our own
+     * emailing Job, instead of laravel's default email job.
+     */
+    public function sendEmailVerificationNotification()
+    {
+        // $this->notify(new VerifyEmail);
+
+
+
+        SendEmail::dispatch(
+            $this->email,
+            new VerifyEmailAddress($this)
+        );
+    }
+
+
+
+    /**
+     * This method is a override of the originl method present in the
+     * Illuminate\Auth\Passwords\CanResetPassword trait. This over-
+     * ride has been done to make sure that verify user email is
+     * sent via our own emailing Job, instead of laravel's.
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        // $this->notify(new ResetPasswordNotification($token));
+
+        SendEmail::dispatch(
+            $this->email,
+            new ResetPasswordLink($this, $token)
+        );
+    }
+
+
+    public function verificationUrl()
+    {
+        return URL::temporarySignedRoute(
+            'verification.verify',
+            Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
+            [
+                'id' => $this->getKey(),
+                'hash' => sha1($this->email),
+            ]
+        );
+    }
 
 }
