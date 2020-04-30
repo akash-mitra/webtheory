@@ -24,28 +24,32 @@ Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
 // Process the incoming password reset request.
 Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+
 // Show reset password form.
 Route::get('/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+
 // Post a reset password request.
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 
 /* Change Password */
 Route::post('/password/change', 'Api\UserController@changePassword')->name('password.change');
 
+
 /*
 | SOCIAL AUTHENTICATION RELATED ROUTES
 */
 
-Route::get('social/login/{provider}', 'Auth\SocialLoginController@login')->name('social.login');
-Route::get('social/login/{provider}/callback', 'Auth\SocialLoginController@callback')->name('social.callback');
-Route::get('ui/email/verify/{id}', function () { return 1; })->name('ui-email.verificationlink');
+Route::get('app/social/login/{provider}', 'Auth\SocialLoginController@login')->name('social.login');
+Route::get('app/social/login/{provider}/callback', 'Auth\SocialLoginController@callback')->name('social.callback');
+
+// Route::get('ui/email/verify/{id}', function () { return 1; })->name('ui-email.verificationlink');
 
 
 /*
 | FRONT-END CONTROLLER
 */
 
-Route::get('/', 'HomeController@root')->name('root');
+Route::get('/', 'HomeController@root')->name('home');
 Route::get('pages/{page}/{slug?}', 'HomeController@single')->name('pages.show');
 Route::get('categories/{category}/{slug?}', 'HomeController@category')->name('categories.show');
 Route::get('sitemap', 'HomeController@sitemap')->name('sitemap');

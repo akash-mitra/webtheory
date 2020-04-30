@@ -17,10 +17,6 @@ Route::post('login', 'Api\Auth\LoginController@login');
 Route::get('check', 'Api\Auth\LoginController@user');
 Route::post('register', 'Api\Auth\RegisterController@register');
 
-Route::get('social/providers', 'Api\Auth\SocialLoginController@socialProviders');
-Route::get('social/login/{provider}', 'Api\Auth\SocialLoginController@login');
-Route::get('social/login/{provider}/callback', 'Api\Auth\SocialLoginController@callback');
-
 
 // Authenticated Routes
 Route::group(['middleware' => ['auth:airlock']], function () {

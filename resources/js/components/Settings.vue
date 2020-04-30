@@ -17,33 +17,63 @@
 
         <div class="px-6 w-full flex justify-between items-center my-8 border-b">
             <div class="flex justify-start">
+
                 <div @click="tab='login'" class="-ml-4 px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='login'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
                     Login
                 </div>
+
                 <div @click="tab='mail'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='mail'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
                     Mail
                 </div>
-                <div @click="tab='ads'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='ads'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
-                    Ad Sense
-                </div>
-                <div @click="tab='payment'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='payment'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
-                    Payment
-                </div>
+
                 <div @click="tab='update'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='update'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
                     Update
                 </div>
+
             </div>
         </div>
 
 
         <div class="pb-10" v-if="tab=='login'">
 
-            <p class="text-sm text-gray-700 pb-3 uppercase">Social Login</p>
-
-            <div v-if="socialprovider!==null && socialProviderRedirectUrl!==null" class="rounded w-full">
 
 
-                <div class="px-6 py-3 mb-4 bg-white shadow rounded">
+            <div v-if="socialprovider!==null && socialProviderRedirectUrl!==null" class="rounded w-full shadow">
+
+                <div class="px-6 py-3 border-b bg-white qshadow rounded">
+                    <div class="w-full relative">
+                        <div class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
+                            @click="changeStatus('google', socialprovider.google==='Disabled'?'Enabled':'Disabled')">
+
+                            <div class="flex items-center">
+                                <div :class="socialprovider.google==='Disabled'? 'bg-gray-400':'bg-green-400'" class="rounded-full h-3 w-3 mr-2"></div>
+                                <span :class="socialprovider.google==='Disabled'? 'text-gray-600':'text-green-600'">{{ socialprovider.google }}</span>
+                            </div>
+                        </div>
+                        <h3 class="text-blue-800 font-semibold flex items-center py-1">
+                        <svg viewBox="0 0 512 512" class="w-8 h-8 mr-3 ml-2 -mb-4 fill-current text-blue-400" xmlns="http://www.w3.org/2000/svg"><path d="M332 150v15a166 166 0 01-332 0A166 166 0 01294 59l-43 43a106 106 0 00-191 63 106 106 0 00202 45h-81v-60zm0 0M512 135v60h-45v45h-60v-45h-45v-60h45V90h60v45zm0 0" fill="#ff3939"/><g fill="#c90232"><path d="M166 60V0c52 0 102 26 128 59l-43 43c-18-24-50-42-85-42zm0 0M332 150v15a166 166 0 01-166 165v-60c42 0 79-25 96-60h-81v-60zm0 0M512 135v60h-45v45h-30V90h30v45zm0 0"/></g></svg>
+                        Google
+                        </h3>
+                    </div>
+
+                    <div class="p-3" v-if="socialprovider.google=='Enabled'">
+                        <div class="w-full sm:flex mt-2">
+                            <label for="googleClientId" class="block w-full sm:w-1/4 text-sm py-1 ">Client Id</label>
+                            <input type="text" id="googleClientId" v-model="googleClientId" ref="googleClientId" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                        </div>
+                        <div class="w-full sm:flex mt-2">
+                            <label for="googleClientSecret" class="block w-full sm:w-1/4 text-sm py-1 ">Client Secret</label>
+                            <input type="text" id="googleClientSecret" v-model="googleClientSecret" ref="googleClientSecret" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                        </div>
+                        <div class="w-full sm:flex mt-2">
+                            <label for="google_redirect" class="block w-full sm:w-1/4 text-sm py-1 ">Redirect URL</label>
+                            <div class="text-gray-800 text-sm w-full sm:w-3/4 max-w-lg py-1 ">{{ socialProviderRedirectUrl.google }}</div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="px-6 py-3 border-b bg-white qshadow rounded">
                     <div class="w-full relative">
                         <div class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
                             @click="changeStatus('facebook', socialprovider.facebook==='Disabled'?'Enabled':'Disabled')">
@@ -59,11 +89,7 @@
                         </h3>
                     </div>
 
-                    <div v-if="socialprovider.facebook=='Enabled'">
-                        <div class="w-full sm:flex mt-2">
-                            <label for="facebook_redirect" class="block w-full sm:w-1/4 text-sm py-1 ">Redirect URL</label>
-                            <div class="text-blue-700 w-full sm:w-3/4 max-w-lg py-1 ">{{ socialProviderRedirectUrl.facebook }}</div>
-                        </div>
+                    <div class="p-3" v-if="socialprovider.facebook=='Enabled'">
                         <div class="w-full sm:flex mt-2">
                             <label for="facebookClientId" class="block w-full sm:w-1/4 text-sm py-1 ">Client Id</label>
                             <input type="text" id="facebookClientId" v-model="facebookClientId" ref="facebookClientId" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
@@ -72,11 +98,15 @@
                             <label for="facebookClientSecret" class="block w-full sm:w-1/4 text-sm py-1 ">Client Secret</label>
                             <input type="text" id="facebookClientSecret" v-model="facebookClientSecret" ref="facebookClientSecret" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                         </div>
+                        <div class="w-full sm:flex mt-2">
+                            <label for="facebook_redirect" class="block w-full sm:w-1/4 text-sm py-1 ">Redirect URL</label>
+                            <div class="text-gray-800 text-sm w-full sm:w-3/4 max-w-lg py-1 ">{{ socialProviderRedirectUrl.facebook }}</div>
+                        </div>
                     </div>
                 </div>
 
 
-                <div class="px-6 py-3 mb-4 bg-white shadow rounded">
+                <div class="px-6 py-3 border-b bg-white qshadow rounded">
                     <div class="w-full relative">
                         <div class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
                             @click="changeStatus('twitter', socialprovider.twitter==='Disabled'?'Enabled':'Disabled')">
@@ -92,11 +122,7 @@
                         </h3>
                     </div>
 
-                    <div v-if="socialprovider.twitter=='Enabled'">
-                        <div class="w-full sm:flex mt-2">
-                            <label for="twitter_redirect" class="block w-full sm:w-1/4 text-sm py-1 ">Redirect URL</label>
-                            <div class="text-blue-700 w-full sm:w-3/4 max-w-lg py-1 ">{{ socialProviderRedirectUrl.twitter }}</div>
-                        </div>
+                    <div class="p-3" v-if="socialprovider.twitter=='Enabled'">
                         <div class="w-full sm:flex mt-2">
                             <label for="twitterClientId" class="block w-full sm:w-1/4 text-sm py-1 ">Client Id</label>
                             <input type="text" id="twitterClientId" v-model="twitterClientId" ref="twitterClientId" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
@@ -105,11 +131,15 @@
                             <label for="twitterClientSecret" class="block w-full sm:w-1/4 text-sm py-1 ">Client Secret</label>
                             <input type="text" id="twitterClientSecret" v-model="twitterClientSecret" ref="twitterClientSecret" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                         </div>
+                        <div class="w-full sm:flex mt-2">
+                            <label for="twitter_redirect" class="block w-full sm:w-1/4 text-sm py-1 ">Redirect URL</label>
+                            <div class="text-gray-800 text-sm w-full sm:w-3/4 max-w-lg py-1 ">{{ socialProviderRedirectUrl.twitter }}</div>
+                        </div>
                     </div>
                 </div>
 
 
-                <div class="px-6 py-3 mb-4 bg-white shadow rounded">
+                <div class="px-6 py-3 border-b bg-white qshadow rounded">
                     <div class="w-full relative">
                         <div class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
                             @click="changeStatus('linkedin', socialprovider.linkedin==='Disabled'?'Enabled':'Disabled')">
@@ -125,11 +155,7 @@
                         </h3>
                     </div>
 
-                    <div v-if="socialprovider.linkedin=='Enabled'">
-                        <div class="w-full sm:flex mt-2">
-                            <label for="linkedin_redirect" class="block w-full sm:w-1/4 text-sm py-1 ">Redirect URL</label>
-                            <div class="text-blue-700 w-full sm:w-3/4 max-w-lg py-1 ">{{ socialProviderRedirectUrl.linkedin }}</div>
-                        </div>
+                    <div class="p-3" v-if="socialprovider.linkedin=='Enabled'">
                         <div class="w-full sm:flex mt-2">
                             <label for="linkedinClientId" class="block w-full sm:w-1/4 text-sm py-1 ">Client Id</label>
                             <input type="text" id="linkedinClientId" v-model="linkedinClientId" ref="linkedinClientId" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
@@ -138,41 +164,15 @@
                             <label for="linkedinClientSecret" class="block w-full sm:w-1/4 text-sm py-1 ">Client Secret</label>
                             <input type="text" id="linkedinClientSecret" v-model="linkedinClientSecret" ref="linkedinClientSecret" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                         </div>
+                        <div class="w-full sm:flex mt-2">
+                            <label for="linkedin_redirect" class="block w-full sm:w-1/4 text-sm py-1 ">Redirect URL</label>
+                            <div class="text-gray-800 text-sm w-full sm:w-3/4 max-w-lg py-1 ">{{ socialProviderRedirectUrl.linkedin }}</div>
+                        </div>
                     </div>
                 </div>
 
 
-                <div class="px-6 py-3 mb-4 bg-white shadow rounded">
-                    <div class="w-full relative">
-                        <div class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
-                            @click="changeStatus('google', socialprovider.google==='Disabled'?'Enabled':'Disabled')">
 
-                            <div class="flex items-center">
-                                <div :class="socialprovider.google==='Disabled'? 'bg-gray-400':'bg-green-400'" class="rounded-full h-3 w-3 mr-2"></div>
-                                <span :class="socialprovider.google==='Disabled'? 'text-gray-600':'text-green-600'">{{ socialprovider.google }}</span>
-                            </div>
-                        </div>
-                        <h3 class="text-blue-800 font-semibold flex items-center">
-                        <svg viewBox="0 0 512 512" class="w-8 h-8 mr-4 fill-current text-blue-400" xmlns="http://www.w3.org/2000/svg"><path d="M332 150v15a166 166 0 01-332 0A166 166 0 01294 59l-43 43a106 106 0 00-191 63 106 106 0 00202 45h-81v-60zm0 0M512 135v60h-45v45h-60v-45h-45v-60h45V90h60v45zm0 0" fill="#ff3939"/><g fill="#c90232"><path d="M166 60V0c52 0 102 26 128 59l-43 43c-18-24-50-42-85-42zm0 0M332 150v15a166 166 0 01-166 165v-60c42 0 79-25 96-60h-81v-60zm0 0M512 135v60h-45v45h-30V90h30v45zm0 0"/></g></svg>
-                        Google
-                        </h3>
-                    </div>
-
-                    <div v-if="socialprovider.google=='Enabled'">
-                        <div class="w-full sm:flex mt-2">
-                            <label for="google_redirect" class="block w-full sm:w-1/4 text-sm py-1 ">Redirect URL</label>
-                            <div class="text-blue-700 w-full sm:w-3/4 max-w-lg py-1 ">{{ socialProviderRedirectUrl.google }}</div>
-                        </div>
-                        <div class="w-full sm:flex mt-2">
-                            <label for="googleClientId" class="block w-full sm:w-1/4 text-sm py-1 ">Client Id</label>
-                            <input type="text" id="googleClientId" v-model="googleClientId" ref="googleClientId" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
-                        </div>
-                        <div class="w-full sm:flex mt-2">
-                            <label for="googleClientSecret" class="block w-full sm:w-1/4 text-sm py-1 ">Client Secret</label>
-                            <input type="text" id="googleClientSecret" v-model="googleClientSecret" ref="googleClientSecret" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
-                        </div>
-                    </div>
-                </div>
 
 
             </div>
@@ -190,7 +190,7 @@
             </div>
 
             <div class="rounded w-full">
-                <div class="px-6 py-3 mb-4 bg-white shadow rounded">
+                <div class="px-6 py-3 border-b bg-white qshadow rounded">
                     <div>
                         <div class="w-full sm:flex mt-2">
                             <label for="mailDriver" class="block w-full sm:w-1/4 text-sm py-1">Mail Driver</label>

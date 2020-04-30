@@ -2,103 +2,125 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use Socialite;
 use App\User;
-use Illuminate\Support\Facades\Auth;
+use Socialite;
 use Exception;
-use Carbon\Carbon;
+use App\Parameter;
+use App\Jobs\SendEmail;
+use App\Mail\WelcomeNewSocialUser;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class SocialLoginController extends Controller
 {
-    /**
-     * list of social drivers enabled for Social Auth
-     */
-    protected $providers = ['twitter', 'facebook', 'instagram', 'google'];
+    protected $providers = ['facebook', 'twitter', 'linkedin', 'google'];
+
 
     public function login($provider)
     {
-        if (!in_array($provider, $this->providers)) {
-            return abort(404, 'Provider not supported');
-        }
-        
+        $this->loadProviderConfig($provider);
+
         return Socialite::driver($provider)->redirect();
     }
 
 
+
     public function callback($provider)
     {
-        if (!in_array($provider, $this->providers)) {
-            return abort(404, 'Provider not supported');
-        }
+        $this->loadProviderConfig($provider);
 
-        $authenticatedUser = $this->getAuthenticatedUser($provider);
-        $this->abortIfInfoMissing($authenticatedUser);
-        $existingUser = $this->authenticatedUserExisting($authenticatedUser);
+        $socialUser = $this->getSocialUser($provider);
 
-        if ($existingUser) {
-            $existingUser->createOrUpdateProvider($provider, $authenticatedUser);
+        $this->validateUserInfo($socialUser);
+
+        $existingUser = $this->userExisting($socialUser);
+
+        if ($existingUser)
+        {
+            $existingUser->createOrUpdateProvider($provider, $socialUser);
+
             Auth::login($existingUser, true);
-        } else {
-            $user = $this->createUserWithProvider($provider, $authenticatedUser);
+        }
+        else
+        {
+            $user = $this->createUserWithProvider($provider, $socialUser);
+
             Auth::login($user, true);
         }
 
-        return redirect()->route('root');
+        return redirect()->route('home', '#');
     }
 
 
-    private function createUserWithProvider($provider, $authenticatedUser)
+
+    private function createUserWithProvider($provider, $socialUser)
     {
         $user = new User([
-            'name' => $authenticatedUser->getName(),
-            'email' => $authenticatedUser->getEmail(),
+            'name' => $socialUser->getName(),
+            'email' => $socialUser->getEmail(),
             'role' => 'registered',
-            'avatar' => $authenticatedUser->getAvatar(),
-            'email_verified_at' => \Carbon\Carbon::now()
+            'avatar' => $socialUser->getAvatar(),
+            'email_verified_at' => now()
         ]);
 
         $user->save();
 
         $user->providers()->create([
-            'provider_user_id' => $authenticatedUser->getId(),
+            'provider_user_id' => $socialUser->getId(),
             'provider'         => $provider,
-            'avatar'           => $authenticatedUser->getAvatar()
+            'avatar'           => $socialUser->getAvatar()
         ]);
-        
+
+        SendEmail::dispatch(
+            $user->email,
+            new WelcomeNewSocialUser($user)
+        );
+
         return $user;
     }
 
-    private function getAuthenticatedUser($provider)
+
+
+    private function getSocialUser($provider)
     {
         try {
             return Socialite::driver($provider)->user();
+
         } catch (Exception $e) {
+
             return abort(400, 'Unable to authenticate user');
         }
     }
 
 
-    private function authenticatedUserExisting($authenticatedUser)
+
+    private function userExisting($socialUser)
     {
-        return User::where('email', $authenticatedUser->getEmail())->first();
+        return User::where('email', $socialUser->getEmail())->first();
     }
 
 
-    /**
-     * Checks the authenticated user returned from the
-     * social provider to make sure all the mandatory
-     * information are present
-     *
-     * @param  object $authenticatedUser
-     * @return void
-     */
-    private function abortIfInfoMissing($authenticatedUser)
+
+    private function validateUserInfo($socialUser)
     {
-        if (empty($authenticatedUser->getEmail())
-            || empty($authenticatedUser->getName())
-            || empty($authenticatedUser->getAvatar())) {
+        if (empty($socialUser->getEmail()) || empty($socialUser->getName()) || empty($socialUser->getAvatar()))
+        {
                 abort(406, "Must provide name, email and profile picture");
         }
+    }
+
+
+
+    private function loadProviderConfig($provider)
+    {
+        if (!in_array($provider, $this->providers)) {
+            abort(404, 'Provider not supported');
+        }
+
+        $redirectUris = json_decode(Parameter::getKey('socialprovider_redirect_url'), true);
+
+        config(['services.' . $provider . '.client_id' => Parameter::getKey(strtoupper($provider). '_CLIENT_ID')]);
+        config(['services.' . $provider . '.client_secret' => Parameter::getKey(strtoupper($provider). '_CLIENT_SECRET')]);
+        config(['services.' . $provider . '.redirect' => $redirectUris[$provider]]);
     }
 }
