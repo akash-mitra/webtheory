@@ -13,7 +13,6 @@ use App\Plugins\EnableDummyAvatar;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Notifications\Notifiable;
-use App\Plugins\EnableDynamicEmailService;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
