@@ -23,7 +23,7 @@
         <div v-if="authUser !== null && authUser.role != 'registered'" class="w-full bg-white border-b border-gray-400 py-3 md:flex items-center justify-between">
             <div class="md:flex justify-start items-center">
                 <div class="px-6 lg:px-8 flex items-center justify-between">
-                    <img src="/images/tensor.svg" alt="WebTheory Home" class="h-10 w-10 mr-6">
+                    <img src="/images/tensor.svg" alt="WebTheory Home" class="h-10 w-10 mr-6 cursor-pointer" @click="$router.push('/app')">
                     <p class="hidden md:block text-blue-400 font-thin mr-10">WebTheory</p>
 
                     <svg id="menu-toggle-button" class="md:hidden text-gray-500 fill-current w-6 h-6 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
