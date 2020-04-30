@@ -91,11 +91,11 @@
 
                     <div class="p-3" v-if="socialprovider.facebook=='Enabled'">
                         <div class="w-full sm:flex mt-2">
-                            <label for="facebookClientId" class="block w-full sm:w-1/4 text-sm py-1 ">Client Id</label>
+                            <label for="facebookClientId" class="block w-full sm:w-1/4 text-sm py-1 ">App Id</label>
                             <input type="text" id="facebookClientId" v-model="facebookClientId" ref="facebookClientId" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                         </div>
                         <div class="w-full sm:flex mt-2">
-                            <label for="facebookClientSecret" class="block w-full sm:w-1/4 text-sm py-1 ">Client Secret</label>
+                            <label for="facebookClientSecret" class="block w-full sm:w-1/4 text-sm py-1 ">App Secret</label>
                             <input type="text" id="facebookClientSecret" v-model="facebookClientSecret" ref="facebookClientSecret" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                         </div>
                         <div class="w-full sm:flex mt-2">
@@ -124,11 +124,11 @@
 
                     <div class="p-3" v-if="socialprovider.twitter=='Enabled'">
                         <div class="w-full sm:flex mt-2">
-                            <label for="twitterClientId" class="block w-full sm:w-1/4 text-sm py-1 ">Client Id</label>
+                            <label for="twitterClientId" class="block w-full sm:w-1/4 text-sm py-1 ">API Key</label>
                             <input type="text" id="twitterClientId" v-model="twitterClientId" ref="twitterClientId" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                         </div>
                         <div class="w-full sm:flex mt-2">
-                            <label for="twitterClientSecret" class="block w-full sm:w-1/4 text-sm py-1 ">Client Secret</label>
+                            <label for="twitterClientSecret" class="block w-full sm:w-1/4 text-sm py-1 ">API Secret Key</label>
                             <input type="text" id="twitterClientSecret" v-model="twitterClientSecret" ref="twitterClientSecret" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                         </div>
                         <div class="w-full sm:flex mt-2">
