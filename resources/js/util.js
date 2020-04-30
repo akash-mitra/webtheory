@@ -246,43 +246,60 @@
             handler.catch((error) => {
                     // Error
                     if (error.response) {
-                            // The request was made and the server responded with a status code
-                            // that falls out of the range of 2xx
 
-                            if (error.response.status >= 400 && error.response.status < 500) {
+                        // 4xx errors
+                        if (error.response.status >= 400 && error.response.status < 500)
+                        {
+                                switch(error.response.status)
+                                {
+                                        // unauthenticated
+                                        case 401:
+                                                util.notifyInfo('You are not logged in.', 'Please login again')
+                                                .then (function () {
+                                                        location.href='/'
+                                                })
+                                        break;
 
-                                if (error.response.status === 419) { // login expired?
-                                        util.notifyInfo('Do I know you?', 'Looks like you are logged out. Please login again')
-                                        .then (function () {
-                                                location.reload()
-                                        })
-                                }
 
-                                if(error.response.status === 422) { // validation error
-                                        let e = error.response.data.errors
-                                        let k = Object.keys(e)
-                                        util.notifyError (error.response.data.message, e[k[0]][0])
-                                }
+                                        // login expired
+                                        case 419:
+                                                util.notifyInfo('Do I know you?', 'Looks like you are logged out. Please login again')
+                                                .then (function () {
+                                                        location.href='/'
+                                                })
+                                        break;
 
-                                else client_error_handler(error.response.status, error.response.data)
-                            }
-                            if (error.response.status >= 500) {
+                                        // validation error
+                                        case 422:
+                                                let e = error.response.data.errors
+                                                let k = Object.keys(e)
+                                                util.notifyError (error.response.data.message, e[k[0]][0])
+
+                                        default:
+                                                client_error_handler(error.response.status, error.response.data)
+
+                                } // end of switch
+                        }
+
+
+                        //5xx errors
+                        if (error.response.status >= 500) {
                                     server_error_handler(error.response.status, error.response.data)
-                            }
-                            // console.log(error.response.headers);
-                    } else if (error.request) {
-                            // The request was made but no response was received
-                            // `error.request` is an instance of XMLHttpRequest in the browser
-                            other_error_handler('204', 'The request was made but no response was received. Please try again later.')
-                            console.log(error.request);
-                    } else {
-                            // Something happened in setting up the request that triggered an Error
-                            other_error_handler('000', 'Something wrong happened in setting up the request.');
-                            console.log('Error', error.message);
-                    }
+                        }
+
+                } else if (error.request) {
+                        // The request was made but no response was received
+                        // `error.request` is an instance of XMLHttpRequest in the browser
+                        other_error_handler('204', 'The request was made but no response was received. Please try again later.')
+                        console.log(error.request);
+                } else {
+                        // Something happened in setting up the request that triggered an Error
+                        other_error_handler('000', 'Something wrong happened in setting up the request.');
+                        console.log('Error', error.message);
+                }
                     // console.log(error.config);
-            });
-    }
+        });
+}
     // axios.patch('/admin/categories/' + this.id, {
     //         'name': this.name, 'description': this.description, 'parent_id': this.parent_id
     // }).then((response) => {
