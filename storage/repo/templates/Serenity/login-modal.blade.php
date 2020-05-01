@@ -235,8 +235,8 @@ input:-webkit-autofill::first-line {
 
                     <div class="w-full mb-4">
 
-                        <label for="email" class="block text-gray-700 text-sm mb-2">Email Address</label>
-                        <input aria-label="Email Address" name="email" id="email" type="email" required autocomplete="username"
+                        <label for="reset_email" class="block text-gray-700 text-sm mb-2">Email Address</label>
+                        <input aria-label="Email Address" name="email" id="reset_email" type="email" required autocomplete="username"
                             class="px-3 py-2 border text-gray-900 bg-gray-100 rounded placeholder-gray-600 appearance-none w-full sm:text-sm sm:leading-5 outline-none"
                             placeholder="john@email.com"
                             value="{{ old('email') }}">
