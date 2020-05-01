@@ -69,14 +69,14 @@
 
 
         created() {
-            util.ajax ('get', '/api/social/providers', {},  (response) => {
-                let providers = JSON.parse(response)
-                this.isFacebook = providers.facebook == 'Enabled' ? true : false
-                this.isTwitter = providers.twitter == 'Enabled' ? true : false
-                this.isLinkedin = providers.linkedin == 'Enabled' ? true : false
-                this.isGoogle = providers.google == 'Enabled' ? true : false
-                this.social = this.isFacebook || this.isTwitter || this.isLinkedin || this.isGoogle
-            })
+            // util.ajax ('get', '/api/social/providers', {},  (response) => {
+            //     let providers = JSON.parse(response)
+            //     this.isFacebook = providers.facebook == 'Enabled' ? true : false
+            //     this.isTwitter = providers.twitter == 'Enabled' ? true : false
+            //     this.isLinkedin = providers.linkedin == 'Enabled' ? true : false
+            //     this.isGoogle = providers.google == 'Enabled' ? true : false
+            //     this.social = this.isFacebook || this.isTwitter || this.isLinkedin || this.isGoogle
+            // })
             window.axios.get('/api/check').then ((response) => {
                 console.log('User');
                 console.log(response.data);
