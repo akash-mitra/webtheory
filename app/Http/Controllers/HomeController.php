@@ -105,6 +105,26 @@ class HomeController extends Controller
 
 
 
+    public function privacy()
+    {
+        $data = DataProvider::home();
+
+        if(view()->exists('active.privacy'))
+        {
+            return view('active.privacy', compact('data'));
+        }
+
+        return view('privacy', compact('data'));
+    }
+
+
+
+    public function terms()
+    {
+
+    }
+
+
     private function capture_analytics ($content_type, $content_id)
     {
         $id = optional(request()->user())->id;

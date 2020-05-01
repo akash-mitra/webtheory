@@ -54,7 +54,8 @@ Route::get('pages/{page}/{slug?}', 'HomeController@single')->name('pages.show');
 Route::get('categories/{category}/{slug?}', 'HomeController@category')->name('categories.show');
 Route::get('sitemap', 'HomeController@sitemap')->name('sitemap');
 Route::get('rss', 'HomeController@rss')->name('rss');
-
+Route::get('privacy', 'HomeController@privacy')->name('privacy');
+Route::get('terms', 'HomeController@terms')->name('terms');
 
 
 /*
