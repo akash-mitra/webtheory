@@ -48,7 +48,7 @@ export default {
 
     created() {
 
-        this.mode = typeof this.$route.params.file === 'undefined' ? 'create' : 'edit'
+        this.mode = typeof this.$route.params.fileIdentity === 'undefined' ? 'create' : 'edit'
 
         this.templateId = this.$route.params.id
 
@@ -74,14 +74,23 @@ export default {
 
             if (typeof this.$route.params.id != 'undefined'
                 && parseInt(this.$route.params.id) > 0
-                && typeof this.$route.params.file != 'undefined') {
+                && typeof this.$route.params.fileIdentity != 'undefined') {
 
-                this.fileName = this.$route.params.file
+                let p = this
 
                 util.ajax ('get',
-                    '/api/templates/' + this.$route.params.id + '/get/' + this.$route.params.file,
+                    '/api/templates/' + this.$route.params.id + '/get/' + this.$route.params.fileIdentity,
                     {},
-                    data => this.sourceCode = data
+
+                    function (data) {
+                        p.fileName = atob(p.$route.params.fileIdentity)
+                        p.sourceCode = data
+                    },
+
+                    function (status, message) {
+                        util.notifyError (message.status)
+                        p.$router.go(-1)
+                    }
                 )
             }
         },

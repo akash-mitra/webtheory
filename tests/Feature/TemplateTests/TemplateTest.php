@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\TemplateTests;
 
-
+use App\Template;
 use Tests\TestDataSetup;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -139,6 +139,22 @@ class TemplateTest extends TestDataSetup
 
         // cleanup
         Storage::disk('templates')->deleteDirectory($template->name);
+    }
+
+
+
+    public function test_user_can_retrieve_a_specific_template_file()
+    {
+        /*
+         * we will test this by trying to retrieve the 'home.blade.php'
+         * file from the default template.
+         */
+
+        $id = Template::where('name', $this->defaultTemplateName)->first()->id;
+
+        $fileIdentity = base64_encode('home.blade.php');
+
+        $this->actingAs($this->adminUser)->get('api/templates/' . $id . '/get/' . $fileIdentity)->assertSuccessful();
     }
 
 

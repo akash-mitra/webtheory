@@ -139,6 +139,15 @@ class TemplateController extends Controller
 
     public function get(Template $template, String $file)
     {
-        return Storage::disk('templates')->get($template->name . '/' . $file);
+        $path = $template->name . '/' . base64_decode($file);
+
+        if (! Storage::disk('templates')->exists($path))
+        {
+            return response([
+                'status' => 'Given file is not available.',
+            ], 404);
+        }
+
+        return Storage::disk('templates')->get($path);
     }
 }

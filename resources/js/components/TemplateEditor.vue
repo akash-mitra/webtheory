@@ -30,17 +30,19 @@
 
         <div v-show="tab==='files'" class="w-full bg-white px-6 py-6 border-t border-blue-400 rounded overflow-scroll mb-12">
             <div class="text-lg text-gray-800 pb-2">Edit Template Files</div>
+
             <div class="text-sm text-gray-800 pb-4">
                 You can edit or add new files for this template.
                 Template files support <code>blade</code> syntax.
             </div>
+
             <table class="table-auto w-full text-sm mb-2">
                 <thead>
                     <tr>
                         <th class="pr-2 py-2 border-b text-left">
                             <p>File</p>
                         </th>
-                        <th class="hidden md:block pr-2 py-2 border-b text-left">Size</th>
+                        <th class="hidden md:block pr-2 py-2 border-b text-left">Size in KB</th>
                         <th class="pr-2 py-2 border-b text-left">Updated</th>
                     </tr>
                 </thead>
@@ -208,7 +210,7 @@ export default {
         },
 
         editTemplateFile (file) {
-            this.$router.push({ path: '/app/templates/' + this.id + '/get/' + file.name })
+            this.$router.push({ path: '/app/templates/' + this.id + '/get/' + file.identity })
         },
 
         // simple front-end validations before starting

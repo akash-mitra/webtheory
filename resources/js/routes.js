@@ -90,7 +90,7 @@ export default {
 
         { path: '/app/templates/create', component: TemplateEditor, meta: { requiresAuth: true } },
 
-        { path: '/app/templates/:id/get/:file', component: TemplateFileEditor, meta: { requiresAuth: true } },
+        { path: '/app/templates/:id/get/:fileIdentity', component: TemplateFileEditor, meta: { requiresAuth: true } },
 
         { path: '/app/templates/:id/create', component: TemplateFileEditor, meta: { requiresAuth: true } },
 

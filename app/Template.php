@@ -158,12 +158,15 @@ class Template extends Model
 
         return array_map(function ($file) {
 
+            $fileName = basename($file);
+
             return [
-                'name' => basename($file),
+                'name' => $fileName,
                 'updated' => \Carbon\Carbon::createFromTimestamp(
                     Storage::disk('templates')->lastModified($file)
                 )->format('d M, Y. H:m'),
-                'size' => round(Storage::disk('templates')->size($file) / 1024, 1)
+                'size' => round(Storage::disk('templates')->size($file) / 1024, 1),
+                'identity' => base64_encode($fileName)
             ];
 
         }, $files);
