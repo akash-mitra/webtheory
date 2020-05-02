@@ -100,8 +100,8 @@
 
             onAuthSuccess (response) {
 
-                if (response.data.role !== 'admin') {
-                    util.notifyError ('Unauthorised', "Only Admins can access this page")
+                if (['admin', 'author'].indexOf(response.data.role) === -1) {
+                    util.notifyError ('Unauthorised', "Only Admins can access this page.")
                     return this.$router.replace('/')
                 }
 
