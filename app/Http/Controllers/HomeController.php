@@ -121,7 +121,14 @@ class HomeController extends Controller
 
     public function terms()
     {
+        $data = DataProvider::home();
 
+        if(view()->exists('active.terms'))
+        {
+            return view('active.terms', compact('data'));
+        }
+
+        return view('terms', compact('data'));
     }
 
 
