@@ -1,19 +1,5 @@
+@push('styles')
 <style>
-.duration-300 {
-    transition-duration: 300ms;
-}
-.ease-in {
-    transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
-}
-.ease-out {
-    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-}
-.scale-60 {
-    transform: scale(.6);
-}
-.scale-100 {
-    transform: scale(1);
-}
 
 .kiwi {
     background-color: #ffffff;
@@ -28,43 +14,18 @@ input:-webkit-autofill {
 input:-webkit-autofill::first-line {
     font-size: 0.875rem !important;
 }
-
 </style>
+@endpush
 
 <div class="overflow-auto"
     style="background-color: rgba(10,20,30, 0.8)"
-    x-show="showLoginModal"
-    :class="{ 'absolute inset-0 z-10 flex items-center justify-center': showLoginModal }">
-    <!--Dialog-->
-
-
-    <div
-      class="bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg text-left"
-      @click.away="showLoginModal = false"
-      x-transition:enter="ease-out duration-300"
-      x-transition:enter-start="opacity-0 scale-60"
-      x-transition:enter-end="opacity-100 scale-100"
-      x-transition:leave="ease-in duration-300"
-      x-transition:leave-start="opacity-100 scale-100"
-      x-transition:leave-end="opacity-0 scale-60"
+    v-show="isLoginModalOpen"
+    :class="isLoginModalOpen ? 'absolute inset-0 z-10 flex items-center justify-center':''"
     >
 
-@switch(old('loginFormType'))
+    <div class="bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg text-left" @click.stop>
 
-    @case('registration')
-    <div x-data="{ mode: 'signup' }">
-    @break
-
-    @case('forgot')
-    <div x-data="{ mode: 'forgot' }">
-    @break
-
-    @default
-    <div x-data="{ mode: 'login' }">
-
-@endswitch
-
-        <div x-show="mode==='signup'">
+        <div v-show="mode==='signup'">
             <div class="py-6 px-6 flex justify-between items-center border-b">
 
                 <div class="w-1/3 text-left text-3xl text-{{$data->ref->template->primaryColor}}-600 font-light">Sign Up</div>
@@ -143,7 +104,7 @@ input:-webkit-autofill::first-line {
         </div>
 
 
-        <div x-show="mode==='login'">
+        <div v-show="mode==='login'">
 
 
             <div class="py-6 px-6 flex justify-between items-center border-bw">
@@ -211,7 +172,7 @@ input:-webkit-autofill::first-line {
         </div>
 
 
-        <div x-show="mode==='forgot'">
+        <div v-show="mode==='forgot'">
             <div class="py-6 px-6 flex justify-between items-center border-b">
 
                 <div class="w-1/3 text-left text-3xl text-{{$data->ref->template->primaryColor}}-600 font-light">Recovery</div>
@@ -291,11 +252,8 @@ input:-webkit-autofill::first-line {
                 @endif
 
             </div>
-
         </div>
-
-        @endif
-    </div>
+    @endif
 
     </div><!--/Dialog -->
 </div><!-- /Overlay -->

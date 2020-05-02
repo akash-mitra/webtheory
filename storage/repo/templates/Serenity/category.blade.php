@@ -1,34 +1,14 @@
-<!doctype html>
-<html lang="en-us">
+@extends('active.master')
 
-<head>
-  <meta charset="utf-8">
+@section('metadesc'){{ $data->category->name . ' -' . $data->ref->site->title  }}@endsection
 
-  <title>{{ $data->category->name . ' -' . $data->ref->site->title  }}</title>
+@section('metakeys'){{ $data->category->metakey }}@endsection
 
-  <meta name="description" content="{{ $data->category->metadesc }}">
-  <meta name="keywords" content="{{ $data->category->metakey }}">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+@push('headers')
+<link rel="canonical" href="{{ $data->category->permalink }}">
+@endpush
 
-  <link rel="canonical" href="{{ $data->category->permalink }}">
-  <link href="/css/style-{{$data->ref->template->primaryColor}}.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
-
-  <style>
-    .font-reading {
-        font-family: 'Open Sans', sans-serif;
-    }
-
-  </style>
-
-
-  <meta name="theme-color" content="#fafafa">
-
-  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.0.1/dist/alpine.js" defer></script>
-
-</head>
-
-<body>
+@section('contents')
 
     <div class="w-full h-1 bg-{{$data->ref->template->primaryColor}}-600 fixed top-0 shadow-lg"></div>
 
@@ -103,5 +83,4 @@
         </footer>
     </div>
 
-</body>
-</html>
+@endsection

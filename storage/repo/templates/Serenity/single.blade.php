@@ -1,26 +1,14 @@
-<!doctype html>
-<html lang="en-us">
+@extends('active.master')
 
-<head>
-  <meta charset="utf-8">
+@section('metadesc'){{ $data->page->metadesc  }}@endsection
 
-  <title>{{ $data->page->title . ' -' . $data->ref->site->title  }}</title>
+@section('metakeys'){{ $data->page->metakey }}@endsection
 
-  <meta name="description" content="{{ $data->page->metadesc }}">
-  <meta name="keywords" content="{{ $data->page->metakey }}">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+@push('headers')
+<link rel="canonical" href="{{ $data->page->permalink }}">
+@endpush
 
-  <link rel="canonical" href="{{ $data->page->permalink }}">
-  <link href="/css/style-{{$data->ref->template->primaryColor}}.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
-
-  <meta name="theme-color" content="#fafafa">
-
-  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.0.1/dist/alpine.js" defer></script>
-
-</head>
-
-<body>
+@section('contents')
 
     <div class="w-full h-1 bg-{{$data->ref->template->primaryColor}}-600 fixed top-0 shadow-lg"></div>
 
@@ -52,9 +40,9 @@
                         </div>
                     </div>
 
-                    <div class="wt-summary bg-{{$data->ref->template->primaryColor}}-100">{{ $data->page->summary }}</div>
+                    <div class="font-reading wt-summary bg-{{$data->ref->template->primaryColor}}-100">{{ $data->page->summary }}</div>
                 </header>
-                <div class="mt-4 text-base">
+                <div class="mt-4 text-base font-reading wt-body">
                     {!! $data->page->content->body_html !!}
                 </div>
             </article>
@@ -67,5 +55,4 @@
         </footer>
     </div>
 
-</body>
-</html>
+@endsection
