@@ -35,6 +35,25 @@ class LoginTest extends TestDataSetup
             ]);
     }
 
+    /* Check User Test */
+    public function test_check_user()
+    {
+        /* Unauthenticated user check returns null */
+        $response = $this->get('/api/check');
+        $response->assertStatus(200)
+            ->assertJson([]);
+
+
+        /* Authenticated user check returns user details */
+        $response = $this->actingAs($this->adminUser)->get('/api/check');
+        $response->assertStatus(200)
+            ->assertJsonStructureExact([
+                'name', 'email',
+                'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
+                'created_at', 'updated_at', 'id', 'created_ago', 'updated_ago'
+            ]);
+    }
+
     /* Logout Test */
     /*
     public function test_logout()
