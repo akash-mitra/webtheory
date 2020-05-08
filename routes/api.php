@@ -17,6 +17,11 @@ Route::post('login', 'Api\Auth\LoginController@login');
 Route::get('check', 'Api\Auth\LoginController@user');
 Route::post('register', 'Api\Auth\RegisterController@register');
 
+// comments route - keeping them here temporarily to check which routes are actually being used.
+Route::get('pages/{page}/comments', 'Api\PageCommentController@index')->name('pagecomment.index');
+Route::post('pages/{page}/comments', 'Api\PageCommentController@store')->name('pagecomment.store');
+
+
 
 // Authenticated Routes
 Route::group(['middleware' => ['auth:airlock']], function () {
@@ -35,7 +40,7 @@ Route::group(['middleware' => ['auth:airlock']], function () {
 
     Route::get('pages', 'Api\PageController@index')->name('pages.index');
     Route::get('pages/{page}', 'Api\PageController@show')->name('pages.show');
-    Route::get('pages/{page}/comments', 'Api\PageController@comments')->name('pages.comments');
+    // Route::get('pages/{page}/comments', 'Api\PageController@comments')->name('pages.comments');
     Route::post('pages', 'Api\PageController@store')->name('pages.store');
     Route::put('pages/{page}', 'Api\PageController@update')->name('pages.update');
     Route::put('pages/{page}/status', 'Api\PageController@updateStatus')->name('pages.updatestatus');
@@ -49,22 +54,22 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     Route::delete('media/{media}', 'Api\MediaController@remove')->name('media.remove');
 
 
-    Route::get('comments/categories', 'Api\CategoryCommentController@index')->name('categorycomments.index');
-    Route::get('comments/categories/{categorycomment}', 'Api\CategoryCommentController@show')->name('categorycomments.show');
-    Route::post('comments/categories', 'Api\CategoryCommentController@store')->name('categorycomments.store');
-    Route::put('comments/categories/{categorycomment}', 'Api\CategoryCommentController@update')->name('categorycomments.update');
-    Route::delete('comments/categories/{categorycomment}', 'Api\CategoryCommentController@destroy')->name('categorycomments.destroy');
-    Route::put('comments/categories/{categorycomment}/like', 'Api\CategoryCommentController@like')->name('categorycomments.like');
-    Route::put('comments/categories/{categorycomment}/dislike', 'Api\CategoryCommentController@dislike')->name('categorycomments.dislike');
+    // Route::get('comments/categories', 'Api\CategoryCommentController@index')->name('categorycomments.index');
+    // Route::get('comments/categories/{categorycomment}', 'Api\CategoryCommentController@show')->name('categorycomments.show');
+    // Route::post('comments/categories', 'Api\CategoryCommentController@store')->name('categorycomments.store');
+    // Route::put('comments/categories/{categorycomment}', 'Api\CategoryCommentController@update')->name('categorycomments.update');
+    // Route::delete('comments/categories/{categorycomment}', 'Api\CategoryCommentController@destroy')->name('categorycomments.destroy');
+    // Route::put('comments/categories/{categorycomment}/like', 'Api\CategoryCommentController@like')->name('categorycomments.like');
+    // Route::put('comments/categories/{categorycomment}/dislike', 'Api\CategoryCommentController@dislike')->name('categorycomments.dislike');
 
 
-    Route::get('comments/pages', 'Api\PageCommentController@index')->name('pagecomments.index');
-    Route::get('comments/pages/{pagecomment}', 'Api\PageCommentController@show')->name('pagecomments.show');
-    Route::post('comments/pages', 'Api\PageCommentController@store')->name('pagecomments.store');
-    Route::put('comments/pages/{pagecomment}', 'Api\PageCommentController@update')->name('pagecomments.update');
-    Route::delete('comments/pages/{pagecomment}', 'Api\PageCommentController@destroy')->name('pagecomments.destroy');
-    Route::put('comments/pages/{pagecomment}/like', 'Api\PageCommentController@like')->name('pagecomments.like');
-    Route::put('comments/pages/{pagecomment}/dislike', 'Api\PageCommentController@dislike')->name('pagecomments.dislike');
+    // Route::get('comments/pages', 'Api\PageCommentController@index')->name('pagecomments.index');
+    // Route::get('comments/pages/{pagecomment}', 'Api\PageCommentController@show')->name('pagecomments.show');
+    // Route::post('comments/pages', 'Api\PageCommentController@store')->name('pagecomments.store');
+    // Route::put('comments/pages/{pagecomment}', 'Api\PageCommentController@update')->name('pagecomments.update');
+    // Route::delete('comments/pages/{pagecomment}', 'Api\PageCommentController@destroy')->name('pagecomments.destroy');
+    // Route::put('comments/pages/{pagecomment}/like', 'Api\PageCommentController@like')->name('pagecomments.like');
+    // Route::put('comments/pages/{pagecomment}/dislike', 'Api\PageCommentController@dislike')->name('pagecomments.dislike');
 
 
     Route::get('users/comments', 'Api\ProfileController@comments')->name('users.comments');
@@ -94,7 +99,7 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     Route::get('parameters/{key}', 'Api\ParameterController@get')->name('parameters.get');
     Route::post('parameters/{key}', 'Api\ParameterController@set')->name('parameters.set');
 
-    
+
     Route::get('users', 'Api\UserController@index')->name('users.index');
     Route::get('users/{user}', 'Api\UserController@show')->name('users.show');
     Route::post('users', 'Api\UserController@store')->name('users.store');

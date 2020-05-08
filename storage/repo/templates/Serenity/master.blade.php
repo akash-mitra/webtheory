@@ -43,7 +43,14 @@
 
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script> --}}
+    <script src="https://vuejs.org/js/vue.js"></script>
+
+    <script>
+        window.csrf_token="{{ csrf_token() }}"
+    </script>
+
+    @stack('pre-scripts')
 
     <script>
         const v = new Vue({
@@ -70,6 +77,8 @@
                 @endswitch
 
                 isUserMenuOpen: false,
+
+                authuser: @json($data->user)
             },
 
             created() {},
@@ -82,7 +91,7 @@
         });
     </script>
 
-    @stack('scripts')
+    @stack('post-scripts')
 
 </body>
 </html>

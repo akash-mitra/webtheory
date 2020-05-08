@@ -10,15 +10,17 @@ class PageComment extends Model
     use SoftDeletes;
 
     protected $fillable = ['parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes'];
-    
+
     protected $appends = ['created_ago', 'updated_ago'];
-    
+
+    protected $touches = ['parent'];
+
     public function parent()
     {
         return $this->belongsTo('App\PageComment', 'parent_id');
     }
 
-    public function subcomments()
+    public function replies()
     {
         return $this->hasMany('App\PageComment', 'parent_id');
     }
@@ -33,11 +35,16 @@ class PageComment extends Model
         return $this->belongsTo('App\User', 'user_id');
     }
 
+    public function isReply()
+    {
+        return $this->parent_id != null;
+    }
+
     public function getCreatedAgoAttribute()
     {
         return empty($this->created_at)? null : $this->created_at->diffForHumans();
     }
-    
+
     public function getUpdatedAgoAttribute()
     {
         return empty($this->updated_at)? null : $this->updated_at->diffForHumans();

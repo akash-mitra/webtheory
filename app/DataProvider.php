@@ -16,7 +16,7 @@ class DataProvider {
     public static function home()
     {
         return (object) [
-            "ref" => self::ref(),
+            "ref" => self::ref('home'),
             "pages" => self::pages(),
             "topics" => self::topics(),
             "user" => auth()->user()
@@ -30,7 +30,7 @@ class DataProvider {
         $page = Page::with(['content', 'author', 'category'])->published()->findOrFail($id);
 
         return (object) [
-            "ref" => self::ref(),
+            "ref" => self::ref('single'),
             "page" => $page,
             "topics" => self::topics(),
             "user" => auth()->user()
@@ -51,7 +51,7 @@ class DataProvider {
         ])->findOrFail($id);
 
         return (object) [
-            "ref" => self::ref(),
+            "ref" => self::ref('category'),
             "category" => $category,
             "user" => auth()->user()
         ];
@@ -100,10 +100,10 @@ class DataProvider {
 
 
 
-    public static function ref() : object
+    public static function ref(String $contentType) : object
     {
         return (object) [
-
+            "contentType" => $contentType,
             "template" => self::template(),
             "site" => self::site(),
             "login" => (object) [

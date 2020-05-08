@@ -46,6 +46,9 @@
                     {!! $data->page->content->body_html !!}
                 </div>
             </article>
+
+            @comments
+
         </main>
 
 

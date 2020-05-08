@@ -2,6 +2,7 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/css/style.css": "/css/style.css",
+    "/js/comments.js": "/js/comments.js",
     "/js/chunks/PageEditor.chunk.3dcd2ecaaced489b3873.js": "/js/chunks/PageEditor.chunk.3dcd2ecaaced489b3873.js",
     "/js/chunks/TemplateFileEditor.chunk.ebd1488b68b0c8604c71.js": "/js/chunks/TemplateFileEditor.chunk.ebd1488b68b0c8604c71.js",
     "/js/chunks/vendors~PageEditor.chunk.dbbe55cc21538fba3fe6.js": "/js/chunks/vendors~PageEditor.chunk.dbbe55cc21538fba3fe6.js",

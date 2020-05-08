@@ -47,6 +47,11 @@ class Page extends Model
         return $this->hasMany('App\PageComment', 'reference_id');
     }
 
+    public function directComments()
+    {
+        return $this->comments()->whereNull('parent_id');
+    }
+
     // public function getBodyAttribute()
     // {
     //     $contents = $this->content;

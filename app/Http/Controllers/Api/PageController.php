@@ -21,7 +21,7 @@ class PageController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['check.permission']);
+        $this->middleware(['check.permission'])->except('comments');
     }
 
 
@@ -186,20 +186,5 @@ class PageController extends Controller
         $page->delete();
 
         return response()->json("success", 204);
-    }
-
-
-
-    /**
-     * Display the comments under a page.
-     *
-     * @param  Page  $page
-     * @return \Illuminate\Http\Response
-     */
-    public function comments(Page $page)
-    {
-        $page->load('comments.user', 'comments.subcomments');
-
-        return response()->json($page);
     }
 }

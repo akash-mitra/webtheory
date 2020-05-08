@@ -20,7 +20,7 @@ input:-webkit-autofill::first-line {
 <div class="overflow-auto"
     style="background-color: rgba(10,20,30, 0.8)"
     v-show="isLoginModalOpen"
-    :class="isLoginModalOpen ? 'absolute inset-0 z-10 flex items-center justify-center':''"
+    :class="isLoginModalOpen ? 'fixed inset-0 z-10 flex items-center justify-center':''"
     >
 
     <div class="bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg text-left" @click.stop>

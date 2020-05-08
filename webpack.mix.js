@@ -23,6 +23,7 @@ const backendScanPaths = [
 const frontendScanPaths = [
   './resources/views/active/*.php',
   './resources/sass/typography.scss',
+  './resources/js/frontend/modules/*.vue',
 ];
 
 
@@ -77,8 +78,9 @@ mix.sass('resources/sass/app.scss', 'public/css', {}, postCssPluginsBackEnd)
 
 
 /*
- * Setup the Mix files for the front-end templates.
+ * Setup the Mix files for the front-end.
  */
+mix.js('resources/js/frontend/modules/comments.js', 'public/js')
 mix.sass('resources/sass/style.scss', 'public/css', {}, postCssPluginsFrontEnd)
 
 
