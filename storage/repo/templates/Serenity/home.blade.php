@@ -53,7 +53,7 @@
             </nav>
         </div>
 
-
+        @if( count($data->pages) !=0 )
         <div class="border-t-4 border-{{$data->ref->template->primaryColor}}-500 w-full pattern rounded-b-lg px-10 py-8 overflow-scroll md:flex justify-center md:justify-between items-center">
             <div class="w-full md:w-1/3 max-w-lg flex justify-center md:justify-start">
                 @if(! empty($data->pages[0]->media))
@@ -98,6 +98,8 @@
                 @endforeach
 
         </div>
+        @endif
+        
         <div class="w-full flex justify-center mt-6 p-4 border-t text-gray-400 rounded-lg">
                 &copy; <?php echo date('Y') ?> - All Rights Reserved. Made with&nbsp;<a href="https://webtheory.co">WebTheory</a>
         </div>
