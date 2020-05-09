@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "js/chunks/" + chunkId + ".chunk." + {"vendors~PageEditor":"dbbe55cc21538fba3fe6","PageEditor":"3dcd2ecaaced489b3873","vendors~TemplateFileEditor":"b2e6b921d827c3d4d96f","TemplateFileEditor":"ebd1488b68b0c8604c71"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "js/chunks/" + chunkId + ".chunk." + {"vendors~PageEditor":"dbbe55cc21538fba3fe6","PageEditor":"f512768b95e3411d398b","vendors~TemplateFileEditor":"b2e6b921d827c3d4d96f","TemplateFileEditor":"53f8ed55cd445e448704"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -2407,6 +2407,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
 //
 //
 //
@@ -10545,16 +10548,16 @@ var render = function() {
               staticClass:
                 "px-4 text-sm tracking-wide uppercase cursor-pointer",
               class:
-                _vm.tab === "update"
+                _vm.tab === "site"
                   ? "text-gray-700 py-2 border-b-4 border-blue-500"
                   : "text-gray-500 py-2",
               on: {
                 click: function($event) {
-                  _vm.tab = "update"
+                  _vm.tab = "site"
                 }
               }
             },
-            [_vm._v("\n                Update\n            ")]
+            [_vm._v("\n                Site\n            ")]
           )
         ])
       ]
@@ -12074,10 +12077,10 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm.tab == "update"
+    _vm.tab == "site"
       ? _c("div", { staticClass: "pb-10" }, [
           _c("p", { staticClass: "text-sm text-gray-700 pb-3 uppercase" }, [
-            _vm._v("Site Update")
+            _vm._v("Site Maintenance")
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "rounded w-full" }, [
@@ -12085,6 +12088,12 @@ var render = function() {
               "div",
               { staticClass: "px-6 py-3 mb-4 bg-white shadow rounded" },
               [
+                _c("div", { staticClass: "py-2 text-sm text-gray-500" }, [
+                  _vm._v(
+                    "\n                    Update your site to the latest version of Webtheory, that fixes any known bugs/issues and adds new feature enhancements.\n                "
+                  )
+                ]),
+                _vm._v(" "),
                 _c(
                   "button",
                   {
@@ -12095,7 +12104,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("Update To XYZ")]
+                  [_vm._v("Update")]
                 )
               ]
             )
@@ -32351,9 +32360,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/akash/code/webtheory/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /Users/akash/code/webtheory/resources/sass/app.scss */"./resources/sass/app.scss");
-module.exports = __webpack_require__(/*! /Users/akash/code/webtheory/resources/sass/style.scss */"./resources/sass/style.scss");
+__webpack_require__(/*! /Users/Saurav/ValetCode/webtheory/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /Users/Saurav/ValetCode/webtheory/resources/sass/app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! /Users/Saurav/ValetCode/webtheory/resources/sass/style.scss */"./resources/sass/style.scss");
 
 
 /***/ })
