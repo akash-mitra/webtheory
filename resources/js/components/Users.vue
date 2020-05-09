@@ -8,7 +8,7 @@
                 <span class="ml-3 rounded-lg py-1 px-2 shadow-inner text-xs bg-gray-300">{{ users.length }}</span>
             </h2>
 
-            <a href="/app/users/create" class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow">Create</a>
+            <a v-if="authUserRole == 'admin'" href="/app/users/create" class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow">Create</a>
 
         </div>
 
@@ -24,7 +24,7 @@
         <div class="px-6 w-full flex justify-between items-center mt-8">
             <div @click="tab='all'" class="px-4 text-sm uppercase cursor-pointer" :class="tab==='all'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">All</div>
 
-            <div @click="tab='trashed'" class="px-4 text-sm uppercase cursor-pointer" :class="tab==='trashed'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Trashed</div>
+            <div v-if="authUserRole == 'admin'" @click="tab='trashed'" class="px-4 text-sm uppercase cursor-pointer" :class="tab==='trashed'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Trashed</div>
         </div>
 
         <div class="px-6">
@@ -71,7 +71,7 @@
                                         {{ user.role.charAt(0).toUpperCase() + user.role.slice(1) }}
                                     </td>
 
-                                    <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
+                                    <td v-if="authUserRole == 'admin'" class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">
                                         <div class="inline-flex">
 
                                             <div class="ml-2">
@@ -105,6 +105,8 @@
 
 <script>
 
+    import { getAuthUserRole } from './../auth.js';
+
     export default {
 
         data() {
@@ -112,12 +114,15 @@
                 users: [],
                 selected: null,
                 tab: 'all',
-                searchPhrase: ''
+                searchPhrase: '',
+                authUserRole: null
             }
         },
 
         created() {
             util.ajax ('get', '/api/users', {},  (response) => { this.users = response })
+            
+            this.authUserRole = getAuthUserRole();
         },
 
         computed: {

@@ -43,17 +43,16 @@
                             Topics
                         </router-link>
                     </p>
-                    <p v-if="authUser.role == 'admin'" class="px-2 md:px-6 tracking-wide text-sm py-2">
-                        <router-link active-class="font-bold text-blue-700" to="/app/templates">
-                            Templates
-                        </router-link>
-                    </p>
                     <p class="px-2 md:px-6 tracking-wide text-sm py-2">
                         <router-link active-class="font-bold text-blue-700" to="/app/users">
                             Users
                         </router-link>
                     </p>
-                    
+                    <p v-if="authUser.role == 'admin'" class="px-2 md:px-6 tracking-wide text-sm py-2">
+                        <router-link active-class="font-bold text-blue-700" to="/app/templates">
+                            Templates
+                        </router-link>
+                    </p>
                     <p v-if="authUser.role == 'admin'" class="px-2 md:px-6 tracking-wide text-sm py-2">
                         <router-link active-class="font-bold text-blue-700" to="/app/settings">
                             Settings

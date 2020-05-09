@@ -48,7 +48,7 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         if ($exception instanceof TokenMismatchException) {
-            return redirect('/')->with('csrf_error', "Please try again.");
+            return back()->withInput()->with('csrf_error', "Please try again.");
         }
 
         return parent::render($request, $exception);
