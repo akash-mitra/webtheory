@@ -15,6 +15,23 @@ window.axios = require('axios');
 window.axios.defaults.withCredentials = true;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios.get('/api/airlock/csrf-cookie').then ((response) => {});
+window.axios.get('/api/check').then ((response) => {
+    if (Object.keys(response.data).length != 0 && response.data.constructor === Object) {
+        
+        if (['admin', 'author'].indexOf(response.data.role) === -1) {
+            util.notifyError ('Unauthorised', "Only Admins can access this page.")
+            return this.$router.replace('/')
+        }
+
+        let authUser = response.data
+
+        window.localStorage.setItem('userIsAuthenticated', true)
+        window.localStorage.setItem('lastLoginAt', (new Date()).getTime())
+        window.localStorage.setItem('authUser', JSON.stringify(authUser))
+
+        // this.$emit('login', authUser)
+    }
+});
 
 
 /**

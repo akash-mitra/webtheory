@@ -41,7 +41,7 @@
                 <a href="{{ $data->user->url }}" class="block px-4 py-4 tracking-wide text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900">Profile</a>
             </div>
 
-            @if($data->user->isAdmin())
+            @if($data->user->isAdmin() || $data->user->isAuthor())
             <div class="border-b">
                 <a href="/app" target="_blank" class="block px-4 py-4 tracking-wide text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900">Admin Panel</a>
             </div>

@@ -17,7 +17,7 @@ class CreateViewsTable extends Migration
             $table->bigIncrements('id');
             $table->ipAddress('ip');
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->float('at', 4);
+            $table->decimal('at', 15, 4);
             $table->string('url', 500);
             $table->string('content_type', 255);
             $table->unsignedBigInteger('content_id');
