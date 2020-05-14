@@ -14,6 +14,8 @@ class ProductionTableSeeder extends Seeder
     {
         $this->addDefaultCategory();
 
+        $this->addDefaultPage();
+
         $this->addDefaultParameters();
 
         $this->addDefaultTemplates();
@@ -27,10 +29,37 @@ class ProductionTableSeeder extends Seeder
             'name' => 'Uncategorised',
             'parent_id' => null,
             'description' => 'All other pages which are not part of any specific topic.',
-            'metakey' => '',
-            'metadesc' => '',
+            'metakey' => 'Uncategorised',
+            'metadesc' => 'Uncategorised',
             'media_id' => null,
             'user_id' => 1,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+    }
+
+
+
+    private function addDefaultPage ()
+    {
+        DB::table('pages')->insert([
+            'category_id' => 1,
+            'user_id' => 1,
+            'title' => 'Getting Started',
+            'summary' => 'This is your Space and it is Fabulous Place to be there',
+            'metakey' => 'Webtheory, Getting Started',
+            'metadesc' => 'Getting Started with Webtheory',
+            'media_id' => null,
+            'status' => 'Live',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        DB::table('page_contents')->insert([
+            'page_id' => 1,
+            'body_json' => '{"time":1588996014099,"blocks":[{"type":"header","data":{"text":"Welcome aboard!","level":3}},{"type":"paragraph","data":{"text":"We at WebTheory, have put our heart, soul and sweat to bring you the next-generation  Content Management System."}},{"type":"paragraph","data":{"text":"You now have access to highly advanced and superfast platform - integrated with powerful tools such as analytics, social integration, media management, CDN, AMP, SEO tools etc."}},{"type":"paragraph","data":{"text":"As you start writing your first article in the WebTheory platform, we wish you very best of writing time. We are always available a mail away from you but very close to the CMS."}},{"type":"paragraph","data":{"text":"Feel free to reach out when you are stuck anywhere in between."}},{"type":"paragraph","data":{"text":"Enjoy writing creating delightful and successful site using WebTheory."}},{"type":"paragraph","data":{"text":"Spread the love and word about us to the world."}},{"type":"paragraph","data":{"text":"Thank you very much for choosing us."}},{"type":"paragraph","data":{"text":"*Note: *This is a default page created and it is published on your site by us. Kindly go to Pages —&gt;  and switch it to Draft to take it down from Live."}}],"version":"2.16.1"}',
+            'body_html' => '<h3>Welcome aboard!</h3><p>We at WebTheory, have put our heart, soul and sweat to bring you the next-generation  Content Management System.</p><p>You now have access to highly advanced and superfast platform - integrated with powerful tools such as analytics, social integration, media management, CDN, AMP, SEO tools etc.</p><p>As you start writing your first article in the WebTheory platform, we wish you very best of writing time. We are always available a mail away from you but very close to the CMS.</p><p>Feel free to reach out when you are stuck anywhere in between.</p><p>Enjoy writing creating delightful and successful site using WebTheory.</p><p>Spread the love and word about us to the world.</p><p>Thank you very much for choosing us.</p><p>*Note: *This is a default page created and it is published on your site by us. Kindly go to Pages —&gt;  and switch it to Draft to take it down from Live.</p>',
+            'editor' => 'editorjs',
             'created_at' => now(),
             'updated_at' => now()
         ]);

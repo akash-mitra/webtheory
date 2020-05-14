@@ -36,7 +36,7 @@ class UpdateSite implements ShouldQueue
             'commit' => $this->commitId
         ]);
 
-        \Log::info($exitCode);
+        // \Log::info($exitCode);
         return true;
     }
 }

@@ -2714,6 +2714,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     var _ref;
@@ -4274,12 +4277,22 @@ __webpack_require__.r(__webpack_exports__);
       resetPasswordModal: false,
       token: token,
       authUserId: null,
+      authUserRole: null,
       errors: null
     };
   },
   created: function created() {
     this.authUserId = Object(_auth_js__WEBPACK_IMPORTED_MODULE_0__["getAuthUserId"])();
+    this.authUserRole = Object(_auth_js__WEBPACK_IMPORTED_MODULE_0__["getAuthUserRole"])();
     this.fetchUserAndLoadForm();
+  },
+  computed: {
+    showSaveButton: function showSaveButton() {
+      if (this.authUserRole === 'admin') return true; // else if (this.authUserId == this.id)
+      // return true
+
+      return false;
+    }
   },
   methods: {
     // simple front-end validations before starting
@@ -4399,6 +4412,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _auth_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../auth.js */ "./resources/js/auth.js");
 //
 //
 //
@@ -4504,13 +4518,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       users: [],
       selected: null,
       tab: 'all',
-      searchPhrase: ''
+      searchPhrase: '',
+      authUserRole: null
     };
   },
   created: function created() {
@@ -4519,6 +4535,7 @@ __webpack_require__.r(__webpack_exports__);
     util.ajax('get', '/api/users', {}, function (response) {
       _this.users = response;
     });
+    this.authUserRole = Object(_auth_js__WEBPACK_IMPORTED_MODULE_0__["getAuthUserRole"])();
   },
   computed: {
     filteredUsers: function filteredUsers() {
@@ -10545,16 +10562,16 @@ var render = function() {
               staticClass:
                 "px-4 text-sm tracking-wide uppercase cursor-pointer",
               class:
-                _vm.tab === "update"
+                _vm.tab === "site"
                   ? "text-gray-700 py-2 border-b-4 border-blue-500"
                   : "text-gray-500 py-2",
               on: {
                 click: function($event) {
-                  _vm.tab = "update"
+                  _vm.tab = "site"
                 }
               }
             },
-            [_vm._v("\n                Update\n            ")]
+            [_vm._v("\n                Site\n            ")]
           )
         ])
       ]
@@ -12074,10 +12091,10 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm.tab == "update"
+    _vm.tab == "site"
       ? _c("div", { staticClass: "pb-10" }, [
           _c("p", { staticClass: "text-sm text-gray-700 pb-3 uppercase" }, [
-            _vm._v("Site Update")
+            _vm._v("Site Maintenance")
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "rounded w-full" }, [
@@ -12085,6 +12102,12 @@ var render = function() {
               "div",
               { staticClass: "px-6 py-3 mb-4 bg-white shadow rounded" },
               [
+                _c("div", { staticClass: "py-2 text-sm text-gray-500" }, [
+                  _vm._v(
+                    "\n                    Update your site to the latest version of Webtheory, that fixes any known bugs/issues and adds new feature enhancements.\n                "
+                  )
+                ]),
+                _vm._v(" "),
                 _c(
                   "button",
                   {
@@ -12095,7 +12118,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("Update To XYZ")]
+                  [_vm._v("Update")]
                 )
               ]
             )
@@ -14190,18 +14213,20 @@ var render = function() {
                 [_vm._v("\n                Close\n            ")]
               ),
               _vm._v("\n\n             \n\n            "),
-              _c(
-                "t-button",
-                {
-                  attrs: { loadingWheel: _vm.isSaving },
-                  nativeOn: {
-                    click: function($event) {
-                      return _vm.initiateSave($event)
-                    }
-                  }
-                },
-                [_vm._v("\n                Save\n            ")]
-              )
+              _vm.showSaveButton
+                ? _c(
+                    "t-button",
+                    {
+                      attrs: { loadingWheel: _vm.isSaving },
+                      nativeOn: {
+                        click: function($event) {
+                          return _vm.initiateSave($event)
+                        }
+                      }
+                    },
+                    [_vm._v("\n                Save\n            ")]
+                  )
+                : _vm._e()
             ],
             1
           )
@@ -14676,15 +14701,17 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass:
-              "bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow",
-            attrs: { href: "/app/users/create" }
-          },
-          [_vm._v("Create")]
-        )
+        _vm.authUserRole == "admin"
+          ? _c(
+              "a",
+              {
+                staticClass:
+                  "bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow",
+                attrs: { href: "/app/users/create" }
+              },
+              [_vm._v("Create")]
+            )
+          : _vm._e()
       ]
     ),
     _vm._v(" "),
@@ -14738,22 +14765,24 @@ var render = function() {
           [_vm._v("All")]
         ),
         _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "px-4 text-sm uppercase cursor-pointer",
-            class:
-              _vm.tab === "trashed"
-                ? "text-gray-700 py-2 border-b-4 border-blue-500"
-                : "text-gray-500 py-2",
-            on: {
-              click: function($event) {
-                _vm.tab = "trashed"
-              }
-            }
-          },
-          [_vm._v("Trashed")]
-        )
+        _vm.authUserRole == "admin"
+          ? _c(
+              "div",
+              {
+                staticClass: "px-4 text-sm uppercase cursor-pointer",
+                class:
+                  _vm.tab === "trashed"
+                    ? "text-gray-700 py-2 border-b-4 border-blue-500"
+                    : "text-gray-500 py-2",
+                on: {
+                  click: function($event) {
+                    _vm.tab = "trashed"
+                  }
+                }
+              },
+              [_vm._v("Trashed")]
+            )
+          : _vm._e()
       ]
     ),
     _vm._v(" "),
@@ -14949,51 +14978,57 @@ var render = function() {
                             ]
                           ),
                           _vm._v(" "),
-                          _c(
-                            "td",
-                            {
-                              staticClass:
-                                "px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
-                            },
-                            [
-                              _c("div", { staticClass: "inline-flex" }, [
-                                _c("div", { staticClass: "ml-2" }, [
-                                  user.deleted_at === null
-                                    ? _c(
-                                        "button",
-                                        {
-                                          staticClass:
-                                            "text-gray-400 hover:text-red-600",
-                                          on: {
-                                            click: function($event) {
-                                              return _vm.deactivateUser(user.id)
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _c(
-                                            "svg",
+                          _vm.authUserRole == "admin"
+                            ? _c(
+                                "td",
+                                {
+                                  staticClass:
+                                    "px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium"
+                                },
+                                [
+                                  _c("div", { staticClass: "inline-flex" }, [
+                                    _c("div", { staticClass: "ml-2" }, [
+                                      user.deleted_at === null
+                                        ? _c(
+                                            "button",
                                             {
                                               staticClass:
-                                                "fill-current h-4 w-4",
-                                              attrs: { viewBox: "0 0 20 20" }
+                                                "text-gray-400 hover:text-red-600",
+                                              on: {
+                                                click: function($event) {
+                                                  return _vm.deactivateUser(
+                                                    user.id
+                                                  )
+                                                }
+                                              }
                                             },
                                             [
-                                              _c("path", {
-                                                attrs: {
-                                                  d:
-                                                    "M6 2l2-2h4l2 2h4v2H2V2h4zM3 6h14l-1 14H4L3 6zm5 2v10h1V8H8zm3 0v10h1V8h-1z"
-                                                }
-                                              })
+                                              _c(
+                                                "svg",
+                                                {
+                                                  staticClass:
+                                                    "fill-current h-4 w-4",
+                                                  attrs: {
+                                                    viewBox: "0 0 20 20"
+                                                  }
+                                                },
+                                                [
+                                                  _c("path", {
+                                                    attrs: {
+                                                      d:
+                                                        "M6 2l2-2h4l2 2h4v2H2V2h4zM3 6h14l-1 14H4L3 6zm5 2v10h1V8H8zm3 0v10h1V8h-1z"
+                                                    }
+                                                  })
+                                                ]
+                                              )
                                             ]
                                           )
-                                        ]
-                                      )
-                                    : _vm._e()
-                                ])
-                              ])
-                            ]
-                          )
+                                        : _vm._e()
+                                    ])
+                                  ])
+                                ]
+                              )
+                            : _vm._e()
                         ]
                       )
                     }),
@@ -30430,7 +30465,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
 /*!******************************!*\
   !*** ./resources/js/auth.js ***!
   \******************************/
-/*! exports provided: isProtected, loginValid, isAuthenticated, isFresh, storeLocalCredential, removeLocalCredential, getLocalUser, getAuthUserId, getDefaultRedirectRoute */
+/*! exports provided: isProtected, loginValid, isAuthenticated, isFresh, storeLocalCredential, removeLocalCredential, getLocalUser, getAuthUserId, getAuthUserRole, getDefaultRedirectRoute */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30443,6 +30478,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeLocalCredential", function() { return removeLocalCredential; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLocalUser", function() { return getLocalUser; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAuthUserId", function() { return getAuthUserId; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAuthUserRole", function() { return getAuthUserRole; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDefaultRedirectRoute", function() { return getDefaultRedirectRoute; });
 /**
  * A collection of some helper functions to
@@ -30486,6 +30522,11 @@ function getAuthUserId() {
   if (authUser) return authUser.id;
   return null;
 }
+function getAuthUserRole() {
+  var authUser = getLocalUser();
+  if (authUser) return authUser.role;
+  return null;
+}
 function getDefaultRedirectRoute() {
   return 'pages.index';
 }
@@ -30498,6 +30539,8 @@ function getDefaultRedirectRoute() {
   \***********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
+
+var _this = this;
 
 /**
  * Sweetalert plugins
@@ -30513,6 +30556,19 @@ window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js")
 window.axios.defaults.withCredentials = true;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios.get('/api/airlock/csrf-cookie').then(function (response) {});
+window.axios.get('/api/check').then(function (response) {
+  if (Object.keys(response.data).length != 0 && response.data.constructor === Object) {
+    if (['admin', 'author'].indexOf(response.data.role) === -1) {
+      util.notifyError('Unauthorised', "Only Admins can access this page.");
+      return _this.$router.replace('/');
+    }
+
+    var authUser = response.data;
+    window.localStorage.setItem('userIsAuthenticated', true);
+    window.localStorage.setItem('lastLoginAt', new Date().getTime());
+    window.localStorage.setItem('authUser', JSON.stringify(authUser)); // this.$emit('login', authUser)
+  }
+});
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
  * all outgoing HTTP requests automatically have it attached. This is just

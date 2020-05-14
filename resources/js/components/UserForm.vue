@@ -25,7 +25,7 @@
 
                 &nbsp;
 
-                <t-button :loadingWheel="isSaving" @click.native="initiateSave">
+                <t-button v-if="showSaveButton" :loadingWheel="isSaving" @click.native="initiateSave">
                     Save
                 </t-button>
             </div>
@@ -144,7 +144,7 @@
 
 <script>
 
-import { getAuthUserId } from '../auth.js';
+import { getAuthUserId, getAuthUserRole } from '../auth.js';
 
 export default {
 
@@ -171,6 +171,7 @@ export default {
             resetPasswordModal: false,
             token: token,
             authUserId: null,
+            authUserRole: null,
             errors: null
         }
     },
@@ -180,7 +181,22 @@ export default {
 
         this.authUserId = getAuthUserId()
 
+        this.authUserRole = getAuthUserRole()
+
         this.fetchUserAndLoadForm()
+    },
+
+
+    computed: {
+        showSaveButton ()
+        {
+            
+            if (this.authUserRole === 'admin')
+                return true
+            // else if (this.authUserId == this.id)
+                // return true
+            return false
+        }
     },
 
 

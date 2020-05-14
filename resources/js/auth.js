@@ -65,6 +65,13 @@ export function getAuthUserId ()
     return null
 }
 
+export function getAuthUserRole ()
+{
+    let authUser = getLocalUser()
+    if (authUser) return authUser.role
+    return null
+}
+
 
 export function getDefaultRedirectRoute()
 {

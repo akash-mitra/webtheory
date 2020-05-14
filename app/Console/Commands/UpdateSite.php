@@ -12,7 +12,7 @@ class UpdateSite extends Command
      *
      * @var string
      */
-    protected $signature = 'update:site {commit}';
+    protected $signature = 'update:site {commit=Latest : Update to the Commit ID}';
 
     /**
      * The console command description.
@@ -44,51 +44,36 @@ class UpdateSite extends Command
             $commitId = $this->argument('commit');
             $this->info('Commit Id: ' . $commitId);
             
-            /*
-            composer install
-            composer dump-autoload
-            Artisan::call('down');
-            Artisan::call('config:clear');
-            Artisan::call('cache:clear');
-            Artisan::call('event:clear');
-	        Artisan::call('view:clear');
-            Artisan::call('route:clear');
-            Artisan::call('migrate');
-            Artisan::call('db:seed', ['--class' => 'PermissionsTableSeeder', '--force' => true]);
-            Artisan::call('up');
-            */
             
-            exec("cd " . base_path() . " && php artisan down");
-            $this->info('Application is now in maintenance mode.');
-
+            $this->call('down');
+            
+            exec("cd " . base_path() . " && git stash");
             exec("cd " . base_path() . " && git pull");
-            exec("cd " . base_path() . " && git checkout " . $commitId);
+            // exec("cd " . base_path() . " && git checkout " . $commitId);
             $this->info('Git command success.');
             
             exec("composer install -d " . base_path());
             exec("composer dump-autoload -d " . base_path());
             $this->info('Composer command success.');
 
-            exec("cd " . base_path() . " && php artisan config:clear");
-            exec("cd " . base_path() . " && php artisan cache:clear");
-            exec("cd " . base_path() . " && php artisan event:clear");
-            exec("cd " . base_path() . " && php artisan view:clear");
-            exec("cd " . base_path() . " && php artisan route:clear");
+            $this->call('config:clear');
+            $this->call('cache:clear');
+            $this->call('event:clear');
+            $this->call('view:clear');
+            $this->call('route:clear');
             $this->info('Artisan clear success.');
 
-            exec("cd " . base_path() . " && php artisan migrate");
-            exec("cd " . base_path() . " && php artisan db:seed --class PermissionsTableSeeder --force");
+            $this->call('migrate', ['--force' => true]);
+            $this->call('db:seed', ['--class' => 'PermissionsTableSeeder', '--force' => true]);
             $this->info('Migration success.');
 
-            exec("cd " . base_path() . " && php artisan up");
-            $this->info('Application is now live.');
+            $this->call('up');
 
+            $this->info('Site updated successfully');
         } catch(\Exception $e) {
             \Log::info($e);
-            exec("cd " . base_path() . " && php artisan up");
+            $this->call('up');
             $this->error('Something went wrong!');
         }
-
-        $this->info('Site updated successfully');
     }
 }

@@ -26,8 +26,8 @@
                     Mail
                 </div>
 
-                <div @click="tab='update'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='update'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
-                    Update
+                <div @click="tab='site'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='site'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
+                    Site
                 </div>
 
             </div>
@@ -291,13 +291,16 @@
         </div>
 
 
-        <div class="pb-10" v-if="tab=='update'">
+        <div class="pb-10" v-if="tab=='site'">
 
-            <p class="text-sm text-gray-700 pb-3 uppercase">Site Update</p>
+            <p class="text-sm text-gray-700 pb-3 uppercase">Site Maintenance</p>
 
             <div class="rounded w-full">
                 <div class="px-6 py-3 mb-4 bg-white shadow rounded">
-                    <button @click="siteUpdate(XYZ)" class="px-4 py-2 text-white bg-indigo-600 rounded">Update To XYZ</button>
+                    <div class="py-2 text-sm text-gray-500">
+                        Update your site to the latest version of Webtheory, that fixes any known bugs/issues and adds new feature enhancements.
+                    </div>
+                    <button @click="siteUpdate(XYZ)" class="px-4 py-2 text-white bg-indigo-600 rounded">Update</button>
                 </div>
             </div>
         </div>
