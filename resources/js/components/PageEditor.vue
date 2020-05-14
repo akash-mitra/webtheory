@@ -55,7 +55,7 @@
                         <span v-if="!! intro" class="bg-gray-100 rounded-lg py-1 px-2 ml-4" :class="intro.length>1048 ? 'text-red-400': 'text-gray-600'"> {{ intro.length }}</span>
                     </label>
 
-                    <textarea name="intro" v-model="intro" ref="intro" class="autoheight h-8 px-6 bg-transparent  outline-none text-gray-700 text-lg tracking-wide w-full placeholder-gray-700" placeholder="Provide a 3/4 lines of introduction to your story..." @input="resizeInput($event)"></textarea>
+                    <textarea name="intro" v-model="intro" ref="intro" class="autoheight h-auto px-6 bg-transparent  outline-none text-gray-700 text-lg tracking-wide w-full placeholder-gray-700" placeholder="Provide a 3/4 lines of introduction to your story..." @input="resizeInput($event)" @focus="resizeInput($event)"></textarea>
 
                     <t-error-message :errors="errors" field="summary"></t-error-message>
 
