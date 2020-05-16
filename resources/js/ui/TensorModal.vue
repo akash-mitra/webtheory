@@ -14,8 +14,22 @@
                                         <slot></slot>
                                 </div>
 
-                                <div class="w-full">
-                                    <slot name="footer"></slot>
+                                <div class="w-full flex justify-between items-center p-6 bg-gray-100 border-t mt-6">
+                                        <button type="button" @click="closeModal">
+                                                <slot name="close-btn-content">
+                                                        <span  class="text-blue-600 text-sm">
+                                                        Cancel
+                                                        </span>
+                                                </slot>
+                                        </button>
+
+                                        <button type="button" @click="startProcess">
+                                                <slot name="action-btn-content">
+                                                        <span class="px-6 py-2 text-white bg-blue-600 rounded">
+                                                        OK
+                                                        </span>
+                                                </slot>
+                                        </button>
                                 </div>
                         </div>
                 </div>
@@ -43,10 +57,14 @@
         },
 
         methods: {
-                closeModal: function () {
-                        
+                closeModal() {
+
                         this.$emit('close')
 
+                },
+
+                startProcess() {
+                        this.$emit('go-ahead')
                 }
         }
     }

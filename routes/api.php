@@ -105,7 +105,7 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     Route::post('users', 'Api\UserController@store')->name('users.store');
     Route::put('users/{user}', 'Api\UserController@update')->name('users.update');
     Route::delete('users/{id}', 'Api\UserController@destroy')->name('users.destroy');
-
+    Route::patch('users/password', 'Api\UserController@changePassword')->name('password.change');
 
     Route::get('settings/social', 'Api\SettingController@getsocial')->name('settings.social');
     Route::get('settings/mail', 'Api\SettingController@getmail')->name('settings.mail');

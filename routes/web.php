@@ -31,9 +31,6 @@ Route::get('/password/reset/{token}', 'Auth\ResetPasswordController@showResetFor
 // Post a reset password request.
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 
-/* Change Password */
-Route::post('/password/change', 'Api\UserController@changePassword')->name('password.change');
-
 
 /*
 | SOCIAL AUTHENTICATION RELATED ROUTES

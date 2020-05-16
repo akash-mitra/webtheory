@@ -83,8 +83,10 @@
 
         </div>
 
-        <t-modal :show="resetPasswordModal" cover="1/2" @close="resetPasswordModal=false">
+        <t-modal :show="resetPasswordModal" cover="1/2" @close="resetPasswordModal=false" @go-ahead="sendResetReq">
+
             <template v-slot:header>
+
                 <div class="w-full px-6 py-4 border-b">
                     <h3 class="text-gray-800 text-xl">Reset Current Password</h3>
                 </div>
@@ -93,18 +95,13 @@
 
             <div class="pt-4 w-full">
 
-            <form method="post" action="/password/change">
-
-                <input type="hidden" v-model="token" name="_token">
-
-                <input type="hidden" v-model="email" name="email">
-
                 <div class="px-6 w-full mb-4">
+
                         <label for="currrent_password" class="block text-gray-700 text-sm mb-2 flex justify-between">
                             Current Password
                         </label>
 
-                        <input aria-label="Password" name="current_password" id="current_password" type="password" required="" autocomplete="current-password"
+                        <input aria-label="Password" v-model="current_password" id="current_password" type="password" required="" autocomplete="current-password"
                             class="px-3 py-2 border text-gray-900 bg-gray-100 rounded placeholder-gray-600 appearance-none w-full sm:text-sm sm:leading-5 outline-none"
                             placeholder="********">
                 </div>
@@ -114,7 +111,7 @@
                             New Password
                         </label>
 
-                        <input aria-label="Password" name="new_password" id="new_password" type="password" required
+                        <input aria-label="Password" v-model="new_password" id="new_password" type="password" required
                             class="px-3 py-2 border text-gray-900 bg-gray-100 rounded placeholder-gray-600 appearance-none w-full sm:text-sm sm:leading-5 outline-none"
                             placeholder="********">
 
@@ -122,17 +119,15 @@
                             Re-type New Password
                         </label>
 
-                        <input aria-label="Password" name="new_password_confirmation" id="new_password_confirmation" type="password" required
+                        <input aria-label="Password" v-model="new_password_confirmation" id="new_password_confirmation" type="password" required
                             class="px-3 py-2 border text-gray-900 bg-gray-100 rounded placeholder-gray-600 appearance-none w-full sm:text-sm sm:leading-5 outline-none"
                             placeholder="********">
                 </div>
-
-                <div class="bg-gray-100 px-6 py-4 flex justify-end">
-                    <button type="submit" class="px-4 py-2 text-white bg-indigo-600 rounded">Change Password</button>
-                </div>
-
-            </form>
             </div>
+
+            <template v-slot:action-btn-content>
+                    <span class="px-4 py-2 text-white bg-indigo-600 rounded">Change Password</span>
+            </template>
 
         </t-modal>
 
@@ -170,6 +165,10 @@ export default {
 
             resetPasswordModal: false,
             token: token,
+            current_password: '',
+            new_password: '',
+            new_password_confirmation: '',
+
             authUserId: null,
             authUserRole: null,
             errors: null
@@ -190,7 +189,7 @@ export default {
     computed: {
         showSaveButton ()
         {
-            
+
             if (this.authUserRole === 'admin')
                 return true
             // else if (this.authUserId == this.id)
@@ -325,6 +324,20 @@ export default {
                 })
             }
         },
+
+        sendResetReq () {
+
+            let data = {
+                'current_password': this.current_password,
+                'new_password': this.new_password,
+                'new_password_confirmation': this.new_password_confirmation
+            }, p = this
+
+            util.ajax('patch', '/api/users/password', data, function (response) {
+                util.notifySuccess(response.message, "Your current session will be logged out.")
+                p.$root.logoutDirect()
+            })
+        }
 
     }
 }

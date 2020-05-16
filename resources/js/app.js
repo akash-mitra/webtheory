@@ -78,9 +78,23 @@ let app = new Vue({
                         p.$router.push('/app/login')
                     })
                     .catch(e => { console.log(e) })
-
-
             })
+        },
+
+        logoutDirect ()
+        {
+            let p = this
+
+            removeLocalCredential()
+
+            p.authUser = null
+
+            window.axios.post('/api/logout')
+            .then(r => {
+                console.log(r)
+                p.$router.push('/app/login')
+            })
+            .catch(e => { console.log(e) })
 
         },
 

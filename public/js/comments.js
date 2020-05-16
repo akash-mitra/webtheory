@@ -204,6 +204,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     content_type: {
@@ -217,19 +224,34 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      comments: [],
+      comments: {},
       comment: '',
       replyText: '',
       unsavedComment: {}
     };
   },
   created: function created() {
-    var p = this;
-    this.ajaxGet(this.getUrl(), function (response) {
-      p.comments = response;
-    });
+    this.loadInitialComments();
   },
   methods: {
+    loadInitialComments: function loadInitialComments() {
+      var p = this;
+      this.ajaxGet(this.getUrl(), function (response) {
+        p.comments = response;
+      });
+    },
+    loadMoreComments: function loadMoreComments() {
+      var p = this;
+      this.ajaxGet(this.getUrl(), function (response) {
+        var l = response.data.length;
+
+        for (var i = 0; i < l; i++) {
+          p.comments.data.push(response.data[i]);
+        }
+
+        p.comments.next_page_url = response.next_page_url;
+      });
+    },
     postComment: function postComment() {
       var c = {
         body: this.comment,
@@ -238,13 +260,13 @@ __webpack_require__.r(__webpack_exports__);
         user: this.$root.$data.authuser
       },
           p = this;
-      this.ajaxPost(this.getUrl(), c, function (response) {
+      this.ajaxPost(this.postUrl(), c, function (response) {
         p.comments.data.unshift(c);
       });
     },
     postReply: function postReply(reply) {
       var p = this;
-      this.ajaxPost(this.getUrl(), {
+      this.ajaxPost(this.postUrl(), {
         'body': this.replyText,
         'parent_id': reply.parent_id
       }, function (response) {
@@ -289,6 +311,12 @@ __webpack_require__.r(__webpack_exports__);
       xhttp.send(JSON.stringify(data));
     },
     getUrl: function getUrl() {
+      var _this$comments$next_p;
+
+      var type = this.content_type === 'single' ? 'pages' : 'categories';
+      return (_this$comments$next_p = this.comments.next_page_url) !== null && _this$comments$next_p !== void 0 ? _this$comments$next_p : '/api/' + type + '/' + this.refid + '/comments';
+    },
+    postUrl: function postUrl() {
       var type = this.content_type === 'single' ? 'pages' : 'categories';
       return '/api/' + type + '/' + this.refid + '/comments';
     },
@@ -311,7 +339,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "\n.justify-end[data-v-4052262a] {\n    justify-content: flex-end\n}\n\n", ""]);
+exports.push([module.i, "\n.comment-strip-style[data-v-4052262a] {\n}\n\n", ""]);
 // Exports
 module.exports = exports;
 
@@ -978,7 +1006,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", { staticClass: "w-full mb-4 py-4 border-b" }, [
+    _c("div", { staticClass: "w-full mb-3 py-4" }, [
       _c("h4", { staticClass: "text-xl" }, [
         _vm._v(_vm._s(_vm.comments.total) + " Comments")
       ])
@@ -1075,16 +1103,18 @@ var render = function() {
               "div",
               {
                 staticClass:
-                  "w-full flex p-4 bg-gray-100 border rounded-lg mb-2 justify-between"
+                  "w-full flex p-4 bg-gray-100 border rounded-lg mb-4 justify-between items-center"
               },
               [
-                _c("div", [_vm._v("Join the Discussion.")]),
+                _c("div", { staticClass: "text-xl" }, [
+                  _vm._v("Join the Discussion.")
+                ]),
                 _vm._v(" "),
                 _c(
                   "div",
                   {
                     staticClass:
-                      "bg-orange-600 text-white py-1 px-4 rounded hover:bg-orange-800",
+                      "bg-orange-600 text-white py-1 px-4 cursor-pointer rounded hover:bg-orange-800",
                     on: {
                       click: function($event) {
                         $event.stopPropagation()
@@ -1092,7 +1122,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("\n                Login Here\n            ")]
+                  [_vm._v("\n                Sign Up / Login\n            ")]
                 )
               ]
             ),
@@ -1100,7 +1130,7 @@ var render = function() {
         _vm._l(_vm.comments.data, function(comment) {
           return _c(
             "div",
-            { staticClass: "w-full flex p-4 rounded hover:bg-gray-100" },
+            { staticClass: "w-full flex p-4 border-b border-gray-200" },
             [
               _c("a", { attrs: { href: comment.user.id } }, [
                 _c("img", {
@@ -1113,12 +1143,14 @@ var render = function() {
                 "div",
                 { staticClass: "w-full text-sm px-4" },
                 [
-                  _c("div", [
-                    _c("span", { staticClass: "text-blue-800 font-bold" }, [
-                      _vm._v(_vm._s(comment.user.name))
-                    ]),
+                  _c("div", { staticClass: "pb-1" }, [
+                    _c(
+                      "span",
+                      { staticClass: "text-blue-800 font-bold tracking-wide" },
+                      [_vm._v(_vm._s(comment.user.name))]
+                    ),
                     _vm._v(" "),
-                    _c("span", { staticClass: "ml-3" }, [
+                    _c("span", { staticClass: "ml-1 text-gray-600" }, [
                       _vm._v("commented " + _vm._s(comment.created_ago))
                     ])
                   ]),
@@ -1203,17 +1235,20 @@ var render = function() {
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "w-full text-sm px-4" }, [
-                        _c(
-                          "div",
-                          { staticClass: "text-blue-800 font-semibold" },
-                          [
-                            _vm._v(
-                              "\n                            " +
-                                _vm._s(reply.user.name) +
-                                "\n                        "
-                            )
-                          ]
-                        ),
+                        _c("div", { staticClass: "pb-1" }, [
+                          _c(
+                            "span",
+                            {
+                              staticClass:
+                                "text-blue-800 font-semibold tracking-wide"
+                            },
+                            [_vm._v(_vm._s(reply.user.name))]
+                          ),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "ml-1 text-gray-600" }, [
+                            _vm._v("replied " + _vm._s(reply.created_ago))
+                          ])
+                        ]),
                         _vm._v(" "),
                         reply.body.length > 0
                           ? _c("div", { staticClass: "text-gray-800" }, [
@@ -1373,7 +1408,20 @@ var render = function() {
         })
       ],
       2
-    )
+    ),
+    _vm._v(" "),
+    _vm.comments.next_page_url != null
+      ? _c("div", { staticClass: "mt-4" }, [
+          _c(
+            "span",
+            {
+              staticClass: "px-3 py-1 cursor-pointer text-blue-700 text-sm",
+              on: { click: _vm.loadMoreComments }
+            },
+            [_vm._v("Load more comments")]
+          )
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = []
@@ -1457,7 +1505,12 @@ function normalizeComponent (
     options._ssrRegister = hook
   } else if (injectStyles) {
     hook = shadowMode
-      ? function () { injectStyles.call(this, this.$root.$options.shadowRoot) }
+      ? function () {
+        injectStyles.call(
+          this,
+          (options.functional ? this.parent : this).$root.$options.shadowRoot
+        )
+      }
       : injectStyles
   }
 

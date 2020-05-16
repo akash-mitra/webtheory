@@ -133,21 +133,11 @@ class UserController extends Controller
         // return $request->only('email');
 
         $request->validate([
-            'email' => ['required'],
             'current_password' => ['required', 'min:8', 'max:255'],
             'new_password' => ['required', 'min:8', 'max:255', 'confirmed'],
         ]);
 
-        // make sure the user is changing own password only
-        if (auth()->user()->email != $request->email)
-        {
-            return response([
-                'status' => 'failure',
-                'message' => 'Unable to reset password for other account.'
-            ], 401);
-        }
-
-        $user = User::where('email', $request->email)->first();
+        $user = auth()->user();
 
         // make sure user current password is correct
         if(! Hash::check($request->current_password, $user->password))
@@ -158,12 +148,14 @@ class UserController extends Controller
             ], 401);
         }
 
-
         $user->password = Hash::make($request->new_password);
 
         $user->save();
 
-        return back();
+        return response([
+            'status' => 'success',
+            'message' => 'Account password changed.'
+        ]);
     }
 
 

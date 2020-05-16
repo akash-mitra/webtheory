@@ -1,7 +1,7 @@
 <template>
 
     <div>
-        <div class="w-full mb-4 py-4 border-b">
+        <div class="w-full mb-3 py-4">
             <h4 class="text-xl">{{ comments.total }} Comments</h4>
         </div>
 
@@ -31,23 +31,24 @@
                     </div>
                 </div>
             </div>
-            <div v-else class="w-full flex p-4 bg-gray-100 border rounded-lg mb-2 justify-between">
-                <div>Join the Discussion.</div>
-                <div class="bg-orange-600 text-white py-1 px-4 rounded hover:bg-orange-800" @click.stop="showLoginOption">
-                    Login Here
+
+            <div v-else class="w-full flex p-4 bg-gray-100 border rounded-lg mb-4 justify-between items-center">
+                <div class="text-xl">Join the Discussion.</div>
+                <div class="bg-orange-600 text-white py-1 px-4 cursor-pointer rounded hover:bg-orange-800" @click.stop="showLoginOption">
+                    Sign Up / Login
                 </div>
             </div>
 
-            <div v-for="comment in comments.data" class="w-full flex p-4 rounded hover:bg-gray-100">
+            <div v-for="comment in comments.data" class="w-full flex p-4 border-b border-gray-200">
 
                 <a  :href="comment.user.id">
                     <img :src="comment.user.avatar" class="h-12 w-12 rounded-full">
                 </a>
 
                 <div class="w-full text-sm px-4">
-                    <div>
-                        <span class="text-blue-800 font-bold">{{ comment.user.name }}</span>
-                        <span class="ml-3">commented {{ comment.created_ago }}</span>
+                    <div class="pb-1">
+                        <span class="text-blue-800 font-bold tracking-wide">{{ comment.user.name }}</span>
+                        <span class="ml-1 text-gray-600">commented {{ comment.created_ago }}</span>
                     </div>
 
                     <div class="text-gray-800">
@@ -70,8 +71,10 @@
                         </a>
 
                         <div class="w-full text-sm px-4">
-                            <div class="text-blue-800 font-semibold">
-                                {{ reply.user.name }}
+
+                            <div class="pb-1">
+                                <span class="text-blue-800 font-semibold tracking-wide">{{ reply.user.name }}</span>
+                                <span class="ml-1 text-gray-600">replied {{ reply.created_ago }}</span>
                             </div>
 
                             <div v-if="reply.body.length>0" class="text-gray-800">
@@ -103,6 +106,10 @@
                 </div>
             </div>
         </div>
+
+        <div v-if="comments.next_page_url != null" class="mt-4">
+            <span @click="loadMoreComments" class="px-3 py-1 cursor-pointer text-blue-700 text-sm">Load more comments</span>
+        </div>
     </div>
 
 </template>
@@ -118,7 +125,7 @@
 
         data() {
             return {
-                comments: [],
+                comments: {},
                 comment: '',
                 replyText:'',
                 unsavedComment: {},
@@ -126,14 +133,30 @@
         },
 
         created() {
-            let p = this
-
-            this.ajaxGet(this.getUrl(), function (response) {
-                p.comments = response
-            })
+            this.loadInitialComments()
         },
 
         methods: {
+
+            loadInitialComments() {
+                let p = this
+                this.ajaxGet(this.getUrl(), function (response) {
+                    p.comments = response
+                })
+            },
+
+
+            loadMoreComments() {
+                let p = this
+                this.ajaxGet(this.getUrl(), function (response) {
+                    let l = response.data.length
+                    for (var i = 0; i < l; i++) {
+                        p.comments.data.push(response.data[i])
+                    }
+                    p.comments.next_page_url = response.next_page_url
+                })
+            },
+
 
             postComment() {
 
@@ -144,8 +167,7 @@
                     user: this.$root.$data.authuser
                 }, p = this
 
-                this.ajaxPost(this.getUrl(), c, function (response) {
-
+                this.ajaxPost(this.postUrl(), c, function (response) {
                     p.comments.data.unshift(c)
                 })
             },
@@ -155,7 +177,7 @@
 
                 let p = this
 
-                this.ajaxPost(this.getUrl(), {
+                this.ajaxPost(this.postUrl(), {
                     'body': this.replyText,
                     'parent_id': reply.parent_id
 
@@ -163,7 +185,6 @@
                     reply.body = p.replyText
                     p.replyText = ''
                 })
-
             },
 
 
@@ -220,6 +241,18 @@
                         ? 'pages'
                         : 'categories'
 
+                return this.comments.next_page_url
+                        ?? '/api/' + type + '/' + this.refid + '/comments'
+            },
+
+
+
+            postUrl() {
+
+                let type = (this.content_type === 'single')
+                        ? 'pages'
+                        : 'categories'
+
                 return '/api/' + type + '/' + this.refid + '/comments'
             },
 
@@ -235,8 +268,8 @@
 </script>
 
 <style scoped>
-.justify-end {
-    justify-content: flex-end
+.comment-strip-style {
+
 }
 
 </style>

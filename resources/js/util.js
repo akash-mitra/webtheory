@@ -274,6 +274,7 @@
                                                 let e = error.response.data.errors
                                                 let k = Object.keys(e)
                                                 util.notifyError (error.response.data.message, e[k[0]][0])
+                                        break;
 
                                         default:
                                                 client_error_handler(error.response.status, error.response.data)
