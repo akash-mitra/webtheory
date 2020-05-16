@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Media;
 use App\Http\Requests\MediaRequest;
+use Illuminate\Http\UploadedFile;
 
 class MediaController extends Controller
 {
@@ -38,6 +40,39 @@ class MediaController extends Controller
     {
         if ($request->file('image')->isValid()) {
             $uploadedFile = $request->file('image');
+            $media =  Media::store($uploadedFile);
+            return [
+                "success" => 1,
+                "file" => [ 'id' => $media['id'], 'path' => $media['path'], 'url' => $media['url'] ]
+            ];
+        } else {
+            return [
+                "success" => 0,
+                "file" => [ 'id' => null, 'path' => null, 'url' => null ]
+            ];
+        }
+    }
+
+    public function uploadurl(Request $request)
+    {
+        if ($request->has('url')) {
+            $url = $request->url;
+
+            // $arrContextOptions = [
+            //     "ssl" => [
+            //         "verify_peer"=>false,
+            //         "verify_peer_name"=>false,
+            //     ],
+            // ];
+            // $urlcontent = file_get_contents($url, false, stream_context_create($arrContextOptions));
+
+            $tempfile = tmpfile();
+            $tempfilepath = (string) stream_get_meta_data($tempfile)['uri'];
+            
+            $urlcontent = file_get_contents($url);
+            file_put_contents($tempfilepath, $urlcontent);
+            $uploadedFile = new UploadedFile($tempfilepath, 'test');
+
             $media =  Media::store($uploadedFile);
             return [
                 "success" => 1,

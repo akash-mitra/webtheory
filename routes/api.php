@@ -51,6 +51,7 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     Route::get('media', 'Api\MediaController@index')->name('media.index');
     Route::get('media/{media}', 'Api\MediaController@show')->name('media.show');
     Route::post('media', 'Api\MediaController@upload')->name('media.upload');
+    Route::post('media/fetchUrl', 'Api\MediaController@uploadurl')->name('media.uploadurl');
     Route::delete('media/{media}', 'Api\MediaController@remove')->name('media.remove');
 
 
