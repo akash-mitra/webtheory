@@ -14,8 +14,7 @@
 
   <meta name="theme-color" content="#fafafa">
 
-  {{-- <link href="/css/style-{{$data->ref->template->primaryColor}}.css" rel="stylesheet"> --}}
-  <link href="/css/style.css" rel="stylesheet">
+  <link href="/css/style-{{$data->ref->template->primaryColor}}.css" rel="stylesheet">
 
   <link href="https://fonts.googleapis.com/css?family={{ str_replace(' ', '+', $data->ref->template->headingFont) }}|Quicksand&display=swap" rel="stylesheet">
 
