@@ -44,16 +44,12 @@
         </div>
 
 
-        <div class="border-t-4 border-{{$data->ref->template->primaryColor}}-500 w-full pattern rounded-b-lg px-10 py-8 overflow-scroll md:flex justify-center md:justify-between items-center">
-            <div class="w-full md:w-1/3 max-w-lg flex justify-center md:justify-start">
-                @if(! empty($data->pages[0]->media))
-                <img src="{{$data->pages[0]->media->url}}" class="shadow-lg rounded-lg">
-                @else
-                <img src="https://source.unsplash.com/400x300?abstract,{{$data->ref->template->primaryColor}}" class="shadow-lg rounded-lg">
-                @endif
+        <div class="border-t-4 border-{{$data->ref->template->primaryColor}}-500 w-full pattern rounded-b-lg px-10 py-8 overflow-scroll md:flex justify-center md:justify-between items-stretch">
+            <div
+                class="w-full md:w-1/3 max-w-lg bg-center bg-no-repeat bg-cover rounded"
+                style="background-image: url('@if(! empty($data->pages[0]->media)){{$data->pages[0]->media->url}}@else https://source.unsplash.com/400x300?abstract,{{$data->ref->template->primaryColor}} @endif')">
             </div>
             <div class="w-full md:w-2/3 max-w-4xl px-0 md:px-8">
-                <div class="mb-2 text-gray-600 px-2 mt-4 md:mt-0">Latest Post</div>
                 <h3 class="text-4xl text-gray-700 font-heading font-bold italic leading-tight">{{ $data->pages[0]->title }}</h3>
                 <p class="py-4 text-lg text-gray-700">{{ $data->pages[0]->summary }}</p>
                 <a href="{{ $data->pages[0]->url }}" class=" inline-block mt-4 text-{{$data->ref->template->primaryColor}}-600 p-3 border-2 rounded border-{{$data->ref->template->primaryColor}}-600 hover:bg-{{$data->ref->template->primaryColor}}-600 hover:text-{{$data->ref->template->primaryColor}}-100 font-bold">Continue Reading...</a>
