@@ -202,7 +202,7 @@ import List from '@editorjs/list';
 import CodeTool from '@editorjs/code';
 import InlineCode from '@editorjs/inline-code';
 import Marker from '@editorjs/marker';
-import Table from '@editorjs/table';
+import Table from '@saurav.mitra/editor-table';
 import ImageTool from '@editorjs/image';
 import Embed from '@editorjs/embed';
 
