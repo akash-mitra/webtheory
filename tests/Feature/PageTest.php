@@ -20,7 +20,7 @@ class PageTest extends TestDataSetup
         ],
         'author' => [
             'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
-            'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago'
+            'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url', 
         ],
         'media'
     ];
@@ -40,7 +40,7 @@ class PageTest extends TestDataSetup
         ],
         'author' => [
             'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
-            'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago'
+            'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url',
         ],
         'media'
     ];
@@ -60,7 +60,7 @@ class PageTest extends TestDataSetup
         ],
         'author' => [
             'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
-            'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago'
+            'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url', 
         ],
         'media' => [
             'id', 'name', 'type', 'size', 'path', 'url', 'storage', 'user_id',
@@ -87,7 +87,7 @@ class PageTest extends TestDataSetup
                     'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
                     'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago'
                 ],
-                "subcomments"
+                "replies"
             ]
         ]
     ];
@@ -327,15 +327,46 @@ class PageTest extends TestDataSetup
             'user_id' => $this->adminUser->id,
         ]);
 
-        /* Unauthenticated user cannot view page comments */
+        /* Unauthenticated user can view page comments */
         $response = $this->get('/api/pages/' . $page->id . '/comments');
-        $response->assertStatus(302);
+        $response->assertStatus(200)
+            ->assertJsonFragment(['body' => $pagecomment->body])
+            ->assertJsonStructureExact([
+                'current_page',
+                'data' => [
+                    '*' => [
+                        'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
+                        'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
+                        'user' => [
+                            'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
+                            'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url', 
+                        ],
+                        "replies"
+                    ]
+                ],
+                'first_page_url', 'from', 'last_page', 'last_page_url', 'next_page_url', 'path', 'per_page', 'prev_page_url', 'to', 'total', 
+            ]);
+        $this->assertDatabaseHas('page_comments', ['reference_id' => $page->id]);
 
         /* Authenticated user can view page comments */
         $response = $this->actingAs($this->adminUser)->get('/api/pages/' . $page->id . '/comments');
         $response->assertStatus(200)
             ->assertJsonFragment(['body' => $pagecomment->body])
-            ->assertJsonStructureExact($this->pagecomment_attributes);
+            ->assertJsonStructureExact([
+                'current_page',
+                'data' => [
+                    '*' => [
+                        'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
+                        'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
+                        'user' => [
+                            'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
+                            'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url', 
+                        ],
+                        "replies"
+                    ]
+                ],
+                'first_page_url', 'from', 'last_page', 'last_page_url', 'next_page_url', 'path', 'per_page', 'prev_page_url', 'to', 'total', 
+            ]);
         $this->assertDatabaseHas('page_comments', ['reference_id' => $page->id]);
     }
 }

@@ -9,7 +9,7 @@ class UserTest extends TestDataSetup
 {
     private $user_attributes = [
         'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-        'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago'
+        'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url', 
     ];
     
     // User Index
@@ -64,7 +64,7 @@ class UserTest extends TestDataSetup
         $response->assertStatus(200)
             ->assertJsonFragment(['name' => $user->name])
             ->assertJsonStructureExact([
-                'name', 'email', 'role', 'updated_at', 'created_at', 'id', 'created_ago', 'updated_ago', 
+                'name', 'email', 'role', 'preferences', 'public_id', 'updated_at', 'created_at', 'id', 'created_ago', 'updated_ago', 'url', 
             ]);
         $this->assertDatabaseHas('users', ['name' => $user->name]);
     }

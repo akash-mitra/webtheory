@@ -72,6 +72,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'role' => 'registered',
+            'preferences' => ["broadcast","database","mail"],
             'public_id' => Str::random(30)
         ]);
     }

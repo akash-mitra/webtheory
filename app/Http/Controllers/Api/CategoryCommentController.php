@@ -11,68 +11,31 @@ use App\CategoryComment;
 
 class CategoryCommentController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        // $this->middleware(['auth']);
-    }
     
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Category $category)
     {
-        return response()->json(Category::with('comments.user')->get());
+        $comments = $category->directComments()
+            ->with(['user', 'replies.user'])
+            ->latest('updated_at')
+            ->paginate(5);
+
+        return response()->json($comments);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(CategoryCommentRequest $request)
+    public function store(Category $category, CategoryCommentRequest $request)
     {
-        $categorycomment = new CategoryComment([
+        $comment = $category->comments()->create([
+            'body' => $request->body,
             'parent_id' => $request->parent_id,
-            'reference_id' => $request->reference_id,
             'user_id' => Auth::id(),
-            'body' => $request->body
         ]);
-        $categorycomment->save();
 
-        return response()->json($categorycomment);
-    }
+        if($comment->isReply())
+        {
+            $comment->parent()->touch();
+        }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  CategoryComment  $categorycomment
-     * @return \Illuminate\Http\Response
-     */
-    public function show(CategoryComment $categorycomment)
-    {
-        return response()->json($categorycomment);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  CategoryComment  $categorycomment
-     * @return \Illuminate\Http\Response
-     */
-    public function update(CategoryCommentRequest $request, CategoryComment $categorycomment)
-    {
-        $categorycomment->fill(request(['body']))->save();
-
-        return response()->json($categorycomment);
+        return response()->json($comment);
     }
 
     /**

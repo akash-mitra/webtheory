@@ -21,7 +21,7 @@ class PageController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['check.permission'])->except('comments');
+        $this->middleware(['check.permission']);
     }
 
 

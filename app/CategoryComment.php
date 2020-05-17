@@ -13,12 +13,14 @@ class CategoryComment extends Model
     
     protected $appends = ['created_ago', 'updated_ago'];
 
+    protected $touches = ['parent'];
+
     public function parent()
     {
         return $this->belongsTo('App\CategoryComment', 'parent_id');
     }
 
-    public function subcomments()
+    public function replies()
     {
         return $this->hasMany('App\CategoryComment', 'parent_id');
     }
@@ -33,11 +35,16 @@ class CategoryComment extends Model
         return $this->belongsTo('App\User', 'user_id');
     }
 
+    public function isReply()
+    {
+        return $this->parent_id != null;
+    }
+
     public function getCreatedAgoAttribute()
     {
         return empty($this->created_at)? null : $this->created_at->diffForHumans();
     }
-    
+
     public function getUpdatedAgoAttribute()
     {
         return empty($this->updated_at)? null : $this->updated_at->diffForHumans();

@@ -26,7 +26,6 @@ class CategoryCommentRequest extends FormRequest
     {
         return [
             'parent_id' => ['nullable', 'integer', 'exists:category_comments,id'],
-            'reference_id' => ['required', 'integer', 'exists:categories,id'],
             'body' => ['required', 'string'],
         ];
     }

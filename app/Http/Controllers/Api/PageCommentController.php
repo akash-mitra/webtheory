@@ -6,6 +6,7 @@ use App\Page;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\PageCommentRequest;
 
 
 class PageCommentController extends Controller
@@ -22,13 +23,8 @@ class PageCommentController extends Controller
     }
 
 
-    public function store(Page $page, Request $request)
+    public function store(Page $page, PageCommentRequest $request)
     {
-        $request->validate([
-            'body' => ['required'],
-            'parent_id' => ['nullable', 'exists:page_comments,id']
-        ]);
-
         $comment = $page->comments()->create([
             'body' => $request->body,
             'parent_id' => $request->parent_id,

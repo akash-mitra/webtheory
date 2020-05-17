@@ -120,17 +120,4 @@ class CategoryController extends Controller
 
         return response()->json($category);
     }
-
-    /**
-     * Display the comments under a category.
-     *
-     * @param  Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function comments(Category $category)
-    {
-        $category->load('comments.user', 'comments.subcomments');
-
-        return response()->json($category);
-    }
 }

@@ -50,6 +50,11 @@ class Category extends Model
         return $this->hasMany('App\CategoryComment', 'reference_id');
     }
 
+    public function directComments()
+    {
+        return $this->comments()->whereNull('parent_id');
+    }
+
     public function getUrlAttribute()
     {
         return url('categories/' . $this->id . '/' . Str::slug($this->name));

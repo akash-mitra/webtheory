@@ -26,7 +26,6 @@ class PageCommentRequest extends FormRequest
     {
         return [
             'parent_id' => ['nullable', 'integer', 'exists:page_comments,id'],
-            'reference_id' => ['required', 'integer', 'exists:pages,id'],
             'body' => ['required', 'string'],
         ];
     }

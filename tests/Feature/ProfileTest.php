@@ -27,7 +27,7 @@ class ProfileTest extends TestDataSetup
             ->assertJsonFragment(['name' => $user->name])
             ->assertJsonStructureExact([
                 'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago'
+                'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url', 
             ]);
         $this->assertDatabaseHas('users', ['name' => $user->name]);
     }
@@ -55,7 +55,7 @@ class ProfileTest extends TestDataSetup
             ->assertJsonFragment(['about_me' => 'I am a registered user'])
             ->assertJsonStructureExact([
                 'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago'
+                'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url', 
             ]);
         $this->assertDatabaseHas('users', ['about_me' => 'I am a registered user']);
         $this->assertDatabaseMissing('users', ['about_me' => 'I am a dummy user']);
@@ -82,7 +82,7 @@ class ProfileTest extends TestDataSetup
             ->assertJsonFragment(['role' => 'author'])
             ->assertJsonStructureExact([
                 'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago'
+                'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url', 
             ]);
         $this->assertDatabaseHas('users', ['role' => 'author']);
         $this->assertDatabaseMissing('users', ['id' => $user->id, 'role' => 'registered']);

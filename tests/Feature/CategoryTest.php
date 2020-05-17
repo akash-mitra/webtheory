@@ -15,7 +15,7 @@ class CategoryTest extends TestDataSetup
         'url', 'permalink', 'created_ago', 'updated_ago', 'media', 
         'author' => [
             'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-            'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago'
+            'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url',
         ]
     ];
 
@@ -30,7 +30,7 @@ class CategoryTest extends TestDataSetup
                 'url', 'permalink', 'created_ago', 'updated_ago', 
                 'author' => [
                     'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-                    'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago'
+                    'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url',
                 ]
             ]
         ]
@@ -46,7 +46,7 @@ class CategoryTest extends TestDataSetup
                 'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago', 
                 'user' => [
                     'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-                    'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago'
+                    'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url',
                 ], 
                 "subcomments"
             ]
@@ -210,29 +210,5 @@ class CategoryTest extends TestDataSetup
             ->assertJsonStructureExact($this->categorypage_attributes);
         $this->assertDatabaseHas('categories', ['id' => $category->id]);
         $this->assertDatabaseHas('pages', ['id' => $categorypage->id]);
-    }
-
-    /* Category Comments */
-    public function test_category_comments()
-    {
-        $category = factory(Category::class)->create([
-            'user_id' => $this->adminUser->id,
-        ]);
-
-        $categorycomment = factory(CategoryComment::class)->create([
-            'reference_id' => $category->id,
-            'user_id' => $this->adminUser->id,
-        ]);
-
-        /* Unauthenticated user cannot view category comments */
-        $response = $this->get('/api/categories/' . $category->id . '/comments');
-        $response->assertStatus(302);
-
-        /* Authenticated user can view category comments */
-        $response = $this->actingAs($this->adminUser)->get('/api/categories/' . $category->id . '/comments');
-        $response->assertStatus(200)
-            ->assertJsonFragment(['body' => $categorycomment->body])
-            ->assertJsonStructureExact($this->categorycomment_attributes);
-        $this->assertDatabaseHas('category_comments', ['reference_id' => $category->id]);
     }
 }
