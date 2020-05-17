@@ -20,7 +20,7 @@
             </svg>
         </button>
 
-        <div v-show="isUserMenuOpen" class="origin-top-right absolute right-0 w-56 rounded shadow-lg">
+        <div v-if="isUserMenuOpen" class="origin-top-right absolute right-0 w-56 rounded shadow-lg">
             <div class="rounded bg-white border shadow-xs">
 
             @if(empty($data->user->email_verified_at))
