@@ -18,7 +18,7 @@
 
     <body class="bg-gray-200">
 
-    <div class="w-full font-sans" id="app" @click="hideOverlayMenu">
+    <div class="w-full font-sans" id="app" @click="hideOverlayMenu" v-cloak>
 
         <div v-if="authUser !== null && authUser.role != 'registered'" class="w-full bg-white border-b border-gray-400 py-3 md:flex items-center justify-between">
             <div class="md:flex justify-start items-center">
