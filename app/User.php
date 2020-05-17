@@ -55,7 +55,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'preferences' => 'array',
     ];
 
-    protected $appends = ['created_ago', 'updated_ago'];
+    protected $appends = ['created_ago', 'updated_ago', 'url'];
 
     public function categories()
     {
@@ -106,6 +106,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getUpdatedAgoAttribute()
     {
         return optional($this->updated_at)->diffForHumans();
+    }
+
+    public function getUrlAttribute()
+    {
+        return route('profile.show', $this->public_id);
     }
 
 

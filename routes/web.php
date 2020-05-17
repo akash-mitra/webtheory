@@ -20,8 +20,10 @@ Route::get('/email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->n
 Route::post('/login', 'Auth\LoginController@login')->name('login');
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
-/* Forgot passsword related links: */
 
+/*
+| FORGET PASSWORD RELATED ROUTES
+*/
 // Process the incoming password reset request.
 Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 
@@ -35,20 +37,22 @@ Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('pass
 /*
 | SOCIAL AUTHENTICATION RELATED ROUTES
 */
-
 Route::get('app/social/login/{provider}', 'Auth\SocialLoginController@login')->name('social.login');
 Route::get('app/social/login/{provider}/callback', 'Auth\SocialLoginController@callback')->name('social.callback');
 
-// Route::get('ui/email/verify/{id}', function () { return 1; })->name('ui-email.verificationlink');
-
 
 /*
-| FRONT-END CONTROLLER
+| FRONT-END RELATED ROUTES
 */
-
 Route::get('/', 'HomeController@root')->name('home');
 Route::get('pages/{page}/{slug?}', 'HomeController@single')->name('pages.show');
 Route::get('categories/{category}/{slug?}', 'HomeController@category')->name('categories.show');
+Route::get('profiles/{public_id}', 'HomeController@profile')->name('profile.show');
+
+
+/*
+| FRONT-END RELATED FIXED ROUTES
+*/
 Route::get('sitemap', 'HomeController@sitemap')->name('sitemap');
 Route::get('rss', 'HomeController@rss')->name('rss');
 Route::get('privacy', 'HomeController@privacy')->name('privacy');

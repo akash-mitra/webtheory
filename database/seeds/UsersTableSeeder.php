@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 
 
@@ -19,6 +20,7 @@ class UsersTableSeeder extends Seeder
             'password' => Hash::make(env('ADMIN_USER_PASSWORD', 'Passw0rd')),
             'role' => 'admin',
             'avatar' => 'https://i.pravatar.cc/100?u=admin@example.com',
+            'public_id' => Str::random(30),
             'created_at' => now(),
             'updated_at' => now()
         ]);

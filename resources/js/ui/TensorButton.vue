@@ -2,7 +2,7 @@
 
     <button
 
-        class="py-2 px-6 outline-none text-white rounded shadow focus:outline-none"
+        class="py-2 px-6 outline-none text-white bg-gray-500 rounded shadow focus:outline-none"
         :class="'text-'+textSize + ' bg-'+compColor+'-500 hover:bg-'+compColor+'-600'"
     >
         <div class="flex items-center">

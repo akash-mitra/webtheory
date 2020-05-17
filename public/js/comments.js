@@ -1132,7 +1132,7 @@ var render = function() {
             "div",
             { staticClass: "w-full flex p-4 border-b border-gray-200" },
             [
-              _c("a", { attrs: { href: comment.user.id } }, [
+              _c("a", { attrs: { href: comment.user.url } }, [
                 _c("img", {
                   staticClass: "h-12 w-12 rounded-full",
                   attrs: { src: comment.user.avatar }
@@ -1227,7 +1227,7 @@ var render = function() {
                   _vm._v(" "),
                   _vm._l(comment.replies, function(reply) {
                     return _c("div", { staticClass: "w-full pt-6 flex" }, [
-                      _c("a", { attrs: { href: reply.user.id } }, [
+                      _c("a", { attrs: { href: reply.user.url } }, [
                         _c("img", {
                           staticClass: "h-12 w-12 rounded-full",
                           attrs: { src: reply.user.avatar }

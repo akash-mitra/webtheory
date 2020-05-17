@@ -14198,7 +14198,8 @@ var render = function() {
       _c(
         "div",
         {
-          staticClass: "px-2 my-6 w-full sm:flex justify-between items-center"
+          staticClass:
+            "px-2 my-6 w-full sm:flex justify-between items-center pattern-wall border-t border-l border-r border-blue-200 pt-6"
         },
         [
           _c(
@@ -15166,7 +15167,7 @@ var render = function() {
     "button",
     {
       staticClass:
-        "py-2 px-6 outline-none text-white rounded shadow focus:outline-none",
+        "py-2 px-6 outline-none text-white bg-gray-500 rounded shadow focus:outline-none",
       class:
         "text-" +
         _vm.textSize +

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Page;
+use App\User;
 use App\Parameter;
 use App\DataProvider;
 use App\Jobs\CaptureViewEvent;
@@ -53,6 +54,19 @@ class HomeController extends Controller
         CaptureViewEvent::dispatchAfterResponse($this->capture_analytics('App\Category', $category));
 
         return view('active.category', compact('data'));
+    }
+
+
+
+    public function profile($public_id)
+    {
+        $user = User::where('public_id', $public_id)->first();
+
+        if ($user === null) abort(404, 'User Not Found');
+
+        $data = DataProvider::profile($user);
+
+        return view('active.profile', compact('data'));
     }
 
 

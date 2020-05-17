@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['check.permission'])->except(['changePassword']);
+        $this->middleware(['check.permission']);
     }
 
 

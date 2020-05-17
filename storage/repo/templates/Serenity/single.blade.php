@@ -33,7 +33,9 @@
                     </a>
                     <h1 class="text-gray-800 text-4xl font-serif">{{ $data->page->title }}</h1>
                     <div class="w-full flex items-center mt-6 mb-8 text-sm">
+                        <a href="{{ $data->page->author->url }}">
                         <img src="{{ $data->page->author->avatar }}" class="h-12 w-12 border-2 rounded-full" />
+                        </a>
                         <div class="ml-4">
                             <div class="w-full">{{ $data->page->author->name }}</div>
                             <div class="w-full">Updated on {{ $data->page->updated_at->format('M d, Y') }}</div>

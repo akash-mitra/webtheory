@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+
 use App\User;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -69,7 +71,8 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'role' => 'registered'
+            'role' => 'registered',
+            'public_id' => Str::random(30)
         ]);
     }
 }

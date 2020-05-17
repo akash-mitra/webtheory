@@ -59,6 +59,17 @@ class DataProvider {
 
 
 
+    public static function profile($user)
+    {
+        return (object) [
+            "ref" => self::ref('single'),
+            "profile" => $user,
+            "user" => auth()->user()
+        ];
+    }
+
+
+
     public static function topics ()
     {
         return Cache::rememberForever('categories', function () {

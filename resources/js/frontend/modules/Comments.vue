@@ -41,7 +41,7 @@
 
             <div v-for="comment in comments.data" class="w-full flex p-4 border-b border-gray-200">
 
-                <a  :href="comment.user.id">
+                <a  :href="comment.user.url">
                     <img :src="comment.user.avatar" class="h-12 w-12 rounded-full">
                 </a>
 
@@ -66,7 +66,7 @@
 
                     <div v-for="reply in comment.replies" class="w-full pt-6 flex">
 
-                        <a  :href="reply.user.id">
+                        <a  :href="reply.user.url">
                             <img :src="reply.user.avatar" class="h-12 w-12 rounded-full">
                         </a>
 

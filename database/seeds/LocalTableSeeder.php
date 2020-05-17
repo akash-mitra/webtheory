@@ -115,17 +115,17 @@ class LocalTableSeeder extends Seeder
                     'media_id' => $faker->randomElement($mediaIds),
                 ]);
                 array_push($pageIds, $page->id);
-                
+
                 // Content Generation
                 $body_html = '';
                 $body_json = '{"blocks":[';
-                
+
                 for ($j = 0; $j < mt_rand(3, 7); $j++) {
                     // Heading1
                     $heading = $faker->realText(40);
                     $body_json .= '{"type":"header","data":{"level":1,"text":"' . str_replace('"', '\"', $heading) . '"}},';
                     $body_html .= '<h1>' . $heading . '</h1>';
-                    
+
                     // Paragraph
                     $paragraph = $faker->realText() . '.' . $faker->realText();
                     $body_json .= '{"type":"paragraph","data":{"text":"' . str_replace('"', '\"', $paragraph) . '"}},';
@@ -136,13 +136,13 @@ class LocalTableSeeder extends Seeder
                         $heading = $faker->realText(40);
                         $body_json .= '{"type":"header","data":{"level":2,"text":"' . str_replace('"', '\"', $heading) . '"}},';
                         $body_html .= '<h2>' . $heading . '</h2>';
-                        
+
                         // Paragraph
                         $paragraph = $faker->realText() . '.' . $faker->realText();
                         $body_json .= '{"type":"paragraph","data":{"text":"' . str_replace('"', '\"', $paragraph) . '"}},';
                         $body_html .= '<p>' . $paragraph . '</p>';
                     }
-                    
+
                     // List
                     for ($k = 0; $k < mt_rand(0, 1); $k++) {
                         $type = random_int(1, 3) != 3 ? 'ordered' : 'unordered';
@@ -153,20 +153,20 @@ class LocalTableSeeder extends Seeder
                             $body_html .= '<ul>';
                             $body_json .= '{"type":"list","data":{"style":"unordered", "items":[';
                         }
-                        
+
                         for ($l = 0; $l < mt_rand(2, 7); $l++) {
                             $listitem = $faker->catchPhrase();
                             $body_json .= '"' . str_replace('"', '\"', $listitem) . '",';
                             $body_html .= '<li>' . $listitem . '</li>';
                         }
-                        
+
                         $body_json = rtrim($body_json, ",") . ']}},';
                         if ($type == 'ordered') {
                             $body_html .= '</ol>';
                         } else {
                             $body_html .= '</ul>';
                         }
-                        
+
                     }
 
                     // Code & Table
@@ -178,7 +178,7 @@ class LocalTableSeeder extends Seeder
                         $body_html .= '</code></pre>';
 
                         // Table
-                        /*
+
                         $name = $faker->name;
                         $member = $faker->randomElement($array = ['Platinum', 'Gold']);
                         $joined = $faker->date($format = 'Y-m-d', $max = 'now');
@@ -190,7 +190,7 @@ class LocalTableSeeder extends Seeder
                         $body_html .= '<tr class="wt-table-tr"><td class="wt-table-td">Name</td><td class="wt-table-td">Email</td><td class="wt-table-td">Member</td><td class="wt-table-td">Joined</td><tr>';
                         $body_html .= '<tr class="wt-table-tr"><td class="wt-table-td">' . $name . '</td><td class="wt-table-td">' . $email . '</td><td class="wt-table-td">' . $member  . '</td><td class="wt-table-td">'  . $joined . '</td><tr>';
                         $body_html .= '</tbody></table>';
-                        */
+
                     }
 
                     // Paragraph
@@ -220,7 +220,7 @@ class LocalTableSeeder extends Seeder
                     'body_json' => $body_json,
                     'body_html' => $body_html
                 ]);
-                
+
             }
         }
         // End of Pages
@@ -235,10 +235,10 @@ class LocalTableSeeder extends Seeder
                 $categoryComments = factory(CategoryComment::class, mt_rand(0, 1))->create([
                     'reference_id' => $categoryId,
                     'user_id' => $userId,
-                ]); 
+                ]);
             }
         }
-        
+
 
         // Page Comment
         // Skip some User from commenting
@@ -250,9 +250,9 @@ class LocalTableSeeder extends Seeder
                 $pageComments = factory(PageComment::class, mt_rand(0, 1))->create([
                     'reference_id' => $pageId,
                     'user_id' => $userId,
-                ]); 
+                ]);
             }
         }
-        
+
     }
 }
