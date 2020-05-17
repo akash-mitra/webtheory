@@ -53,7 +53,6 @@ class UpdateSite extends Command
             $this->info('Git command success.');
             
             exec("composer install -d " . base_path());
-            exec("composer dump-autoload -d " . base_path());
             $this->info('Composer command success.');
 
             $this->call('config:clear');
@@ -67,6 +66,7 @@ class UpdateSite extends Command
             $this->call('db:seed', ['--class' => 'PermissionsTableSeeder', '--force' => true]);
             $this->info('Migration success.');
 
+            exec("composer dump-autoload -d " . base_path());
             $this->call('up');
 
             $this->info('Site updated successfully');
