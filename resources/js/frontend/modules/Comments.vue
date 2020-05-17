@@ -9,7 +9,7 @@
 
             <div v-if="!!this.$root.$data.authuser" class="w-full flex p-4 bg-gray-100 border rounded-lg mb-2">
 
-                <a  :href="this.$root.$data.authuser.id">
+                <a  :href="this.$root.$data.authuser.url">
                     <img :src="this.$root.$data.authuser.avatar" class="h-12 w-12 rounded-full">
                 </a>
 
