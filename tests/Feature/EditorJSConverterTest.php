@@ -10,7 +10,7 @@ use App\Converters\ContentsConverter;
 class EditorJSConverterTest extends TestDataSetup
 {
     private $editor = 'editorjs';
-    
+
     // Heading
     public function test_header()
     {
@@ -18,7 +18,7 @@ class EditorJSConverterTest extends TestDataSetup
         $body_html = '<h1>Test Heading</h1>';
         $converter = new ContentsConverter($body_json, $this->editor);
         $response = $converter->getHtml();
-        
+
         $this->assertEquals($body_html, $response);
     }
 
@@ -29,7 +29,7 @@ class EditorJSConverterTest extends TestDataSetup
         $body_html = '<p>Test Paragraph</p>';
         $converter = new ContentsConverter($body_json, $this->editor);
         $response = $converter->getHtml();
-        
+
         $this->assertEquals($body_html, $response);
     }
 
@@ -40,7 +40,7 @@ class EditorJSConverterTest extends TestDataSetup
         $body_html = '<ol><li>Item 1</li><li>Item 2</li><li>Item 3</li></ol>';
         $converter = new ContentsConverter($body_json, $this->editor);
         $response = $converter->getHtml();
-        
+
         $this->assertEquals($body_html, $response);
     }
 
@@ -48,10 +48,10 @@ class EditorJSConverterTest extends TestDataSetup
     public function test_table()
     {
         $body_json = '{"blocks": [{"type": "table", "data": {"content": [["Item 1","Item 2","Item 3"]]}}]}';
-        $body_html = '<table class="wt-table"><tbody><tr class="wt-table-tr"><td class="wt-table-td">Item 1</td><td class="wt-table-td">Item 2</td><td class="wt-table-td">Item 3</td></tr></tbody></table>';
+        $body_html = '<table class="border border-collapse wt-table"><tbody><tr class="wt-table-tr"><td class="border px-2 wt-table-td">Item 1</td><td class="border px-2 wt-table-td">Item 2</td><td class="border px-2 wt-table-td">Item 3</td></tr></tbody></table>';
         $converter = new ContentsConverter($body_json, $this->editor);
         $response = $converter->getHtml();
-        
+
         $this->assertEquals($body_html, $response);
     }
 
@@ -62,7 +62,7 @@ class EditorJSConverterTest extends TestDataSetup
         $body_html = '<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">users</span></code></pre>';
         $converter = new ContentsConverter($body_json, $this->editor);
         $response = $converter->getHtml();
-        
+
         $this->assertEquals($body_html, $response);
     }
 
@@ -73,7 +73,7 @@ class EditorJSConverterTest extends TestDataSetup
         $body_html = '<div class="my-4"><figure class="img-fig"><img src="/storage/media/test.png" alt="Test Image" class=""></img><figcaption class="text-sm mt-3 img-fig-caption">Test Image</figcaption></figure></div>';
         $converter = new ContentsConverter($body_json, $this->editor);
         $response = $converter->getHtml();
-        
+
         $this->assertEquals($body_html, $response);
     }
 
@@ -84,7 +84,7 @@ class EditorJSConverterTest extends TestDataSetup
         $body_html = '<embed type="video/mpeg" src="http://example.com/testvideo.mpeg" width="100" height="100" title="Test Video">';
         $converter = new ContentsConverter($body_json, $this->editor);
         $response = $converter->getHtml();
-        
+
         $this->assertEquals($body_html, $response);
     }
 }

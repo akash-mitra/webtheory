@@ -44,13 +44,13 @@ class EditorJSConverter
 
     private static function processTable($data)
     {
-        $table = '<table class="wt-table"><tbody>';
+        $table = '<table class="border border-collapse wt-table"><tbody>';
         $content = $data->content;
         foreach ($content as $rows) {
             $table .= '<tr class="wt-table-tr">';
             foreach ($rows as $row) {
                 $value = strip_tags($row);
-                $table .= '<td class="wt-table-td">' . $value . '</td>';
+                $table .= '<td class="border px-2 wt-table-td">' . $value . '</td>';
             }
             $table .= '</tr>';
         }
