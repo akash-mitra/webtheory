@@ -26,7 +26,9 @@
                             <div>
                                 <span class="text-xs text-gray-200">{{ comment.length }} characters</span>
                             </div>
-                            <button @click="postComment" class="ml-3 bg-orange-600 text-white py-1 px-4 rounded hover:bg-orange-800">Post</button>
+
+                            <button @click="postComment" class="ml-3 bg-orange-600 text-white py-1 px-4 rounded hover:bg-orange-800" :disabled="networkActionInProgress">Post</button>
+
                         </div>
                     </div>
                 </div>
@@ -97,7 +99,7 @@
                                     <div>
                                         <span class="text-xs text-gray-200">{{ replyText.length }} characters</span>
                                     </div>
-                                    <button @click="postReply(reply)" class="ml-3 bg-orange-600 text-white py-1 px-4 rounded hover:bg-orange-800">Post</button>
+                                    <button @click="postReply(reply)" class="ml-3 bg-orange-600 text-white py-1 px-4 rounded hover:bg-orange-800" :disabled="networkActionInProgress">Post</button>
                                 </div>
                             </div>
 
@@ -129,6 +131,8 @@
                 comment: '',
                 replyText:'',
                 unsavedComment: {},
+
+                networkActionInProgress: false,
             }
         },
 
@@ -160,6 +164,10 @@
 
             postComment() {
 
+                this.networkActionInProgress = true
+
+
+
                 let c = {
                     body: this.comment,
                     created_ago: 'just now',
@@ -168,7 +176,20 @@
                 }, p = this
 
                 this.ajaxPost(this.postUrl(), c, function (response) {
-                    p.comments.data.unshift(c)
+
+                    // the response contains the comment data
+                    // however, we must also add the "user"
+                    // and replies with this.
+                    response['user'] = c.user
+                    response['replies'] = c.replies
+
+                    p.comments.data.unshift(response)
+
+                    p.networkActionInProgress = false
+
+                }, function (error) {
+                    console.log(error)
+                    p.networkActionInProgress = false
                 })
             },
 
@@ -176,6 +197,7 @@
             postReply(reply) {
 
                 let p = this
+                this.networkActionInProgress = true
 
                 this.ajaxPost(this.postUrl(), {
                     'body': this.replyText,
@@ -184,6 +206,7 @@
                 }, function (response) {
                     reply.body = p.replyText
                     p.replyText = ''
+                    p.networkActionInProgress = false
                 })
             },
 
