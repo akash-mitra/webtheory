@@ -12,6 +12,7 @@ Vue.component('t-button', require('./ui/TensorButton.vue').default);
 Vue.component('t-toggle', require('./ui/TensorToggle.vue').default);
 Vue.component('t-error-message', require('./ui/TensorInputError.vue').default);
 Vue.component('t-modal', require('./ui/TensorModal.vue').default);
+Vue.component('t-gallery', require('./ui/TensorGallery.vue').default);
 
 
 // define the route files for the vue-router

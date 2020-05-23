@@ -44,6 +44,11 @@
                         </router-link>
                     </p>
                     <p class="px-2 md:px-6 tracking-wide text-sm py-2">
+                        <router-link active-class="font-bold text-blue-700" to="/app/gallery">
+                            Gallery
+                        </router-link>
+                    </p>
+                    <p class="px-2 md:px-6 tracking-wide text-sm py-2">
                         <router-link active-class="font-bold text-blue-700" to="/app/users">
                             Users
                         </router-link>

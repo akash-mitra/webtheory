@@ -9,6 +9,7 @@ import TemplateEditor from './components/TemplateEditor.vue';
 import Users from './components/Users.vue';
 import UserForm from './components/UserForm.vue';
 import Settings from './components/Settings.vue';
+import Gallery from './components/Gallery.vue';
 
 /* dynamic components */
 const PageEditor = () => import (
@@ -129,6 +130,18 @@ export default {
             path: '/app/settings',
             component: Settings,
             name: 'settings.index',
+            meta: { requiresAuth: true }
+        },
+
+
+
+        /*
+         * Setting related routes
+         */
+        {
+            path: '/app/gallery',
+            component: Gallery,
+            name: 'gallery.index',
             meta: { requiresAuth: true }
         },
 
