@@ -6,15 +6,22 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use  App\Traits\Shareable;
 
 class Page extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Shareable;
 
     protected $fillable = ['category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'status', 'media_id'];
 
     protected $appends = ['url', 'permalink', 'created_ago', 'updated_ago'];
 
+    protected $shareOptions = [
+        'columns' => [
+            'title' => 'title'
+        ],
+        'url' => 'url'
+    ];
 
     public function scopePublished($query)
     {

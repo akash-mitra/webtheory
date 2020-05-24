@@ -19,5 +19,6 @@ class BladeExtensionServiceProvider extends ServiceProvider
     {
         Blade::include('modules.comments', 'comments');
         Blade::include('modules.fbcomments', 'fbcomments');
+        Blade::include('modules.sharepost', 'sharepost');
     }
 }
