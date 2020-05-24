@@ -7,15 +7,15 @@
 
         <div>
 
-            <div v-if="!!this.$root.$data.authuser" class="w-full flex p-4 bg-gray-100 border rounded-lg mb-2">
+            <div v-if="!!authUser" class="w-full flex p-4 bg-gray-100 border rounded-lg mb-2">
 
-                <a  :href="this.$root.$data.authuser.url">
-                    <img :src="this.$root.$data.authuser.avatar" class="h-12 w-12 rounded-full">
+                <a  :href="authUser.url">
+                    <img :src="authUser.avatar" class="h-12 w-12 rounded-full">
                 </a>
 
                 <div class="w-full text-sm px-4">
                     <div>
-                        <span class="text-blue-800 font-bold">{{ this.$root.$data.authuser.name }}</span>
+                        <span class="text-blue-800 font-bold">{{ authUser.name }}</span>
                         <span class="ml-3">&mdash; Join the discussion</span>
                     </div>
 
@@ -59,7 +59,13 @@
 
                     <div class="w-full flex justify-between py-1 text-gray-600 text-xs tracking-wide">
                         <div class="flex justify-start">
-                            <button @click="openReplyBox(comment.id)" class="hover:text-orange-500">Reply</button>
+                            <button
+                                v-if="!!authUser"
+                                @click="openReplyBox(comment.id)"
+                                class="hover:text-orange-500"
+                            >
+                                Reply
+                            </button>
                             <span v-show="false" class="text-gray-600">&nbsp;•&nbsp;</span>
                             <button v-show="false" class="hover:text-orange-500">Like</button>
                         </div>
@@ -131,12 +137,13 @@
                 comment: '',
                 replyText:'',
                 unsavedComment: {},
-
+                authUser: false,
                 networkActionInProgress: false,
             }
         },
 
         created() {
+            this.authUser = this.$root.$data.authuser
             this.loadInitialComments()
         },
 
@@ -172,7 +179,7 @@
                     body: this.comment,
                     created_ago: 'just now',
                     replies: [],
-                    user: this.$root.$data.authuser
+                    user: this.authUser
                 }, p = this
 
                 this.ajaxPost(this.postUrl(), c, function (response) {
@@ -218,7 +225,7 @@
                 parentComment.replies.unshift({
                     body: '',
                     parent_id: id,
-                    user: this.$root.$data.authuser
+                    user: this.authUser
                 })
             },
 
