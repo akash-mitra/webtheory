@@ -5,7 +5,9 @@
                 Media Gallery
 
         </h2>
-        <t-gallery deletable></t-gallery>
+
+        <VueImageBrowser source="/api/media" deletable></VueImageBrowser>
+
     </div>
 
 
@@ -13,6 +15,12 @@
 </template>
 
 <script>
+
+import VueImageBrowser from '@akashmitra/vue-image-browser'
+
 export default {
+    components: {
+        VueImageBrowser,
+    }
 }
 </script>
