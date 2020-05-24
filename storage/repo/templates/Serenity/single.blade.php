@@ -49,7 +49,14 @@
                 </div>
             </article>
 
-            @comments
+            @if($data->ref->comment->native ==='Enabled')
+                @comments
+            @endif
+
+            @if($data->ref->comment->facebook ==='Enabled')
+                <h4 class="text-md text-blue-800 mt-8">Facebook Comments</h4>
+                <div class="fb-comments" data-href={{ Request::url() }} data-numposts="5" data-width="100%"></div>
+            @endif
 
         </main>
 

@@ -12,6 +12,9 @@
             <t-button v-if="tab=='mail'" :loadingWheel="isSaving" @click.native="saveMail">
                 Save Settings
             </t-button>
+            <t-button v-if="tab=='comment'" :loadingWheel="isSaving" @click.native="saveComment">
+                Save Settings
+            </t-button>
         </div>
 
 
@@ -24,6 +27,10 @@
 
                 <div @click="tab='mail'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='mail'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
                     Mail
+                </div>
+
+                <div @click="tab='comment'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='comment'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
+                    Comment
                 </div>
 
                 <div @click="tab='site'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='site'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
@@ -291,6 +298,61 @@
         </div>
 
 
+        <div class="pb-10" v-if="tab=='comment'">
+
+
+
+            <div class="rounded w-full shadow">
+
+                <div class="px-6 py-3 border-b bg-white qshadow rounded">
+                    <div class="w-full relative">
+                        <div class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
+                            @click="changeComment('native', nativeComment==='Disabled'?'Enabled':'Disabled')">
+
+                            <div class="flex items-center">
+                                <div :class="nativeComment==='Disabled'? 'bg-gray-400':'bg-green-400'" class="rounded-full h-3 w-3 mr-2"></div>
+                                <span :class="nativeComment==='Disabled'? 'text-gray-600':'text-green-600'">{{ nativeComment }}</span>
+                            </div>
+                        </div>
+                        <h3 class="text-blue-800 font-semibold flex items-center py-1">
+                        <img src="/images/tensor.svg" class="w-8 h-8 mr-4"/>
+                        Native
+                        </h3>
+                    </div>
+                </div>
+
+
+                <div class="px-6 py-3 border-b bg-white qshadow rounded">
+                    <div class="w-full relative">
+                        <div class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
+                            @click="changeComment('facebook', facebookComment==='Disabled'?'Enabled':'Disabled')">
+
+                            <div class="flex items-center">
+                                <div :class="facebookComment==='Disabled'? 'bg-gray-400':'bg-green-400'" class="rounded-full h-3 w-3 mr-2"></div>
+                                <span :class="facebookComment==='Disabled'? 'text-gray-600':'text-green-600'">{{ facebookComment }}</span>
+                            </div>
+                        </div>
+                        <h3 class="text-blue-800 font-semibold flex items-center">
+                        <svg class="w-8 h-8 mr-4 fill-current text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M448 0H64C29 0 0 29 0 64v384c0 35 29 64 64 64h384c35 0 64-29 64-64V64c0-35-29-64-64-64z" fill="#1976d2"/><path d="M432 256h-80v-64c0-18 14-16 32-16h32V96h-64c-53 0-96 43-96 96v64h-64v80h64v176h96V336h48l32-80z" fill="#fafafa"/></svg>
+                        Facebook
+                        </h3>
+                    </div>
+
+                    <div class="p-3" v-if="facebookComment=='Enabled'">
+                        <div class="w-full sm:flex mt-2">
+                            <label for="commentFacebookClientId" class="block w-full sm:w-1/4 text-sm py-1 ">App Id</label>
+                            <input type="text" id="commentFacebookClientId" v-model="commentFacebookClientId" ref="commentFacebookClientId" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+
         <div class="pb-10" v-if="tab=='site'">
 
             <p class="text-sm text-gray-700 pb-3 uppercase">Site Maintenance</p>
@@ -366,6 +428,9 @@
                 sesSecret: null,
                 sesRegion: null,
 
+                nativeComment: null,
+                facebookComment: null,
+                commentFacebookClientId: null,
 
             }
         },
@@ -411,6 +476,12 @@
                     this.mailSaved = true
             })
 
+            util.ajax ('get', '/api/settings/comment', {},  (response) => {
+                this.nativeComment = response['NATIVE_COMMENT']
+                this.facebookComment = response['FACEBOOK_COMMENT']
+                this.commentFacebookClientId = response['COMMENT_FACEBOOK_CLIENT_ID']
+            })
+
         },
 
 
@@ -449,6 +520,21 @@
                 })
             },
 
+            changeComment (provider, status)
+            {
+                if (provider == 'native') {
+                    this.nativeComment = status
+                    util.ajax ('post', '/api/parameters/NATIVE_COMMENT', { "value": status }, function () {
+                        util.notifySuccess ('Saved', 'Native Comment provider have been ' + status)
+                    })
+                } else if (provider == 'facebook') {
+                    this.facebookComment = status
+                    util.ajax ('post', '/api/parameters/FACEBOOK_COMMENT', { "value": status }, function () {
+                        util.notifySuccess ('Saved', 'Facebook Comment provider have been ' + status)
+                    })
+                }
+            },
+
             saveMail () {
                 let data = [
                         { 'key': 'MAIL_DRIVER', 'value': this.mailDriver },
@@ -484,6 +570,12 @@
                     .catch(error => {
                         util.notifyError ('Test Mail Error', error)
                     })
+            },
+
+            saveComment () {
+                util.ajax ('post', '/api/parameters/COMMENT_FACEBOOK_CLIENT_ID', { "value": this.commentFacebookClientId }, function () {
+                    util.notifySuccess ('Saved', 'Comment provider settings have been successfully saved.')
+                })
             },
 
             siteUpdate (commitId) {

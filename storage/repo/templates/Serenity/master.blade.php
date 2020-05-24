@@ -35,6 +35,11 @@
 </head>
 
 <body>
+    
+    @if($data->ref->comment->facebook_client_id !='')
+        <div id="fb-root"></div>
+        <script async defer crossorigin="anonymous" src={{ "https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v7.0&appId=" . $data->ref->comment->facebook_client_id . "&autoLogAppEvents=1" }}></script>
+    @endif
 
     <div style="width: 100%; height: 100%; margin: 0; padding: 0;"
         id="js-playground"
