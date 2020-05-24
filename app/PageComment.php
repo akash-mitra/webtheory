@@ -22,7 +22,7 @@ class PageComment extends Model
 
     public function replies()
     {
-        return $this->hasMany('App\PageComment', 'parent_id');
+        return $this->hasMany('App\PageComment', 'parent_id')->latest('updated_at');
     }
 
     public function page()
