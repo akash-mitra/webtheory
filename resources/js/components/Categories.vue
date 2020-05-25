@@ -4,11 +4,11 @@
 
         <div class="px-6 my-6 w-full flex justify-between items-center">
             <h2 class="text-gray-600 text-2xl flex items-center">
-                Topics
-                <span class="ml-3 rounded-lg py-1 px-2 shadow-inner text-xs bg-gray-300">{{ topics.length }}</span>
+                Categories
+                <span class="ml-3 rounded-lg py-1 px-2 shadow-inner text-xs bg-gray-300">{{ categories.length }}</span>
             </h2>
 
-            <a href="/app/topics/create" class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow">Create</a>
+            <a href="/app/categories/create" class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow">Create</a>
 
         </div>
 
@@ -16,19 +16,19 @@
             <input type="text"
                 class="w-full rounded-lg shadow px-4 py-3 text-sm focus:outline-none"
                 name="search"
-                placeholder="Search by topic name..."
+                placeholder="Search by category name..."
                 v-model="searchPhrase"
             />
         </div>
 
         <div class="p-6">
 
-            <Topic
-                    :item="topic"
+            <Category
+                    :item="category"
                     :needle="searchPhrase"
-                    v-for="topic in topics"
-                    :key="topic.id">
-            </Topic>
+                    v-for="category in categories"
+                    :key="category.id">
+            </Category>
 
         </div>
 
@@ -37,23 +37,23 @@
 
 <script>
 
-    import Topic from './Topic.vue';
+    import Category from './Category.vue';
 
     export default {
 
         data() {
             return {
-                topics: [],
+                categories: [],
                 selected: null,
                 tab: 'all',
                 searchPhrase: ''
             }
         },
 
-        components: { Topic },
+        components: { Category },
 
         created() {
-            util.ajax ('get', '/api/categories', {},  (response) => { this.topics = this.toTree(response) })
+            util.ajax ('get', '/api/categories', {},  (response) => { this.categories = this.toTree(response) })
         },
 
 

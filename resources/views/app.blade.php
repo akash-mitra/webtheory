@@ -39,8 +39,8 @@
                         </router-link>
                     </p>
                     <p class="px-2 md:px-6 tracking-wide text-sm py-2">
-                        <router-link active-class="font-bold text-blue-700" to="/app/topics">
-                            Topics
+                        <router-link active-class="font-bold text-blue-700" to="/app/categories">
+                            Categories
                         </router-link>
                     </p>
                     <p class="px-2 md:px-6 tracking-wide text-sm py-2">

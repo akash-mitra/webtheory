@@ -11,6 +11,8 @@
 </style>
 @endpush
 
+
+
 @section('contents')
 
     <div class="w-full max-w-6xl mx-auto px-6 font-reading">
@@ -33,10 +35,10 @@
                         Menu
                     </span>
 
-                    @foreach ($data->topics as $topic)
+                    @foreach ($data->categories as $category)
                         @if ($loop->first) @continue @endif
-                        <a href="{{ $topic->url }}" class="menu-mod-item whitespace-no-wrap px-6 tracking-wide shadow-inner pt-3 pb-4 hover:bg-{{$data->ref->template->primaryColor}}-600 hover:text-{{$data->ref->template->primaryColor}}-100 text-lg hidden md:block">
-                            {{ $topic->name }}
+                        <a href="{{ $category->url }}" class="menu-mod-item whitespace-no-wrap px-6 tracking-wide shadow-inner pt-3 pb-4 hover:bg-{{$data->ref->template->primaryColor}}-600 hover:text-{{$data->ref->template->primaryColor}}-100 text-lg hidden md:block">
+                            {{ $category->name }}
                         </a>
                     @endforeach
                 </div>

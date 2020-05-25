@@ -1,10 +1,10 @@
 import Dashboard from './components/Dashboard.vue';
 import Pages from './components/Pages.vue';
-import Topics from './components/Topics.vue';
+import Categories from './components/Categories.vue';
 import Templates from './components/Templates.vue';
 import Login from './components/Login.vue';
 import SocialLogin from './components/SocialLogin.vue';
-import TopicEditor from './components/TopicEditor.vue';
+import CategoryEditor from './components/CategoryEditor.vue';
 import TemplateEditor from './components/TemplateEditor.vue';
 import Users from './components/Users.vue';
 import UserForm from './components/UserForm.vue';
@@ -63,23 +63,23 @@ export default {
          * Category related routes
          */
         {
-            path: '/app/topics',
-            component: Topics,
-            name: 'topics.index',
+            path: '/app/categories',
+            component: Categories,
+            name: 'categories.index',
             meta: { requiresAuth: true }
         },
 
         {
-            path: '/app/topics/create',
-            component: TopicEditor,
-            name: 'topics.create',
+            path: '/app/categories/create',
+            component: CategoryEditor,
+            name: 'categories.create',
             meta: { requiresAuth: true }
         },
 
         {
-            path: '/app/topics/:id',
-            component: TopicEditor ,
-            name: 'topics.edit',
+            path: '/app/categories/:id',
+            component: CategoryEditor ,
+            name: 'categories.edit',
             meta: { requiresAuth: true }
         },
 

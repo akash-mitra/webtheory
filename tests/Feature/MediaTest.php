@@ -10,15 +10,11 @@ use App\Media;
 class MediaTest extends TestDataSetup
 {
     private $media_attributes = [
-        'id', 'name', 'type', 'size', 'path', 'url', 'storage', 'user_id', 
-        'created_at', 'updated_at', 
-        'created_ago', 'updated_ago',
-        'author' => [
-            'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-            'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url',
-        ]
+        'id', 'name', 'type', 'size', 'path', 'url', 'storage', 'user_id',
+        'created_at', 'updated_at',
+        'created_ago', 'updated_ago'
     ];
-    
+
     // Media Index
     public function test_media_index()
     {
@@ -31,10 +27,13 @@ class MediaTest extends TestDataSetup
 
         /* Authenticated user can view media listing */
         $response = $this->actingAs($this->adminUser)->get('/api/media');
-        $response->assertStatus(200)
-            ->assertJsonStructureExact([
+        $response->assertStatus(200);
+
+        $response->assertJsonStructure([
+            'data' => [
                 '*' => $this->media_attributes
-            ]);
+            ]
+        ]);
         $this->assertDatabaseHas('media', ['name' => $media->name]);
     }
 
@@ -52,7 +51,13 @@ class MediaTest extends TestDataSetup
         $response = $this->actingAs($this->adminUser)->get('/api/media/' . $media->id);
         $response->assertStatus(200)
             ->assertJsonFragment(['name' => $media->name])
-            ->assertJsonStructureExact($this->media_attributes);
+            ->assertJsonStructure(
+                array_merge(
+                    $this->media_attributes,
+                    ['author']
+                )
+            );
+
         $this->assertDatabaseHas('media', ['name' => $media->name]);
     }
 
@@ -74,13 +79,11 @@ class MediaTest extends TestDataSetup
         $media_id = $response->getOriginalContent()['file']['id'];
         $file_path = $response->getOriginalContent()['file']['path'];
         $response->assertStatus(200)
-            ->assertJsonStructureExact([
-                'success', 
-                'file' => [
-                    'id', 'path', 'url'
-                ]
+            ->assertJsonStructure([
+                'success',
+                'file' => $this->media_attributes
             ]);
-        
+
         $this->assertDatabaseHas('media', ['name' => 'testimage.png']);
         Storage::disk('public')->assertExists($file_path);
 

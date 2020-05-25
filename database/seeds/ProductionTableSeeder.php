@@ -28,7 +28,7 @@ class ProductionTableSeeder extends Seeder
         DB::table('categories')->insert([
             'name' => 'Uncategorised',
             'parent_id' => null,
-            'description' => 'All other pages which are not part of any specific topic.',
+            'description' => 'All other pages which are not part of any specific category.',
             'metakey' => 'Uncategorised',
             'metadesc' => 'Uncategorised',
             'media_id' => null,

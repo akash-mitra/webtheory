@@ -5,7 +5,9 @@
 @section('metakeys'){{ $data->category->metakey }}@endsection
 
 @push('headers')
+
 <link rel="canonical" href="{{ $data->category->permalink }}">
+
 @endpush
 
 @section('contents')

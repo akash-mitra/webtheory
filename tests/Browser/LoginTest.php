@@ -23,8 +23,8 @@ class LoginTest extends DuskTestDataSetup
                     ->pause(1000)
                     ->assertPathIs('/app/pages')
                     ->assertSee('Pages')
-                    ->visit('/app/topics')
-                    ->assertSee('Topics')
+                    ->visit('/app/categories')
+                    ->assertSee('Categories')
                     ->visit('/app/templates')
                     ->assertSee('Templates');
         });

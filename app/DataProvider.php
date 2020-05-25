@@ -18,7 +18,7 @@ class DataProvider {
         return (object) [
             "ref" => self::ref('home'),
             "pages" => self::pages(),
-            "topics" => self::topics(),
+            "categories" => self::categories(),
             "user" => auth()->user()
         ];
     }
@@ -32,7 +32,7 @@ class DataProvider {
         return (object) [
             "ref" => self::ref('single'),
             "page" => $page,
-            "topics" => self::topics(),
+            "categories" => self::categories(),
             "user" => auth()->user()
         ];
     }
@@ -70,7 +70,7 @@ class DataProvider {
 
 
 
-    public static function topics ()
+    public static function categories ()
     {
         return Cache::rememberForever('categories', function () {
 

@@ -21,14 +21,14 @@ class CategoryTest extends DuskTestDataSetup
                     ->type('password', 'password')
                     ->press('Login Now')
                     ->pause(200)
-                    ->visit('/app/topics/create')
-                    ->type('#topicName', 'Test Category')
-                    ->type('#topicDescription', 'Test Category Description')
+                    ->visit('/app/categories/create')
+                    ->type('#categoryName', 'Test Category')
+                    ->type('#categoryDescription', 'Test Category Description')
                     ->press('Save')
                     ->pause(200)
-                    ->assertSee('Topic Saved Successfully')
-                    ->visit('/app/topics')
-                    ->waitForText('Topics')
+                    ->assertSee('Category Saved Successfully')
+                    ->visit('/app/categories')
+                    ->waitForText('categories')
                     ->assertSee('Test Category');
             $this->assertDatabaseHas('categories', ['name' => 'Test Category']);
         });
@@ -42,7 +42,7 @@ class CategoryTest extends DuskTestDataSetup
     public function testAdminLogout()
     {
         $this->browse(function (Browser $browser) {
-            
+
             $browser->visit('/app/login')
                     ->waitForText('WebTheory')
                     ->type('Email', $this->adminUser->email)

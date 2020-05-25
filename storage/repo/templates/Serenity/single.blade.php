@@ -42,8 +42,6 @@
                         </div>
                     </div>
 
-                    @sharepost
-
                     <div class="font-reading wt-summary bg-{{$data->ref->template->primaryColor}}-100">{{ $data->page->summary }}</div>
                 </header>
                 <div class="mt-4 text-base font-reading wt-body">
@@ -51,9 +49,7 @@
                 </div>
             </article>
 
-
             @comments
-
 
         </main>
 
