@@ -20,5 +20,7 @@ class BladeExtensionServiceProvider extends ServiceProvider
         Blade::include('modules.comments', 'comments');
 
         Blade::include('modules.favicon', 'favicon');
+
+        Blade::include('modules.sharepost', 'sharepost');
     }
 }
