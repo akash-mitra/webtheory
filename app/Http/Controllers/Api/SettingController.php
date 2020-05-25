@@ -111,21 +111,6 @@ class SettingController extends Controller
         return response()->json("Mail Driver not set", 400);
     }
 
-    public function getcomment()
-    {
-        $keys = [
-            'NATIVE_COMMENT',
-            'FACEBOOK_COMMENT', 'COMMENT_FACEBOOK_CLIENT_ID'
-        ];
-
-        $comment = [];
-        foreach($keys as $key) {
-            $value = Parameter::getKey($key);
-            $comment[$key] = $value;
-        }
-
-        return response()->json($comment);
-    }
 
     public function update(Request $request)
     {

@@ -119,11 +119,6 @@ class DataProvider {
             "site" => self::site(),
             "login" => (object) [
                 "socialprovider" => json_decode(Parameter::getKey('socialprovider'), false)
-            ],
-            "comment" => (object) [
-                "native" => Parameter::getKey('NATIVE_COMMENT'),
-                "facebook" => Parameter::getKey('FACEBOOK_COMMENT'),
-                "facebook_client_id" => Parameter::getKey('COMMENT_FACEBOOK_CLIENT_ID'),
             ]
         ];
     }

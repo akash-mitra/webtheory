@@ -213,6 +213,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     content_type: {
@@ -230,10 +236,12 @@ __webpack_require__.r(__webpack_exports__);
       comment: '',
       replyText: '',
       unsavedComment: {},
+      authUser: false,
       networkActionInProgress: false
     };
   },
   created: function created() {
+    this.authUser = this.$root.$data.authuser;
     this.loadInitialComments();
   },
   methods: {
@@ -261,7 +269,7 @@ __webpack_require__.r(__webpack_exports__);
         body: this.comment,
         created_ago: 'just now',
         replies: [],
-        user: this.$root.$data.authuser
+        user: this.authUser
       },
           p = this;
       this.ajaxPost(this.postUrl(), c, function (response) {
@@ -296,7 +304,7 @@ __webpack_require__.r(__webpack_exports__);
       parentComment.replies.unshift({
         body: '',
         parent_id: id,
-        user: this.$root.$data.authuser
+        user: this.authUser
       });
     },
     ajaxGet: function ajaxGet(url, handler) {
@@ -1030,7 +1038,7 @@ var render = function() {
     _c(
       "div",
       [
-        !!this.$root.$data.authuser
+        !!_vm.authUser
           ? _c(
               "div",
               {
@@ -1038,17 +1046,17 @@ var render = function() {
                   "w-full flex p-4 bg-gray-100 border rounded-lg mb-2"
               },
               [
-                _c("a", { attrs: { href: this.$root.$data.authuser.url } }, [
+                _c("a", { attrs: { href: _vm.authUser.url } }, [
                   _c("img", {
                     staticClass: "h-12 w-12 rounded-full",
-                    attrs: { src: this.$root.$data.authuser.avatar }
+                    attrs: { src: _vm.authUser.avatar }
                   })
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "w-full text-sm px-4" }, [
                   _c("div", [
                     _c("span", { staticClass: "text-blue-800 font-bold" }, [
-                      _vm._v(_vm._s(this.$root.$data.authuser.name))
+                      _vm._v(_vm._s(_vm.authUser.name))
                     ]),
                     _vm._v(" "),
                     _c("span", { staticClass: "ml-3" }, [
@@ -1187,18 +1195,24 @@ var render = function() {
                     },
                     [
                       _c("div", { staticClass: "flex justify-start" }, [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "hover:text-orange-500",
-                            on: {
-                              click: function($event) {
-                                return _vm.openReplyBox(comment.id)
-                              }
-                            }
-                          },
-                          [_vm._v("Reply")]
-                        ),
+                        !!_vm.authUser
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "hover:text-orange-500",
+                                on: {
+                                  click: function($event) {
+                                    return _vm.openReplyBox(comment.id)
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                            Reply\n                        "
+                                )
+                              ]
+                            )
+                          : _vm._e(),
                         _vm._v(" "),
                         _c(
                           "span",

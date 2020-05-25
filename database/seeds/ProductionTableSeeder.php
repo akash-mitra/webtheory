@@ -244,27 +244,6 @@ class ProductionTableSeeder extends Seeder
             'updated_at' => now()
         ]);
 
-
-        // COMMENTING
-        DB::table('parameters')->insert([
-            'key' => 'NATIVE_COMMENT',
-            'value' => 'Enabled',
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-
-        DB::table('parameters')->insert([
-            'key' => 'FACEBOOK_COMMENT',
-            'value' => 'Disabled',
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
-        DB::table('parameters')->insert([
-            'key' => 'COMMENT_FACEBOOK_CLIENT_ID',
-            'value' => '',
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
     }
 
     private function getUrl($provider)

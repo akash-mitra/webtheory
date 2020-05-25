@@ -136,7 +136,6 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     Route::post('settings/loginprovider', 'Api\SettingController@loginprovider')->name('settings.loginprovider');
     Route::post('settings/mailprovider', 'Api\SettingController@mailprovider')->name('settings.mailprovider');
     Route::get('settings/testmail', 'Api\SettingController@testmail')->name('settings.testmail');
-    Route::get('settings/comment', 'Api\SettingController@getcomment')->name('settings.comment');
     Route::post('settings/update', 'Api\SettingController@update')->name('settings.update');
 
 

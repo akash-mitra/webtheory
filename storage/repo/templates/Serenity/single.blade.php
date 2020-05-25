@@ -43,7 +43,7 @@
                     </div>
 
                     @sharepost
-                    
+
                     <div class="font-reading wt-summary bg-{{$data->ref->template->primaryColor}}-100">{{ $data->page->summary }}</div>
                 </header>
                 <div class="mt-4 text-base font-reading wt-body">
@@ -51,13 +51,9 @@
                 </div>
             </article>
 
-            @if($data->ref->comment->native ==='Enabled')
-                @comments
-            @endif
 
-            @if($data->ref->comment->facebook ==='Enabled')
-                @fbcomments
-            @endif
+            @comments
+
 
         </main>
 
