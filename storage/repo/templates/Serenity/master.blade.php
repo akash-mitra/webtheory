@@ -18,6 +18,8 @@
 
   <link href="https://fonts.googleapis.com/css?family={{ str_replace(' ', '+', $data->ref->template->headingFont) }}|Quicksand&display=swap" rel="stylesheet">
 
+  @favicon
+
   <style>
     .font-heading {
         font-family: "{{ $data->ref->template->headingFont }}", serif;

@@ -9,7 +9,9 @@
 
 
         <div class="px-6 w-full flex justify-between items-center my-8 border-b">
+
             <div class="flex justify-start">
+
                 <div @click="tab='installed'" class="-ml-4 px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='installed'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
                     Installed
                     <span class="ml-3 rounded-lg py-1 px-2 shadow-inner text-xs bg-gray-300">{{ templates.installed.length }}</span>
@@ -21,8 +23,7 @@
                 </div>
 
             </div>
-            <div v-if="constantLoaded" @click="tab='constants'" class="px-2 text-sm tracking-wide py-2  cursor-pointer" :class="tab==='constants'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Constants</div>
-            <div v-else class="px-2 text-sm tracking-wide text-gray-600 py-2">Loading Constants...</div>
+
         </div>
 
 
@@ -106,39 +107,8 @@
             </div>
         </div>
 
-
-
-        <div class="px-6 pb-10" v-show="tab==='constants'">
-
-            <p class="text-sm text-gray-700 pb-3 uppercase">Site Information</p>
-            <div class="bg-white rounded w-full max-w-21xl p-6 mb-6 shadow">
-                <div class="pb-4">
-                    <label for="sitename" class="block">Website Name</label>
-                    <input type="text" id="sitename" v-model="sitename" ref="sitename" placeholder="My Personal Blog" class="w-full max-w-2xl p-2 my-2 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
-                    <p class="text-xs text-gray-600">This is a human readable name of your website. <br/>
-                    For example, if your website URL is profoundmelon.com, this can be "Profound Melon". <br />
-                    </p>
-                </div>
-                <div class="pb-4">
-                    <label for="siteTitle" class="block">Website Title</label>
-                    <input type="text" id="siteTitle" v-model="sitetitle" ref="sitetitle" placeholder="My Personal Blog" class="w-full max-w-2xl p-2 my-2 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
-                    <p class="text-xs text-gray-600">The site title is applicable to your entire site and not specific to a page. Site title is visible in the browser window.
-                    <br/>This can be same or different from the <code>sitename</code>.</p>
-                </div>
-                <div class="pb-4">
-                    <label for="sitedesc" class="block">Website Description</label>
-                    <textarea id="sitedesc" v-model="sitedesc" ref="sitedesc" placeholder="Daily journals, ideas, viewpoints and photos of Mr. John Doe" class="w-full max-w-2xl p-2 my-2 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none"></textarea>
-                    <p class="text-xs text-gray-600">Provide a short but accurate description about what this site is about. This information may be utilised by search bots.</p>
-                </div>
-            </div>
-
-            <t-button :loadingWheel="isSaving" @click.native="saveConstants">
-                Save Constants
-            </t-button>
-
-        </div>
-
     </div>
+
 </template>
 
 <script>
@@ -155,29 +125,12 @@
                 selected: null,
                 tab: 'installed',
                 searchPhrase: '',
-
-                sitetitle: '',
-                sitename: '',
-                sitedesc: '',
-
-                isSaving: false,
-                constantLoaded: false,
             }
         },
 
         created() {
 
             util.ajax ('get', '/api/templates', {},  (response) => { this.templates = response })
-
-            util.ajax ('get', '/api/parameters/siteinfo', {},  (response) => {
-                let siteinfo = JSON.parse(response)
-                this.sitetitle = siteinfo.title
-                this.sitename = siteinfo.name
-                this.sitedesc = siteinfo.desc
-
-                this.constantLoaded = true
-            })
-
         },
 
 
@@ -245,17 +198,6 @@
                 })
 
                 return found.length === 0;
-            },
-
-            saveConstants () {
-                let data = {
-                    name: this.sitename,
-                    title: this.sitetitle,
-                    desc: this.sitedesc,
-                }
-                util.ajax ('post', '/api/parameters/siteinfo', { "value": JSON.stringify(data) }, function () {
-                    util.notifySuccess ('Saved', 'Template constants have been successfully saved.')
-                })
             },
 
         }

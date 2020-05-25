@@ -18,5 +18,7 @@ class BladeExtensionServiceProvider extends ServiceProvider
     public function boot()
     {
         Blade::include('modules.comments', 'comments');
+
+        Blade::include('modules.favicon', 'favicon');
     }
 }
