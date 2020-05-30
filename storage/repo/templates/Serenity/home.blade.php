@@ -45,7 +45,7 @@
             </nav>
         </div>
 
-
+        @if(count($data->pages) > 0)
         <div class="border-t-4 border-{{$data->ref->template->primaryColor}}-500 w-full pattern rounded-b-lg px-10 py-8 overflow-scroll md:flex justify-center md:justify-between items-stretch">
             <div
                 class="w-full md:w-1/3 max-w-lg bg-center bg-no-repeat bg-cover rounded"
@@ -57,6 +57,7 @@
                 <a href="{{ $data->pages[0]->url }}" class=" inline-block mt-4 text-{{$data->ref->template->primaryColor}}-600 p-3 border-2 rounded border-{{$data->ref->template->primaryColor}}-600 hover:bg-{{$data->ref->template->primaryColor}}-600 hover:text-{{$data->ref->template->primaryColor}}-100 font-bold">Continue Reading...</a>
             </div>
         </div>
+        @endif
 
         <div class="md:flex md:flex-wrap">
 
