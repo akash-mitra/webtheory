@@ -32,11 +32,20 @@
 
             <div style="max-height: 300px" class="px-6 overflow-y-auto border-t">
 
+
                 <VueImageBrowser
-                    :source="imageList"
-                    selectable
-                    @selected="imageSelected"
-                >
+                    :images="photos"
+                    :image-properties="imageFields"
+                    allow-select
+                    allow-upload
+                    :allow-delete="false"
+                    enable-lazy-load
+                    save-url="/api/media"
+                    :save-request-headers="headers"
+                    @selected="onSelect"
+                    @saved="onSave"
+                    @searched="onSearch"
+                    >
                 </VueImageBrowser>
 
             </div>
@@ -85,19 +94,57 @@ export default {
     data() {
         return {
             showImageBrowser: false,
+            photos: [],
+            headers: {
+                "X-CSRF-Token": document.head.querySelector('meta[name="csrf-token"]').content
+            },
+            imageFields: {
+                'id': 'File ID',
+                'name': 'Image Name',
+                'url': 'url',
+                'size': 'File Size (KB)',
+                'type': 'Image Type',
+                'storage': 'Storage Type',
+                'created_ago': 'Created'
+            }
         }
+    },
+
+    created() {
+        this.getFromServer()
     },
 
     methods: {
 
-        imageSelected(image) {
 
+
+        onSelect(image) {
             this.showImageBrowser = false
 
-            // this.imageSrc = image.url
-
             this.$emit('picked', image)
-        }
+        },
+
+        onSearch(query) {
+            this.getFromServer(query)
+        },
+
+        onSave(image) {
+            this.photos.unshift(image.file)
+        },
+
+        getFromServer(query) {
+            const p = this
+            let url = '/api/media' + ((typeof query != 'undefined' && query != null) ? '?query=' + encodeURIComponent(query):'')
+
+            util.ajax(
+                'GET',
+                url,
+                {},
+                (response) => {
+                    p.photos = response.data
+                }
+            )
+        },
     }
 
 }
