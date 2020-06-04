@@ -12,7 +12,7 @@
     // ------------------------------------------------
 
     & h1 {
-        @apply text-4xl pt-3 pb-1 my-0 font-serif antialiased tracking-tight leading-tight text-gray-700;
+        @apply text-4xl pt-3 pb-1 my-0 antialiased tracking-tight leading-tight text-gray-700;
       }
 
     @media (min-width: 640px) {
@@ -27,7 +27,7 @@
 
     & h2, h3, h4 {
 
-        @apply pt-4 pb-1 my-0 font-serif antialiased text-gray-800;
+        @apply pt-4 pb-1 my-0 antialiased text-gray-800;
 
     }
 
