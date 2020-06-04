@@ -62,8 +62,8 @@ class DataProvider {
     public static function profile($user)
     {
         return (object) [
-            "ref" => self::ref('single'),
-            "profile" => $user,
+            "ref" => self::ref('profile'),
+            "profile" => (object) $user,
             "user" => auth()->user()
         ];
     }
