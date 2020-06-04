@@ -12,34 +12,25 @@
 |
 */
 // --------------------------------------------------------------------------------------------------------------------------
-// Unauthenticated Routes
+// Unauthenticated API Routes
 // --------------------------------------------------------------------------------------------------------------------------
+
+
+// Related to user login/register
 Route::post('login', 'Api\Auth\LoginController@login');
 Route::get('check', 'Api\Auth\LoginController@user');
 Route::post('register', 'Api\Auth\RegisterController@register');
 
+// Related to Users pages
+Route::get('profiles/{public}/pages', 'Api\ProfileController@pages')->name('profile.pages');
 
-
-// --------------------------------------------------------------------------------------------------------------------------
 // Comments Listing
-// --------------------------------------------------------------------------------------------------------------------------
 Route::get('categories/{category}/comments', 'Api\CategoryCommentController@index')->name('categorycomment.index');
 Route::get('pages/{page}/comments', 'Api\PageCommentController@index')->name('pagecomment.index');
 
 
-
 // --------------------------------------------------------------------------------------------------------------------------
-// All media related routes
-// --------------------------------------------------------------------------------------------------------------------------
-// Route::get('/admin/media',            'MediaController@index')->name('media.index')->middleware('author');
-// Route::get('/api/media',              'MediaController@apiIndex')->name('api.media.index')->middleware('author');
-// Route::post('/admin/media',           'MediaController@store')->name('media.store')->middleware('author');
-// Route::delete('/admin/media/{media}', 'MediaController@destroy')->name('media.destroy')->middleware('author');
-
-
-
-// --------------------------------------------------------------------------------------------------------------------------
-// Authenticated Routes
+// Authenticated API Routes
 // --------------------------------------------------------------------------------------------------------------------------
 Route::group(['middleware' => ['auth:airlock']], function () {
 
@@ -89,16 +80,20 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     // --------------------------------------------------------------------------------------------------------------------------
     // Users API
     // --------------------------------------------------------------------------------------------------------------------------
-    Route::get('users/comments', 'Api\ProfileController@comments')->name('users.comments');
-    Route::get('profile/{user}', 'Api\ProfileController@show')->name('profile.show');
-    Route::put('profile/{user}', 'Api\ProfileController@update')->name('profile.update');
+
+    // ProfileController methods are meant to be called by the profile owner / other non-admin users
+    // Route::get('users/comments', 'Api\ProfileController@comments')->name('users.comments');
+    // Route::get('profile/{user}', 'Api\ProfileController@show')->name('profile.show');
+    Route::patch('profile', 'Api\ProfileController@update')->name('profile.update');
+
+    // UserController methods are strictly for the admin users.
     Route::put('users/{user}/role', 'Api\ProfileController@updateRole')->name('users.updaterole');
     Route::get('users', 'Api\UserController@index')->name('users.index');
     Route::get('users/{user}', 'Api\UserController@show')->name('users.show');
     Route::post('users', 'Api\UserController@store')->name('users.store');
     Route::put('users/{user}', 'Api\UserController@update')->name('users.update');
     Route::delete('users/{id}', 'Api\UserController@destroy')->name('users.destroy');
-    Route::patch('users/password', 'Api\UserController@changePassword')->name('password.change');
+    Route::patch('users/password', 'Api\UserController@changePassword')->name('users.changepassword');
 
 
 
