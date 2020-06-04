@@ -80,7 +80,9 @@ mix.sass('resources/sass/app.scss', 'public/css', {}, postCssPluginsBackEnd)
 /*
  * Setup the Mix files for the front-end.
  */
+mix.js('resources/js/frontend.js', 'public/js/frontend.js')
 mix.js('resources/js/frontend/modules/comments.js', 'public/js')
+mix.js('resources/js/frontend/modules/profile.js', 'public/js')
 mix.sass('resources/sass/style.scss', 'public/css', {}, postCssPluginsFrontEnd)
 
 
