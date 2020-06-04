@@ -60,11 +60,11 @@ class HomeController extends Controller
 
     public function profile($public_id)
     {
-        $user = User::where('public_id', $public_id)->first();
+        $user = User::findByPublicId($public_id);
 
-        if ($user === null) abort(404, 'User Not Found');
-
-        $data = DataProvider::profile($user);
+        $data = DataProvider::profile($user->only([
+            'id', 'name', 'about_me', 'url', 'avatar', 'public_id', 'created_ago', 'role', 'email_verified_at'
+        ]));
 
         return view('active.profile', compact('data'));
     }
