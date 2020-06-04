@@ -96,6 +96,77 @@ class Media extends Model
     }
 
 
+
+
+    /**
+     * Stores the given base64 encoded data as image file. The file name
+     * must be provided without the extension as extension will be determined
+     * from the mime type of the provided data.
+     *
+     * If the parameter "register" is set to true (by default), the media
+     * file information will also be written in the media table in database.
+     * If this flag is set to false, the file will be stored in the disk only.
+     */
+    public static function storeFromBase64($encoded, $name, $subDirectory = null, $register = true)
+    {
+
+        if (preg_match('/^data:image\/(\w+);base64,/', $encoded, $fileType))
+        {
+            $encoded = substr($encoded, strpos($encoded, ',') + 1);
+            $fileType = strtolower($fileType[1]); // jpg, png, gif
+
+            $decodedImage = base64_decode($encoded);
+
+            if ($decodedImage === false) {
+                throw new \Exception('base64_decode failed');
+            }
+        } else {
+            throw new \Exception('did not match data URI with image data');
+        }
+
+
+        try {
+
+            $diskStorageType = self::configureAndGetDiskStorageType();
+
+            if ($subDirectory === null) $subDirectory = self::$subDirectoryPath;
+
+            $path = $subDirectory . '/' . $name . '.' . $fileType;
+
+            Storage::disk($diskStorageType)->put(
+                $path,
+                $decodedImage,
+                self::$visibility
+            );
+
+            $media = new Media([
+                'name'       => $name . '.' . $fileType,
+                'type'       => $fileType,
+                'size'       => round(strlen($decodedImage) / 1024, 2), // killobytes
+                'path'       => $path,
+                'url'        => ($diskStorageType === 'public') ? '/storage/' . $path : Storage::disk($diskStorageType)->url($path),
+                'storage'    => $diskStorageType,
+                'user_id'    => Auth::id()
+            ]);
+
+            if ($register) $media->save();
+
+            return $media;
+
+        } catch (\Exception $e) {
+
+            if (! empty($path)) {
+                if (Storage::disk($diskStorageType)->exists($path)) {
+                    Storage::disk($diskStorageType)->delete($path);
+                }
+                if (!empty ($media) && $register === true) $media->delete();
+            }
+
+            throw $e;
+        }
+    }
+
+
     public static function destroy($media)
     {
         return self::_destroy($media);
