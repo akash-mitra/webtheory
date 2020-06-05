@@ -38,7 +38,7 @@
                     <p class="pb-4">Site Logo</p>
 
                     <PhotoPicker
-                        :image-src="sitelogo"
+                        v-model="sitelogo"
                         @picked="onLogoSelect"
                     ></PhotoPicker>
 
@@ -50,7 +50,7 @@
                     <p class="pb-4">Favicon</p>
 
                     <PhotoPicker
-                        :image-src="siteicon"
+                        v-model="siteicon"
                         @picked="onIconSelect"
                     ></PhotoPicker>
 
@@ -104,8 +104,8 @@ export default {
                 this.sitetitle = siteinfo.title
                 this.sitename = siteinfo.name
                 this.sitedesc = siteinfo.desc
-                this.sitelogo = siteinfo.logo
-                this.siteicon = siteinfo.icon
+                this.sitelogo = siteinfo.logo || ''
+                this.siteicon = siteinfo.icon || ''
 
                 this.isLoading = false
             })

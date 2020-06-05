@@ -42,6 +42,24 @@
                 <textarea id="categoryDescription" v-model="description" class="w-full sm:w-3/4 text-sm max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none"></textarea>
             </div>
 
+
+            <div class="w-full sm:flex my-6">
+                <div class="w-full sm:w-1/4 text-sm py-1 px-3">
+                    <label for="categoryUrl">Category Image</label>
+                    <p class="text-xs text-gray-600 py-2">Provide an image URL to be used as category icon image</p>
+                </div>
+
+                <div class="w-full sm:w-3/4 max-w-lg">
+
+                    <PhotoPicker
+                        v-model="media"
+                        image-list="/api/media"
+                    ></PhotoPicker>
+                </div>
+
+
+            </div>
+
             <div class="w-full sm:flex mb-8">
                 <div class="w-full sm:w-1/4 text-sm py-1 px-3">
                     <label for="categoryParent">Parent Category</label>
@@ -56,18 +74,6 @@
                 </select>
             </div>
 
-            <hr>
-            <div class="w-full sm:flex my-6">
-                <div class="w-full sm:w-1/4 text-sm py-1 px-3">
-                    <label for="categoryUrl">Optional Image</label>
-                    <p class="text-xs text-gray-600 py-2">Provide an image URL to be used as category icon image</p>
-                </div>
-
-                <div class="w-full sm:w-3/4">
-                    <input type="text" id="categoryUrl" v-model="url" class="w-full max-w-lg text-sm max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
-
-                </div>
-            </div>
         </div>
 
 
@@ -96,14 +102,6 @@
 
         </div>
 
-
-        <!--
-        <h2 class="mt-4 text-gray-600 text-2xl flex items-center">Pages</h2>
-        <div  class="w-full md:flex bg-white px-6 py-10 border-t border-blue-400 rounded my-8">
-
-        </div>
-        -->
-
     </div>
 
 </template>
@@ -111,6 +109,8 @@
 
 
 <script>
+
+import PhotoPicker from './PhotoPicker.vue'
 
 export default {
 
@@ -123,11 +123,15 @@ export default {
             name: null,
             description: null,
             parent_id: null,
-            url: 'https://source.unsplash.com/500x310/?category',
+            media: null,
             metadesc: '',
             metakey: '',
             categories: [],
         }
+    },
+
+    components: {
+        PhotoPicker
     },
 
     created() {
@@ -192,6 +196,7 @@ export default {
                     name: this.name,
                     description: this.description,
                     parent_id: this.parent_id,
+                    media_id: this.media.id,
                     metadesc: this.metadesc,
                     metakey: this.metakey,
                     url: this.url
@@ -245,6 +250,7 @@ export default {
                     p.id = data.id
                     p.name = data.name
                     p.description = data.description
+                    p.media = data.media
                     p.metakey = data.metakey
                     p.metadesc = data.metadesc
                     p.parent_id = data.parent_id
@@ -262,7 +268,7 @@ export default {
             })
         },
 
-        deletePage () {
+        deleteCategory () {
 
             let p = this
             util.confirm ("Delete this category?", "This action can not be reverted", function () {

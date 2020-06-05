@@ -85,6 +85,7 @@ export default {
         },
 
         onSave(image) {
+
             this.photos.unshift(image.file)
         },
 

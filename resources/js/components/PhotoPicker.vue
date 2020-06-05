@@ -3,8 +3,8 @@
     <div :class="containerClasses" @click="showImageBrowser=true">
 
         <img
-            v-if="!!imageSrc"
-            :src="imageSrc"
+            v-if="!!value"
+            :src="imageUrl"
             class="block mx-auto border"
         >
 
@@ -70,8 +70,8 @@ export default {
 
     props: {
 
-        imageSrc: {
-            type: String,
+        value: {
+            type: [Object, String],
             default: null
         },
 
@@ -114,14 +114,19 @@ export default {
         this.getFromServer()
     },
 
+    computed: {
+        // This supports sending both object or string as the value prop
+        imageUrl() {
+            return typeof this.value === 'object' ? this.value.url : this.value
+        }
+    },
+
     methods: {
-
-
 
         onSelect(image) {
             this.showImageBrowser = false
 
-            this.$emit('picked', image)
+            this.$emit('input', typeof this.value === 'object' ? image : image.url)
         },
 
         onSearch(query) {
