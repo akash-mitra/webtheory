@@ -15,20 +15,42 @@
   <meta name="theme-color" content="#fafafa">
 
   <link href="/css/style-{{$data->ref->template->primaryColor}}.css" rel="stylesheet">
-
-  <link href="https://fonts.googleapis.com/css?family={{ str_replace(' ', '+', $data->ref->template->headingFont) }}|Quicksand&display=swap" rel="stylesheet">
+  {{-- <link href="/css/style.css" rel="stylesheet"> --}}
 
   @favicon
 
-  <style>
-    .font-heading {
-        font-family: "{{ $data->ref->template->headingFont }}", serif;
-    }
 
-    .font-reading {
-        font-family: 'Quicksand', sans-serif;
-    }
-  </style>
+
+  @if(!empty(optional($data->ref->template)->headingFont))
+    <link href="https://fonts.googleapis.com/css?family={{ str_replace(' ', '+', $data->ref->template->headingFont) }}&display=swap" rel="stylesheet">
+    <style>
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "{{ $data->ref->template->headingFont }}", serif;
+        }
+    </style>
+  @else
+    <style>
+        h1, h2, h3, h4, h5, h6 {
+            font-family: serif;
+        }
+    </style>
+  @endif
+
+  @if(!empty(optional($data->ref->template)->readingFont))
+    <link href="https://fonts.googleapis.com/css?family={{ str_replace(' ', '+', $data->ref->template->readingFont) }}&display=swap" rel="stylesheet">
+    <style>
+        p {
+            font-family: "{{ $data->ref->template->readingFont }}", sans-serif;
+        }
+    </style>
+  @else
+    <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
+    <style>
+        p {
+            font-family: Quicksand, sans-serif;
+        }
+    </style>
+  @endif
 
   @stack('styles')
 
@@ -41,14 +63,19 @@
     <div style="width: 100%; height: 100%; margin: 0; padding: 0;"
         id="js-playground"
         v-cloak
-        @click="discardModalsAndPopups($event)">
+        @click="discardModalsAndPopups"
+        @keydown.esc="discardModalsAndPopups"
+    >
 
         @yield('contents')
 
+        <form method="post" action="/logout" ref="loform">@csrf</form>
     </div>
 
     {{-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script> --}}
-    <script src="https://vuejs.org/js/vue.js"></script>
+    {{-- <script src="https://vuejs.org/js/vue.js"></script> --}}
+
+    <script src="{{ mix('/js/frontend.js') }}"></script>
 
     <script>
         window.csrf_token="{{ csrf_token() }}"
@@ -82,14 +109,17 @@
 
                 isUserMenuOpen: false,
 
-                authuser: @json($data->user)
-            },
+                authuser: @json($data->user),
 
-            created() {},
+            },
 
             methods: {
                 discardModalsAndPopups() {
                     this.isUserMenuOpen = this.isLoginModalOpen = false
+                },
+
+                logout() {
+                    this.$refs.loform.submit()
                 }
             }
         });
