@@ -104,7 +104,11 @@ class ProfileController extends Controller
     {
         $user = User::findByPublicId($public);
 
-        return $user->pages()->with(['media', 'category'])->paginate(4);
+        return $user
+                ->pages()
+                    ->where('status', 'Live')
+                        ->with(['media', 'category'])
+                            ->paginate(4);
     }
 
 

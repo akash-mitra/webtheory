@@ -15,7 +15,7 @@
                 nav-class="w-full mt-4 p-4 flex justify-between items-center bg-gray-100">
 
                     <template v-slot:default="data">
-                        <PageTile :page="data.item" v-if="showDraft || data.item.status != 'Draft'"></PageTile>
+                        <PageTile :page="data.item"></PageTile>
                     </template>
 
             </Paginator>
