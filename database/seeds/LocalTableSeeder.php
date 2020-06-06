@@ -28,6 +28,7 @@ class LocalTableSeeder extends Seeder
             'email' => env('ADMIN_USER_EMAIL', 'admin@example.com'),
             'password' => Hash::make(env('ADMIN_USER_PASSWORD', 'Passw0rd')),
             'role' => 'admin',
+            'email_verified_at' => now(),
             'avatar' => 'https://i.pravatar.cc/100?u=admin@example.com',
         ]);
 
