@@ -1,6 +1,6 @@
 <template>
 
-    <div class="my-4">
+    <div class="my-4" v-if="userPagesData.hasOwnProperty('data') && userPagesData.data.length>0">
         <div class="px-12 pt-3 text-xl uppercase text-gray-700">
             Pages Created by {{ user.name }}
         </div>
@@ -15,7 +15,7 @@
                 nav-class="w-full mt-4 p-4 flex justify-between items-center bg-gray-100">
 
                     <template v-slot:default="data">
-                        <PageTile :page="data.item"></PageTile>
+                        <PageTile :page="data.item" v-if="showDraft || data.item.status != 'Draft'"></PageTile>
                     </template>
 
             </Paginator>
@@ -39,6 +39,11 @@ export default {
     props: {
         user: {
             type: Object
+        },
+
+        showDraft: {
+            type: Boolean,
+            default: false,
         },
     },
 
