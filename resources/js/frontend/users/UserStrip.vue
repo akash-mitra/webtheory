@@ -14,7 +14,7 @@
         <div v-if="userMenuOpen" class="origin-top-right absolute right-0 w-56 rounded shadow-lg">
             <div class="rounded bg-white border shadow-xs">
 
-            <div class="border-b" v-if="user.email_verified_at != null">
+            <div class="border-b" v-if="user.email_verified_at === null">
                 <div class="flex px-4 py-4 tracking-wide text-gray-700">
                     <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24">
                         <desc>Email Not Verified</desc>
