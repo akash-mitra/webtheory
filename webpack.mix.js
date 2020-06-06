@@ -22,6 +22,7 @@ const backendScanPaths = [
 
 const frontendScanPaths = [
   './resources/views/active/*.php',
+  './resources/views/modules/*.php',
   './resources/sass/typography.scss',
   './resources/js/frontend/modules/*.vue',
   './resources/js/frontend/pages/*.vue',
