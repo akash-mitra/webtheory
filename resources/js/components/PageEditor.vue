@@ -9,17 +9,21 @@
             <div class="max-w-4xl mx-auto flex justify-between items-center">
 
                 <div class="flex justify-start items-center">
-                    <div @click="tab='content'" class="pr-6 py-4 text-xs uppercase text-gray-800 cursor-pointer" :class="tab==='content'?'px-6 text-blue-600 font-bold border-b-4 border-blue-500':''">
+                    <div @click="tab='content'" class="px-6 py-4 text-xs uppercase text-gray-800 cursor-pointer" :class="tab==='content'?'text-blue-600 font-bold border-b-4 border-blue-500':''">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-6 w-6 sm:hidden"><path class="bg-icon-primary" d="M6 2h6v6c0 1.1.9 2 2 2h6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2zm2 11a1 1 0 0 0 0 2h8a1 1 0 0 0 0-2H8zm0 4a1 1 0 0 0 0 2h4a1 1 0 0 0 0-2H8z"/><polygon class="secondary" points="14 2 20 8 14 8"/></svg>
                         <span class="hidden sm:inline-block tracking-wider">Content</span>
                     </div>
-                    <div @click="tab='meta'" class="px-6 py-4 text-xs uppercase text-gray-800 cursor-pointer" :class="tab==='meta'?'text-blue-600 font-bold border-b-4 border-blue-500':''">
+                    <div @click="tab='seo'" class="px-6 py-4 text-xs uppercase text-gray-800 cursor-pointer" :class="tab==='seo'?'text-blue-600 font-bold border-b-4 border-blue-500':''">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-6 w-6 sm:hidden"><path class="bg-icon-primary" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z"/><path class="secondary" d="M11 12a1 1 0 0 1 0-2h2a1 1 0 0 1 .96 1.27L12.33 17H13a1 1 0 0 1 0 2h-2a1 1 0 0 1-.96-1.27L11.67 12H11zm2-4a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>
-                        <span class="hidden sm:inline-block tracking-wider">Meta</span>
+                        <span class="hidden sm:inline-block tracking-wider">Seo</span>
                     </div>
                     <div @click="tab='setting'" class="px-6 py-4 text-xs uppercase text-gray-800 cursor-pointer" :class="tab==='setting'?'text-blue-600 font-bold border-b-4 border-blue-500':''">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-6 w-6 sm:hidden"><path class="secondary" fill-rule="evenodd" d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
                         <span class="hidden sm:inline-block tracking-wider">Setting</span>
+                    </div>
+                    <div @click="showGallery=true" class="px-6 py-4 text-xs uppercase text-gray-800 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-6 w-6 sm:hidden"><path class="secondary" fill-rule="evenodd" d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
+                        <span class="hidden sm:inline-block tracking-wider">Gallery</span>
                     </div>
                 </div>
                 <t-button :loadingWheel="isSaving" @click.native="initiateSave">
@@ -62,7 +66,7 @@
                 </div>
             </div>
 
-            <div class="w-full p-2 bg-gray-100 pb-20">
+            <div class="w-full p-2 bg-pattern pb-20">
                 <div class="max-w-4xl mx-auto bg-white -mt-16 shadow-xl px-6 pt-12 border-t-2 border-blue-400">
                     <div id="tensor-editor" class="mx-auto text-gray-700 pb-4 bg-white -mr-2 wt-typography"></div>
                 </div>
@@ -71,8 +75,8 @@
         </div>
 
 
-        <!-- meta section -->
-        <div v-show="tab==='meta'" id="page-meta" class="w-full max-w-4xl mx-auto px-4 xl:px-0 pb-20">
+        <!-- seo section -->
+        <div v-show="tab==='seo'" id="page-seo" class="w-full max-w-4xl mx-auto px-4 xl:px-0 pb-20">
 
             <!-- meta tags -->
             <div class="text-sm text-gray-600 pt-10 pb-3 uppercase">Meta Information</div>
@@ -167,6 +171,18 @@
         <div v-show="tab==='setting'" id="page-setting" class="w-full max-w-4xl mx-auto px-4 xl:px-0 pb-20">
 
             <div class="text-sm text-gray-600 pt-10 pb-3 uppercase">
+                Blog Image
+            </div>
+
+            <div class="bg-white rounded w-full border-t-2 border-blue-400 shadow">
+
+                <PhotoPicker v-model="media"
+                image-classes="w-full"
+                ></PhotoPicker>
+
+            </div>
+
+            <div class="text-sm text-gray-600 pt-10 pb-3 uppercase">
                 Publication
             </div>
 
@@ -189,6 +205,14 @@
 
         </div><!-- end of setting section -->
 
+
+        <!-- Gallery Section -->
+        <PageEditorGallery
+            :show-gallery="showGallery"
+            @close="showGallery=false"
+            @selected="imageSelected"
+        ></PageEditorGallery>
+
     </div>
 
 </template>
@@ -207,10 +231,15 @@ import Table from '@saurav.mitra/editor-table';
 import ImageTool from '@editorjs/image';
 import Embed from '@editorjs/embed';
 
-
+import PhotoPicker from './PhotoPicker.vue';
+import PageEditorGallery from './PageEditorGallery.vue';
 
 export default {
 
+    components: {
+        PhotoPicker,
+        PageEditorGallery
+    },
 
     data: function () {
         return {
@@ -223,6 +252,7 @@ export default {
             metakey: null,
             metadesc: null,
             category_id: 1,
+            media: null,
             status: 'Draft',
 
             categories: [],
@@ -234,6 +264,7 @@ export default {
             },
 
             EDITOR_IDENTITY: 'editorjs',
+            showGallery: false,
 
             timer: null,
             autoSaveFreqSeconds: 120,
@@ -337,6 +368,7 @@ export default {
                         metakey: this.metakey,
                         metadesc: this.metadesc,
                         category_id: this.category_id,
+                        media_id: this.media.id,
                         status: this.status,
                         editor: this.EDITOR_IDENTITY,
                     },
@@ -425,6 +457,7 @@ export default {
                     p.metadesc = data.metadesc
                     p.category_id = data.category_id
                     p.status = data.status
+                    p.media = data.media
                     p.body = JSON.parse(data.content.body_json)
                     p.editor = p.loadEditorTool()
                 })
@@ -502,7 +535,7 @@ export default {
                     table: {
                         class: Table,
                         config: {
-                            rows: 1,
+                            rows: 2,
                             cols: 2,
                         },
                     },
@@ -550,6 +583,11 @@ export default {
             e.target.style.height = (e.target.scrollHeight)+"px";
         },
 
+
+        imageSelected(image) {
+            //console.log(image)
+        },
+
     }, // end of methods
 
     beforeDestroy () {
@@ -563,9 +601,7 @@ export default {
             return 'https://yoursite.com/' + this.id
                 + '-'
                 + (!!this.title ? this.title.replace(/\W+/g, '-').toLowerCase() : '');
-        },
-
-
+        }
     }
 }
 </script>
@@ -771,6 +807,12 @@ export default {
         overflow: hidden;
         min-height: 2em;
         max-height: 10em;
+    }
+
+
+    .bg-pattern {
+        background-color: #cbd5e0;
+        background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23a0aec0' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
     }
 
 </style>

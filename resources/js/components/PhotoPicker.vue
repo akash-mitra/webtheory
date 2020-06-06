@@ -5,7 +5,7 @@
         <img
             v-if="!!value"
             :src="imageUrl"
-            class="block mx-auto border"
+            :class="imageClasses"
         >
 
         <svg
@@ -36,9 +36,7 @@
                 <VueImageBrowser
                     :images="photos"
                     :image-properties="imageFields"
-                    allow-select
                     allow-upload
-                    :allow-delete="false"
                     enable-lazy-load
                     save-url="/api/media"
                     :save-request-headers="headers"
@@ -85,10 +83,16 @@ export default {
             default: 'w-full bg-gray-100 flex items-center p-6 border cursor-pointer'
         },
 
+        imageClasses: {
+            type: String,
+            default: 'block mx-auto border'
+        },
+
         defaultImageClasses: {
             type: String,
             default: 'block mx-auto stroke-current text-gray-500'
         }
+
     },
 
     data() {

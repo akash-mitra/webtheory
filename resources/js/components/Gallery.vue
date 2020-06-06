@@ -8,13 +8,12 @@
         <VueImageBrowser
             :images="photos"
             :image-properties="imageFields"
-            allow-select
+            allow-photo-pane
+            allow-delete
             allow-upload
-            :allow-delete="true"
-            enable-lazy-load
             save-url="/api/media"
+            enable-lazy-load
             :save-request-headers="headers"
-            @selected="onSelect"
             @saved="onSave"
             @deleted="onDelete"
             @searched="onSearch"
@@ -76,9 +75,6 @@ export default {
             )
         },
 
-        onSelect(image) {
-            console.log('on select', image)
-        },
 
         onSearch(query) {
             this.getFromServer(query)

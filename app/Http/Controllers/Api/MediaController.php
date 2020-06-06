@@ -77,35 +77,42 @@ class MediaController extends Controller
 
     public function uploadurl(Request $request)
     {
+
         if ($request->has('url')) {
             $url = $request->url;
-
-            // $arrContextOptions = [
-            //     "ssl" => [
-            //         "verify_peer"=>false,
-            //         "verify_peer_name"=>false,
-            //     ],
-            // ];
-            // $urlcontent = file_get_contents($url, false, stream_context_create($arrContextOptions));
-
-            $tempfile = tmpfile();
-            $tempfilepath = (string) stream_get_meta_data($tempfile)['uri'];
-
-            $urlcontent = file_get_contents($url);
-            file_put_contents($tempfilepath, $urlcontent);
-            $uploadedFile = new UploadedFile($tempfilepath, 'test');
-
-            $media =  Media::store($uploadedFile);
-            return [
-                "success" => 1,
-                "file" => $media
-            ];
-        } else {
+        }
+        else {
             return [
                 "success" => 0,
                 "file" => [ 'id' => null, 'path' => null, 'url' => null ]
             ];
         }
+
+        // if the image URL is from the same website where this blog is hosted,
+        // we can simply return the URL as no need to save the image again.
+        if (parse_url($url, PHP_URL_HOST) === parse_url(url('/'), PHP_URL_HOST)) {
+            return [
+                "success" => 1,
+                "file" => [
+                    "url" => $url
+                ]
+            ];
+        }
+
+
+        $tempfile = tmpfile();
+        $tempfilepath = (string) stream_get_meta_data($tempfile)['uri'];
+
+        $urlcontent = file_get_contents($url);
+        file_put_contents($tempfilepath, $urlcontent);
+        $uploadedFile = new UploadedFile($tempfilepath, 'test');
+
+        $media =  Media::store($uploadedFile);
+        return [
+            "success" => 1,
+            "file" => $media
+        ];
+
     }
 
     /**

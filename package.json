@@ -10,7 +10,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
-        "@akashmitra/vue-image-browser": "^1.1.0",
+        "@akashmitra/vue-image-browser": "^1.2.0",
         "@editorjs/code": "^2.4.1",
         "@editorjs/editorjs": "^2.17.0",
         "@editorjs/embed": "^2.3.1",
