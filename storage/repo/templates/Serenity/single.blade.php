@@ -46,7 +46,6 @@
                 </header>
                 <div class="mt-4 text-base wt-body">
                     {!! $data->page->content->body_html !!}
-                    @menu
                 </div>
             </article>
 
