@@ -53,11 +53,6 @@
 
         </main>
 
-
-
-        <footer class="w-full flex justify-center mt-6 p-4 border-t text-gray-400 rounded-lg">
-                &copy; <?php echo date('Y') ?> - All Rights Reserved. Made with&nbsp;<a href="https://webtheory.co">WebTheory</a>
-        </footer>
     </div>
 
 @endsection

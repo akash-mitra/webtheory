@@ -26,8 +26,9 @@
 
         </div>
 
+
         <main class="w-full max-w-6xl mx-auto pb-10 px-6 text-gray-800">
-            <header class="bg-{{$data->ref->template->primaryColor}}-100 w-full p-8">
+            <header>
                 @if(! empty($data->category->parent))
                     <a class="py-1 text-{{$data->ref->template->primaryColor}}-400" href="{{ $data->category->parent->url }}">{{ $data->category->parent->name }}</a>
                 @endif
@@ -35,7 +36,7 @@
                 @if(empty($data->category->media))
                     <div class="w-full bordeqr-b">&nbsp;</div>
                 @else
-                    <img src="{{ $data->category->media->url }}" class="w-full rounded-lg mt-2 shadown">
+                    <img src="{{ $data->category->media->url }}" class="w-full mt-2 shadown">
                 @endif
                 <p class="mt-2 py-4 text-xl">{{ $data->category->description }}</p>
                 <div class="w-full flex">
@@ -45,7 +46,7 @@
             </header>
 
             <section>
-                <header class="mt-8 text-2xl text-gray-600 px-4">Articles</header>
+                <header class="mt-8 text-2xl text-gray-600 border-b py-2">Articles</header>
 
                 <div class="w-full md:flex md:justify-between md:flex-wrap">
                 @if(count($data->category->pages)===0)
@@ -53,7 +54,12 @@
                 @endif
                 @foreach($data->category->pages as $page)
                     <div class="w-full md:w-1/2 p-6 mb-2">
-                        <h3 class="text-xl mt-3">{{ $page->title }}</h3>
+
+                        <h2 class="my-2 text-2xl">
+                            <a href="{{ $page->url }}" class="text-gray-700 leading-tight hover:text-{{$data->ref->template->primaryColor}}-500">
+                                {{ $page->title }}
+                            </a>
+                        </h2>
                         <p class="text-gray-700 mt-3">{{ $page->summary }}</p>
                         <p class="text-xs text-gray-700 py-2">Updated {{ $page->updated_at->format('d M, Y')}}</p>
                         <a class="mt-3 inline-block text-{{$data->ref->template->primaryColor}}-600" href="{{$page->url}}">Read More</a>
@@ -62,27 +68,28 @@
             </section>
 
             <section>
-                <header class="mt-8 text-2xl text-gray-600 px-4">Sub-categories</header>
+                <header class="mt-8 text-2xl text-gray-600 border-b py-2">Sub-categories</header>
 
                 <div class="w-full md:flex md:justify-between md:flex-wrap">
                 @if(count($data->category->subcategories)===0)
                     <p class="text-gray-600 mt-3 p-4">No sub-category under this category</p>
                 @endif
-                @foreach($data->category->subcategories as $topic)
+                @foreach($data->category->subcategories as $category)
                     <div class="w-full md:w-1/2 p-6 mb-2">
-                        <h3 class="text-xl mt-3">{{ $topic->name }}</h3>
-                        <p class="text-gray-700 mt-3">{{ $topic->description }}</p>
-                        <a class="mt-3 inline-block text-{{$data->ref->template->primaryColor}}-600" href="{{$topic->url}}">Explore</a>
+
+                        <h2 class="my-2 text-2xl">
+                            <a href="{{ $category->url }}" class="text-gray-700 leading-tight hover:text-{{$data->ref->template->primaryColor}}-500">
+                                {{ $category->name }}
+                            </a>
+                        </h2>
+                        <p class="text-gray-700 mt-3">{{ $category->description }}</p>
+                        <a class="mt-3 inline-block text-{{$data->ref->template->primaryColor}}-600" href="{{$category->url}}">Explore</a>
                     </div>
                 @endforeach
             </section>
         </main>
 
 
-
-        <footer class="w-full flex justify-center mt-6 p-4 border-t text-gray-400 rounded-lg">
-                &copy; <?php echo date('Y') ?> - All Rights Reserved. Made with&nbsp;<a href="https://webtheory.co">WebTheory</a>
-        </footer>
     </div>
 
 @endsection

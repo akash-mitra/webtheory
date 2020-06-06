@@ -33,9 +33,7 @@
             "showPages" => 'true'
         ])
 
-        <div class="w-full flex mt-6 p-4 text-gray-400 rounded-lg">
-                &copy; <?php echo date('Y') ?> - All Rights Reserved. Made with&nbsp;<a href="https://webtheory.co">WebTheory</a>
-        </div>
+
     </div>
 
 @endsection

@@ -69,6 +69,16 @@
 
         @yield('contents')
 
+        <footer class="w-full flex flex-col bg-gray-100 items-center mt-6 p-6 border-t text-gray-600 rounded-lg">
+            <p class="p-2">
+                <a href="/terms">Terms of Use</a> |
+                <a href="/privacy">Privacy Policy</a> |
+                <a href="/sitemap">Sitemap</a>
+            </p>
+            <p class="p-2">&copy; <?php echo date('Y') ?> - All Rights Reserved. </p>
+            <p class="p-2 text-{{$data->ref->template->primaryColor}}-600"><a href="https://webtheory.co">Made with WebTheory</a></p>
+        </footer>
+
         <form method="post" action="/logout" ref="loform">@csrf</form>
     </div>
 
