@@ -28,6 +28,8 @@ class TestDataSetup extends TestCase
 
         $this->generateTestdata();
 
+        $this->setModelAttributes();
+
         // COMMENTED OUT FOR 403 Restricted Access permission Test Cases
         // $this->withoutExceptionHandling();
 
@@ -65,4 +67,100 @@ class TestDataSetup extends TestCase
             'page_id' => $this->page->id
         ]);
     }
+
+    private function setModelAttributes()
+    {
+        $this->user_attributes = [
+            'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
+            'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url', 
+        ];
+
+        $this->user_attributes_store = [
+            'name', 'email', 'role', 'preferences', 'public_id', 'updated_at', 'created_at', 'id', 'created_ago', 'updated_ago', 'url', 
+        ];
+
+        $this->profile_attributes = [
+            'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
+            'created_at', 'updated_at', 'public_id', 'id', 'created_ago', 'updated_ago', 'url', 
+        ];
+
+        $this->media_attributes = [
+            'id', 'name', 'type', 'size', 'path', 'url', 'storage', 'user_id',
+            'created_at', 'updated_at',
+            'created_ago', 'updated_ago'
+        ];
+
+        $this->category_attributes = [
+            'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
+            'created_at', 'updated_at', 'deleted_at', 
+            'url', 'permalink', 'created_ago', 'updated_ago', 
+        ];
+
+        $this->page_attributes = [
+            'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status', 
+            'created_at', 'updated_at', 'deleted_at', 
+            'url', 'permalink', 'created_ago', 'updated_ago', 
+        ];
+
+        $this->pagecontent_attributes = [
+            'id', 'page_id', 'body_json', 'body_html', 
+            'created_at', 'updated_at', 'editor', 
+        ];
+
+
+        $this->category_attributes_list = array_merge($this->category_attributes, [
+            'media', 
+            'author' => $this->user_attributes
+        ]);
+
+        $this->category_attributes_pages = array_merge($this->category_attributes, [
+            'pages' => [
+                '*' => array_merge($this->page_attributes, [
+                    'author' => $this->user_attributes
+                ])   
+            ]
+            
+        ]);
+
+
+        $this->page_attributes_list = array_merge($this->page_attributes, [
+            'category' => $this->category_attributes, 
+            'author' => $this->user_attributes, 
+            'media'
+        ]);
+
+        $this->page_attributes_show = array_merge($this->page_attributes, [
+            'content' => $this->pagecontent_attributes, 
+            'category' => $this->category_attributes, 
+            'author' => $this->user_attributes, 
+            'media'
+        ]);
+        
+        $this->page_attributes_show_media = array_merge($this->page_attributes, [
+            'content' => $this->pagecontent_attributes, 
+            'category' => $this->category_attributes, 
+            'author' => $this->user_attributes, 
+            'media' => $this->media_attributes, 
+        ]);
+
+        $this->page_attributes_store = [
+            'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status', 
+            'updated_at', 'created_at', 
+            'id', 'url', 'permalink', 'created_ago', 'updated_ago', 
+            'content' => $this->pagecontent_attributes, 
+        ];
+        
+        
+        $this->comment_attributes = [
+            'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 
+            'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago', 
+        ];
+
+        $this->comment_attributes_store = [
+            'body', 'parent_id', 'user_id', 'reference_id', 
+            'updated_at', 'created_at', 'id', 'created_ago', 'updated_ago', 'parent' 
+        ];
+
+    }
+
 }

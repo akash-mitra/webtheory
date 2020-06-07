@@ -23,19 +23,6 @@ class ProfileController extends Controller
         // $this->middleware(['auth']);
     }
 
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        return response()->json($user);
-    }
-
     /**
      * Update the specified resource in storage.
      *
@@ -85,20 +72,6 @@ class ProfileController extends Controller
         return response()->json($user);
     }
 
-    /**
-     * Update the user role.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function updateRole(Request $request, User $user)
-    {
-        $user->fill(request(['role']))->save();
-
-        return response()->json($user);
-    }
-
 
     public function pages($public)
     {
@@ -112,16 +85,17 @@ class ProfileController extends Controller
     }
 
 
-    // public function comments(Page $page)
-    // {
-    //     $categorycomments = Category::with('comments')->whereHas('comments', function ($query) {
-    //         $query->where('user_id', Auth::id());
-    //     })->get();
+    // Comments made by the Auth User under categories or pages
+    public function comments(Page $page)
+    {
+        $categorycomments = Category::with('comments')->whereHas('comments', function ($query) {
+            $query->where('user_id', Auth::id());
+        })->get();
 
-    //     $pagecomments = Page::with('comments')->whereHas('comments', function ($query) {
-    //         $query->where('user_id', Auth::id());
-    //     })->get();
+        $pagecomments = Page::with('comments')->whereHas('comments', function ($query) {
+            $query->where('user_id', Auth::id());
+        })->get();
 
-    //     return response()->json(["categories" => $categorycomments, "pages" => $pagecomments]);
-    // }
+        return response()->json(["categories" => $categorycomments, "pages" => $pagecomments]);
+    }
 }

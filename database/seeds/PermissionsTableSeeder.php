@@ -130,5 +130,29 @@ class PermissionsTableSeeder extends Seeder
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'settings', 'action' => 'update', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
 
 
+        /********************
+         * SETTING
+         *******************/
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'lov', 'action' => 'categories', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'lov', 'action' => 'authors', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'lov', 'action' => 'categories', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'lov', 'action' => 'authors', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+
+
+        /********************
+         * TEMPLATE
+         *******************/
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'index', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'store', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'add', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'get', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'activate', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'update', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'destroy', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'duplicate', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'import', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        
+
     }
 }

@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\SendEmail;
 use Illuminate\Http\Request;
-use App\Parameter;
 use Illuminate\Support\Facades\Auth;
-use App\Jobs\UpdateSite;
+use Exception;
+use App\Parameter;
 use App\Mail\TestMail;
+use App\Jobs\SendEmail;
+use App\Jobs\UpdateSite;
 
 class SettingController extends Controller
 {
@@ -95,7 +96,6 @@ class SettingController extends Controller
                 //     $message->to(Auth::user()->email);
                 // });
 
-
                 SendEmail::dispatch(
                     Auth::user()->email,
                     new TestMail($siteinfo['title'])
@@ -103,7 +103,7 @@ class SettingController extends Controller
 
                 return response()->json("Mail Sent. Please check your email inbox", 200);
 
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return abort(400, $e);
             }
         }

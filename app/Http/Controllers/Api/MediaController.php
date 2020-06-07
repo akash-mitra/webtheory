@@ -75,9 +75,8 @@ class MediaController extends Controller
         }
     }
 
-    public function uploadurl(Request $request)
+    public function uploadUrl(Request $request)
     {
-
         if ($request->has('url')) {
             $url = $request->url;
         }
@@ -98,7 +97,6 @@ class MediaController extends Controller
                 ]
             ];
         }
-
 
         $tempfile = tmpfile();
         $tempfilepath = (string) stream_get_meta_data($tempfile)['uri'];

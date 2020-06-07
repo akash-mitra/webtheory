@@ -415,8 +415,8 @@ class TemplateTest extends TestDataSetup
     }
 
 
-    // public function test_correct_template_is_loaded_when_visiting_home()
-    // {
-    //     $this->get('/')->assertViewIs('active.home');
-    // }
+    public function test_correct_template_is_loaded_when_visiting_home()
+    {
+        $this->get('/')->assertViewIs('active.home');
+    }
 }

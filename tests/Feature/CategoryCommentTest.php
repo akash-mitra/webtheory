@@ -19,13 +19,10 @@ class CategoryCommentTest extends TestDataSetup
                 'current_page',
                 'data' => [
                     '*' => [
-                        'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
-                        'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
-                        'user' => [
-                            'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
-                            'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url', 
-                        ],
-                        "replies"
+                        array_merge($this->comment_attributes, [
+                            'user' => $this->user_attributes,
+                            "replies"
+                        ])
                     ]
                 ],
                 'first_page_url', 'from', 'last_page', 'last_page_url', 'next_page_url', 'path', 'per_page', 'prev_page_url', 'to', 'total', 
@@ -38,13 +35,10 @@ class CategoryCommentTest extends TestDataSetup
                 'current_page',
                 'data' => [
                     '*' => [
-                        'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
-                        'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
-                        'user' => [
-                            'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
-                            'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url', 
-                        ],
-                        "replies"
+                        array_merge($this->comment_attributes, [
+                            'user' => $this->user_attributes,
+                            "replies"
+                        ])
                     ]
                 ],
                 'first_page_url', 'from', 'last_page', 'last_page_url', 'next_page_url', 'path', 'per_page', 'prev_page_url', 'to', 'total', 
@@ -66,90 +60,77 @@ class CategoryCommentTest extends TestDataSetup
         $response = $this->actingAs($this->adminUser)->post('/api/categories/' . $this->category->id . '/comments', $categorycomment->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['body' => $categorycomment->body])
-            ->assertJsonStructure([
-                'body', 'parent_id', 'user_id', 'reference_id', 
-                'updated_at', 'created_at', 'id', 'created_ago', 'updated_ago', 'parent'
-            ]);
+            ->assertJsonStructure($this->comment_attributes_store);
         $this->assertDatabaseHas('category_comments', ['body' => $categorycomment->body]);
     }
 
-    /* CategoryComment Destroy */
+    /*
+
+    // CategoryComment Destroy
     public function test_categorycomment_destroy()
     {
-        $this->assertTrue(true);
-        // $categorycomment = factory(CategoryComment::class)->create([
-        //     'reference_id' => $this->category->id,
-        //     'user_id' => $this->adminUser->id
-        // ]);
+        $categorycomment = factory(CategoryComment::class)->create([
+            'reference_id' => $this->category->id,
+            'user_id' => $this->adminUser->id
+        ]);
 
-        /* Unauthenticated user cannot delete categorycomment */
-        // $response = $this->delete('/api/comments/categories/' . $categorycomment->id, [], ['Accept' => 'application/json']);
-        // $response->assertStatus(401)
-        //     ->assertJson(['message' => 'Unauthenticated.']);
+        // Unauthenticated user cannot delete categorycomment
+        $response = $this->delete('/api/comments/categories/' . $categorycomment->id, [], ['Accept' => 'application/json']);
+        $response->assertStatus(401)
+            ->assertJson(['message' => 'Unauthenticated.']);
 
-        /* Authenticated user can delete categorycomment */
-        // $response = $this->actingAs($this->adminUser)->delete('/api/comments/categories/' . $categorycomment->id);
-        // $response->assertStatus(204);
-        // $this->assertSoftDeleted('category_comments', ['body' => $categorycomment->body]);
+        // Authenticated user can delete categorycomment
+        $response = $this->actingAs($this->adminUser)->delete('/api/comments/categories/' . $categorycomment->id);
+        $response->assertStatus(204);
+        $this->assertSoftDeleted('category_comments', ['body' => $categorycomment->body]);
     }
 
-    /* CategoryComment Like */
+    // CategoryComment Like
     public function test_categorycomment_like()
     {
-        $this->assertTrue(true);
-        // $categorycomment = factory(CategoryComment::class)->create([
-        //     'reference_id' => $this->category->id,
-        //     'user_id' => $this->adminUser->id,
-        // ]);
+        $categorycomment = factory(CategoryComment::class)->create([
+            'reference_id' => $this->category->id,
+            'user_id' => $this->adminUser->id,
+        ]);
 
-        /* Unauthenticated user cannot give categorycomment like */
-        // $response = $this->put('/api/comments/categories/' . $categorycomment->id . '/like');
-        // $response->assertStatus(200)
-        //     ->assertJsonFragment(['body' => $categorycomment->body])
-        //     ->assertJsonStructureExact([
-        //         'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
-        //         'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
-        //     ]);
-        // $this->assertDatabaseHas('category_comments', ['likes' => $categorycomment->likes + 1]);
+        // Unauthenticated user cannot give categorycomment like
+        $response = $this->put('/api/comments/categories/' . $categorycomment->id . '/like');
+        $response->assertStatus(200)
+            ->assertJsonFragment(['body' => $categorycomment->body])
+            ->assertJsonStructureExact($this->comment_attributes);
+        $this->assertDatabaseHas('category_comments', ['likes' => $categorycomment->likes + 1]);
 
-        /* Authenticated user can give categorycomment like */
-        // $response = $this->actingAs($this->adminUser)->put('/api/comments/categories/' . $categorycomment->id . '/like');
-        // $response->assertStatus(200)
-        //     ->assertJsonFragment(['likes' => $categorycomment->likes + 1])
-        //     ->assertJsonStructure([
-        //         'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
-        //         'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
-        //     ]);
-        // $this->assertDatabaseHas('category_comments', ['likes' => $categorycomment->likes + 1]);
+        // Authenticated user can give categorycomment like
+        $response = $this->actingAs($this->adminUser)->put('/api/comments/categories/' . $categorycomment->id . '/like');
+        $response->assertStatus(200)
+            ->assertJsonFragment(['likes' => $categorycomment->likes + 1])
+            ->assertJsonStructure($this->comment_attributes);
+        $this->assertDatabaseHas('category_comments', ['likes' => $categorycomment->likes + 1]);
     }
 
-    /* CategoryComment Dislike */
+    // CategoryComment Dislike
     public function test_categorycomment_dislike()
     {
-        $this->assertTrue(true);
-        // $categorycomment = factory(CategoryComment::class)->create([
-        //     'reference_id' => $this->category->id,
-        //     'user_id' => $this->adminUser->id,
-        // ]);
+        $categorycomment = factory(CategoryComment::class)->create([
+            'reference_id' => $this->category->id,
+            'user_id' => $this->adminUser->id,
+        ]);
 
-        /* Unauthenticated user cannot give categorycomment dislike */
-        // $response = $this->put('/api/comments/categories/' . $categorycomment->id . '/dislike');
-        // $response->assertStatus(200)
-        //     ->assertJsonFragment(['body' => $categorycomment->body])
-        //     ->assertJsonStructureExact([
-        //         'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
-        //         'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
-        //     ]);
-        // $this->assertDatabaseHas('category_comments', ['body' => $categorycomment->body]);
+        // Unauthenticated user cannot give categorycomment dislike
+        $response = $this->put('/api/comments/categories/' . $categorycomment->id . '/dislike');
+        $response->assertStatus(200)
+            ->assertJsonFragment(['body' => $categorycomment->body])
+            ->assertJsonStructureExact($this->comment_attributes);
+        $this->assertDatabaseHas('category_comments', ['body' => $categorycomment->body]);
 
-        /* Authenticated user can give categorycomment dislike */
-        // $response = $this->actingAs($this->adminUser)->put('/api/comments/categories/' . $categorycomment->id . '/dislike');
-        // $response->assertStatus(200)
-        //     ->assertJsonFragment(['dislikes' => $categorycomment->dislikes + 1])
-        //     ->assertJsonStructure([
-        //         'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes',
-        //         'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago',
-        //     ]);
-        // $this->assertDatabaseHas('category_comments', ['dislikes' => $categorycomment->dislikes + 1]);
+        // Authenticated user can give categorycomment dislike
+        $response = $this->actingAs($this->adminUser)->put('/api/comments/categories/' . $categorycomment->id . '/dislike');
+        $response->assertStatus(200)
+            ->assertJsonFragment(['dislikes' => $categorycomment->dislikes + 1])
+            ->assertJsonStructure($this->comment_attributes);
+        $this->assertDatabaseHas('category_comments', ['dislikes' => $categorycomment->dislikes + 1]);
     }
+
+    */
+
 }
