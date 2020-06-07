@@ -1,8 +1,10 @@
 const mix = require('laravel-mix');
 const tailwindcss = require('tailwindcss')('./tailwind.config.js')
+const purgecss = require('@fullhuman/postcss-purgecss')
+
 const postCssPluginsBackEnd = [tailwindcss];
 const postCssPluginsFrontEnd = [tailwindcss];
-const purgecss = require('@fullhuman/postcss-purgecss')
+
 const tailwindClassExtractor = function (content) { return content.match(/[\w-/:]+(?<!:)/g) || [] }
 
 /**
@@ -34,6 +36,8 @@ const frontendScanPaths = [
  * We do not want to run purgeCss in non-prod environment
  */
 if (mix.inProduction()) {
+
+  // backend
   postCssPluginsBackEnd.push (
     purgecss({
       content: backendScanPaths,
@@ -41,6 +45,7 @@ if (mix.inProduction()) {
     })
   );
 
+  // frontend
   postCssPluginsFrontEnd.push (
     purgecss({
       content: frontendScanPaths,
@@ -48,6 +53,7 @@ if (mix.inProduction()) {
     })
   );
 }
+
 
 /*
  * This is to circumvent an odd browser cache issue
