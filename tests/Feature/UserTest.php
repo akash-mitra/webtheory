@@ -7,12 +7,7 @@ use App\User;
 
 class UserTest extends TestDataSetup
 {
-    private $user_attributes = [
-        'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-        'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url', 
-    ];
-    
-    // User Index
+    /* User Index */
     public function test_user_index()
     {
         $user = factory(User::class)->create(['role' => 'author']);
@@ -26,12 +21,16 @@ class UserTest extends TestDataSetup
         $response = $this->actingAs($this->adminUser)->get('/api/users');
         $response->assertStatus(200)
             ->assertJsonStructureExact([
-                '*' => $this->user_attributes
+                'current_page',
+                'data' => [
+                    '*' => $this->user_attributes
+                ],
+                'first_page_url', 'from', 'last_page', 'last_page_url', 'next_page_url', 'path', 'per_page', 'prev_page_url', 'to', 'total', 
             ]);
         $this->assertDatabaseHas('users', ['name' => $user->name]);
     }
 
-    // User Show
+    /* User Show */
     public function test_user_show()
     {
         $user = factory(User::class)->create(['role' => 'author']);
@@ -49,7 +48,7 @@ class UserTest extends TestDataSetup
         $this->assertDatabaseHas('users', ['name' => $user->name]);
     }
 
-    // User Store
+    /* User Store */
     public function test_user_store()
     {
         $user = factory(User::class)->make(['role' => 'author']);
@@ -63,9 +62,7 @@ class UserTest extends TestDataSetup
         $response = $this->actingAs($this->adminUser)->post('/api/users', $user->toArray(), ['Accept' => 'application/json']);
         $response->assertStatus(200)
             ->assertJsonFragment(['name' => $user->name])
-            ->assertJsonStructureExact([
-                'name', 'email', 'role', 'preferences', 'public_id', 'updated_at', 'created_at', 'id', 'created_ago', 'updated_ago', 'url', 
-            ]);
+            ->assertJsonStructureExact($this->user_attributes_store);
         $this->assertDatabaseHas('users', ['name' => $user->name]);
     }
 
@@ -94,7 +91,7 @@ class UserTest extends TestDataSetup
         $this->assertDatabaseMissing('users', ['about_me' => 'Initial Profile']);
     }
 
-    // User Remove
+    /* User Remove */
     public function test_user_destroy()
     {
         $user = factory(User::class)->create(['role' => 'author']);

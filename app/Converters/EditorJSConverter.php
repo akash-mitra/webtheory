@@ -3,6 +3,7 @@
 namespace App\Converters;
 
 use Highlight\Highlighter;
+use Exception;
 
 class EditorJSConverter
 {
@@ -137,7 +138,7 @@ class EditorJSConverter
             return '<pre><code class="hljs ' . $highlighted->language . '">' . $highlighted->value . '</code></pre>';
 
         }
-        catch (\Exception $e) {
+        catch (Exception $e) {
 
             return '<pre><code class="hljs">' . $code . '</code></pre>';
         }

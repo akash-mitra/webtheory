@@ -11,6 +11,8 @@ use App\Http\Requests\PageStatusRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Converters\ContentsConverter;
+use Illuminate\Database\Eloquent\Builder;
+
 
 class PageController extends Controller
 {
@@ -31,13 +33,38 @@ class PageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pages = Page::with('category', 'author', 'media')
-            ->latest()
-            ->get();
+        $pages = Page::query()->with('category', 'author', 'media');
 
-        return response()->json($pages);
+        /**
+         * This builds a "like" query based on the query string.
+         * It breaks the query string in individual words and
+         * tries to match any of those words in image name.
+         */
+        $query = $request->input('query');
+
+        if (! empty($query))
+        {
+            $queryArray = explode(" ", $query);
+            // a false where statement so that "or" condition below works
+            $pages->where('id', 0);
+
+            foreach($queryArray as $q) {
+                if (! empty($q)) {
+                    $pages->orWhere('title', 'like', '%' . $q . '%');
+                    $pages->orWhere('summary', 'like', '%' . $q . '%');
+                    $pages->orWhereHas('category', function (Builder $query) use ($q) {
+                        $query->where('name', 'like', '%' . $q . '%');
+                    });
+                    $pages->orWhereHas('author', function (Builder $query) use ($q) {
+                        $query->where('name', 'like', '%' . $q . '%');
+                    });
+                }
+            }
+        }
+
+        return $pages->latest()->paginate(100);
     }
 
 

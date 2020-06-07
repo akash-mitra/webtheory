@@ -9,50 +9,6 @@ use App\CategoryComment;
 
 class CategoryTest extends TestDataSetup
 {
-    private $category_attributes = [
-        'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
-        'created_at', 'updated_at', 'deleted_at', 
-        'url', 'permalink', 'created_ago', 'updated_ago', 'media', 
-        'author' => [
-            'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-            'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url',
-        ]
-    ];
-
-    private $categorypage_attributes = [
-        'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
-        'created_at', 'updated_at', 'deleted_at', 
-        'url', 'permalink', 'created_ago', 'updated_ago', 
-        'pages' => [
-            '*' => [
-                'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status',
-                'created_at', 'updated_at', 'deleted_at', 
-                'url', 'permalink', 'created_ago', 'updated_ago', 
-                'author' => [
-                    'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-                    'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url',
-                ]
-            ]
-        ]
-    ];
-
-    private $categorycomment_attributes = [
-        'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
-        'created_at', 'updated_at', 'deleted_at', 
-        'url', 'permalink', 'created_ago', 'updated_ago', 
-        'comments' => [
-            '*' => [
-                'id', 'parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes', 
-                'created_at', 'updated_at', 'deleted_at', 'created_ago', 'updated_ago', 
-                'user' => [
-                    'id', 'name', 'email', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 
-                    'created_at', 'updated_at', 'deleted_at', 'public_id', 'created_ago', 'updated_ago', 'url',
-                ], 
-                "subcomments"
-            ]
-        ]
-    ];
-    
     /* Category Index */
     public function test_category_index()
     {
@@ -60,15 +16,15 @@ class CategoryTest extends TestDataSetup
             'user_id' => $this->adminUser->id,
         ]);
 
-        /* Unauthenticated user cannot view categories listing */
+        // Unauthenticated user cannot view categories listing
         $response = $this->get('/api/categories');
         $response->assertStatus(302);
 
-        /* Authenticated user can view categories listing */
+        // Authenticated user can view categories listing
         $response = $this->actingAs($this->adminUser)->get('/api/categories');
         $response->assertStatus(200)
             ->assertJsonStructureExact([
-                '*' => $this->category_attributes
+                '*' => $this->category_attributes_list
             ]);
         $this->assertDatabaseHas('categories', ['name' => $category->name]);
     }
@@ -80,28 +36,28 @@ class CategoryTest extends TestDataSetup
             'user_id' => $this->adminUser->id,
         ]);
 
-        /* Unauthenticated user cannot view category */
+        // Unauthenticated user cannot view category
         $response = $this->get('/api/categories/' . $category->id);
         $response->assertStatus(302);
 
-        /* Authenticated user can view category */
+        // Authenticated user can view category
         $response = $this->actingAs($this->adminUser)->get('/api/categories/' . $category->id);
         $response->assertStatus(200)
             ->assertJsonFragment(['name' => $category->name])
-            ->assertJsonStructureExact($this->category_attributes);
+            ->assertJsonStructureExact($this->category_attributes_list);
         $this->assertDatabaseHas('categories', ['name' => $category->name]);
 
-        /* Category with Media */
+        // Category with Media
         $category = factory(Category::class)->create([
             'media_id' => $this->media->id,
             'user_id' => $this->adminUser->id,
         ]);
         
-        /* Authenticated user can view category */
+        // Authenticated user can view category
         $response = $this->actingAs($this->adminUser)->get('/api/categories/' . $category->id);
         $response->assertStatus(200)
             ->assertJsonFragment(['name' => $category->name])
-            ->assertJsonStructureExact($this->category_attributes);
+            ->assertJsonStructureExact($this->category_attributes_list);
         $this->assertDatabaseHas('categories', ['name' => $category->name]);
     }
 
@@ -110,17 +66,17 @@ class CategoryTest extends TestDataSetup
     {
         $category = factory(Category::class)->make();
 
-        /* Unauthenticated user cannot save category */
+        // Unauthenticated user cannot save category
         $response = $this->post('/api/categories', $category->toArray(), ['Accept' => 'application/json']);
         $response->assertStatus(401)
             ->assertJson(['message' => 'Unauthenticated.']);
 
-        /* Registered user cannot save category */
+        // Registered user cannot save category
         $response = $this->actingAs($this->registeredUser)->post('/api/categories', $category->toArray(), ['Accept' => 'application/json']);
         $response->assertStatus(403)
             ->assertJson(['message' => 'Restricted Access']);
 
-        /* Authenticated user can save category */
+        // Authenticated user can save category
         $response = $this->actingAs($this->adminUser)->post('/api/categories', $category->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['name' => $category->name])
@@ -141,17 +97,17 @@ class CategoryTest extends TestDataSetup
         ]);
         $category->name = 'Test Category Updated';
 
-        /* Unauthenticated user cannot update category */
+        // Unauthenticated user cannot update category
         $response = $this->put('/api/categories/' . $category->id, $category->toArray(), ['Accept' => 'application/json']);
         $response->assertStatus(401)
             ->assertJson(['message' => 'Unauthenticated.']);
 
-        /* Registered user cannot update category */
+        // Registered user cannot update category
         $response = $this->actingAs($this->registeredUser)->put('/api/categories/' . $category->id, $category->toArray(), ['Accept' => 'application/json']);
         $response->assertStatus(403)
             ->assertJson(['message' => 'Restricted Access']);
 
-        /* Authenticated user can update category */
+        // Authenticated user can update category
         $response = $this->actingAs($this->adminUser)->put('/api/categories/' . $category->id, $category->toArray());
         $response->assertStatus(200)
             ->assertJsonFragment(['name' => 'Test Category Updated'])
@@ -171,17 +127,17 @@ class CategoryTest extends TestDataSetup
             'user_id' => $this->adminUser->id
         ]);
 
-        /* Unauthenticated user cannot delete category */
+        // Unauthenticated user cannot delete category
         $response = $this->delete('/api/categories/' . $category->id, [], ['Accept' => 'application/json']);
         $response->assertStatus(401)
             ->assertJson(['message' => 'Unauthenticated.']);
 
-        /* Registered user cannot delete category */
+        // Registered user cannot delete category
         $response = $this->actingAs($this->registeredUser)->delete('/api/categories/' . $category->id, [], ['Accept' => 'application/json']);
         $response->assertStatus(403)
             ->assertJson(['message' => 'Restricted Access']);
 
-        /* Authenticated user can delete category */
+        // Authenticated user can delete category
         $response = $this->actingAs($this->adminUser)->delete('/api/categories/' . $category->id);
         $response->assertStatus(204);
         $this->assertSoftDeleted('categories', ['name' => $category->name]);
@@ -199,15 +155,15 @@ class CategoryTest extends TestDataSetup
             'user_id' => $this->adminUser->id,
         ]);
 
-        /* Unauthenticated user cannot view category pages */
+        // Unauthenticated user cannot view category pages
         $response = $this->get('/api/categories/' . $category->id . '/pages');
         $response->assertStatus(302);
 
 
-        /* Authenticated user can view category pages */
+        // Authenticated user can view category pages
         $response = $this->actingAs($this->adminUser)->get('/api/categories/' . $category->id . '/pages');
         $response->assertStatus(200)
-            ->assertJsonStructureExact($this->categorypage_attributes);
+            ->assertJsonStructureExact($this->category_attributes_pages);
         $this->assertDatabaseHas('categories', ['id' => $category->id]);
         $this->assertDatabaseHas('pages', ['id' => $categorypage->id]);
     }

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Exception;
 
 class Media extends Model
 {
@@ -82,7 +83,7 @@ class Media extends Model
 
             return $media;
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
 
             if (! empty($path)) {
                 if (Storage::disk($diskStorageType)->exists($path)) {
@@ -118,10 +119,10 @@ class Media extends Model
             $decodedImage = base64_decode($encoded);
 
             if ($decodedImage === false) {
-                throw new \Exception('base64_decode failed');
+                throw new Exception('base64_decode failed');
             }
         } else {
-            throw new \Exception('did not match data URI with image data');
+            throw new Exception('did not match data URI with image data');
         }
 
 
@@ -153,7 +154,7 @@ class Media extends Model
 
             return $media;
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
 
             if (! empty($path)) {
                 if (Storage::disk($diskStorageType)->exists($path)) {

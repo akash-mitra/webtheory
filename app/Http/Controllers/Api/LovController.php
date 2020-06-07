@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use App\Category;
 use App\User;
 
@@ -18,7 +17,7 @@ class LovController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware(['auth']);
+        $this->middleware(['check.permission']);
     }
 
     /**
@@ -29,15 +28,12 @@ class LovController extends Controller
         $categories = Cache::rememberForever('categories.lov', function () {
 
             return Category::withTrashed()->get()->sortBy('id')->map (function ($item) {
-
                 return [
                     'key' => $item['id'],
                     'value' => $item['name'],
                     'trashed' => $item['deleted_at'] != null
                 ];
-
             })->all();
-
         });
 
         return response()->json($categories);

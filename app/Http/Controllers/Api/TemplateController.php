@@ -2,14 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Template;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
+use App\Template;
 
 class TemplateController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware(['check.permission']);
+    }
 
     public function index()
     {

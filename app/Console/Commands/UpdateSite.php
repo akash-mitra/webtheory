@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Exception;
 
 class UpdateSite extends Command
 {
@@ -70,7 +71,7 @@ class UpdateSite extends Command
             $this->call('up');
 
             $this->info('Site updated successfully');
-        } catch(\Exception $e) {
+        } catch(Exception $e) {
             \Log::info($e);
             $this->call('up');
             $this->error('Something went wrong!');

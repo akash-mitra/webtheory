@@ -66,7 +66,7 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     Route::get('media', 'Api\MediaController@index')->name('media.index');
     Route::get('media/{media}', 'Api\MediaController@show')->name('media.show');
     Route::post('media', 'Api\MediaController@upload')->name('media.upload');
-    Route::post('media/fetchUrl', 'Api\MediaController@uploadurl')->name('media.uploadurl');
+    Route::post('media/fetchUrl', 'Api\MediaController@uploadUrl')->name('media.uploadurl');
     Route::delete('media/{media}', 'Api\MediaController@remove')->name('media.remove');
 
 
@@ -82,12 +82,11 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     // --------------------------------------------------------------------------------------------------------------------------
 
     // ProfileController methods are meant to be called by the profile owner / other non-admin users
-    // Route::get('users/comments', 'Api\ProfileController@comments')->name('users.comments');
-    // Route::get('profile/{user}', 'Api\ProfileController@show')->name('profile.show');
     Route::patch('profile', 'Api\ProfileController@update')->name('profile.update');
+    Route::get('profile/comments', 'Api\ProfileController@comments')->name('profile.comments');
+    
 
     // UserController methods are strictly for the admin users.
-    Route::put('users/{user}/role', 'Api\ProfileController@updateRole')->name('users.updaterole');
     Route::get('users', 'Api\UserController@index')->name('users.index');
     Route::get('users/{user}', 'Api\UserController@show')->name('users.show');
     Route::post('users', 'Api\UserController@store')->name('users.store');

@@ -21,25 +21,45 @@ class UserController extends Controller
         $this->middleware(['check.permission']);
     }
 
-
-
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $users = User::query();
+
+        /**
+         * This builds a "like" query based on the query string.
+         * It breaks the query string in individual words and
+         * tries to match any of those words in image name.
+         */
+        $query = $request->input('query');
+
+        if (! empty($query))
+        {
+            $queryArray = explode(" ", $query);
+            // a false where statement so that "or" condition below works
+            $users->where('id', 0);
+
+            foreach($queryArray as $q) {
+                if (! empty($q)) {
+                    $users->orWhere('name', 'like', '%' . $q . '%');
+                    $users->orWhere('email', 'like', '%' . $q . '%');
+                    $users->orWhere('role', 'like', '%' . $q . '%');
+                }
+            }
+        }
+
         if (auth()->user()->isAdmin())
         {
-            $users = User::withTrashed()->latest()->get();
+            return $users->withTrashed()->latest()->paginate(100);
         }
         else
         {
-            $users = User::latest()->get();
+            return $users->latest()->paginate(100);
         }
-
-        return response()->json($users);
     }
 
 
@@ -131,10 +151,14 @@ class UserController extends Controller
 
 
 
+    /**
+     * Change the password of Auth user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function changePassword(Request $request)
     {
-        // return $request->only('email');
-
         $request->validate([
             'current_password' => ['required', 'min:8', 'max:255'],
             'new_password' => ['required', 'min:8', 'max:255', 'confirmed'],
@@ -160,6 +184,5 @@ class UserController extends Controller
             'message' => 'Account password changed.'
         ]);
     }
-
 
 }

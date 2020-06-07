@@ -20,7 +20,7 @@ class ParameterTest extends TestDataSetup
         $this->assertEquals( 
             '{"name": "My Blog", "title": "My Blog Title", "desc": "My Blog Description"}', 
             $value
-        ); 
+        );
         $this->assertDatabaseHas('parameters', ['key' => 'siteinfo']);
     }
 
@@ -33,13 +33,13 @@ class ParameterTest extends TestDataSetup
 
         /* Authenticated user can save parameters */
         $response = $this->actingAs($this->adminUser)->post('/api/parameters/siteinfo', 
-            ['value' => '{"name": "My Test Blog", "title": "My Test Blog Title", "desc": ""}'], ['Accept' => 'application/json']);
+            ['value' => '{"name": "My Test Blog", "title": "My Test Blog Title", "desc": "My Test Blog Description"}'], ['Accept' => 'application/json']);
         $response->assertStatus(200);
         $value = $response->decodeResponseJson();
         $this->assertEquals( 
-            '{"name": "My Test Blog", "title": "My Test Blog Title", "desc": ""}', 
+            '{"name": "My Test Blog", "title": "My Test Blog Title", "desc": "My Test Blog Description"}', 
             $value
-        ); 
+        );
         $this->assertDatabaseHas('parameters', ['key' => 'siteinfo']);
     }
 }
