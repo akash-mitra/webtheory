@@ -21,10 +21,10 @@
     <div class="w-full font-sans" id="app" @click="hideOverlayMenu" v-cloak>
 
         <div v-if="authUser !== null && authUser.role != 'registered'" class="w-full bg-white border-b border-gray-400 py-3 md:flex items-center justify-between">
-            <div class="md:flex justify-start items-center">
+            <div class="md:flex justify-start items-center overflow-hidden">
                 <div class="px-6 lg:px-8 flex items-center justify-between">
-                    <img src="/images/tensor.svg" alt="WebTheory Home" class="h-10 w-10 mr-6 cursor-pointer" @click="$router.push('/app')">
-                    <p class="hidden md:block text-blue-400 font-thin mr-10">WebTheory</p>
+                    <img src="/images/tensor.svg" alt="WebTheory Home" class="h-10 w-10 mr-4 cursor-pointer" @click="$router.push('/app')">
+                    <p class="block md:hidden lg:block text-blue-500 font-bold mr-10">WebTheory</p>
 
                     <svg id="menu-toggle-button" class="md:hidden text-gray-500 fill-current w-6 h-6 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                         <path id="menu-toggle-btn-burger" class="hidden" d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"></path>
@@ -32,33 +32,33 @@
                     </svg>
                 </div>
 
-                <nav id="nav-menu" class="hidden md:block px-4 lg:px-8 md:flex py-4 md:py-0 w-full max-w-4xl">
-                    <p class="px-2 md:px-6 tracking-wide text-sm py-2">
+                <nav id="nav-menu" class="hidden md:block px-4 lg:px-8 md:flex py-4 md:py-0 w-full max-w-4xl overflow-x-scroll">
+                    <p class="px-2 md:px-4 lg:px-6 tracking-wide text-sm py-2">
                         <router-link active-class="font-bold text-blue-700" to="/app/pages">
                             Pages
                         </router-link>
                     </p>
-                    <p class="px-2 md:px-6 tracking-wide text-sm py-2">
+                    <p class="px-2 md:px-4 lg:px-6 tracking-wide text-sm py-2">
                         <router-link active-class="font-bold text-blue-700" to="/app/categories">
                             Categories
                         </router-link>
                     </p>
-                    <p class="px-2 md:px-6 tracking-wide text-sm py-2">
+                    <p class="px-2 md:px-4 lg:px-6 tracking-wide text-sm py-2">
                         <router-link active-class="font-bold text-blue-700" to="/app/gallery">
                             Gallery
                         </router-link>
                     </p>
-                    <p class="px-2 md:px-6 tracking-wide text-sm py-2">
+                    <p class="px-2 md:px-4 lg:px-6 tracking-wide text-sm py-2">
                         <router-link active-class="font-bold text-blue-700" to="/app/users">
                             Users
                         </router-link>
                     </p>
-                    <p v-if="authUser.role == 'admin'" class="px-2 md:px-6 tracking-wide text-sm py-2">
+                    <p v-if="authUser.role == 'admin'" class="px-2 md:px-4 lg:px-6 tracking-wide text-sm py-2">
                         <router-link active-class="font-bold text-blue-700" to="/app/templates">
                             Templates
                         </router-link>
                     </p>
-                    <p v-if="authUser.role == 'admin'" class="px-2 md:px-6 tracking-wide text-sm py-2">
+                    <p v-if="authUser.role == 'admin'" class="px-2 md:px-4 lg:px-6 tracking-wide text-sm py-2">
                         <router-link active-class="font-bold text-blue-700" to="/app/settings">
                             Settings
                         </router-link>
