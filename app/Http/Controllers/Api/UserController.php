@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserController extends Controller
 {
@@ -28,38 +29,88 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::query();
+        $usersQuery = User::query();
 
-        /**
-         * This builds a "like" query based on the query string.
-         * It breaks the query string in individual words and
-         * tries to match any of those words in image name.
-         */
-        $query = $request->input('query');
+        return $this->queryUsers($usersQuery, $request);
+    }
 
-        if (! empty($query))
+
+
+    /**
+     * Get list of users who are banned (soft deleted).
+     */
+    public function banned (Request $request)
+    {
+        $usersQuery = User::query();
+
+        $usersQuery->whereNotNull('deleted_at');
+
+        return $this->queryUsers($usersQuery, $request);
+    }
+
+
+    /**
+     * Get list of users with unverified email addresses.
+     */
+    public function unverified (Request $request)
+    {
+        $usersQuery = User::query();
+
+        $usersQuery->whereNull('email_verified_at');
+
+        return $this->queryUsers($usersQuery, $request);
+    }
+
+
+    /**
+     * Perform query to the User model with additional
+     * conditions for LIKE matches with query string.
+     */
+    private function queryUsers($queryBuilder, $request)
+    {
+        $queryBuilder = $this->filterByQueryString(
+            $queryBuilder,
+            ['name', 'email', 'role'],
+            $request->input('query')
+        );
+
+        if ($request->user()->isAdmin()) {
+            $queryBuilder->withTrashed();
+        }
+
+        return $queryBuilder->latest()->paginate(10);
+    }
+
+
+
+    /**
+     * Enhances a query builder with additional conditions for
+     * matching the query string with the list of columns.
+     */
+    private function filterByQueryString(Builder $queryBuilder, array $cols, $queryString)
+    {
+        if (! empty($queryString))
         {
-            $queryArray = explode(" ", $query);
-            // a false where statement so that "or" condition below works
-            $users->where('id', 0);
+            $keywords = explode(" ", $queryString);
 
-            foreach($queryArray as $q) {
-                if (! empty($q)) {
-                    $users->orWhere('name', 'like', '%' . $q . '%');
-                    $users->orWhere('email', 'like', '%' . $q . '%');
-                    $users->orWhere('role', 'like', '%' . $q . '%');
+            $queryBuilder->where(function ($builder) use($keywords, $cols) {
+                foreach($keywords as $keyword) {
+                    if (! empty($keyword)) {
+                        foreach($cols as $col) {
+                            if (Str::contains($col, ".")) {
+                                $relation = explode(".", $col);
+                                $builder->orWhereHas($relation[0], function (Builder $query) use ($relation, $keyword) {
+                                    $query->where($relation[1], 'like', '%' . $keyword . '%');
+                                });
+                            } else {
+                                $builder->orWhere($col, 'like', '%' . $keyword . '%');
+                            }
+                        }
+                    }
                 }
-            }
+            });
         }
-
-        if (auth()->user()->isAdmin())
-        {
-            return $users->withTrashed()->latest()->paginate(100);
-        }
-        else
-        {
-            return $users->latest()->paginate(100);
-        }
+        return $queryBuilder;
     }
 
 

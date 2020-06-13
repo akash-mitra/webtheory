@@ -58,7 +58,7 @@ export default {
 
         arrowClass: {
             type: String,
-            default: 'stroke-current text-gray-500 inline-block h-8 w-8 hover:text-blue-400 cursor-pointer'
+            default: 'stroke-current text-blue-500 inline-block h-8 w-8 hover:text-blue-600 cursor-pointer'
         },
     },
 

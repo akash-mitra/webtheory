@@ -81,13 +81,15 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     // Users API
     // --------------------------------------------------------------------------------------------------------------------------
 
-    // ProfileController methods are meant to be called by the profile owner / other non-admin users
+    // ProfileController methods are for non-admin users
     Route::patch('profile', 'Api\ProfileController@update')->name('profile.update');
     Route::get('profile/comments', 'Api\ProfileController@comments')->name('profile.comments');
-    
+
 
     // UserController methods are strictly for the admin users.
     Route::get('users', 'Api\UserController@index')->name('users.index');
+    Route::get('users/banned', 'Api\UserController@banned')->name('users.banned');
+    Route::get('users/unverified', 'Api\UserController@unverified')->name('users.unverified');
     Route::get('users/{user}', 'Api\UserController@show')->name('users.show');
     Route::post('users', 'Api\UserController@store')->name('users.store');
     Route::put('users/{user}', 'Api\UserController@update')->name('users.update');
