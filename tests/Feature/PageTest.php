@@ -15,6 +15,7 @@ class PageTest extends TestDataSetup
         $page = factory(Page::class)->create([
             'category_id' => $this->category->id,
             'user_id' => $this->adminUser->id,
+            'status' => 'Live',
         ]);
 
         // Unauthenticated user cannot view pages listing
@@ -40,6 +41,7 @@ class PageTest extends TestDataSetup
         $page = factory(Page::class)->create([
             'category_id' => $this->category->id,
             'user_id' => $this->adminUser->id,
+            'status' => 'Live',
         ]);
         $pagecontent = factory(PageContent::class)->create(['page_id' => $page->id]);
 
@@ -186,7 +188,8 @@ class PageTest extends TestDataSetup
     {
         $page = factory(Page::class)->create([
             'category_id' => $this->category->id,
-            'user_id' => $this->authorUser1->id
+            'user_id' => $this->authorUser1->id,
+            'status' => 'Live',
         ]);
         $pagecontent = factory(PageContent::class)->create([
             'page_id' => $page->id
@@ -213,7 +216,8 @@ class PageTest extends TestDataSetup
     {
         $page = factory(Page::class)->create([
             'category_id' => $this->category->id,
-            'user_id' => $this->adminUser->id
+            'user_id' => $this->adminUser->id,
+            'status' => 'Live',
         ]);
 
         // Unauthenticated user cannot delete page
