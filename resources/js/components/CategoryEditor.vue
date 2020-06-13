@@ -196,7 +196,7 @@ export default {
                     name: this.name,
                     description: this.description,
                     parent_id: this.parent_id,
-                    media_id: this.media.id,
+                    media_id: (!! this.media) ? this.media.id: null,
                     metadesc: this.metadesc,
                     metakey: this.metakey,
                     url: this.url

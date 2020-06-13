@@ -116,7 +116,7 @@ input:-webkit-autofill::first-line {
                 </div>
 
                 <div class="w-1/3 text-right">
-                    <span id="register-form" @click="mode='signup'" class="text-sm text-blue-600 cursor-pointer">New Account?</span>
+                    <span @click="mode='signup'" class="text-sm text-blue-600 cursor-pointer">New Account?</span>
                 </div>
 
             </div>
