@@ -1,5 +1,5 @@
 @guest
-    <span id="login-modal" class="flex px-4 py-2 rounded-lg font-bold text-{{$data->ref->template->primaryColor}}-600 hover:bg-gray-100 cursor-pointer"
+    <span class="flex px-4 py-2 rounded-lg font-bold text-{{$data->ref->template->primaryColor}}-600 hover:bg-gray-100 cursor-pointer"
         @click.stop="isLoginModalOpen = true">
         Login / Sign Up
     </span>
