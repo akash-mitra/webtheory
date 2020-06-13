@@ -8,7 +8,7 @@ use App\User;
 
 class LovTest extends TestDataSetup
 {
-    /* Categories Lov Test */
+    /* Categories Lov */
     public function test_categories_lov()
     {
         $category = factory(Category::class)->create([
@@ -30,7 +30,7 @@ class LovTest extends TestDataSetup
         $this->assertDatabaseHas('categories', ['name' => $category->name]);
     }
 
-    /* Authors Lov Test */
+    /* Authors Lov */
     public function test_authors_lov()
     {
         /* Unauthenticated user cannot view authors lov listing */

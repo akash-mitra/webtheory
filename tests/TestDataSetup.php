@@ -5,11 +5,14 @@ namespace Tests;
 use App\Page;
 use App\User;
 use App\Media;
-use Notification;
 use App\Category;
 use App\PageContent;
 use Tests\Support\AssertJson;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Event;
 
 class TestDataSetup extends TestCase
 {
@@ -21,6 +24,9 @@ class TestDataSetup extends TestCase
         parent::setUp();
 
         Notification::fake();
+        Mail::fake();
+        Queue::fake();
+        Event::fake();
 
         $this->setUpAssertJson();
 
@@ -62,6 +68,7 @@ class TestDataSetup extends TestCase
         $this->page = factory(Page::class)->create([
             'category_id' => $this->category->id,
             'user_id' => $this->adminUser->id,
+            'status' => 'Live',
         ]);
         $this->pagecontent = factory(PageContent::class)->create([
             'page_id' => $this->page->id
@@ -86,20 +93,17 @@ class TestDataSetup extends TestCase
 
         $this->media_attributes = [
             'id', 'name', 'type', 'size', 'path', 'url', 'storage', 'user_id',
-            'created_at', 'updated_at',
-            'created_ago', 'updated_ago'
+            'created_at', 'updated_at', 'created_ago', 'updated_ago'
         ];
 
         $this->category_attributes = [
             'id', 'name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id', 'user_id', 
-            'created_at', 'updated_at', 'deleted_at', 
-            'url', 'permalink', 'created_ago', 'updated_ago', 
+            'created_at', 'updated_at', 'deleted_at', 'url', 'permalink', 'created_ago', 'updated_ago', 
         ];
 
         $this->page_attributes = [
             'id', 'category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status', 
-            'created_at', 'updated_at', 'deleted_at', 
-            'url', 'permalink', 'created_ago', 'updated_ago', 
+            'created_at', 'updated_at', 'deleted_at', 'url', 'permalink', 'created_ago', 'updated_ago', 
         ];
 
         $this->pagecontent_attributes = [
@@ -149,6 +153,11 @@ class TestDataSetup extends TestCase
             'id', 'url', 'permalink', 'created_ago', 'updated_ago', 
             'content' => $this->pagecontent_attributes, 
         ];
+
+        $this->user_pages_attributes = array_merge($this->page_attributes, [
+            'media', 
+            'category' => $this->category_attributes, 
+        ]);
         
         
         $this->comment_attributes = [

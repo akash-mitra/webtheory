@@ -125,11 +125,11 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     // --------------------------------------------------------------------------------------------------------------------------
     // Settings API
     // --------------------------------------------------------------------------------------------------------------------------
-    Route::get('settings/social', 'Api\SettingController@getsocial')->name('settings.social');
-    Route::get('settings/mail', 'Api\SettingController@getmail')->name('settings.mail');
-    Route::post('settings/loginprovider', 'Api\SettingController@loginprovider')->name('settings.loginprovider');
-    Route::post('settings/mailprovider', 'Api\SettingController@mailprovider')->name('settings.mailprovider');
-    Route::get('settings/testmail', 'Api\SettingController@testmail')->name('settings.testmail');
+    Route::get('settings/social', 'Api\SettingController@getSocial')->name('settings.social');
+    Route::get('settings/mail', 'Api\SettingController@getMail')->name('settings.mail');
+    Route::post('settings/loginprovider', 'Api\SettingController@loginProvider')->name('settings.loginprovider');
+    Route::post('settings/mailprovider', 'Api\SettingController@mailProvider')->name('settings.mailprovider');
+    Route::get('settings/testmail', 'Api\SettingController@testMail')->name('settings.testmail');
     Route::post('settings/update', 'Api\SettingController@update')->name('settings.update');
 
 

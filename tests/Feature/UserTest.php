@@ -83,7 +83,7 @@ class UserTest extends TestDataSetup
             ->assertJson(['message' => 'Restricted Access']);
 
         /* Authenticated user can update user */
-        $response = $this->actingAs($this->adminUser)->put('/api/users/' . $user->id, $user->toArray());
+        $response = $this->actingAs($this->adminUser)->put('/api/users/' . $user->id, $user->toArray(), ['Accept' => 'application/json']);
         $response->assertStatus(200)
             ->assertJsonFragment(['about_me' => 'Profile Modified'])
             ->assertJsonStructureExact($this->user_attributes);
@@ -105,5 +105,21 @@ class UserTest extends TestDataSetup
         $response = $this->actingAs($this->adminUser)->delete('/api/users/' . $user->id);
         $response->assertStatus(204);
         $this->assertSoftDeleted('users', ['name' => $user->name]);
+    }
+
+    /* Auth User can change password */
+    public function test_user_can_change_password()
+    {
+        $data = ['current_password' => 'password', 'new_password' => 'password1234', 'new_password_confirmation' => 'password1234'];
+
+        /* Unauthenticated user cannot update password */
+        $response = $this->patch('/api/users/password', $data, ['Accept' => 'application/json']);
+        $response->assertStatus(401)
+            ->assertJson(['message' => 'Unauthenticated.']);
+
+        /* Authenticated user can update password */
+        $response = $this->actingAs($this->adminUser)->patch('/api/users/password', $data, ['Accept' => 'application/json']);
+        $response->assertStatus(200)
+            ->assertJson(['status' => 'success', 'message' => 'Account password changed.']);
     }
 }
