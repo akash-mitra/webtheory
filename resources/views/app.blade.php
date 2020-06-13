@@ -32,33 +32,33 @@
                     </svg>
                 </div>
 
-                <nav id="nav-menu" class="hidden md:block px-4 lg:px-8 md:flex py-4 md:py-0 w-full max-w-4xl overflow-x-scroll">
-                    <p class="px-2 md:px-4 lg:px-6 tracking-wide text-sm py-2">
+                <nav id="nav-menu" class="hidden md:block px-4 lg:px-8 md:flex py-4 md:py-0 w-full max-w-4xl overflow-x-scroll space-x-0 md:space-x-8 xl:space-x-12">
+                    <p class="tracking-wide text-sm py-2">
                         <router-link active-class="font-bold text-blue-700" to="/app/pages">
                             Pages
                         </router-link>
                     </p>
-                    <p class="px-2 md:px-4 lg:px-6 tracking-wide text-sm py-2">
+                    <p class="tracking-wide text-sm py-2">
                         <router-link active-class="font-bold text-blue-700" to="/app/categories">
                             Categories
                         </router-link>
                     </p>
-                    <p class="px-2 md:px-4 lg:px-6 tracking-wide text-sm py-2">
+                    <p class="tracking-wide text-sm py-2">
                         <router-link active-class="font-bold text-blue-700" to="/app/gallery">
                             Gallery
                         </router-link>
                     </p>
-                    <p class="px-2 md:px-4 lg:px-6 tracking-wide text-sm py-2">
+                    <p class="tracking-wide text-sm py-2">
                         <router-link active-class="font-bold text-blue-700" to="/app/users">
                             Users
                         </router-link>
                     </p>
-                    <p v-if="authUser.role == 'admin'" class="px-2 md:px-4 lg:px-6 tracking-wide text-sm py-2">
+                    <p v-if="authUser.role == 'admin'" class="tracking-wide text-sm py-2">
                         <router-link active-class="font-bold text-blue-700" to="/app/templates">
                             Templates
                         </router-link>
                     </p>
-                    <p v-if="authUser.role == 'admin'" class="px-2 md:px-4 lg:px-6 tracking-wide text-sm py-2">
+                    <p v-if="authUser.role == 'admin'" class="tracking-wide text-sm py-2">
                         <router-link active-class="font-bold text-blue-700" to="/app/settings">
                             Settings
                         </router-link>
