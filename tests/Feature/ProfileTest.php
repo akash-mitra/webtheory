@@ -5,11 +5,42 @@ namespace Tests\Feature;
 use Tests\TestDataSetup;
 use App\User;
 use App\CategoryComment;
+use App\Page;
+use App\PageContent;
 use App\PageComment;
 
 class ProfileTest extends TestDataSetup
 {
-    /* User Update */
+    /* User Pages */
+    public function test_user_pages()
+    {
+        $page = factory(Page::class)->create([
+            'category_id' => $this->category->id,
+            'user_id' => $this->adminUser->id,
+            'status' => 'Live',
+        ]);
+        $pagecontent = factory(PageContent::class)->create([
+            'page_id' => $page->id
+        ]);
+
+        // Unauthenticated user can view user pages listing
+        $response = $this->get('/api/profiles/' . $this->adminUser->public_id . '/pages');
+        $response->assertStatus(200);
+
+        // Authenticated user can view user pages listing
+        $response = $this->get('/api/profiles/' . $this->adminUser->public_id . '/pages');
+        $response->assertStatus(200)
+            ->assertJsonFragment(['title' => $page->title])
+            ->assertJsonStructureExact([
+                'current_page',
+                'data' => [
+                    '*' => $this->user_pages_attributes
+                ],
+                'first_page_url', 'from', 'last_page', 'last_page_url', 'next_page_url', 'path', 'per_page', 'prev_page_url', 'to', 'total', 
+            ]);
+    }
+    
+    /* User Profile Update */
     public function test_user_update()
     {
         $user = factory(User::class)->create([
@@ -36,7 +67,7 @@ class ProfileTest extends TestDataSetup
     }
 
 
-    /* User Comments Test */
+    /* User Comments */
     public function test_user_comments()
     {
         $categorycomment = factory(CategoryComment::class)->create([

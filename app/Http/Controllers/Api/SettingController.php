@@ -23,7 +23,7 @@ class SettingController extends Controller
         $this->middleware(['check.permission']);
     }
 
-    public function getsocial()
+    public function getSocial()
     {
         $keys = [
             'FACEBOOK_CLIENT_ID', 'FACEBOOK_CLIENT_SECRET',
@@ -41,7 +41,7 @@ class SettingController extends Controller
         return response()->json($social);
     }
 
-    public function getmail()
+    public function getMail()
     {
         $keys = [
             'MAIL_DRIVER', 'MAIL_FROM_ADDRESS', 'MAIL_FROM_NAME',
@@ -60,7 +60,7 @@ class SettingController extends Controller
         return response()->json($mail);
     }
 
-    public function loginprovider(Request $request)
+    public function loginProvider(Request $request)
     {
         $data = $request->data;
         foreach($data as $lov) {
@@ -72,7 +72,7 @@ class SettingController extends Controller
         return response()->json("Saved", 200);
     }
 
-    public function mailprovider(Request $request)
+    public function mailProvider(Request $request)
     {
         $data = $request->data;
         foreach($data as $lov) {
@@ -84,7 +84,7 @@ class SettingController extends Controller
         return response()->json("Saved", 200);
     }
 
-    public function testmail()
+    public function testMail()
     {
         $mailDriver = Parameter::getKey('MAIL_DRIVER');
 

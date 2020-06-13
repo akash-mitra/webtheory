@@ -2,14 +2,16 @@
 
 namespace Tests;
 
-use DB;
-use App\User;
-use App\Category;
 use App\Page;
-use App\PageContent;
+use App\User;
 use App\Media;
-use Notification;
+use App\Category;
+use App\PageContent;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Event;
 
 class DuskTestDataSetup extends DuskTestCase
 {
@@ -20,6 +22,9 @@ class DuskTestDataSetup extends DuskTestCase
         parent::setUp();
 
         Notification::fake();
+        Mail::fake();
+        Queue::fake();
+        Event::fake();
 
         $this->seed();
 
@@ -49,6 +54,7 @@ class DuskTestDataSetup extends DuskTestCase
         $this->page = factory(Page::class)->create([
             'category_id' => $this->category->id,
             'user_id' => $this->adminUser->id,
+            'status' => 'Live',
         ]);
         $this->pagecontent = factory(PageContent::class)->create([
             'page_id' => $this->page->id
