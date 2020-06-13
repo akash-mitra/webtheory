@@ -8,7 +8,7 @@ use Tests\DuskTestDataSetup;
 class LoginTest extends DuskTestDataSetup
 {
     /**
-     * Test Admin Login.
+     * Test Login.
      *
      * @return void
      */

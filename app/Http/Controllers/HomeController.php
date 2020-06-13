@@ -66,6 +66,8 @@ class HomeController extends Controller
             'id', 'name', 'about_me', 'url', 'avatar', 'public_id', 'created_ago', 'role', 'email_verified_at'
         ]));
 
+        CaptureViewEvent::dispatchAfterResponse($this->capture_analytics('App\User', $user->id));
+
         return view('active.profile', compact('data'));
     }
 
