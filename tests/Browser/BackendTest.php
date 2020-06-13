@@ -97,7 +97,6 @@ class BackendTest extends DuskTestDataSetup
                 ->assertSee('Category Saved Successfully')
                 ->visit('/app/categories')
                 ->pause(200)
-                // ->waitForText('categories')
                 ->assertSee('My Test Category');
             $this->assertDatabaseHas('categories', ['name' => 'My Test Category']);
         });
