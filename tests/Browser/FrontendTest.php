@@ -30,8 +30,6 @@ class FrontendTest extends DuskTestDataSetup
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/pages/' . $this->page->id)
-                ->pause(200)
-                ->waitForText('My Blog')
                 ->assertSee($this->page->title);
         });
         $this->assertDatabaseHas('views', ['content_type' => 'App\Page', 'content_id' => $this->page->id, 'browser' => 'HeadlessChrome']);
@@ -46,8 +44,6 @@ class FrontendTest extends DuskTestDataSetup
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/categories/' . $this->category->id)
-                ->pause(200)
-                ->waitForText('My Blog')
                 ->assertSee($this->category->name);
         });
         $this->assertDatabaseHas('views', ['content_type' => 'App\Category', 'content_id' => $this->category->id, 'browser' => 'HeadlessChrome']);
@@ -62,8 +58,6 @@ class FrontendTest extends DuskTestDataSetup
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/profiles/' . $this->adminUser->public_id)
-                ->pause(200)
-                ->waitForText('My Blog')
                 ->assertSee($this->adminUser->name)
                 ->assertSee($this->adminUser->role);
         });
@@ -79,7 +73,6 @@ class FrontendTest extends DuskTestDataSetup
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/sitemap')
-                ->pause(200)
                 ->assertSee('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
                 ->assertSee('<loc>' . env('APP_URL') . '</loc>');
         });
@@ -94,7 +87,6 @@ class FrontendTest extends DuskTestDataSetup
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/rss')
-                ->pause(200)
                 ->assertSee('<rss version="2.0">')
                 ->assertSee('<title>My Blog Title</title>')
                 ->assertSee('<link>' . env('APP_URL') . '</link>')
@@ -111,8 +103,6 @@ class FrontendTest extends DuskTestDataSetup
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/privacy')
-                ->pause(200)
-                ->waitForText('My Blog')
                 ->assertSee('Privacy Policy')
                 ->assertSee('At "My Blog", accessible from ' . env('APP_URL') . ', one of our main priorities is the privacy of our visitors.');
         });
@@ -127,8 +117,6 @@ class FrontendTest extends DuskTestDataSetup
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/terms')
-                ->pause(200)
-                ->waitForText('My Blog')
                 ->assertSee('Terms of Use')
                 ->assertSee('You may view and/or print pages from ' . env('APP_URL') . ' for your own personal use subject to restrictions set in these terms of service.');
         });

@@ -15,23 +15,23 @@
 /*
 | AUTHENTICATION RELATED ROUTES
 */
-Route::post('/register', 'Auth\RegisterController@register')->name('register');
-Route::get('/email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->name('verification.verify');
-Route::post('/login', 'Auth\LoginController@login')->name('login');
-Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+Route::post('register', 'Auth\RegisterController@register')->name('register');
+Route::get('email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->name('verification.verify');
+Route::post('login', 'Auth\LoginController@login')->name('login');
+Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
 
 /*
 | FORGET PASSWORD RELATED ROUTES
 */
 // Process the incoming password reset request.
-Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 
 // Show reset password form.
-Route::get('/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 
 // Post a reset password request.
-Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
+Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 
 
 /*
@@ -62,4 +62,4 @@ Route::get('terms', 'HomeController@terms')->name('terms');
 /*
 | BACK-END CONTROLLER
 */
-Route::get('/app/{any?}', 'AdminController@app')->where('any', '.*')->name('admin.app');
+Route::get('app/{any?}', 'AdminController@app')->where('any', '.*')->name('admin.app');
