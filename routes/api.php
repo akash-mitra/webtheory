@@ -81,7 +81,7 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     // Users API
     // --------------------------------------------------------------------------------------------------------------------------
 
-    // ProfileController methods are meant to be called by the profile owner / other non-admin users
+    // ProfileController methods are for non-admin users
     Route::patch('profile', 'Api\ProfileController@update')->name('profile.update');
     Route::get('profile/comments', 'Api\ProfileController@comments')->name('profile.comments');
 

@@ -4414,6 +4414,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     page: {
@@ -4462,8 +4467,29 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _auth_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../auth.js */ "./resources/js/auth.js");
-/* harmony import */ var _Page_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Page.vue */ "./resources/js/components/Page.vue");
+/* harmony import */ var _Page_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Page.vue */ "./resources/js/components/Page.vue");
+/* harmony import */ var _Paginator_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Paginator.vue */ "./resources/js/components/Paginator.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4501,45 +4527,77 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      pages: [],
+      paginatedPages: {},
       tab: 'all',
-      searchPhrase: ''
+      searchPhrase: '',
+      searchStatus: ''
     };
   },
   created: function created() {
-    var _this = this;
-
-    util.ajax('get', '/api/pages', {}, function (response) {
-      _this.pages = response;
-    });
+    this.fetchFromServer();
   },
   components: {
-    Page: _Page_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+    Page: _Page_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
+    Paginator: _Paginator_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  computed: {
-    filteredPages: function filteredPages() {
+  methods: {
+    fetchFromServer: function fetchFromServer(url) {
+      var _this = this;
+
+      if (typeof url === 'undefined') {
+        url = '/api/pages';
+      }
+
+      var oUrl = new URL(url, location.href);
+
+      if (this.tab === 'draft') {
+        oUrl.searchParams.set('type', 'draft');
+      }
+
+      oUrl.searchParams.set('query', this.searchPhrase);
+      util.ajax('get', oUrl, {}, function (response) {
+        _this.paginatedPages = response;
+        _this.searchStatus = '';
+      });
+    },
+    doDelayedSearch: function doDelayedSearch(evt) {
       var _this2 = this;
 
-      return this.pages.filter(function (page) {
-        if (_this2.tab === 'draft' && page.status != 'Draft') return false;
-        if (_this2.tab === 'byme' && page.author.id != Object(_auth_js__WEBPACK_IMPORTED_MODULE_0__["getAuthUserId"])()) return false;
-        if (_this2.tab === 'deleted' && page.deleted_at == null) return false;
+      evt = evt ? evt : window.event;
+      var charCode = evt.which ? evt.which : evt.keyCode;
 
-        if (!!_this2.searchPhrase) {
-          var title = page.title.toLowerCase();
-          var summary = page.summary.toLowerCase();
-          var authorName = page.author.name.toLowerCase();
+      if (charCode === 13 || charCode === 17 || charCode === 18 || charCode === 20 || charCode === 27 || charCode === 37 || charCode === 38 || charCode === 39 || charCode === 40) {
+        return;
+      }
 
-          var needle = _this2.searchPhrase.toLowerCase();
+      this.searchStatus = 'Searching...';
 
-          if (title.indexOf(needle) === -1 && summary.indexOf(needle) === -1 && authorName.indexOf(needle) === -1) return false;
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
+
+      this.doInstantLocalSearch();
+      this.timer = setTimeout(function () {
+        return _this2.fetchFromServer();
+      }, 500);
+    },
+    doInstantLocalSearch: function doInstantLocalSearch() {
+      var needle = this.searchPhrase.toLowerCase();
+
+      for (var i = 0; i < this.paginatedPages.data.length; i++) {
+        var p = this.paginatedPages.data[i];
+
+        if (p.title.toLowerCase().indexOf(needle) === -1 && p.summary.toLowerCase().indexOf(needle) === -1 && p.author.name.toLowerCase().indexOf(needle) === -1) {
+          this.paginatedPages.data.splice(i, 1);
         }
-
-        return true;
-      });
+      }
+    },
+    filterByTab: function filterByTab(tab) {
+      this.tab = tab;
+      this.fetchFromServer();
     }
-  } // end of computed
-
+  }
 });
 
 /***/ }),
@@ -4604,7 +4662,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     arrowClass: {
       type: String,
-      "default": 'stroke-current text-gray-500 inline-block h-8 w-8 hover:text-blue-400 cursor-pointer'
+      "default": 'stroke-current text-blue-500 inline-block h-8 w-8 hover:text-blue-600 cursor-pointer'
     }
   },
   methods: {
@@ -6227,7 +6285,6 @@ __webpack_require__.r(__webpack_exports__);
     fetchFromServer: function fetchFromServer(url) {
       var _this = this;
 
-      this.searchStatus = 'searching...';
       url = typeof url === 'undefined' ? '/api/users/' + (this.tab === 'all' ? '' : this.tab) : url;
       var oUrl = new URL(url, location.href);
       oUrl.searchParams.set('query', this.searchPhrase);
@@ -6236,10 +6293,17 @@ __webpack_require__.r(__webpack_exports__);
         _this.searchStatus = '';
       });
     },
-    doDelayedSearch: function doDelayedSearch() {
+    doDelayedSearch: function doDelayedSearch(evt) {
       var _this2 = this;
 
-      var p = this;
+      evt = evt ? evt : window.event;
+      var charCode = evt.which ? evt.which : evt.keyCode;
+
+      if (charCode === 17 || charCode === 17 || charCode === 18 || charCode === 20 || charCode === 27 || charCode === 37 || charCode === 38 || charCode === 39 || charCode === 40) {
+        return;
+      }
+
+      this.searchStatus = 'searching...';
 
       if (this.timer) {
         clearTimeout(this.timer);
@@ -6252,15 +6316,13 @@ __webpack_require__.r(__webpack_exports__);
       }, 500);
     },
     doInstantLocalSearch: function doInstantLocalSearch() {
-      if (!!this.searchPhrase) {
-        var needle = this.searchPhrase.toLowerCase();
+      var needle = this.searchPhrase.toLowerCase();
 
-        for (var i = 0; i < this.paginatedUsers.data.length; i++) {
-          var u = this.paginatedUsers.data[i];
+      for (var i = 0; i < this.paginatedUsers.data.length; i++) {
+        var u = this.paginatedUsers.data[i];
 
-          if (u.name.toLowerCase().indexOf(needle) === -1 && u.email.toLowerCase().indexOf(needle) === -1) {
-            this.paginatedUsers.data.splice(i, 1);
-          }
+        if (u.name.toLowerCase().indexOf(needle) === -1 && u.email.toLowerCase().indexOf(needle) === -1) {
+          this.paginatedUsers.data.splice(i, 1);
         }
       }
     },
@@ -14085,7 +14147,7 @@ var render = function() {
               }
             }
           },
-          [_vm._v(_vm._s(_vm.page.title))]
+          [_vm._v("\n            " + _vm._s(_vm.page.title) + "\n        ")]
         ),
         _vm._v(" "),
         _c("div", { staticClass: "px-6 py-4 text-sm text-gray-700" }, [
@@ -14117,41 +14179,15 @@ var render = function() {
           _c(
             "div",
             {
+              staticClass:
+                "text-right text-normal text-gray-500 hover:text-blue-700 cursor-pointer",
               on: {
                 click: function($event) {
                   return _vm.openPageInNewWindow(_vm.page)
                 }
               }
             },
-            [
-              _c(
-                "svg",
-                {
-                  staticClass:
-                    "h-6 w-6 fill-current text-gray-300 hover:text-blue-700 cursor-pointer",
-                  attrs: {
-                    xmlns: "http://www.w3.org/2000/svg",
-                    viewBox: "0 0 24 24"
-                  }
-                },
-                [
-                  _c("path", {
-                    staticClass: "primary",
-                    attrs: {
-                      d:
-                        "M12 8a1 1 0 0 1-1 1H5v10h10v-6a1 1 0 0 1 2 0v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9c0-1.1.9-2 2-2h6a1 1 0 0 1 1 1z"
-                    }
-                  }),
-                  _c("path", {
-                    staticClass: "secondary",
-                    attrs: {
-                      d:
-                        "M19 6.41L8.7 16.71a1 1 0 1 1-1.4-1.42L17.58 5H14a1 1 0 0 1 0-2h6a1 1 0 0 1 1 1v6a1 1 0 0 1-2 0V6.41z"
-                    }
-                  })
-                ]
-              )
-            ]
+            [_vm._v("\n            # " + _vm._s(_vm.page.id) + "\n        ")]
           )
         ]
       )
@@ -14180,36 +14216,10 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "max-w-4xl mx-auto" }, [
-    _c(
-      "div",
-      { staticClass: "px-6 my-6 w-full flex justify-between items-center" },
-      [
-        _c("h2", { staticClass: "text-gray-600 text-2xl flex items-center" }, [
-          _vm._v("Pages "),
-          _c(
-            "span",
-            {
-              staticClass:
-                "ml-3 rounded-lg py-1 px-2 shadow-inner text-xs bg-gray-300"
-            },
-            [_vm._v(_vm._s(_vm.pages.length))]
-          )
-        ]),
-        _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass:
-              "bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow",
-            attrs: { href: "/app/pages/create" }
-          },
-          [_vm._v("Create")]
-        )
-      ]
-    ),
+  return _c("div", { staticClass: "max-w-4xl mx-auto mb-12" }, [
+    _vm._m(0),
     _vm._v(" "),
-    _c("div", { staticClass: "px-6" }, [
+    _c("div", { staticClass: "px-6 relative" }, [
       _c("input", {
         directives: [
           {
@@ -14228,6 +14238,7 @@ var render = function() {
         },
         domProps: { value: _vm.searchPhrase },
         on: {
+          keyup: _vm.doDelayedSearch,
           input: function($event) {
             if ($event.target.composing) {
               return
@@ -14235,7 +14246,16 @@ var render = function() {
             _vm.searchPhrase = $event.target.value
           }
         }
-      })
+      }),
+      _vm._v(" "),
+      _c(
+        "span",
+        {
+          staticClass:
+            "absolute inset-y-0 right-0 pr-12 flex items-center text-gray-700"
+        },
+        [_vm._v("\n            " + _vm._s(_vm.searchStatus) + "\n        ")]
+      )
     ]),
     _vm._v(" "),
     _c(
@@ -14254,7 +14274,7 @@ var render = function() {
                 : "text-gray-500 py-2",
             on: {
               click: function($event) {
-                _vm.tab = "all"
+                return _vm.filterByTab("all")
               }
             }
           },
@@ -14271,28 +14291,11 @@ var render = function() {
                 : "text-gray-500 py-2",
             on: {
               click: function($event) {
-                _vm.tab = "draft"
+                return _vm.filterByTab("draft")
               }
             }
           },
           [_vm._v("Draft")]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "px-4 text-sm uppercase cursor-pointer",
-            class:
-              _vm.tab === "byme"
-                ? "text-gray-700 py-2 border-b-4 border-blue-500"
-                : "text-gray-500 py-2",
-            on: {
-              click: function($event) {
-                _vm.tab = "byme"
-              }
-            }
-          },
-          [_vm._v("By Me")]
         )
       ]
     ),
@@ -14300,14 +14303,60 @@ var render = function() {
     _c(
       "div",
       { staticClass: "px-6" },
-      _vm._l(_vm.filteredPages, function(page) {
-        return _c("Page", { key: page.id, attrs: { page: page } })
-      }),
+      [
+        _c("Paginator", {
+          attrs: {
+            "page-data": _vm.paginatedPages,
+            "container-class": "w-full",
+            "item-class": "w-full",
+            "nav-class":
+              "w-full p-4 flex justify-between items-center bg-gray-100"
+          },
+          on: { next: _vm.fetchFromServer, previous: _vm.fetchFromServer },
+          scopedSlots: _vm._u([
+            {
+              key: "default",
+              fn: function(data) {
+                return [_c("Page", { attrs: { page: data.item } })]
+              }
+            }
+          ])
+        }),
+        _vm._v(" "),
+        _c("span", { staticClass: "text-sm text-gray-700" }, [
+          _vm._v(_vm._s(_vm.searchStatus))
+        ])
+      ],
       1
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "px-6 my-6 w-full flex justify-between items-center" },
+      [
+        _c("h2", { staticClass: "text-gray-600 text-2xl flex items-center" }, [
+          _vm._v("Pages")
+        ]),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass:
+              "bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow",
+            attrs: { href: "/app/pages/create" }
+          },
+          [_vm._v("Create")]
+        )
+      ]
+    )
+  }
+]
 render._withStripped = true
 
 
@@ -17027,7 +17076,7 @@ var render = function() {
       ]
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "px-61 relative" }, [
+    _c("div", { staticClass: "px-6 relative" }, [
       _c("input", {
         directives: [
           {
@@ -17060,7 +17109,7 @@ var render = function() {
         "span",
         {
           staticClass:
-            "absolute inset-y-0 right-0 px-6 flex items-center text-gray-700"
+            "absolute inset-y-0 right-0 pr-12 flex items-center text-gray-700"
         },
         [_vm._v("\n            " + _vm._s(_vm.searchStatus) + "\n        ")]
       )

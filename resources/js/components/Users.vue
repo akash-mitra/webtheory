@@ -12,7 +12,7 @@
 
         </div>
 
-        <div class="px-61 relative">
+        <div class="px-6 relative">
             <input type="text"
                 class="w-full rounded-lg shadow px-4 py-3 text-sm focus:outline-none"
                 name="search"
@@ -20,7 +20,7 @@
                 v-model="searchPhrase"
                 @keyup="doDelayedSearch"
             />
-            <span class="absolute inset-y-0 right-0 px-6 flex items-center text-gray-700">
+            <span class="absolute inset-y-0 right-0 pr-12 flex items-center text-gray-700">
                 {{ searchStatus }}
             </span>
         </div>
@@ -97,8 +97,6 @@
 
             fetchFromServer(url) {
 
-                this.searchStatus = 'searching...'
-
                 url = (typeof url === 'undefined')
                     ? '/api/users/' + (this.tab==='all'?'': this.tab)
                     : url
@@ -113,9 +111,17 @@
                 })
             },
 
-            doDelayedSearch() {
+            doDelayedSearch(evt) {
 
-                let p = this
+                evt = (evt) ? evt : window.event;
+                let charCode = (evt.which) ? evt.which : evt.keyCode;
+
+                if (charCode === 17 || charCode === 17 || charCode === 18 || charCode === 20 || charCode === 27
+                    || charCode === 37 || charCode === 38 || charCode === 39 || charCode === 40) {
+                    return
+                }
+
+                this.searchStatus = 'searching...'
 
                 if (this.timer) {
                     clearTimeout(this.timer);
@@ -129,16 +135,14 @@
             },
 
             doInstantLocalSearch () {
-                if (!!this.searchPhrase) {
-                    let needle = this.searchPhrase.toLowerCase()
-                    for(let i = 0; i < this.paginatedUsers.data.length; i++) {
-                        let u = this.paginatedUsers.data[i]
-                        if (
-                            (u.name.toLowerCase().indexOf(needle) === -1)
-                            && (u.email.toLowerCase().indexOf(needle) === -1)
-                        ) {
-                            this.paginatedUsers.data.splice(i, 1)
-                        }
+                let needle = this.searchPhrase.toLowerCase()
+                for(let i = 0; i < this.paginatedUsers.data.length; i++) {
+                    let u = this.paginatedUsers.data[i]
+                    if (
+                        (u.name.toLowerCase().indexOf(needle) === -1)
+                        && (u.email.toLowerCase().indexOf(needle) === -1)
+                    ) {
+                        this.paginatedUsers.data.splice(i, 1)
                     }
                 }
             },

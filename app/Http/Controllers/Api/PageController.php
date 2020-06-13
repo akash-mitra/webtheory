@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Api;
 use DB;
 use App\Page;
 use App\PageContent;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\PageRequest;
-use App\Http\Requests\PageStatusRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Converters\ContentsConverter;
+use App\Http\Requests\PageStatusRequest;
 use Illuminate\Database\Eloquent\Builder;
-
 
 class PageController extends Controller
 {
@@ -28,44 +28,68 @@ class PageController extends Controller
 
 
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
-        $pages = Page::query()->with('category', 'author', 'media');
+        $pagesQuery = Page::query()->with('category', 'author', 'media');
 
-        /**
-         * This builds a "like" query based on the query string.
-         * It breaks the query string in individual words and
-         * tries to match any of those words in image name.
-         */
-        $query = $request->input('query');
-
-        if (! empty($query))
-        {
-            $queryArray = explode(" ", $query);
-            // a false where statement so that "or" condition below works
-            $pages->where('id', 0);
-
-            foreach($queryArray as $q) {
-                if (! empty($q)) {
-                    $pages->orWhere('title', 'like', '%' . $q . '%');
-                    $pages->orWhere('summary', 'like', '%' . $q . '%');
-                    $pages->orWhereHas('category', function (Builder $query) use ($q) {
-                        $query->where('name', 'like', '%' . $q . '%');
-                    });
-                    $pages->orWhereHas('author', function (Builder $query) use ($q) {
-                        $query->where('name', 'like', '%' . $q . '%');
-                    });
-                }
-            }
+        if($request->input('type') === 'draft') {
+            $pagesQuery->where('status', 'draft');
         }
 
-        return $pages->latest()->paginate(100);
+        return $this->queryPages($pagesQuery, $request);
     }
+
+
+
+    private function queryPages($queryBuilder, $request)
+    {
+        $queryBuilder = $this->filterByQueryString(
+            $queryBuilder,
+            ['title', 'summary', 'category.name', 'author.name'],
+            $request->input('query')
+        );
+
+        if ($request->user()->isAdmin()) {
+            $queryBuilder->withTrashed();
+        }
+
+        return $queryBuilder->latest()->paginate(10);
+    }
+
+
+    // public function index(Request $request)
+    // {
+    //     $pages = Page::query()->with('category', 'author', 'media');
+
+    //     /**
+    //      * This builds a "like" query based on the query string.
+    //      * It breaks the query string in individual words and
+    //      * tries to match any of those words in image name.
+    //      */
+    //     $query = $request->input('query');
+
+    //     if (! empty($query))
+    //     {
+    //         $queryArray = explode(" ", $query);
+    //         // a false where statement so that "or" condition below works
+    //         $pages->where('id', 0);
+
+    //         foreach($queryArray as $q) {
+    //             if (! empty($q)) {
+    //                 $pages->orWhere('title', 'like', '%' . $q . '%');
+    //                 $pages->orWhere('summary', 'like', '%' . $q . '%');
+    //                 $pages->orWhereHas('category', function (Builder $query) use ($q) {
+    //                     $query->where('name', 'like', '%' . $q . '%');
+    //                 });
+    //                 $pages->orWhereHas('author', function (Builder $query) use ($q) {
+    //                     $query->where('name', 'like', '%' . $q . '%');
+    //                 });
+    //             }
+    //         }
+    //     }
+
+    //     return $pages->latest()->paginate(2);
+    // }
 
 
 
@@ -213,5 +237,38 @@ class PageController extends Controller
         $page->delete();
 
         return response()->json("success", 204);
+    }
+
+
+
+
+    /**
+     * Enhances a query builder with additional conditions for
+     * matching the query string with the list of columns.
+     */
+    private function filterByQueryString(Builder $queryBuilder, array $cols, $queryString)
+    {
+        if (! empty($queryString))
+        {
+            $keywords = explode(" ", $queryString);
+
+            $queryBuilder->where(function ($builder) use($keywords, $cols) {
+                foreach($keywords as $keyword) {
+                    if (! empty($keyword)) {
+                        foreach($cols as $col) {
+                            if (Str::contains($col, ".")) {
+                                $relation = explode(".", $col);
+                                $builder->orWhereHas($relation[0], function (Builder $query) use ($relation, $keyword) {
+                                    $query->where($relation[1], 'like', '%' . $keyword . '%');
+                                });
+                            } else {
+                                $builder->orWhere($col, 'like', '%' . $keyword . '%');
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        return $queryBuilder;
     }
 }

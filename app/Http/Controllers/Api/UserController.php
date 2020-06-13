@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserController extends Controller
 {
@@ -97,7 +97,14 @@ class UserController extends Controller
                 foreach($keywords as $keyword) {
                     if (! empty($keyword)) {
                         foreach($cols as $col) {
-                            $builder->orWhere($col, 'like', '%' . $keyword . '%');
+                            if (Str::contains($col, ".")) {
+                                $relation = explode(".", $col);
+                                $builder->orWhereHas($relation[0], function (Builder $query) use ($relation, $keyword) {
+                                    $query->where($relation[1], 'like', '%' . $keyword . '%');
+                                });
+                            } else {
+                                $builder->orWhere($col, 'like', '%' . $keyword . '%');
+                            }
                         }
                     }
                 }
