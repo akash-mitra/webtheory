@@ -16,10 +16,9 @@
 // --------------------------------------------------------------------------------------------------------------------------
 
 
-// Related to user login/register
+// Related to user login
 Route::post('login', 'Api\Auth\LoginController@login');
 Route::get('check', 'Api\Auth\LoginController@user');
-Route::post('register', 'Api\Auth\RegisterController@register');
 
 // Related to Users pages
 Route::get('profiles/{public}/pages', 'Api\ProfileController@pages')->name('profile.pages');
@@ -95,6 +94,8 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     Route::put('users/{user}', 'Api\UserController@update')->name('users.update');
     Route::delete('users/{id}', 'Api\UserController@destroy')->name('users.destroy');
     Route::patch('users/password', 'Api\UserController@changePassword')->name('users.changepassword');
+    Route::get('users/{user}/pages', 'Api\UserController@pages')->name('users.pages');
+    Route::get('users/{user}/comments', 'Api\UserController@comments')->name('users.comments');
 
 
 

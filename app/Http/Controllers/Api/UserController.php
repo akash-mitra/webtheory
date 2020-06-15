@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\User;
+use App\Category;
+use App\Page;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
@@ -234,6 +236,30 @@ class UserController extends Controller
             'status' => 'success',
             'message' => 'Account password changed.'
         ]);
+    }
+
+
+    public function pages(User $user)
+    {
+        return $user
+                ->pages()
+                    ->where('status', 'Live')
+                        ->with(['media', 'category'])
+                            ->paginate(10);
+    }
+
+
+    public function comments(User $user)
+    {
+        $categorycomments = Category::with('comments')->whereHas('comments', function ($query) use($user) {
+            $query->where('user_id', $user->id);
+        })->paginate(10);
+
+        $pagecomments = Page::with('comments')->whereHas('comments', function ($query) use($user) {
+            $query->where('user_id', $user->id);
+        })->paginate(10);
+
+        return response()->json(["categories" => $categorycomments, "pages" => $pagecomments]);
     }
 
 }

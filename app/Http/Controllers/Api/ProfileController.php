@@ -86,7 +86,7 @@ class ProfileController extends Controller
 
 
     // Comments made by the Auth User under categories or pages
-    public function comments(Page $page)
+    public function comments()
     {
         $categorycomments = Category::with('comments')->whereHas('comments', function ($query) {
             $query->where('user_id', Auth::id());

@@ -33,7 +33,7 @@ class PageController extends Controller
         $pagesQuery = Page::query()->with('category', 'author', 'media');
 
         if($request->input('type') === 'draft') {
-            $pagesQuery->where('status', 'draft');
+            $pagesQuery->where('status', 'Draft');
         }
 
         return $this->queryPages($pagesQuery, $request);

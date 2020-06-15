@@ -8,6 +8,7 @@ use App\Media;
 use App\Category;
 use App\PageContent;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
@@ -20,6 +21,9 @@ class DuskTestDataSetup extends DuskTestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        Artisan::call('cache:clear');
+        Artisan::call('config:clear');
 
         Notification::fake();
         Mail::fake();
