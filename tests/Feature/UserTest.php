@@ -17,9 +17,8 @@ class UserTest extends TestDataSetup
         $user = factory(User::class)->create(['role' => 'author']);
 
         // Unauthenticated user cannot view user listing
-        $response = $this->get('/api/users', ['Accept' => 'application/json']);
-        $response->assertStatus(401)
-            ->assertJson(['message' => 'Unauthenticated.']);
+        $response = $this->get('/api/users');
+        $response->assertStatus(302);
 
         /* Authenticated user can view user listing */
         $response = $this->actingAs($this->adminUser)->get('/api/users');
@@ -34,15 +33,58 @@ class UserTest extends TestDataSetup
         $this->assertDatabaseHas('users', ['name' => $user->name]);
     }
 
+    /* User Banned */
+    public function test_user_banned()
+    {
+        $user = factory(User::class)->create(['role' => 'author', 'deleted_at' => now()]);
+
+        // Unauthenticated user cannot view banned user listing
+        $response = $this->get('/api/users/banned');
+        $response->assertStatus(302);
+
+        /* Authenticated user can view banned user listing */
+        $response = $this->actingAs($this->adminUser)->get('/api/users/banned');
+        $response->assertStatus(200)
+            ->assertJsonStructureExact([
+                'current_page',
+                'data' => [
+                    '*' => $this->user_attributes
+                ],
+                'first_page_url', 'from', 'last_page', 'last_page_url', 'next_page_url', 'path', 'per_page', 'prev_page_url', 'to', 'total', 
+            ]);
+        $this->assertSoftDeleted('users', ['name' => $user->name]);
+    }
+
+    /* User Unverified */
+    public function test_user_unverified()
+    {
+        $user = factory(User::class)->create(['role' => 'author', 'email_verified_at' => null]);
+
+        // Unauthenticated user cannot view unverified user listing
+        $response = $this->get('/api/users/unverified');
+        $response->assertStatus(302);
+
+        /* Authenticated user can view unverified user listing */
+        $response = $this->actingAs($this->adminUser)->get('/api/users/unverified');
+        $response->assertStatus(200)
+            ->assertJsonStructureExact([
+                'current_page',
+                'data' => [
+                    '*' => $this->user_attributes
+                ],
+                'first_page_url', 'from', 'last_page', 'last_page_url', 'next_page_url', 'path', 'per_page', 'prev_page_url', 'to', 'total', 
+            ]);
+        $this->assertDatabaseHas('users', ['name' => $user->name, 'email_verified_at' => null]);
+    }
+
     /* User Show */
     public function test_user_show()
     {
         $user = factory(User::class)->create(['role' => 'author']);
 
         // Unauthenticated user cannot view user
-        $response = $this->get('/api/users/' . $user->id, ['Accept' => 'application/json']);
-        $response->assertStatus(401)
-            ->assertJson(['message' => 'Unauthenticated.']);
+        $response = $this->get('/api/users/' . $user->id);
+        $response->assertStatus(302);
 
         /* Authenticated user can view user */
         $response = $this->actingAs($this->adminUser)->get('/api/users/' . $user->id);
@@ -106,7 +148,7 @@ class UserTest extends TestDataSetup
             ->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can delete user */
-        $response = $this->actingAs($this->adminUser)->delete('/api/users/' . $user->id);
+        $response = $this->actingAs($this->adminUser)->delete('/api/users/' . $user->id, [], ['Accept' => 'application/json']);
         $response->assertStatus(204);
         $this->assertSoftDeleted('users', ['name' => $user->name]);
     }
