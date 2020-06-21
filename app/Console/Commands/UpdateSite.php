@@ -54,6 +54,11 @@ class UpdateSite extends Command
             $this->info('Git command success.');
             
             exec("composer install -d " . base_path());
+            
+            // TEMP- Remove Later below 2 lines
+            exec("cp -rf /var/www/app/webtheory/storage/repo/templates/Serenity/* /var/www/app/webtheory/resources/views/active/");
+            exec("cp -rf /var/www/app/webtheory/storage/repo/templates/Serenity /var/www/app/webtheory/resources/views/templates/");
+
             $this->info('Composer command success.');
 
             $this->call('config:clear');
