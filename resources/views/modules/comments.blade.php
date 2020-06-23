@@ -9,7 +9,15 @@
 
 <wt-comments
     content_type="{{ $data->ref->contentType }}"
-    refid="{{ $data->page->id }}">
+    refid="{{ $data->page->id }}"
+    @isset($boxClass) box-class="{{ $boxClass }}" @endisset
+    @isset($textBoxClass) text-box-class="{{ $textBoxClass }}" @endisset
+    @isset($buttonClass) button-class="{{ $buttonClass }}" @endisset
+    @isset($linkClass) link-class="{{ $linkClass }}" @endisset
+    @isset($commentClass) comment-class="{{ $commentClass }}" @endisset
+    @isset($textClass) text-class="{{ $textClass }}" @endisset
+    @isset($commentInviteClass) comment-invite-class="{{ $commentInviteClass }}" @endisset
+    >
 </wt-comments>
 
 @break
