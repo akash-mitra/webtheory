@@ -107,7 +107,7 @@ class TemplateTest extends TestDataSetup
                 ],
                 'available' => [
                     '*' => [
-                        'name', 'description', 'media_url', 'parameters'
+                        'name', 'description', 'version', 'media_url', 'parameters'
                     ]
                 ],
             ]);
@@ -360,7 +360,7 @@ class TemplateTest extends TestDataSetup
                 Storage::disk('templates')->exists($random . '/' . $fileName),
                 $fileName . ' file is missing in ' . $random
             );
-        }, $this->requiredTemplateFiles);
+        }, $this->preloadedTemplates[$this->defaultTemplateName]);
 
 
         Storage::disk('templates')->deleteDirectory($random);

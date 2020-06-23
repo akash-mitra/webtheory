@@ -15,15 +15,32 @@ trait DefaultTemplateTests {
 
     public $defaultTemplateName = 'Serenity';
 
-    public $requiredTemplateFiles = [
-        'home.blade.php',
-        'single.blade.php',
-        'category.blade.php',
-        'profile.blade.php',
+    public $preloadedTemplates = [
+        'Serenity' => [
+            'master.blade.php',
 
-        'login-modal.blade.php',
-        'user-menu.blade.php',
+            'home.blade.php',
+            'single.blade.php',
+            'category.blade.php',
+            'profile.blade.php',
 
+            'login-modal.blade.php',
+            'user-menu.blade.php',
+
+        ],
+
+        'Serenity Dark' => [
+            'master.blade.php',
+
+            'home.blade.php',
+            'single.blade.php',
+            'category.blade.php',
+            'profile.blade.php',
+
+            'login-modal.blade.php',
+            'user-menu.blade.php',
+
+        ]
     ];
 
 
@@ -48,7 +65,7 @@ trait DefaultTemplateTests {
 
                 $targetFileContent = Storage::disk('active')->get(basename($file));
 
-                $this->assertEquals($sourceFileContent, $targetFileContent, $file . ' is missing in the active directory.');
+                $this->assertEquals($sourceFileContent, $targetFileContent, $file . ' is different between active and template directories.');
             }
         },
         Storage::disk('templates')->files($this->defaultTemplateName));
@@ -70,28 +87,24 @@ trait DefaultTemplateTests {
                 Storage::disk('templates')->exists($this->defaultTemplateName . '/' . $fileName),
                 $fileName . ' file is missing in ' . $this->defaultTemplateName
             );
-        }, $this->requiredTemplateFiles);
+        }, $this->preloadedTemplates[$this->defaultTemplateName]);
     }
 
 
 
     public function test_repo_is_preloaded_with_templates()
     {
-        // check there is at least one template directory in the repo
-        $templateDirectories = Storage::disk('repo')->directories('templates');
-        $this->assertGreaterThanOrEqual(1, count($templateDirectories));
-
-        // and the directories contain all the required template files
-        foreach($templateDirectories as $dir)
+        foreach($this->preloadedTemplates as $dir => $files)
         {
             array_map(function ($fileName) use ($dir){
                 $this->assertTrue(
-                    Storage::disk('repo')->exists($dir . '/' . $fileName),
+                    Storage::disk('repo')->exists('templates/' . $dir . '/' . $fileName),
                     $fileName . ' file is missing in ' . $dir
                 );
-            }, $this->requiredTemplateFiles);
+            }, $files);
         }
     }
+
 
 
     public function test_all_repo_templates_contain_info_json()
