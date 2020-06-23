@@ -12,7 +12,7 @@
     // ------------------------------------------------
 
     & h1 {
-        @apply text-4xl pt-3 pb-1 my-0 antialiased tracking-tight leading-tight text-gray-700;
+        @apply text-4xl pt-3 pb-1 my-0 antialiased tracking-tight leading-tight;
       }
 
     @media (min-width: 640px) {
@@ -22,18 +22,18 @@
     }
 
     & p {
-        @apply pt-2 pb-3 px-2 text-base leading-relaxed text-gray-700;
+        @apply pt-2 pb-3 px-2 text-base leading-relaxed;
     }
 
     & h2, h3, h4 {
 
-        @apply pt-4 pb-1 my-0 antialiased text-gray-800;
+        @apply pt-4 pb-1 my-0 antialiased;
 
     }
 
 
     & h2 {
-        @apply text-3xl leading-tight font-semibold py-4 text-gray-700 tracking-tight;
+        @apply text-3xl leading-tight font-semibold py-4 tracking-tight;
 
     }
 
@@ -58,7 +58,7 @@
     // ------------------------------------------------
 
     & ul>li, & ol>li {
-        @apply text-base ml-4 pb-2 pr-0 leading-relaxed text-gray-700;
+        @apply text-base ml-4 pb-2 pr-0 leading-relaxed;
     }
 
     & ol {
@@ -156,7 +156,7 @@
     }
 
     & code.hljs {
-        @apply p-6 my-6 -ml-6;
+        @apply p-6 my-6 -ml-6 bg-gray-200 rounded;
     }
 
 }

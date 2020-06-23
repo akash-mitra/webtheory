@@ -14,7 +14,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <meta name="theme-color" content="#fafafa">
+  <meta name="theme-color" content="#888">
 
   <link href="/css/style-{{$data->ref->template->primaryColor}}.css" rel="stylesheet">
   {{-- <link href="/css/style.css" rel="stylesheet"> --}}
@@ -62,7 +62,7 @@
 
 <body>
 
-    <div style="width: 100%; height: 100%; margin: 0; padding: 0;"
+    <div class="bg-gray-900" style="width: 100%; height: 100%; margin: 0; padding: 0;"
         id="js-playground"
         v-cloak
         @click="discardModalsAndPopups"
@@ -71,14 +71,14 @@
 
         @yield('contents')
 
-        <footer class="w-full flex flex-col bg-gray-100 items-center mt-6 p-6 border-t text-gray-600 rounded-lg">
+        <footer class="w-full flex flex-col bg-gray-800 items-center mt-6 p-6 text-{{$data->ref->template->primaryColor}}-500 tracking-wide">
             <p class="p-2">
-                <a href="/terms">Terms of Use</a> |
-                <a href="/privacy">Privacy Policy</a> |
-                <a href="/sitemap">Sitemap</a>
+                <a class="text-{{$data->ref->template->primaryColor}}-500 px-3" href="/terms">Terms of Use</a> |
+                <a class="text-{{$data->ref->template->primaryColor}}-500 px-3" href="/privacy">Privacy Policy</a> |
+                <a class="text-{{$data->ref->template->primaryColor}}-500 px-3" href="/sitemap">Sitemap</a>
             </p>
             <p class="p-2">&copy; <?php echo date('Y') ?> - All Rights Reserved. </p>
-            <p class="p-2 text-{{$data->ref->template->primaryColor}}-600"><a href="https://webtheory.co">Made with WebTheory</a></p>
+            <p class="p-2 text-{{$data->ref->template->primaryColor}}-500"><a href="https://webtheory.co">Made with WebTheory</a></p>
         </footer>
 
         <form method="post" action="/logout" ref="loform">@csrf</form>
