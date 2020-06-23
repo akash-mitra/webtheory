@@ -24,7 +24,7 @@ class RegisterTest extends DuskTestDataSetup
                 ->type('email_confirmation', 'tester@test.com')
                 ->type('password', 'password')
                 ->press('Sign Up')
-                ->pause(200)
+                ->pause(1000)
                 ->assertPathIs('/')
                 ->assertSee('tester');
         });

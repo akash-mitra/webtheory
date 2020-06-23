@@ -10,8 +10,6 @@ class AdminController extends Controller
     public function __construct()
     {
         $this->middleware(['check.permission']);
-
-        // $this->middleware('auth');
     }
 
 

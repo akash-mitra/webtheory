@@ -77,7 +77,7 @@ class CategoryTest extends TestDataSetup
             ->assertJson(['message' => 'Restricted Access']);
 
         // Authenticated user can save category
-        $response = $this->actingAs($this->adminUser)->post('/api/categories', $category->toArray());
+        $response = $this->actingAs($this->adminUser)->post('/api/categories', $category->toArray(), ['Accept' => 'application/json']);
         $response->assertStatus(200)
             ->assertJsonFragment(['name' => $category->name])
             ->assertJsonStructureExact([
@@ -108,7 +108,7 @@ class CategoryTest extends TestDataSetup
             ->assertJson(['message' => 'Restricted Access']);
 
         // Authenticated user can update category
-        $response = $this->actingAs($this->adminUser)->put('/api/categories/' . $category->id, $category->toArray());
+        $response = $this->actingAs($this->adminUser)->put('/api/categories/' . $category->id, $category->toArray(), ['Accept' => 'application/json']);
         $response->assertStatus(200)
             ->assertJsonFragment(['name' => 'Test Category Updated'])
             ->assertJsonStructureExact([
@@ -138,7 +138,7 @@ class CategoryTest extends TestDataSetup
             ->assertJson(['message' => 'Restricted Access']);
 
         // Authenticated user can delete category
-        $response = $this->actingAs($this->adminUser)->delete('/api/categories/' . $category->id);
+        $response = $this->actingAs($this->adminUser)->delete('/api/categories/' . $category->id, [], ['Accept' => 'application/json']);
         $response->assertStatus(204);
         $this->assertSoftDeleted('categories', ['name' => $category->name]);
     }
