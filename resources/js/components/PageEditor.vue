@@ -36,44 +36,41 @@
 
 
         <!-- content section -->
-        <div v-show="tab==='content'" id="page-contents" class="w-full bg-gray-200">
+        <div v-show="tab==='content'" id="page-contents" class="w-full">
 
-            <div class="mt-6 py-10 w-full mx-auto max-w-4xl">
+            <div class="pt-10 w-full p-6 pb-24">
+                <div class="mx-auto max-w-4xl">
 
-                <div class="mx-auto editor-max-width">
-
-                    <label class="uppercase text-xs tracking-wider text-gray-700 block pb-2">
+                    <label class="px-6 uppercase text-xs tracking-wider text-gray-700 block pb-2">
                         Title
                         <span v-if="!! title" class="bg-gray-100 rounded-lg py-1 px-2 ml-4" :class="title.length>100 ? 'text-red-400': 'text-gray-600'"> {{ title.length }}</span>
                     </label>
 
-                    <textarea name="title" v-model="title" ref="title" class="autoheight h-8 bg-white p-4 rounded-lg outline-none text-blue-800 text-3xl tracking-wide w-full placeholder-gray-700" placeholder="Title of your story" @input="resizeInput($event)"></textarea>
+                    <textarea name="title" v-model="title" ref="title" class="autoheight h-8 px-6 bg-transparent border-b-2 border-gray-400 outline-none text-blue-800 text-3xl tracking-wide w-full placeholder-gray-700" placeholder="Title of your story" @input="resizeInput($event)"></textarea>
 
                     <t-error-message :errors="errors" field="title"></t-error-message>
 
                 </div>
 
-                <div class="mt-12 mx-auto editor-max-width">
+                <div class="mt-12 mx-auto  max-w-4xl">
 
-                    <label class="uppercase text-xs tracking-wider text-gray-700 block pb-2">
+                    <label class="px-6 uppercase text-xs tracking-wider text-gray-700 block pb-2">
                         Intro
                         <span v-if="!! intro" class="bg-gray-100 rounded-lg py-1 px-2 ml-4" :class="intro.length>1048 ? 'text-red-400': 'text-gray-600'"> {{ intro.length }}</span>
                     </label>
 
-                    <textarea name="intro" v-model="intro" ref="intro" class="autoheight h-8 bg-white p-4 rounded-lg outline-none text-gray-700 text-lg tracking-wide w-full placeholder-gray-700" placeholder="Provide a 3/4 lines of introduction to your story..." @input="resizeInput($event)" @focus="resizeInput($event)"></textarea>
+                    <textarea name="intro" v-model="intro" ref="intro" class="autoheight h-auto px-6 bg-transparent  outline-none text-gray-700 text-lg tracking-wide w-full placeholder-gray-700" placeholder="Provide a 3/4 lines of introduction to your story..." @input="resizeInput($event)" @focus="resizeInput($event)"></textarea>
 
                     <t-error-message :errors="errors" field="summary"></t-error-message>
 
                 </div>
             </div>
 
-
-                <div class="mt-6 mx-auto max-w-4xl bg-white py-10 border-t rounded-lg shadow-lg">
-
-                    <div id="tensor-editor" class="mx-auto w-full text-gray-700 pb-4 bg-white wt-typography"></div>
-
+            <div class="w-full p-2 bg-pattern pb-20">
+                <div class="max-w-4xl mx-auto bg-white -mt-16 shadow-xl px-6 pt-12 border-t-2 border-blue-400">
+                    <div id="tensor-editor" class="mx-auto text-gray-700 pb-4 bg-white -mr-2 wt-typography"></div>
                 </div>
-
+            </div>
 
         </div>
 
@@ -385,7 +382,9 @@ export default {
                         title: "Editor failed. Refresh and try again."
                     })
                     this.isSaving = false
+
                     console.log('Saving failed: ', error)
+
                 })
             }
         },
@@ -443,7 +442,6 @@ export default {
             util.notifyError ("Failed to save the page to server.", data.message)
 
             console.log(data)
-
         },
 
         isJustCreated: function () {
@@ -598,7 +596,7 @@ export default {
 
 
         imageSelected(image) {
-            console.log(image)
+            //console.log(image)
         },
 
     }, // end of methods
@@ -721,12 +719,11 @@ export default {
 
     /* On screens that are 768px or more, set the padding */
     @media screen and (min-width: 768px) {
-        /*
+
         .ce-block--stretched {
             padding-right: 6rem;
             padding-left: 6rem;
         }
-        */
     }
 
 
@@ -827,11 +824,6 @@ export default {
     .bg-pattern {
         background-color: #cbd5e0;
         background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23a0aec0' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
-    }
-
-    .editor-max-width {
-        width: 100%;
-        max-width: 650px;
     }
 
 </style>
