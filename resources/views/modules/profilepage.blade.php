@@ -8,4 +8,5 @@
     :profile='@json($user)'
     :show-editor="{{ $showEditor }}"
     :show-pages="{{ $showPages }}"
+    text-color-class="text-{{$data->ref->template->primaryColor}}-100"
 ></wt-profile>

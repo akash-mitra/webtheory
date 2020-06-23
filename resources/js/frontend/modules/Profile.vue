@@ -1,7 +1,10 @@
 <template>
     <div>
 
-        <UserTile :user="user" v-if="mode==='read'"></UserTile>
+        <UserTile v-if="mode==='read'"
+            :user="user"
+            :textColorClass="textColorClass"
+        ></UserTile>
 
 
         <div v-if="showEditor && mode==='edit'">
@@ -45,6 +48,11 @@ export default {
         showComments: {
             type: Boolean,
             default: false
+        },
+
+        textColorClass: {
+            type: String,
+            default: 'text-gray-200'
         },
     },
 
