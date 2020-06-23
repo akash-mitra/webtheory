@@ -40,6 +40,7 @@ class Template extends Model
         $info = [
             'name' => $name,
             'description' => 'No description is available for this template.',
+            'version' => 0,
             'media_url' => 'https://source.unsplash.com/random',
             'parameters' => (object)[]
         ];

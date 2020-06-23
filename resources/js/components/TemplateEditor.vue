@@ -76,7 +76,7 @@
             <div class="w-full sm:flex mb-8 px-6 py-4">
                 <div class="w-full sm:w-1/4 text-sm py-1 px-3">
                     <label for="templateDescription">Description</label>
-                    <p class="text-xs text-gray-600 py-2">Describe the motivation behind this template</p>
+                    <p class="text-xs text-gray-600 py-2">Describe the motivation and the features of this template</p>
                 </div>
                 <textarea id="templateDescription" v-model="description" class="w-full sm:w-3/4 text-sm max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none"></textarea>
             </div>
@@ -114,10 +114,9 @@
                     <p class="text-xs text-gray-600 py-2">Provide an image URL to be used as template icon image</p>
                 </div>
 
-                <div class="w-full sm:w-3/4">
-                    <input type="text" id="templateUrl" v-model="url" class="w-full max-w-lg text-sm max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
+                <div class="max-w-lg w-full">
+                    <PhotoPicker v-model="url"></PhotoPicker>
                 </div>
-
             </div>
 
             <div class="border-t p-6 bg-gray-100 text-right">
@@ -133,7 +132,7 @@
         <div v-show="tab==='parameters'" class="w-full bg-white px-6 py-6 border-t border-blue-400 rounded overflow-scroll mb-12">
             <div class="text-lg text-gray-800 pb-2">Create or Edit Template Parameters</div>
             <div class="text-sm text-gray-800 pb-4">
-                Template parameters can be used to avoid hard-coding certain values in the template and replace them with parameters.
+                Parameters are static value(s) that can be used to avoid hard-coding information directly in the template and to provide flexibility during template usage.
             </div>
             <table class="table-auto w-full text-xs mb-2">
                 <thead>
@@ -143,6 +142,7 @@
                         </th>
                         <th class="pr-2 py-2 border-b text-left">Type</th>
                         <th class="pr-2 py-2 border-b text-left">List Items</th>
+                        <th class="pr-2 py-2 border-b text-left"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -159,6 +159,9 @@
                         <td class="pr-2 py-2 border-b">
                             <input v-show="row.type==='list'" type="text" v-model="row.options" class="font-mono rounded w-full bg-gray-200 p-2" />
                         </td>
+                        <td class="pr-2 py-2 border-b text-right text-xs cursor-pointer" @click="deleteTemplateParameter(row)">
+                            Delete
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -172,6 +175,8 @@
 
 
 <script>
+
+import PhotoPicker from './PhotoPicker.vue'
 
 export default {
 
@@ -193,6 +198,10 @@ export default {
         }
     },
 
+    components: {
+        PhotoPicker
+    },
+
     created() {
 
         this.fetchContentAndLoadEditor()
@@ -203,6 +212,14 @@ export default {
 
         addTemplateParameter() {
             this.parameters.push ({name: '', type: 'text', options: '', value: '' },)
+        },
+
+        deleteTemplateParameter(row) {
+            util.confirm(
+                'Make sure no template file is using this parameter',
+                'Are you sure you want to delete ' + row.name + '?',
+                () => this.parameters = this.parameters.filter( param => param.name != row.name )
+            )
         },
 
         addTemplateFile() {
@@ -239,6 +256,8 @@ export default {
 
             return true
         },
+
+
 
 
 

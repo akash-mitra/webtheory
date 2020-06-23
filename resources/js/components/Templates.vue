@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="block w-full pattern-wall bg-blue-100" style='min-height: 250px; min-width: 400px'>
-                        <img v-if="template.media_url !== null" :src="template.media_url"  class="w-full">
+                        <img v-if="template.media_url !== null" :src="template.media_url"  class="w-full h-64 object-cover">
                     </div>
 
                     <div class="w-full p-6 flex flex-col justify-around">
@@ -59,7 +59,10 @@
                                 <t-button v-if="!template.active" :loadingWheel="isSaving" @click.native="activate(template)" color="blue">
                                     Activate
                                 </t-button>
-                                <button v-else class="text-xs">This is Active Now</button>
+                                <div v-else class="flex items-center text-green-500">
+                                    <svg v-if="template.active" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 469 469" class="mr-3 fill-current w-8 h-8 p-1 bg-green-500 text-white text-xs rounded-full shadow-lg font-bold border border-white uppercase"><path d="M463 96l-22-22c-9-8-24-8-33 0L180 302 61 183c-9-9-24-9-33 0L7 205c-9 9-9 23 0 32l157 158a23 23 0 0032 0l266-266c9-9 9-24 1-33z"/></svg>
+                                    Template in Use
+                                </div>
                             </div>
                         </div>
 
@@ -77,7 +80,7 @@
                 <div class="bg-white shadow-lg relative overflow-hidden">
 
                     <div class="block w-full pattern-wall bg-blue-100" style='min-height: 250px; min-width: 400px'>
-                        <img v-if="template.media_url !== null" :src="template.media_url"  class="w-full">
+                        <img v-if="template.media_url !== null" :src="template.media_url"  class="w-full h-64 object-cover">
                     </div>
 
                     <div class="w-full p-6 flex flex-col justify-around">
@@ -92,7 +95,7 @@
 
                         <div class="w-full flex items-center">
                             <div class="w-1/2">
-                                Version 1.0
+                                <span class="px-3 py-1 rounded-lg text-sm bg-gray-200 border">Version {{ template.version }}</span>
                             </div>
                             <div class="w-1/2 flex justify-end">
                                 <t-button :loadingWheel="isSaving" @click.native="installTemplate(template)" color="blue">
