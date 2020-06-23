@@ -24,7 +24,7 @@ class TemplateController extends Controller
     {
         return response()->json([
             'available' => Template::getFromRepo(),
-            'installed' => Template::get()
+            'installed' => Template::orderBy('active', 'desc')->orderBy('updated_at', 'desc')->get()
         ]);
     }
 
