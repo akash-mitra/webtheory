@@ -1,6 +1,6 @@
 <template>
     <div class="w-full p-3">
-        <div @click="navigateTo(page.url)" class="text-2xl text-blue-600 py-3 cursor-pointer hover:text-blue-800 font-heading">
+        <div @click="navigateTo(page.url)" class="text-2xl py-3 cursor-pointer font-heading"  :class="linkColorClass">
             {{ page.title }}
         </div>
 
@@ -14,7 +14,7 @@
             <div class="text-gray-600 font-reading">{{ page.summary }}</div>
         </div>
 
-        <div @click="navigateTo(page.url)" class="py-3 text-blue-600 cursor-pointer hover:text-blue-800">
+        <div @click="navigateTo(page.url)" class="py-3 cursor-pointer" :class="linkColorClass">
             Read More...
         </div>
 
@@ -27,7 +27,12 @@ export default {
     props: {
         page: {
             type: Object,
-        }
+        },
+
+        linkColorClass: {
+            type: String,
+            default: 'text-blue-600'
+        },
     },
 
     methods: {

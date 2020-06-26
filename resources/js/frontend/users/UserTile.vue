@@ -1,18 +1,18 @@
 <template>
-    <div class="w-full user-pattern rounded-lg shadow">
+    <div>
 
         <div class="flex flex-col sm:flex-row sm:justify-start items-center p-6">
             <div class="px-4">
                 <img :src="user.avatar" class="rounded-full border-2 shadow h-24 w-24">
             </div>
             <div class="text-center sm:text-justify">
-                <div class="text-3xl" :class="textColorClass">{{ user.name }}</div>
-                <div class="text-lg" :class="textColorClass">Joined {{ user.created_ago }} • {{ user.role }}</div>
+                <div class="text-3xl">{{ user.name }}</div>
+                <div class="text-lg">Joined {{ user.created_ago }} • {{ user.role }}</div>
             </div>
         </div>
         <div class="p-6">
-            <div class="px-6 py-2 text-xl uppercase" :class="textColorClass">About Me</div>
-            <div class="px-6 py-3 font-reading" :class="textColorClass">
+            <div class="px-6 py-2 text-xl uppercase">About Me</div>
+            <div class="px-6 py-3 font-reading">
                 {{ user.about_me }}
             </div>
         </div>
@@ -26,11 +26,6 @@ export default {
     props: {
         user: {
             type: Object,
-        },
-
-        textColorClass: {
-            type: String,
-            default: 'text-gray-700'
         },
     }
 }

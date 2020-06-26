@@ -3,21 +3,33 @@
 
         <UserTile v-if="mode==='read'"
             :user="user"
-            :textColorClass="textColorClass"
+            :class="userTileClass"
+            class="w-full rounded-lg shadow"
         ></UserTile>
 
 
         <div v-if="showEditor && mode==='edit'">
-            <UserProfileEditor :user="user" @saved="onSave" @cancelled="mode='read'">
+            <UserProfileEditor
+                :user="user"
+                :class="editorTileClass"
+                @saved="onSave"
+                @cancelled="mode='read'">
             </UserProfileEditor>
         </div>
 
         <div v-if="showEditor && mode==='read'" class="text-right p-3">
-            <span class="text-blue-600 cursor-pointer" @click="mode='edit'">Update Profile Data</span>
+            <span class="cursor-pointer" :class="linkColorClass" @click="mode='edit'">Update Profile Data</span>
         </div>
 
 
-        <PagesByUser :user="user" v-if="showPages && mode==='read'"></PagesByUser>
+
+        <PagesByUser
+            :user="user"
+            class="my-4 rounded-lg"
+            :class="pagesTileClass"
+            :link-color-class="linkColorClass"
+            v-if="showPages && mode==='read'">
+        </PagesByUser>
 
     </div>
 </template>
@@ -50,9 +62,24 @@ export default {
             default: false
         },
 
-        textColorClass: {
+        userTileClass: {
             type: String,
-            default: 'text-gray-200'
+            default: 'bg-gray-100 text-gray-800'
+        },
+
+        editorTileClass: {
+            type: String,
+            default: 'bg-gray-100 text-gray-800'
+        },
+
+        pagesTileClass: {
+            type: String,
+            default: 'bg-gray-100 text-gray-800'
+        },
+
+        linkColorClass: {
+            type: String,
+            default: 'text-blue-800'
         },
     },
 
