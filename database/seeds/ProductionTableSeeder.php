@@ -278,7 +278,7 @@ class ProductionTableSeeder extends Seeder
         DB::table('templates')->insert([
             'name' => 'Serenity',
             'description' => 'A spotless template that provides a clean and simple user experience for the users of your blog.',
-            'media_url' => 'https://source.unsplash.com/apax4M-4kFI',
+            'media_url' => 'https://source.unsplash.com/nDd3dIkkOLo',
             'active' => 1,
             'user_id' => 1,
             'parameters' => json_encode($templateParameters),
