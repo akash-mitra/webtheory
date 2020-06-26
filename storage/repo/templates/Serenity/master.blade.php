@@ -16,7 +16,7 @@
 
   <meta name="theme-color" content="#fafafa">
 
-  <link href="/css/style-{{$data->ref->template->primaryColor}}.css" rel="stylesheet">
+  <link href="/css/serenity.{{$data->ref->template->primaryColor}}.css" rel="stylesheet">
   {{-- <link href="/css/style.css" rel="stylesheet"> --}}
 
   @favicon
