@@ -32,7 +32,7 @@
                     </svg>
                 </div>
 
-                <nav id="nav-menu" class="hidden md:block px-4 lg:px-8 md:flex py-4 md:py-0 w-full max-w-4xl overflow-x-scroll space-x-0 md:space-x-8 xl:space-x-12">
+                <nav id="nav-menu" class="hidden md:block px-4 lg:px-8 md:flex py-4 md:py-0 w-full max-w-4xl overflow-x-auto space-x-0 md:space-x-8 xl:space-x-12">
                     <p class="tracking-wide text-sm py-2">
                         <router-link active-class="font-bold text-blue-700" to="/app/pages">
                             Pages

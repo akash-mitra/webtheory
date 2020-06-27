@@ -28,7 +28,7 @@
             <div @click="tab='parameters'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='parameters'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Parameters</div>
         </div>
 
-        <div v-show="tab==='files'" class="w-full bg-white px-6 py-6 border-t border-blue-400 rounded overflow-scroll mb-12">
+        <div v-show="tab==='files'" class="w-full bg-white px-6 py-6 border-t border-blue-400 rounded overflow-auto mb-12">
             <div class="text-lg text-gray-800 pb-2">Edit Template Files</div>
 
             <div class="text-sm text-gray-800 pb-4">
@@ -129,7 +129,7 @@
 
 
 
-        <div v-show="tab==='parameters'" class="w-full bg-white px-6 py-6 border-t border-blue-400 rounded overflow-scroll mb-12">
+        <div v-show="tab==='parameters'" class="w-full bg-white px-6 py-6 border-t border-blue-400 rounded overflow-auto mb-12">
             <div class="text-lg text-gray-800 pb-2">Create or Edit Template Parameters</div>
             <div class="text-sm text-gray-800 pb-4">
                 Parameters are static value(s) that can be used to avoid hard-coding information directly in the template and to provide flexibility during template usage.

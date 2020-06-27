@@ -33,7 +33,7 @@
         </div>
 
         @if(count($data->pages) > 0)
-        <div class="border-t-4 border-{{$data->ref->template->primaryColor}}-500 w-full pattern rounded-b-lg px-10 py-8 overflow-scroll md:flex justify-center md:justify-between items-stretch">
+        <div class="border-t-4 border-{{$data->ref->template->primaryColor}}-500 w-full pattern rounded-b-lg px-10 py-8 overflow-auto md:flex justify-center md:justify-between items-stretch">
             <div
                 class="w-full md:w-1/3 max-w-lg bg-center bg-no-repeat bg-cover rounded"
                 style="background-image: url('@if(! empty($data->pages[0]->media)){{$data->pages[0]->media->url}}@else https://source.unsplash.com/400x300?abstract,{{$data->ref->template->primaryColor}} @endif')">
