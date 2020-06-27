@@ -99,6 +99,15 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        if ($category->hasContent()) {
+            return response()->json([
+                "message" => "Unable to delete the category",
+                "errors" => [
+                    "name" => ["This category is not empty."]
+                ]
+            ], 422);
+        }
+
         Category::invalidateCache();
 
         $category->delete();

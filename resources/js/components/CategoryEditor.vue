@@ -27,14 +27,14 @@
 
         </div>
 
-        <div v-show="tab==='category'" class="w-full bg-white px-6 py-10 border-t border-blue-400 rounded mb-12">
+        <div v-show="tab==='category'" class="w-full bg-white pt-10 border-t border-blue-400 rounded mb-12">
 
-            <div class="w-full sm:flex mb-4">
+            <div class="w-full sm:flex mb-4 px-6">
                 <label for="categoryName" class="block w-full sm:w-1/4 text-sm py-1 px-3">Name</label>
                 <input type="text" id="categoryName" v-model="name" ref="name" class="w-full sm:w-3/4 max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
             </div>
 
-            <div class="w-full sm:flex mb-8">
+            <div class="w-full sm:flex mb-8 px-6">
                 <div class="w-full sm:w-1/4 text-sm py-1 px-3">
                     <label for="categoryDescription">Description</label>
                     <p class="text-xs text-gray-600 py-2">Describe the motivation behind this category</p>
@@ -43,7 +43,7 @@
             </div>
 
 
-            <div class="w-full sm:flex my-6">
+            <div class="w-full sm:flex my-6 px-6">
                 <div class="w-full sm:w-1/4 text-sm py-1 px-3">
                     <label for="categoryUrl">Category Image</label>
                     <p class="text-xs text-gray-600 py-2">Provide an image URL to be used as category icon image</p>
@@ -60,7 +60,7 @@
 
             </div>
 
-            <div class="w-full sm:flex mb-8">
+            <div class="w-full sm:flex mb-8 px-6">
                 <div class="w-full sm:w-1/4 text-sm py-1 px-3">
                     <label for="categoryParent">Parent Category</label>
                     <p class="text-xs text-gray-600 py-2">Create this category as a subcategory under parent</p>
@@ -72,6 +72,14 @@
                             {{ category.value }}
                         </option>
                 </select>
+            </div>
+
+            <div class="w-full mb-8 px-6 py-10 border-t bg-gray-100 text-right">
+
+                <span @click="deleteCategory" class="border border-red-500 cursor-pointer text-red-500 hover:text-white px-3 py-2 rounded text-sm hover:bg-red-500">
+                    Delete Category
+                </span>
+
             </div>
 
         </div>
@@ -273,7 +281,8 @@ export default {
             let p = this
             util.confirm ("Delete this category?", "This action can not be reverted", function () {
 
-                util.ajax ('delete', '/api/categories/' + p.id, {}, (response) => {
+                util.ajax ('delete', '/api/categories/' + p.id, {},
+                (response) => {
 
                     util.notifySuccess ('Deleted', 'The category has been successfully deleted')
 

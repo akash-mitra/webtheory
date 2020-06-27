@@ -45,6 +45,11 @@ class Category extends Model
         return $this->hasMany('App\Page');
     }
 
+    public function hasContent()
+    {
+        return $this->pagesWithDrafts()->count() || $this->subcategories()->count();
+    }
+
     public function comments()
     {
         return $this->hasMany('App\CategoryComment', 'reference_id');
