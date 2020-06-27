@@ -10,11 +10,7 @@ use App\Template;
 
 class TemplateController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+
     public function __construct()
     {
         $this->middleware(['check.permission']);
@@ -83,9 +79,6 @@ class TemplateController extends Controller
     public function destroy(Template $template)
     {
         if($template->active) {
-            // return redirect()->back()->withErrors([
-            //     'Unable to delete an active template.'
-            // ]);
 
             return response([
                 'message' => 'Delete Failed.',
@@ -157,6 +150,8 @@ class TemplateController extends Controller
             ], 404);
         }
 
-        return Storage::disk('templates')->get($path);
+        $contents = Storage::disk('templates')->get($path);
+
+        return response($contents, 200)->header('Content-Type', 'text/plain');
     }
 }
