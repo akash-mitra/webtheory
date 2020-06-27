@@ -81,7 +81,7 @@
             <p class="p-2 text-{{$data->ref->template->primaryColor}}-600"><a href="https://webtheory.co">Made with WebTheory</a></p>
         </footer>
 
-        <form method="post" action="/logout" ref="loform">@csrf</form>
+        <form method="post" action="/logout" id="loform" ref="loform">@csrf</form>
     </div>
 
     {{-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script> --}}
