@@ -30,7 +30,11 @@
         @profilepage([
             "user" => $data->profile,
             "showEditor" => ($data->profile->public_id === optional($data->user)->public_id) ? 'true' : 'false',
-            "showPages" => 'true'
+            "showPages" => 'true',
+            "userTileClass" => "bg-" . $data->ref->template->primaryColor . "-100 text-gray-800",
+            "editorTileClass" => 'bg-gray-100 text-gray-800',
+            "pagesTileClass" => '',
+            "linkColorClass" => "text-" . $data->ref->template->primaryColor . "-600"
         ])
 
 

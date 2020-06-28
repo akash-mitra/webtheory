@@ -41,7 +41,7 @@ export default {
             templateId: null,
             fileName: null,
             isSaving: false,
-            sourceCode: '<html></html>',
+            sourceCode: '',
             mode: null,
         }
     },
@@ -60,7 +60,7 @@ export default {
 
     methods: {
 
-        editorInit: function () {
+        editorInit: function (editor) {
             // require('brace/ext/language_tools') //language extension prerequsite...
             require('brace/mode/html')
             // require('brace/mode/javascript')    //language
@@ -84,7 +84,11 @@ export default {
 
                     function (data) {
                         p.fileName = atob(p.$route.params.fileIdentity)
-                        p.sourceCode = data
+
+                        // this is required because axios unneccesarily transforms
+                        // json like string to json. check https://github.com/axios/axios/issues/907
+                        p.sourceCode = (typeof data === 'string') ? data : JSON.stringify(data)
+
                     },
 
                     function (status, message) {

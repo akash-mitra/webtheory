@@ -1,0 +1,26 @@
+{
+    "name": "Serenity Dark",
+    "description": "A powerful dark template that stands out and provides an intuitive user experience for your blog.",
+    "version": 1.1,
+    "media_url": "https://source.unsplash.com/U4wcrDteZ2Y",
+    "parameters": [
+        {
+            "name":"headingFont",
+            "type":"list",
+            "options":"Verdana, Arial, Playfair Display",
+            "value":"Playfair Display"
+        },
+        {
+            "name":"primaryColor",
+            "type":"list",
+            "options":"gray,red,orange,yellow,green,teal,blue,indigo,purple,pink",
+            "value":"blue"
+        },
+        {
+            "name":"centerContent",
+            "type":"list",
+            "options":"yes,no",
+            "value":"yes"
+        }
+    ]
+}

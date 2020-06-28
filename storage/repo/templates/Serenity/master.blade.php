@@ -10,11 +10,13 @@
 
   <meta name="keywords" content="@yield('metakeys')">
 
+  <meta name="generator" content="webtheory">
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <meta name="theme-color" content="#fafafa">
 
-  <link href="/css/style-{{$data->ref->template->primaryColor}}.css" rel="stylesheet">
+  <link href="/css/serenity.{{$data->ref->template->primaryColor}}.css" rel="stylesheet">
   {{-- <link href="/css/style.css" rel="stylesheet"> --}}
 
   @favicon
@@ -79,7 +81,7 @@
             <p class="p-2 text-{{$data->ref->template->primaryColor}}-600"><a href="https://webtheory.co">Made with WebTheory</a></p>
         </footer>
 
-        <form method="post" action="/logout" ref="loform">@csrf</form>
+        <form method="post" action="/logout" id="loform" ref="loform">@csrf</form>
     </div>
 
     {{-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script> --}}

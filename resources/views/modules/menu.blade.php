@@ -6,7 +6,7 @@
 
         @foreach ($data->categories as $category)
             @if ($loop->first) @continue @endif
-            <a href="{{ $category->url }}" class="menu-mod-item whitespace-no-wrap px-6 tracking-wide shadow-inner pt-3 pb-4 text-gray-700 hover:bg-{{$data->ref->template->primaryColor}}-600 hover:text-{{$data->ref->template->primaryColor}}-100 text-lg hidden md:block">
+            <a href="{{ $category->url }}" class="menu-mod-item whitespace-no-wrap px-6 tracking-wide shadow-inner pt-3 pb-4 text-{{$data->ref->template->primaryColor}}-500 hover:bg-{{$data->ref->template->primaryColor}}-600 hover:text-{{$data->ref->template->primaryColor}}-100 text-lg hidden md:block">
                 {{ $category->name }}
             </a>
         @endforeach

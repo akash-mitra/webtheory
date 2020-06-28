@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>WebTheory - Admin</title>
+        <title>WebTheory Control Panel</title>
 
         <link href="{{ mix('/css/app.css') }}" rel="stylesheet" />
 
@@ -32,34 +32,34 @@
                     </svg>
                 </div>
 
-                <nav id="nav-menu" class="hidden md:block px-4 lg:px-8 md:flex py-4 md:py-0 w-full max-w-4xl overflow-x-scroll space-x-0 md:space-x-8 xl:space-x-12">
+                <nav id="nav-menu" class="hidden md:block px-4 lg:px-8 md:flex py-4 md:py-0 w-full max-w-4xl overflow-x-auto space-x-0 md:space-x-8 xl:space-x-12">
                     <p class="tracking-wide text-sm py-2">
-                        <router-link active-class="font-bold text-blue-700" to="/app/pages">
+                        <router-link active-class="font-bold text-blue-700" id="nav-menu-1" to="/app/pages">
                             Pages
                         </router-link>
                     </p>
                     <p class="tracking-wide text-sm py-2">
-                        <router-link active-class="font-bold text-blue-700" to="/app/categories">
+                        <router-link active-class="font-bold text-blue-700" id="nav-menu-2" to="/app/categories">
                             Categories
                         </router-link>
                     </p>
                     <p class="tracking-wide text-sm py-2">
-                        <router-link active-class="font-bold text-blue-700" to="/app/gallery">
+                        <router-link active-class="font-bold text-blue-700" id="nav-menu-3" to="/app/gallery">
                             Gallery
                         </router-link>
                     </p>
                     <p class="tracking-wide text-sm py-2">
-                        <router-link active-class="font-bold text-blue-700" to="/app/users">
+                        <router-link active-class="font-bold text-blue-700" id="nav-menu-4" to="/app/users">
                             Users
                         </router-link>
                     </p>
                     <p v-if="authUser.role == 'admin'" class="tracking-wide text-sm py-2">
-                        <router-link active-class="font-bold text-blue-700" to="/app/templates">
+                        <router-link active-class="font-bold text-blue-700" id="nav-menu-5" to="/app/templates">
                             Templates
                         </router-link>
                     </p>
                     <p v-if="authUser.role == 'admin'" class="tracking-wide text-sm py-2">
-                        <router-link active-class="font-bold text-blue-700" to="/app/settings">
+                        <router-link active-class="font-bold text-blue-700" id="nav-menu-6" to="/app/settings">
                             Settings
                         </router-link>
                     </p>
@@ -75,7 +75,7 @@
                         <p v-text="authUser.role" class="text-sm font-mono"></p>
                     </div>
                     <div class="px-6 py-2 border-b cursor-pointer hover:bg-gray-100">Account</div>
-                    <div class="px-6 py-2 border-b cursor-pointer hover:bg-gray-100" @click="logout">Logout</div>
+                    <div class="px-6 py-2 border-b cursor-pointer hover:bg-gray-100" id="loform" @click="logout">Logout</div>
                 </div>
             </div>
 

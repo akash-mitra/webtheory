@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="tab==='info'" class="w-full my-2 bg-gray-100 px-12 py-3 rounded-lg">
+        <div v-if="tab==='info'" class="w-full my-2 px-12 py-3 rounded-lg">
 
             <div class="my-2">
                 <div :class="labelClass">Profile Image</div>
@@ -41,7 +41,7 @@
                 container-class="px-6 py-2 mt-6 -mb-8 bg-yellow-100 border border-orange-300">
             </TensorFormError>
 
-            <div class="mt-8 border-t py-4">
+            <div class="mt-8 py-4">
                 <button :class="btnClass" type="button" @click="save">Save</button>
                 <span @click="cancel" class="ml-4 text-blue-600 cursor-pointer inline-block">Cancel</span>
             </div>
@@ -49,7 +49,7 @@
         </div>
 
 
-        <div class="pt-4 w-full" v-if="tab==='password'">
+        <div class="py-4 w-full" v-if="tab==='password'">
 
             <TensorFormError
                 v-if="errors"
@@ -86,9 +86,9 @@
                         placeholder="********">
             </div>
 
-            <div class="px-6 w-full mt-8">
-                <span @click="resetPassword" class="px-6 py-2 text-white bg-green-600 rounded cursor-pointer">Change Password</span>
-                <span @click="tab='info'" class="ml-4 text-blue-600 cursor-pointer inline-block">Back</span>
+            <div class="px-6 w-full mt-8 flex items-center">
+                <span @click="resetPassword" class="block px-6 py-2 text-white bg-green-600 rounded cursor-pointer">Change Password</span>
+                <span @click="tab='info'" class="block ml-4 text-blue-600 cursor-pointer inline-block">Back</span>
             </div>
 
             <div class="px-6 w-full mt-4">
@@ -119,12 +119,12 @@ export default {
 
         labelClass: {
             type: String,
-            default: 'mt-4 mb-2 uppercase text-gray-700'
+            default: 'mt-4 mb-2 uppercase text-gray-500'
         },
 
         inputClass: {
             type: String,
-            default: 'w-full p-3 border rounded outline:none'
+            default: 'w-full p-3 border rounded outline:none bg-transparent shadow-inner border-gray-500'
         },
 
         btnClass: {

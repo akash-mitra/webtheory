@@ -13,3 +13,6 @@ yarn-error.log
 .DS_Store
 style-generator.sh
 push.sh
+coverage.zip
+coverage.html
+__pycache__

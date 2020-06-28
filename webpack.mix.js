@@ -3,7 +3,7 @@ const tailwindcss = require('tailwindcss')('./tailwind.config.js')
 const purgecss = require('@fullhuman/postcss-purgecss')
 
 const postCssPluginsBackEnd = [tailwindcss];
-const postCssPluginsFrontEnd = [tailwindcss];
+// const postCssPluginsFrontEnd = [tailwindcss];
 
 const tailwindClassExtractor = function (content) { return content.match(/[\w-/:]+(?<!:)/g) || [] }
 
@@ -22,14 +22,14 @@ const backendScanPaths = [
 
 ];
 
-const frontendScanPaths = [
-  './resources/views/active/*.php',
-  './resources/views/modules/*.php',
-  './resources/sass/typography.scss',
-  './resources/js/frontend/modules/*.vue',
-  './resources/js/frontend/pages/*.vue',
-  './resources/js/frontend/users/*.vue',
-];
+// const frontendScanPaths = [
+//   './resources/views/active/*.php',
+//   './resources/views/modules/*.php',
+//   './resources/sass/typography.scss',
+//   './resources/js/frontend/modules/*.vue',
+//   './resources/js/frontend/pages/*.vue',
+//   './resources/js/frontend/users/*.vue',
+// ];
 
 
 /**
@@ -46,12 +46,12 @@ if (mix.inProduction()) {
   );
 
   // frontend
-  postCssPluginsFrontEnd.push (
-    purgecss({
-      content: frontendScanPaths,
-      defaultExtractor: tailwindClassExtractor
-    })
-  );
+  // postCssPluginsFrontEnd.push (
+  //   purgecss({
+  //     content: frontendScanPaths,
+  //     defaultExtractor: tailwindClassExtractor
+  //   })
+  // );
 }
 
 
@@ -92,7 +92,7 @@ mix.sass('resources/sass/app.scss', 'public/css', {}, postCssPluginsBackEnd)
 mix.js('resources/js/frontend.js', 'public/js/frontend.js')
 mix.js('resources/js/frontend/modules/comments.js', 'public/js')
 mix.js('resources/js/frontend/modules/profile.js', 'public/js')
-mix.sass('resources/sass/style.scss', 'public/css', {}, postCssPluginsFrontEnd)
+// mix.sass('resources/sass/style.scss', 'public/css', {}, postCssPluginsFrontEnd)
 
 
 /*

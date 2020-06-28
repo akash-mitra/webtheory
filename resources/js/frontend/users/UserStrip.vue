@@ -3,10 +3,10 @@
 
         <div @click="openMe" class="inline-flex justify-center items-center w-full rounded py-2 text-sm font-medium transition ease-in-out duration-150">
             <span class="flex items-center px-4">
-                <img :src="user.avatar" class="h-12 w-12 rounded-full border-2" />
-                <span class="hidden sm:flex ml-4 text-lg text-gray-800">{{ user.name }}</span>
+                <img :src="user.avatar" class="h-12 w-12 rounded-full" />
+                <span class="hidden sm:flex ml-4 text-lg" :class="textColorClass">{{ user.name }}</span>
             </span>
-            <svg class="ml-1 pr-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+            <svg class="ml-1 pr-2 h-5 w-5" :class="textColorClass" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
             </svg>
         </div>
@@ -80,6 +80,11 @@ export default {
         editPageLink: {
             type: String,
             default: null
+        },
+
+        textColorClass: {
+            type: String,
+            default: 'text-gray-800'
         },
     },
 

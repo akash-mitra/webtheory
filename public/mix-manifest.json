@@ -1,12 +1,11 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
-    "/css/style.css": "/css/style.css",
     "/js/comments.js": "/js/comments.js",
     "/js/frontend.js": "/js/frontend.js",
     "/js/profile.js": "/js/profile.js",
-    "/js/chunks/4.chunk.5bfcbcd05e750b8ccc36.js": "/js/chunks/4.chunk.5bfcbcd05e750b8ccc36.js",
-    "/js/chunks/5.chunk.4cffa0dc72703bf88acf.js": "/js/chunks/5.chunk.4cffa0dc72703bf88acf.js",
-    "/js/chunks/6.chunk.082bb4bda7b2f2762259.js": "/js/chunks/6.chunk.082bb4bda7b2f2762259.js",
-    "/js/chunks/7.chunk.a96534d6450816f48bb2.js": "/js/chunks/7.chunk.a96534d6450816f48bb2.js"
+    "/js/chunks/4.chunk.eae9cc44480cbe67ec87.js": "/js/chunks/4.chunk.eae9cc44480cbe67ec87.js",
+    "/js/chunks/5.chunk.527b9d02b99d8066068f.js": "/js/chunks/5.chunk.527b9d02b99d8066068f.js",
+    "/js/chunks/6.chunk.fd54b1d04540f04d5007.js": "/js/chunks/6.chunk.fd54b1d04540f04d5007.js",
+    "/js/chunks/7.chunk.990d0251d59b337895b0.js": "/js/chunks/7.chunk.990d0251d59b337895b0.js"
 }

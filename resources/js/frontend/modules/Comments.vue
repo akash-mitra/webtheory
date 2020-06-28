@@ -7,7 +7,7 @@
 
         <div>
 
-            <div v-if="!!authUser" class="w-full flex p-4 bg-gray-100 border rounded-lg mb-2">
+            <div v-if="!!authUser" :class="boxClass">
 
                 <a  :href="authUser.url">
                     <img :src="authUser.avatar" class="h-12 w-12 rounded-full">
@@ -15,33 +15,37 @@
 
                 <div class="w-full text-sm px-4">
                     <div>
-                        <span class="text-blue-800 font-bold">{{ authUser.name }}</span>
-                        <span class="ml-3">&mdash; Join the discussion</span>
+                        <span :class="linkClass">{{ authUser.name }}</span>
+                        <span class="ml-3" :class="textClass">&mdash; Join the discussion</span>
                     </div>
 
                     <div class="w-full text-gray-800">
-                        <textarea v-model="comment" class="mt-2 border-2 rounded p-2 w-full h-12" onclick="this.classList.remove('h-12')"></textarea>
+                        <textarea
+                            v-model="comment"
+                            :class="textBoxClass"
+                            onclick="this.classList.remove('h-12')"
+                        ></textarea>
 
                         <div v-show="comment.length>0" class="w-full flex justify-end items-center mt-2">
                             <div>
-                                <span class="text-xs text-gray-200">{{ comment.length }} characters</span>
+                                <span :class="textClass">{{ comment.length }} characters</span>
                             </div>
 
-                            <button @click="postComment" class="ml-3 bg-orange-600 text-white py-1 px-4 rounded hover:bg-orange-800" :disabled="networkActionInProgress">Post</button>
+                            <button @click="postComment" :class="buttonClass" :disabled="networkActionInProgress">Post</button>
 
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div v-else class="w-full flex p-4 bg-gray-100 border rounded-lg mb-4 justify-between items-center">
-                <div class="text-xl">Join the Discussion.</div>
-                <div class="bg-orange-600 text-white py-1 px-4 cursor-pointer rounded hover:bg-orange-800" @click.stop="showLoginOption">
+            <div v-else :class="commentInviteClass">
+                <div>Join the Discussion.</div>
+                <div :class="buttonClass" @click.stop="showLoginOption">
                     Sign Up / Login
                 </div>
             </div>
 
-            <div v-for="comment in comments.data" class="w-full flex p-4 border-b border-gray-200">
+            <div v-for="comment in comments.data" class="w-full flex p-4">
 
                 <a  :href="comment.user.url">
                     <img :src="comment.user.avatar" class="h-12 w-12 rounded-full">
@@ -49,11 +53,11 @@
 
                 <div class="w-full text-sm px-4">
                     <div class="pb-1">
-                        <span class="text-blue-800 font-bold tracking-wide">{{ comment.user.name }}</span>
-                        <span class="ml-1 text-gray-600">commented {{ comment.created_ago }}</span>
+                        <span :class="linkClass">{{ comment.user.name }}</span>
+                        <span :class="textClass">commented {{ comment.created_ago }}</span>
                     </div>
 
-                    <div class="text-gray-800">
+                    <div :class="commentClass">
                         {{ comment.body }}
                     </div>
 
@@ -62,14 +66,14 @@
                             <button
                                 v-if="!!authUser"
                                 @click="openReplyBox(comment.id)"
-                                class="hover:text-orange-500"
+                                :class="replyTextClass"
                             >
                                 Reply
                             </button>
                             <span v-show="false" class="text-gray-600">&nbsp;•&nbsp;</span>
                             <button v-show="false" class="hover:text-orange-500">Like</button>
                         </div>
-                        <span v-if="comment.replies.length>1" class="hover:text-orange-500">{{ comment.replies.length }} Replies</span>
+                        <span v-if="comment.replies.length>1" :class="replyTextClass">{{ comment.replies.length }} Replies</span>
                     </div>
 
                     <div v-for="reply in comment.replies" class="w-full pt-6 flex">
@@ -81,16 +85,16 @@
                         <div class="w-full text-sm px-4">
 
                             <div class="pb-1">
-                                <span class="text-blue-800 font-semibold tracking-wide">{{ reply.user.name }}</span>
-                                <span class="ml-1 text-gray-600">replied {{ reply.created_ago }}</span>
+                                <span :class="linkClass">{{ reply.user.name }}</span>
+                                <span :class="textClass">replied {{ reply.created_ago }}</span>
                             </div>
 
-                            <div v-if="reply.body.length>0" class="text-gray-800">
+                            <div v-if="reply.body.length>0" :class="commentClass">
                                 {{ reply.body }}
 
-                                <div class="w-full flex justify-between py-1 text-gray-600 text-xs tracking-wide">
+                                <div class="w-full flex justify-between py-1 text-xs tracking-wide">
                                     <div class="flex justify-start">
-                                        <button @click="openReplyBox(reply.parent_id)" class="hover:text-orange-500">Reply</button>
+                                        <button @click="openReplyBox(reply.parent_id)" :class="replyTextClass">Reply</button>
                                         <span v-show="false" class="text-gray-600">&nbsp;•&nbsp;</span>
                                         <button v-show="false" class="hover:text-orange-500">Like</button>
                                     </div>
@@ -98,14 +102,14 @@
                                 </div>
                             </div>
 
-                            <div v-else class="w-full text-gray-800 bg-gray-100">
-                                <textarea v-model="replyText" class="mt-2 border-2 rounded p-2 w-full h-12" onclick="this.classList.remove('h-12')"></textarea>
+                            <div v-else>
+                                <textarea v-model="replyText" :class="textBoxClass" onclick="this.classList.remove('h-12')"></textarea>
 
                                 <div v-show="replyText.length>0" class="w-full flex justify-end items-center mt-2">
                                     <div>
-                                        <span class="text-xs text-gray-200">{{ replyText.length }} characters</span>
+                                        <span :class="textClass">{{ replyText.length }} characters</span>
                                     </div>
-                                    <button @click="postReply(reply)" class="ml-3 bg-orange-600 text-white py-1 px-4 rounded hover:bg-orange-800" :disabled="networkActionInProgress">Post</button>
+                                    <button @click="postReply(reply)" :class="buttonClass" :disabled="networkActionInProgress">Post</button>
                                 </div>
                             </div>
 
@@ -129,6 +133,16 @@
         props: {
             content_type: { required: true, type: String },
             refid: { required: true, type: String },
+
+            boxClass: { type: String, default: 'w-full flex p-4 rounded-lg mb-2 pb-6 bg-gray-100 border' },
+            textBoxClass: { type: String, default: 'mt-2 rounded-lg p-2 w-full h-12 border-2' },
+            buttonClass: { type: String, default: 'ml-3 bg-orange-600 text-white py-1 px-4 rounded hover:bg-orange-800' },
+            linkClass: { type: String, default: 'font-bold text-blue-800' },
+            commentClass: { type: String, default: 'text-gray-800' },
+            textClass: { type: String, default: 'text-gray-800' },
+            replyTextClass: { type: String, default: 'hover:text-orange-500' },
+            commentInviteClass: { type: String, default: 'w-full flex p-4 border rounded-lg mb-4 justify-between items-center' },
+
         },
 
         data() {
