@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
-use  App\Traits\Shareable;
+use App\Parameter;
+use App\Traits\Shareable;
 
 class Page extends Model
 {
@@ -97,7 +98,7 @@ class Page extends Model
 
     public function shouldBeSearchable()
     {
-        return $this->status == 'Live';
+        return Parameter::getKey('SEARCHABLE') && $this->status == 'Live';
     }
 
     /**
@@ -112,19 +113,6 @@ class Page extends Model
             'category_name' => $this->category()->value('name'),
             'content' => strip_tags($this->content()->value('body_html')),
         ]);
-        // $array = $this->toArray();
-        // $array = [
-        //     'id' => $this->id,
-        //     'category_id' => $this->category_id,
-        //     'category_name' => $this->category()->value('name'),
-        //     'title' => $this->title,
-        //     'summary' => $this->summary,
-        //     'metakey' => $this->metakey,
-        //     'metadesc' => $this->metadesc,
-        //     'status' => $this->status,
-        //     'media_id' => $this->media_id,
-        //     'content' => strip_tags($this->content()->value('body_html')),
-        // ];
 
         return $array;
     }

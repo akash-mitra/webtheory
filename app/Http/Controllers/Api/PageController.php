@@ -25,6 +25,11 @@ class PageController extends Controller
     public function __construct()
     {
         $this->middleware(['check.permission'])->except(['search']);
+        
+        if (Parameter::getKey('SEARCHABLE')) {
+            config(['scout.algolia.id' => Parameter::getKey('ALGOLIA_APP_ID')]);
+            config(['scout.algolia.secret' => Parameter::getKey('ALGOLIA_SECRET')]);
+        }
     }
 
 
@@ -275,9 +280,6 @@ class PageController extends Controller
 
     public function search(Request $request)
     {
-        config(['scout.algolia.id' => Parameter::getKey('ALGOLIA_APP_ID')]);
-        config(['scout.algolia.secret' => Parameter::getKey('ALGOLIA_SECRET')]);
-
         return Page::search($request->get('query'))->paginate(10);
     }
 }
