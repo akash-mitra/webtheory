@@ -111,7 +111,7 @@ class Page extends Model
         $page = $this->toArray();
         $array = array_merge($page, [
             'category_name' => $this->category()->value('name'),
-            'content' => strip_tags($this->content()->value('body_html')),
+            // 'content' => strip_tags($this->content()->value('body_html')),
         ]);
 
         return $array;
