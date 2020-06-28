@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use DB;
 use App\Page;
 use App\PageContent;
+use App\Parameter;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\PageRequest;
@@ -23,7 +24,7 @@ class PageController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['check.permission']);
+        $this->middleware(['check.permission'])->except(['search']);
     }
 
 
@@ -270,5 +271,13 @@ class PageController extends Controller
             });
         }
         return $queryBuilder;
+    }
+
+    public function search(Request $request)
+    {
+        config(['scout.algolia.id' => Parameter::getKey('ALGOLIA_APP_ID')]);
+        config(['scout.algolia.secret' => Parameter::getKey('ALGOLIA_SECRET')]);
+
+        return Page::search($request->get('query'))->paginate(10);
     }
 }

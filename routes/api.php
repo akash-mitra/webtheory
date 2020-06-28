@@ -27,6 +27,9 @@ Route::get('profiles/{public}/pages', 'Api\ProfileController@pages')->name('prof
 Route::get('categories/{category}/comments', 'Api\CategoryCommentController@index')->name('categorycomment.index');
 Route::get('pages/{page}/comments', 'Api\PageCommentController@index')->name('pagecomment.index');
 
+// Page Search Listing
+Route::get('pages/search', 'Api\PageController@search')->name('pages.search');
+
 
 // --------------------------------------------------------------------------------------------------------------------------
 // Authenticated API Routes
@@ -134,6 +137,8 @@ Route::group(['middleware' => ['auth:airlock']], function () {
     Route::post('settings/mailprovider', 'Api\SettingController@mailProvider')->name('settings.mailprovider');
     Route::get('settings/testmail', 'Api\SettingController@testMail')->name('settings.testmail');
     Route::post('settings/update', 'Api\SettingController@update')->name('settings.update');
+    Route::get('settings/search', 'Api\SettingController@getSearch')->name('settings.search');
+    Route::post('settings/searchprovider', 'Api\SettingController@searchProvider')->name('settings.searchprovider');
 
 
 
