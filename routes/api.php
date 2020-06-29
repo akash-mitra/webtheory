@@ -34,7 +34,7 @@ Route::get('pages/search', 'Api\PageController@search')->name('pages.search');
 // --------------------------------------------------------------------------------------------------------------------------
 // Authenticated API Routes
 // --------------------------------------------------------------------------------------------------------------------------
-Route::group(['middleware' => ['auth:airlock']], function () {
+Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('logout', 'Api\Auth\LoginController@logout');
 

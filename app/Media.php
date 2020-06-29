@@ -59,7 +59,7 @@ class Media extends Model
     public static function store($file, $name = null, $subDirectory = null, $register = true)
     {
         try {
-            $sizeInBytes = $file->getClientSize(); // bytes
+            $sizeInBytes = $file->getSize(); // bytes
 
             self::_checkFileError($file, $sizeInBytes);
 

@@ -76,10 +76,12 @@ class UpdateSite extends Command
             $this->call('up');
 
             $this->info('Site updated successfully');
+            return 0;
         } catch(Exception $e) {
             \Log::info($e);
             $this->call('up');
             $this->error('Something went wrong!');
+            return 1;
         }
     }
 }

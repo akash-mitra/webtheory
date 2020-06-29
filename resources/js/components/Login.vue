@@ -91,7 +91,7 @@
         methods: {
 
             attemptLogin() {
-                window.axios.get('/api/airlock/csrf-cookie').then ((response) => {
+                window.axios.get('/api/sanctum/csrf-cookie').then ((response) => {
                     window.axios.post('/api/login', {"email": this.email, "password": this.password})
                     .then(this.onAuthSuccess)
                     .catch(this.onAuthFail)

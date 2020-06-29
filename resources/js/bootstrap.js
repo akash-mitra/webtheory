@@ -14,7 +14,7 @@ window.Swal = require('sweetalert2');
 window.axios = require('axios');
 window.axios.defaults.withCredentials = true;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-window.axios.get('/api/airlock/csrf-cookie').then ((response) => {});
+window.axios.get('/api/sanctum/csrf-cookie').then ((response) => {});
 window.axios.get('/api/check').then ((response) => {
     if (Object.keys(response.data).length != 0 && response.data.constructor === Object) {
         
