@@ -10,23 +10,23 @@
         <div class="px-6 w-full flex justify-between items-center my-8 border-b">
             <div class="flex justify-start">
 
-                <div @click="tab='site'" class="-ml-4 px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='site'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
+                <div id="settings-site-tab" @click="tab='site'" class="-ml-4 px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='site'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
                     Site
                 </div>
 
-                <div @click="tab='login'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='login'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
+                <div id="settings-login-tab" @click="tab='login'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='login'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
                     Login
                 </div>
 
-                <div @click="tab='notification'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='notification'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
+                <div id="settings-notification-tab" @click="tab='notification'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='notification'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
                     Notification
                 </div>
 
-                <div @click="tab='services'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='services'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
+                <div id="settings-services-tab" @click="tab='services'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='services'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
                     services
                 </div>
 
-                <div @click="tab='maintainance'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='maintainance'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
+                <div id="settings-maintainance-tab" @click="tab='maintainance'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='maintainance'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
                     maintainance
                 </div>
 

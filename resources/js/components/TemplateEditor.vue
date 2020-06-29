@@ -23,9 +23,9 @@
 
 
         <div class="px-2 w-full flex justify-start items-center mt-8">
-            <div @click="tab='general'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='general'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">general</div>
-            <div @click="tab='files'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='files'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Files</div>
-            <div @click="tab='parameters'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='parameters'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Parameters</div>
+            <div id="template-general-tab" @click="tab='general'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='general'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">general</div>
+            <div id="template-files-tab" @click="tab='files'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='files'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Files</div>
+            <div id="template-parameters-tab" @click="tab='parameters'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='parameters'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Parameters</div>
         </div>
 
         <div v-show="tab==='files'" class="w-full bg-white px-6 py-6 border-t border-blue-400 rounded overflow-auto mb-12">
@@ -48,7 +48,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="file in files">
-                        <td class="pr-2 py-2 border-b cursor-pointer text-blue-600" @click="editTemplateFile(file)">
+                        <td :id="'show-file-' + file.id" class="pr-2 py-2 border-b cursor-pointer text-blue-600" @click="editTemplateFile(file)">
                             {{ file.name }}
                         </td>
                         <td class="hidden md:block  pr-2 py-2 border-b">
@@ -62,7 +62,7 @@
                 </tbody>
             </table>
 
-            <div class="py-2 px-4 inline-block mt-4 border rounded cursor-pointer text-sm shado1w border-blue-400 text-blue-500" @click="addTemplateFile">Add File</div>
+            <div id="addTemplateFile" class="py-2 px-4 inline-block mt-4 border rounded cursor-pointer text-sm shado1w border-blue-400 text-blue-500" @click="addTemplateFile">Add File</div>
         </div>
 
 
@@ -115,7 +115,7 @@
                 </div>
 
                 <div class="max-w-lg w-full">
-                    <PhotoPicker v-model="url"></PhotoPicker>
+                    <PhotoPicker id="templateImage" v-model="url"></PhotoPicker>
                 </div>
             </div>
 
@@ -159,14 +159,14 @@
                         <td class="pr-2 py-2 border-b">
                             <input v-show="row.type==='list'" type="text" v-model="row.options" class="font-mono rounded w-full bg-gray-200 p-2" />
                         </td>
-                        <td class="pr-2 py-2 border-b text-xs cursor-pointer" @click="deleteTemplateParameter(row)">
+                        <td :id="'delete-parameter-' + row.name" class="pr-2 py-2 border-b text-xs cursor-pointer" @click="deleteTemplateParameter(row)">
                             <svg class="h-6 w-6 mx-auto block text-gray-500 hover:text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                         </td>
                     </tr>
                 </tbody>
             </table>
             <p class="text-xs font-normal">No space is allowed in parameter name.</p>
-            <div class="py-2 px-4 inline-block mt-4 border rounded cursor-pointer text-sm shado1w border-blue-400 text-blue-500" @click="addTemplateParameter">Add Parameter</div>
+            <div id="addTemplateParameter" class="py-2 px-4 inline-block mt-4 border rounded cursor-pointer text-sm shado1w border-blue-400 text-blue-500" @click="addTemplateParameter">Add Parameter</div>
         </div>
     </div>
 

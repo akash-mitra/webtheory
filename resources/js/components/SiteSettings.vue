@@ -38,6 +38,7 @@
                     <p class="pb-4">Site Logo</p>
 
                     <PhotoPicker
+                        id="sitelogo"
                         v-model="sitelogo"
                         @picked="onLogoSelect"
                     ></PhotoPicker>
@@ -50,6 +51,7 @@
                     <p class="pb-4">Favicon</p>
 
                     <PhotoPicker
+                        id="siteicon"
                         v-model="siteicon"
                         @picked="onIconSelect"
                     ></PhotoPicker>

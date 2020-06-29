@@ -48,7 +48,7 @@ class UserTest extends DuskTestDataSetup
                 ->type('search', $user->name)
                 ->pause(1000)
                 ->assertSee($user->name)
-                ->click('#unverified-tab')
+                ->click('#user-unverified-tab')
                 ->assertSee($user->name);
         });
     }
@@ -109,4 +109,50 @@ class UserTest extends DuskTestDataSetup
             $this->assertDatabaseHas('users', ['name' => 'Dummy Author']);
         });
     }
+
+    /**
+     * Test App User Update.
+     *
+     * @return void
+     */
+    // public function test_app_user_update()
+    // {
+    // }
+
+    /**
+     * Test App User Ban.
+     *
+     * @return void
+     */
+    public function test_app_user_ban()
+    {
+        $user = factory(User::class)->create([
+            'role' => 'author',
+        ]);
+
+        $this->browse(function (Browser $browser) use($user) {
+            $browser->loginAs($this->adminUser)
+                ->visit('/app/users')
+                ->pause(1000)
+                ->assertSee('Users')
+                ->assertSee($user->name)
+                ->press('#ban-user-' . $user->id)
+                ->assertSee('Ban this user?')
+                ->press('Confirm')
+                ->pause(1000)
+                ->assertSee('User Banned')
+                ->press('OK')
+                ->click('#user-banned-tab')
+                ->assertSee($user->name);
+        });
+    }
+
+    /**
+     * Test App User Unban.
+     *
+     * @return void
+     */
+    // public function test_app_user_unban()
+    // {
+    // }
 }

@@ -4,7 +4,7 @@
 
         <div class="px-6 my-6 w-full flex justify-between items-center">
             <h2 class="text-gray-600 text-2xl flex items-center">Templates </h2>
-            <a href="/app/templates/create" class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow">Create</a>
+            <a id="createTemplate" href="/app/templates/create" class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow">Create</a>
         </div>
 
 
@@ -12,12 +12,12 @@
 
             <div class="flex justify-start">
 
-                <div @click="tab='installed'" class="-ml-4 px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='installed'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
+                <div id="template-installed-tab" @click="tab='installed'" class="-ml-4 px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='installed'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
                     Installed
                     <span class="ml-3 rounded-lg py-1 px-2 shadow-inner text-xs bg-gray-300">{{ templates.installed.length }}</span>
                 </div>
 
-                <div @click="tab='available'" class="ml-2 px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='available'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
+                <div id="template-available-tab" @click="tab='available'" class="ml-2 px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='available'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
                     Available
                     <span class="ml-3 rounded-lg py-1 px-2 shadow-inner text-xs bg-gray-300">{{ templates.available.length }}</span>
                 </div>
@@ -53,10 +53,10 @@
 
                         <div class="w-full flex items-center">
                             <div class="w-1/2">
-                                <a :href="'/app/templates/' + template.id" class="text-blue-600 text-xs rounded py-2 px-6 border border-blue-400">Customize</a>
+                                <a :id="'customize-template-' + template.id" :href="'/app/templates/' + template.id" class="text-blue-600 text-xs rounded py-2 px-6 border border-blue-400">Customize</a>
                             </div>
                             <div class="w-1/2 flex justify-end">
-                                <t-button v-if="!template.active" :loadingWheel="isSaving" @click.native="activate(template)" color="blue">
+                                <t-button :id="'activate-template-' + template.name" v-if="!template.active" :loadingWheel="isSaving" @click.native="activate(template)" color="blue">
                                     Activate
                                 </t-button>
                                 <div v-else class="flex items-center text-green-500">
@@ -98,7 +98,7 @@
                                 <span class="px-3 py-1 rounded-lg text-sm bg-gray-200 border">Version {{ template.version }}</span>
                             </div>
                             <div class="w-1/2 flex justify-end">
-                                <t-button :loadingWheel="isSaving" @click.native="installTemplate(template)" color="blue">
+                                <t-button :id="'install-template-' + template.id" :loadingWheel="isSaving" @click.native="installTemplate(template)" color="blue">
                                     Install Now
                                 </t-button>
 

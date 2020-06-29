@@ -22,7 +22,7 @@
 
 
         <div class="px-2 w-full flex justify-start items-center mt-8">
-            <div @click="tab='category'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='category'? 'text-gray-700 py-2 1border-b-4 border-blue-500': 'text-gray-500 py-2'">Content</div>
+            <div id="category-content-tab" @click="tab='category'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='category'? 'text-gray-700 py-2 1border-b-4 border-blue-500': 'text-gray-500 py-2'">Content</div>
             <div id="category-meta-tab" @click="tab='meta'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='meta'? 'text-gray-700 py-2 1border-b-4 border-blue-500': 'text-gray-500 py-2'">Meta</div>
 
         </div>
