@@ -16,15 +16,14 @@
             <div class="my-2">
                 <div :class="labelClass">Name</div>
                 <div class="mb-2">
-                    <input type="text" :class="inputClass" v-model="name">
+                    <input name="name" type="text" :class="inputClass" v-model="name">
                 </div>
             </div>
-
 
             <div class="my-2">
                 <div :class="labelClass">About Me</div>
                 <div class="mb-2">
-                    <textarea :class="inputClass" v-model="aboutMe"></textarea>
+                    <textarea name="about_me" :class="inputClass" v-model="aboutMe"></textarea>
                 </div>
             </div>
 

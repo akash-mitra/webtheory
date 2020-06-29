@@ -3,7 +3,7 @@
 <div class="w-full sm:flex justify-between items-center p-4 border-b">
 
     <div class="w-full sm:w-1/2 flex">
-        <router-link :to="{name: 'users.edit', params: { id: user.id }}" class="text-blue-600 hover:text-blue-900 focus:outline-none focus:underline">
+        <router-link :id="'show-user-' + user.id" :to="{name: 'users.edit', params: { id: user.id }}" class="text-blue-600 hover:text-blue-900 focus:outline-none focus:underline">
             <img v-if="user.avatar" class="block h-10 w-10 rounded-full" :src="user.avatar" alt="" />
 
             <svg v-else class="w-8 h-8 rounded-full border text-gray-700" viewBox="0 0 20 20">
@@ -48,12 +48,12 @@
 
 
     <div v-if="canBan" class="w-full sm:w-1/6 flex justify-end sm:px-6">
-        <div v-if="!!user.deleted_at" @click="$emit('unbanned', user.id)" class="tooltip cursor-pointer text-red-600 hover:text-red-400">
+        <div :id="'remove-ban-user-' + user.id" v-if="!!user.deleted_at" @click="$emit('unbanned', user.id)" class="tooltip cursor-pointer text-red-600 hover:text-red-400">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M5 5l14 14"/></svg>
             <span class="tooltip-text bg-black text-white mb-2 rounded-lg text-xs py-1">Remove Ban</span>
         </div>
 
-        <div v-else @click="$emit('banned', user.id)" class="tooltip cursor-pointer text-gray-400 hover:text-red-600">
+        <div :id="'ban-user-' + user.id" v-else @click="$emit('banned', user.id)" class="tooltip cursor-pointer text-gray-400 hover:text-red-600">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M5 5l14 14"/></svg>
             <span class="tooltip-text bg-black text-white mb-2 rounded-lg text-xs py-1">Ban User</span>
         </div>

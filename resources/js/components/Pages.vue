@@ -24,8 +24,8 @@
 
 
         <div class="px-6 w-full flex justify-start items-center my-8 border-b">
-            <div @click="filterByTab('all')" class="px-4 text-sm uppercase cursor-pointer" :class="tab==='all'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">All</div>
-            <div @click="filterByTab('draft')" class="px-4 text-sm uppercase cursor-pointer" :class="tab==='draft'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Draft</div>
+            <div id="all-tab" @click="filterByTab('all')" class="px-4 text-sm uppercase cursor-pointer" :class="tab==='all'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">All</div>
+            <div id="draft-tab" @click="filterByTab('draft')" class="px-4 text-sm uppercase cursor-pointer" :class="tab==='draft'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Draft</div>
 
         </div>
 

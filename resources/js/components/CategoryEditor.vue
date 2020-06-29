@@ -23,7 +23,7 @@
 
         <div class="px-2 w-full flex justify-start items-center mt-8">
             <div @click="tab='category'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='category'? 'text-gray-700 py-2 1border-b-4 border-blue-500': 'text-gray-500 py-2'">Content</div>
-            <div @click="tab='meta'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='meta'? 'text-gray-700 py-2 1border-b-4 border-blue-500': 'text-gray-500 py-2'">Meta</div>
+            <div id="category-meta-tab" @click="tab='meta'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='meta'? 'text-gray-700 py-2 1border-b-4 border-blue-500': 'text-gray-500 py-2'">Meta</div>
 
         </div>
 
@@ -52,6 +52,7 @@
                 <div class="w-full sm:w-3/4 max-w-lg">
 
                     <PhotoPicker
+                        id="categoryImage"
                         v-model="media"
                         image-list="/api/media"
                     ></PhotoPicker>
@@ -67,7 +68,7 @@
                 </div>
 
 
-                <select v-model="parent_id" class="h-10 block w-full sm:w-3/4 max-w-lg px-2 py-1 my-1 text-sm rounded appearance-none1 bg-gray-200 focus:bg-white border focus:outline-none">
+                <select id="parent_id" v-model="parent_id" class="h-10 block w-full sm:w-3/4 max-w-lg px-2 py-1 my-1 text-sm rounded appearance-none1 bg-gray-200 focus:bg-white border focus:outline-none">
                         <option v-for="category in categories" v-bind:value="category.key">
                             {{ category.value }}
                         </option>
@@ -76,7 +77,7 @@
 
             <div class="w-full mb-8 px-6 py-10 border-t bg-gray-100 text-right">
 
-                <span @click="deleteCategory" class="border border-red-500 cursor-pointer text-red-500 hover:text-white px-3 py-2 rounded text-sm hover:bg-red-500">
+                <span id="deleteCategory" @click="deleteCategory" class="border border-red-500 cursor-pointer text-red-500 hover:text-white px-3 py-2 rounded text-sm hover:bg-red-500">
                     Delete Category
                 </span>
 
@@ -94,8 +95,8 @@
                         Good meta descriptions are short blurbs that describe accurately the content of the page.
                     </div>
 
-                    <textarea v-model="metadesc" class="mt-2 w-full bg-gray-100 shadow-inner rounded-lg text-xs text-gray-800 p-4 border focus:outline-none" :class="!metadesc ? 'border-red-400' : ''"></textarea>
-                    <span class="mt-3 p-1 text-xs text-blue-700 cursor-pointer hover:text-blue-900" @click="metadesc=description">Copy from category description</span>
+                    <textarea id="metadesc" v-model="metadesc" class="mt-2 w-full bg-gray-100 shadow-inner rounded-lg text-xs text-gray-800 p-4 border focus:outline-none" :class="!metadesc ? 'border-red-400' : ''"></textarea>
+                    <span id="copyCatDesc" class="mt-3 p-1 text-xs text-blue-700 cursor-pointer hover:text-blue-900" @click="metadesc=description">Copy from category description</span>
 
                 </div>
 
@@ -105,7 +106,7 @@
                         A series of keywords you deem relevant to the category in question.
                         Note that Google doesn’t use meta keywords in its ranking algorithm.
                     </div>
-                    <textarea v-model="metakey" class="mt-2 w-full bg-gray-100 shadow-inner rounded-lg text-xs text-gray-800 p-4 border focus:outline-none"></textarea>
+                    <textarea id="metakey" v-model="metakey" class="mt-2 w-full bg-gray-100 shadow-inner rounded-lg text-xs text-gray-800 p-4 border focus:outline-none"></textarea>
                 </div>
 
         </div>

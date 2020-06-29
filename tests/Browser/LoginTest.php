@@ -27,4 +27,23 @@ class LoginTest extends DuskTestDataSetup
                 ->assertSee($this->adminUser->name);
         });
     }
+
+    /**
+     * Test User Logout.
+     *
+     * @return void
+     */
+    public function test_user_logout()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->loginAs($this->adminUser)
+                ->visit('/')
+                ->assertSee($this->adminUser->name)
+                ->press('#user-strip')
+                ->assertSee('Logout')
+                ->press('Logout')
+                ->assertPathIs('/')
+                ->assertDontSee($this->adminUser->name);
+        });
+    }
 }

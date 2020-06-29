@@ -73,6 +73,15 @@ class TestDataSetup extends TestCase
         $this->pagecontent = factory(PageContent::class)->create([
             'page_id' => $this->page->id
         ]);
+
+        $this->draftPage = factory(Page::class)->create([
+            'category_id' => $this->category->id,
+            'user_id' => $this->adminUser->id,
+            'status' => 'Draft',
+        ]);
+        $this->draftPagecontent = factory(PageContent::class)->create([
+            'page_id' => $this->draftPage->id
+        ]);
     }
 
     private function setModelAttributes()
