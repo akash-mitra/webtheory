@@ -244,6 +244,34 @@ class ProductionTableSeeder extends Seeder
             'updated_at' => now()
         ]);
 
+
+        // ALGOLIA SEARCH
+        DB::table('parameters')->insert([
+            'key' => 'SEARCHABLE',
+            'value' => false,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'ALGOLIA_COMMUNITY_PLAN',
+            'value' => true,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'ALGOLIA_APP_ID',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        DB::table('parameters')->insert([
+            'key' => 'ALGOLIA_SECRET',
+            'value' => '',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        
+
     }
 
     private function getUrl($provider)

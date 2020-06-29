@@ -131,4 +131,43 @@ class SettingTest extends TestDataSetup
             ->assertExitCode(0);
         */
     }
+
+    /* Get Search Settings */
+    public function test_search_setting()
+    {
+        /* Unauthenticated user cannot view search listing */
+        $response = $this->get('/api/settings/search');
+        $response->assertStatus(302);
+
+        /* Authenticated user can view search listing */
+        $response = $this->actingAs($this->adminUser)->get('/api/settings/search');
+        $response->assertStatus(200)
+            ->assertJsonStructureExact([
+                'SEARCHABLE', 'ALGOLIA_COMMUNITY_PLAN', 
+                'ALGOLIA_APP_ID', 'ALGOLIA_SECRET',
+            ]);
+        $this->assertDatabaseHas('parameters', ['key' => 'SEARCHABLE']);
+    }
+
+    /* Set Search Providers */
+    public function test_search_provider_setting()
+    {
+        $searchprovider = [ 'data' => [
+            ['key' => 'SEARCHABLE', 'value' => true],
+            ['key' => 'ALGOLIA_COMMUNITY_PLAN', 'value' => false],
+            ['key' => 'ALGOLIA_APP_ID', 'value' => 'Id1234'],
+            ['key' => 'ALGOLIA_SECRET', 'value' => 'Secret1234']
+        ]];
+        
+        /* Unauthenticated user cannot set search provider */
+        $response = $this->post('/api/settings/searchprovider', $searchprovider, ['Accept' => 'application/json']);
+        $response->assertStatus(401)
+            ->assertJson(['message' => 'Unauthenticated.']);
+
+        /* Authenticated user can set search provider */
+        $response = $this->actingAs($this->adminUser)->post('/api/settings/searchprovider', $searchprovider, ['Accept' => 'application/json']);
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('parameters', ['key' => 'SEARCHABLE', 'value' => true]);
+        $this->assertDatabaseHas('parameters', ['key' => 'ALGOLIA_APP_ID', 'value' => 'Id1234']);
+    }
 }

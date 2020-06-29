@@ -121,4 +121,33 @@ class SettingController extends Controller
         return response()->json("Site update is in progress", 200);
     }
 
+
+    public function getSearch()
+    {
+        $keys = [
+            'SEARCHABLE', 'ALGOLIA_COMMUNITY_PLAN',
+            'ALGOLIA_APP_ID', 'ALGOLIA_SECRET',
+        ];
+
+        $search = [];
+        foreach($keys as $key) {
+            $value = Parameter::getKey($key);
+            $search[$key] = $value;
+        }
+
+        return response()->json($search);
+    }
+
+
+    public function searchProvider(Request $request)
+    {
+        $data = $request->data;
+        foreach($data as $lov) {
+            $key = $lov['key'];
+            $value = is_null($lov['value']) ? '' : $lov['value'];
+            Parameter::setKey($key, $value);
+        }
+
+        return response()->json("Saved", 200);
+    }
 }

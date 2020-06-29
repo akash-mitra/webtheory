@@ -6,11 +6,13 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use  App\Traits\Shareable;
+use Laravel\Scout\Searchable;
+use App\Parameter;
+use App\Traits\Shareable;
 
 class Page extends Model
 {
-    use SoftDeletes, Shareable;
+    use SoftDeletes, Searchable, Shareable;
 
     protected $fillable = ['category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'status', 'media_id'];
 
@@ -91,5 +93,27 @@ class Page extends Model
     public static function invalidateCache()
     {
         Cache::forget('pages');
+    }
+
+
+    public function shouldBeSearchable()
+    {
+        return Parameter::getKey('SEARCHABLE') && $this->status == 'Live';
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $page = $this->toArray();
+        $array = array_merge($page, [
+            'category_name' => $this->category()->value('name'),
+            // 'content' => strip_tags($this->content()->value('body_html')),
+        ]);
+
+        return $array;
     }
 }

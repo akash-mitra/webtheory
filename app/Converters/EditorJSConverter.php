@@ -113,7 +113,7 @@ class EditorJSConverter
             'embed' => 'processEmbeded',
         ];
         $method = $processor[$type];
-        return self::$method($data);
+        return is_null($data) ? '' : self::$method($data);
     }
 
 

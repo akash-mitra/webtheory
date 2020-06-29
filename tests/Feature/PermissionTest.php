@@ -248,6 +248,17 @@ class PermissionTest extends TestDataSetup
         $this->actingAs($this->adminUser)->get('/api/settings/testmail')->assertStatus(200);
         $this->actingAs($this->authorUser1)->get('/api/settings/testmail')->assertStatus(403);
         $this->actingAs($this->registeredUser)->get('/api/settings/testmail')->assertStatus(403);
+
+
+        $this->actingAs($this->adminUser)->get('/api/settings/search')->assertStatus(200);
+        $this->actingAs($this->authorUser1)->get('/api/settings/search')->assertStatus(403);
+        $this->actingAs($this->registeredUser)->get('/api/settings/search')->assertStatus(403);
+
+
+        $searchprovider = [ 'data' => [['key' => 'ALGOLIA_APP_ID', 'value' => 'Id1234'], ['key' => 'ALGOLIA_SECRET', 'value' => 'Secret1234']]];
+        $this->actingAs($this->adminUser)->post('/api/settings/searchprovider', $searchprovider, ['Accept' => 'application/json'])->assertStatus(200);
+        $this->actingAs($this->authorUser1)->post('/api/settings/searchprovider', $this->data, ['Accept' => 'application/json'])->assertStatus(403);
+        $this->actingAs($this->registeredUser)->post('/api/settings/searchprovider', $this->data, ['Accept' => 'application/json'])->assertStatus(403);
     }
 
     // Lov
