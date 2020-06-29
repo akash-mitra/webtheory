@@ -113,51 +113,51 @@ class PageTest extends DuskTestDataSetup
      *
      * @return void
      */
-    // public function test_app_page_change_status()
-    // {
-    //     $page = $this->draftPage;
-    //     $this->browse(function (Browser $browser) use($page) {
-    //         $response = $browser->loginAs($this->adminUser)
-    //             ->visit('/app/pages')
-    //             ->pause(1000)
-    //             ->assertSee('Pages')
-    //             ->click('#draft-tab')
-    //             ->assertSee($page->title)
-    //             ->press('#change-status-page-' . $page->id)
-    //             ->pause(1000)
-    //             // ->assertSee('Status Updated Page in Live mode now')
-    //             ->click('#all-tab')
-    //             ->assertSee($page->title);
-    //     });
-    // }
+    public function test_app_page_change_status()
+    {
+        $page = $this->draftPage;
+        $this->browse(function (Browser $browser) use($page) {
+            $response = $browser->loginAs($this->adminUser)
+                ->visit('/app/pages')
+                ->pause(1000)
+                ->assertSee('Pages')
+                ->click('#draft-tab')
+                ->assertSee($page->title)
+                ->press('#change-status-page-' . $page->id)
+                ->pause(1000)
+                // ->assertSee('Status Updated Page in Live mode now')
+                ->click('#all-tab')
+                ->assertSee($page->title);
+        });
+    }
 
     /**
      * Test App Page Create.
      *
      * @return void
      */
-    // public function test_app_page_create()
-    // {
-    //     $this->browse(function (Browser $browser) {
-    //         $browser->loginAs($this->adminUser)
-    //             ->visit('/app/pages/create')
-    //             ->pause(1000)
-    //             ->press('Save')
-    //             ->assertSee('Page has no title')
-    //             ->press('OK')
-    //             ->type('title', 'My Test Page')
-    //             ->press('Save')
-    //             ->assertSee('Provide an Introduction')
-    //             ->press('OK')
-    //             ->type('intro', 'My Test Page Introduction')
-    //             // ->keys('intro', ['{tab}'])
-    //             ->press('Save')
-    //             ->pause(1000)
-    //             ->assertSee('Page Contents are Saved')
-    //             ->visit('/app/pages')
-    //             ->pause(1000)
-    //             ->assertSee('My Test Page');
-    //         $this->assertDatabaseHas('pages', ['title' => 'My Test Page']);
-    //     });
-    // }
+    public function test_app_page_create()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->loginAs($this->adminUser)
+                ->visit('/app/pages/create')
+                ->pause(1000)
+                ->press('Save')
+                ->assertSee('Page has no title')
+                ->press('OK')
+                ->type('title', 'My Test Page')
+                ->press('Save')
+                ->assertSee('Provide an Introduction')
+                ->press('OK')
+                ->type('intro', 'My Test Page Introduction')
+                // ->keys('intro', ['{tab}'])
+                ->press('Save')
+                ->pause(1000)
+                ->assertSee('Page Contents are Saved')
+                ->visit('/app/pages')
+                ->pause(1000)
+                ->assertSee('My Test Page');
+            $this->assertDatabaseHas('pages', ['title' => 'My Test Page']);
+        });
+    }
 }

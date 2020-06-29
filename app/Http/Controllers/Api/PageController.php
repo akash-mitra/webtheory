@@ -27,6 +27,7 @@ class PageController extends Controller
         $this->middleware(['check.permission'])->except(['search']);
         
         if (Parameter::getKey('SEARCHABLE')) {
+            config(['scout.driver' => 'algolia']);
             config(['scout.algolia.id' => Parameter::getKey('ALGOLIA_APP_ID')]);
             config(['scout.algolia.secret' => Parameter::getKey('ALGOLIA_SECRET')]);
         }
