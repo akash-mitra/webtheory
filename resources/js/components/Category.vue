@@ -7,12 +7,12 @@
             <div class="px-4 py-2 w-full flex items-center justify-between rounded border" :class="hasNeedle? 'bg-yellow-200':'bg-white'">
                 <div class="w-5/6">
                     <p class="text-blue-700" :class="level===1? 'font-bold':''">
-                        <router-link :to="{ name: 'categories.edit', params: { id: item.id }}">{{item.name}}</router-link>
+                        <router-link :id="'show-category-' + item.id" :to="{ name: 'categories.edit', params: { id: item.id }}">{{item.name}}</router-link>
                     </p>
                     <p class="text-xs text-gray-700">{{item.description}}</p>
                 </div>
                 <div class="w-1/6 text-right">
-                    <a :href="'/categories/' + item.id" class="text-xs text-blue-800">View</a>
+                    <a :id="'view-category-' + item.id" :href="'/categories/' + item.id" class="text-xs text-blue-800">View</a>
                 </div>
 
             </div>

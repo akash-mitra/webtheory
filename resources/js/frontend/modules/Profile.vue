@@ -18,7 +18,7 @@
         </div>
 
         <div v-if="showEditor && mode==='read'" class="text-right p-3">
-            <span class="cursor-pointer" :class="linkColorClass" @click="mode='edit'">Update Profile Data</span>
+            <span id="update-profile" class="cursor-pointer" :class="linkColorClass" @click="mode='edit'">Update Profile Data</span>
         </div>
 
 
