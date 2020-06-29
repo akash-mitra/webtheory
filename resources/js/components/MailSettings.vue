@@ -1,17 +1,17 @@
 <template>
-    <div class="w-full">
-        <div class="w-full flex justify-between">
-            <p class="ml-3 text-sm text-gray-700 pb-3 uppercase">Mail Setup</p>
-            <button v-if="mailSaved" @click="testMail" class="px-3 py-1 mb-2 mr-2 border border-blue-400 rounded text-blue-500 bg-transparent">Test Email</button>
-        </div>
 
-        <div class="rounded w-full">
-            <div class="px-6 py-3 border-b bg-white mb-6 rounded">
-                <div>
+    <div class="w-full">
+
+        <div class="rounded max-w-xl1 bg-white shadow">
+
+            <p class="text-sm px-6 py-4 border-b text-gray-700 uppercase">E-Mail Notification Setup</p>
+
+            <div class="p-6">
+
                     <div class="w-full sm:flex mt-2">
-                        <label for="mailDriver" class="block w-full sm:w-1/4 text-sm py-1">Mail Driver</label>
+                        <label for="mailDriver" class="block w-full sm:w-1/4 text-right mr-4 text-sm py-1">Mail Driver</label>
                         <div class="inline-block relative w-64">
-                            <select id="mailDriver" v-model="mailDriver" ref="mailDriver" class="block appearance-none w-full bg-white px-2 py-1 pr-8 rounded border focus:outline-none">
+                            <select id="mailDriver" v-model="mailDriver" ref="mailDriver" class="block appearance-none w-full bg-gray-200 focus:bg-white px-2 py-1 pr-8 rounded border focus:outline-none">
                                 <option v-for="mailDriver in mailDrivers" :value="mailDriver.key" :key="mailDriver.key" v-text="mailDriver.value"></option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -19,28 +19,29 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="w-full sm:flex mt-2">
-                        <label for="mailFromAddress" class="block w-full sm:w-1/4 text-sm py-1">Mail From Email</label>
+                        <label for="mailFromAddress" class="block w-full sm:w-1/4 text-right mr-4 text-sm py-1">Mail From Email</label>
                         <input type="email" id="mailFromAddress" v-model="mailFromAddress" ref="mailFromAddress" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                     </div>
                     <div class="w-full sm:flex mt-2">
-                        <label for="mailFromName" class="block w-full sm:w-1/4 text-sm py-1">Mail From Name</label>
+                        <label for="mailFromName" class="block w-full sm:w-1/4 text-right mr-4 text-sm py-1">Mail From Name</label>
                         <input type="text" id="mailFromName" v-model="mailFromName" ref="mailFromName" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                     </div>
 
 
                     <div v-if="showSmtp" class="w-full sm:flex mt-2">
-                        <label for="mailHost" class="block w-full sm:w-1/4 text-sm py-1">Mail Host</label>
+                        <label for="mailHost" class="block w-full sm:w-1/4 text-right mr-4 text-sm py-1">Mail Host</label>
                         <input type="text" id="mailHost" v-model="mailHost" ref="mailHost" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                     </div>
                     <div v-if="showSmtp" class="w-full sm:flex mt-2">
-                        <label for="mailPort" class="block w-full sm:w-1/4 text-sm py-1">Mail Port</label>
+                        <label for="mailPort" class="block w-full sm:w-1/4 text-right mr-4 text-sm py-1">Mail Port</label>
                         <input type="number" id="mailPort" v-model="mailPort" ref="mailPort" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                     </div>
                     <div v-if="showSmtp" class="w-full sm:flex mt-2">
-                        <label for="mailEncryption" class="block w-full sm:w-1/4 text-sm py-1">Mail Encryption</label>
+                        <label for="mailEncryption" class="block w-full sm:w-1/4 text-right mr-4 text-sm py-1">Mail Encryption</label>
                         <div class="inline-block relative w-64">
-                            <select id="mailEncryption" v-model="mailEncryption" ref="mailEncryption" class="block appearance-none w-full bg-white px-2 py-1 pr-8 rounded border focus:outline-none">
+                            <select id="mailEncryption" v-model="mailEncryption" ref="mailEncryption" class="block appearance-none w-full bg-gray-200 focus:bg-white px-2 py-1 pr-8 rounded border focus:outline-none">
                                 <option v-for="mailEncryption in mailEncryptions" :value="mailEncryption.key" :key="mailEncryption.key" v-text="mailEncryption.value"></option>
                             </select>
                             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -49,64 +50,73 @@
                         </div>
                     </div>
                     <div v-if="showSmtp" class="w-full sm:flex mt-2">
-                        <label for="mailUsername" class="block w-full sm:w-1/4 text-sm py-1">Mail Username</label>
+                        <label for="mailUsername" class="block w-full sm:w-1/4 text-right mr-4 text-sm py-1">Mail Username</label>
                         <input type="text" id="mailUsername" v-model="mailUsername" ref="mailUsername" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                     </div>
                     <div v-if="showSmtp" class="w-full sm:flex mt-2 mb-4">
-                        <label for="mailPassword" class="block w-full sm:w-1/4 text-sm py-1">Mail Password</label>
+                        <label for="mailPassword" class="block w-full sm:w-1/4 text-right mr-4 text-sm py-1">Mail Password</label>
                         <div class="w-full block sm:w-3/4 max-w-lg">
                             <input type="text" id="mailPassword" v-model="mailPassword" ref="mailPassword" class="w-full px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
-                            <p class="mt-3 text-sm" v-show="mailHost.includes('gmail')">
+                            <p class="mt-3 text-sm text-gray-700" v-show="mailHost.includes('gmail')">
                                 For Gmail, you should not use your regular Gmail password above. Instead, please use App specific password.
-                                Please <a href="https://support.google.com/accounts/answer/185833" target="_blank" class="text-blue-500 hover:underline">follow this link</a>
-                                to obtain your Gmail App Password.
+                                Get your <a href="https://support.google.com/accounts/answer/185833" target="_blank" class="text-blue-500 hover:underline">Gmail App Password</a> here.
                             </p>
                         </div>
                     </div>
 
 
                     <div v-if="showMailgun" class="w-full sm:flex mt-2">
-                        <label for="mailgunDomian" class="block w-full sm:w-1/4 text-sm py-1">Mailgun Domain</label>
+                        <label for="mailgunDomian" class="block w-full sm:w-1/4 text-right mr-4 text-sm py-1">Mailgun Domain</label>
                         <input type="text" id="mailgunDomian" v-model="mailgunDomian" ref="mailgunDomian" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                     </div>
                     <div v-if="showMailgun" class="w-full sm:flex mt-2">
-                        <label for="mailgunSecret" class="block w-full sm:w-1/4 text-sm py-1">Mailgun Secret</label>
+                        <label for="mailgunSecret" class="block w-full sm:w-1/4 text-right mr-4 text-sm py-1">Mailgun Secret</label>
                         <input type="text" id="mailgunSecret" v-model="mailgunSecret" ref="mailgunSecret" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                     </div>
                     <div v-if="showMailgun" class="w-full sm:flex mt-2 mb-4">
-                        <label for="mailgunEndpoint" class="block w-full sm:w-1/4 text-sm py-1">Mailgun Endpoint</label>
+                        <label for="mailgunEndpoint" class="block w-full sm:w-1/4 text-right mr-4 text-sm py-1">Mailgun Endpoint</label>
                         <input type="text" id="mailgunEndpoint" v-model="mailgunEndpoint" ref="mailgunEndpoint" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                     </div>
 
 
                     <div v-if="showPostmark" class="w-full sm:flex mt-2 mb-4">
-                        <label for="postmarkToken" class="block w-full sm:w-1/4 text-sm py-1">Postmark Token</label>
+                        <label for="postmarkToken" class="block w-full sm:w-1/4 text-right mr-4 text-sm py-1">Postmark Token</label>
                         <input type="text" id="postmarkToken" v-model="postmarkToken" ref="postmarkToken" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                     </div>
 
 
                     <div v-if="showSes" class="w-full sm:flex mt-2">
-                        <label for="sesKey" class="block w-full sm:w-1/4 text-sm py-1">SES Key</label>
+                        <label for="sesKey" class="block w-full sm:w-1/4 text-right mr-4 text-sm py-1">SES Key</label>
                         <input type="text" id="sesKey" v-model="sesKey" ref="sesKey" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                     </div>
                     <div v-if="showSes" class="w-full sm:flex mt-2">
-                        <label for="sesSecret" class="block w-full sm:w-1/4 text-sm py-1">SES Secret</label>
+                        <label for="sesSecret" class="block w-full sm:w-1/4 text-right mr-4 text-sm py-1">SES Secret</label>
                         <input type="text" id="sesSecret" v-model="sesSecret" ref="sesSecret" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                     </div>
                     <div v-if="showSes" class="w-full sm:flex mt-2 mb-4">
-                        <label for="sesRegion" class="block w-full sm:w-1/4 text-sm py-1">SES Region</label>
+                        <label for="sesRegion" class="block w-full sm:w-1/4 text-right mr-4 text-sm py-1">SES Region</label>
                         <input type="text" id="sesRegion" v-model="sesRegion" ref="sesRegion" class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none">
                     </div>
 
-                </div>
+
+                    <div class="w-full sm:flex mt-2 mb-4">
+                        <div class="block w-full sm:w-1/4 text-right mr-4 text-sm py-1"></div>
+                        <div class="w-full sm:w-3/4 max-w-lg py-3 flex items-center justify-end">
+                            <button v-if="mailSaved" @click="testMail" class="px-3 py-1 mr-3 border border-blue-400 rounded text-blue-500 bg-transparent">Send Test Email</button>
+                            <t-button :loadingWheel="isSaving" textSize="normal" @click.native="saveMailConfig">
+                                Save Mail Configuration
+                            </t-button>
+                        </div>
+
+                    </div>
+
             </div>
+
         </div>
 
-        <t-button :loadingWheel="isSaving" textSize="normal" @click.native="saveMailConfig">
-            Save Mail Configuration
-        </t-button>
-
     </div>
+
+
 </template>
 
 <script>

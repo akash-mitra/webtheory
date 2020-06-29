@@ -18,12 +18,16 @@
                     Login
                 </div>
 
-                <div @click="tab='mail'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='mail'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
-                    Mail
+                <div @click="tab='notification'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='notification'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
+                    Notification
                 </div>
 
-                <div @click="tab='maintain'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='maintain'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
-                    maintain
+                <div @click="tab='services'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='services'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
+                    services
+                </div>
+
+                <div @click="tab='maintainance'" class="px-4 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='maintainance'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">
+                    maintainance
                 </div>
 
             </div>
@@ -44,14 +48,20 @@
         </div>
 
 
-        <div v-if="tab=='mail'">
+        <div v-if="tab=='notification'">
 
             <MailSettings></MailSettings>
 
         </div>
 
+        <div v-if="tab=='services'">
 
-        <div v-if="tab=='maintain'">
+            <SearchServiceSettings></SearchServiceSettings>
+
+        </div>
+
+
+        <div v-if="tab=='maintainance'">
 
             <UpdateSettings></UpdateSettings>
 
@@ -66,6 +76,7 @@
     import LoginSettings from './LoginSettings.vue'
     import MailSettings from './MailSettings.vue'
     import UpdateSettings from './UpdateSettings.vue'
+    import SearchServiceSettings from './SearchServiceSettings.vue'
 
     export default {
 
@@ -74,11 +85,12 @@
             LoginSettings,
             MailSettings,
             UpdateSettings,
+            SearchServiceSettings,
         },
 
         data() {
             return {
-                tab: 'site',
+                tab: 'services',
             }
         },
     }

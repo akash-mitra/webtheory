@@ -2,26 +2,23 @@
 
     <div @click="toggle" class="flex items-center cursor-pointer">
 
-        <div class="w-12 h-4 bg-gray-200 border border-blue-200 rounded-lg flex items-center" :class="value === trueValue ? 'justify-end' : 'justify-start'">
-
-            <div class="rounded-full h-4 w-4 shadow" :class="value === trueValue ? 'bg-blue-400' : 'bg-gray-400'">
-            </div>
-
+        <div class="flex items-center" :class="boxClass + (value === trueValue ? ' justify-start' : ' justify-end')">
+            <div :class="value === trueValue ? trueClass : falseClass"></div>
         </div>
 
-        <slot></slot>    
+        <slot></slot>
     </div>
 
 </template>
 
-<script> 
+<script>
 
 export default {
-    
+
     props: {
-        value: { 
-            
-            type: String, 
+        value: {
+
+            type: String,
             default: 'yes'
         },
 
@@ -33,6 +30,21 @@ export default {
         falseValue: {
             type: String,
             default: 'no'
+        },
+
+        boxClass: {
+            type: String,
+            default: 'w-12 h-4 bg-gray-200 border border-blue-200 rounded-lg'
+        },
+
+        trueClass: {
+            type: String,
+            default: 'rounded-full h-4 w-4 shadow bg-blue-400'
+        },
+
+        falseClass: {
+            type: String,
+            default: 'rounded-full h-4 w-4 shadow bg-gray-400'
         },
 
         // disabled: {
@@ -67,7 +79,7 @@ export default {
             let newValue = this.value === this.trueValue ? this.falseValue : this.trueValue
 
             this.$emit("input", newValue);
-        
+
         }
     },
 
