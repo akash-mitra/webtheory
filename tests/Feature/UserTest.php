@@ -246,4 +246,23 @@ class UserTest extends TestDataSetup
         $this->assertDatabaseHas('category_comments', ['user_id' => $categorycomment->user_id]);
         $this->assertDatabaseHas('page_comments', ['user_id' => $pagecomment->user_id]);
     }
+
+    /* Check User Test */
+    public function test_check_user()
+    {
+        /* Unauthenticated user check returns null */
+        $response = $this->get('/api/check');
+        $response->assertStatus(200)
+            ->assertJson([]);
+
+
+        /* Authenticated user check returns user details */
+        $response = $this->actingAs($this->adminUser)->get('/api/check');
+        $response->assertStatus(200)
+            ->assertJsonStructureExact([
+                'name', 'email',
+                'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences',
+                'created_at', 'updated_at', 'public_id', 'id', 'created_ago', 'updated_ago', 'url',
+            ]);
+    }
 }

@@ -139,8 +139,6 @@
 
 <script>
 
-import { getAuthUserId, getAuthUserRole } from '../auth.js';
-
 export default {
 
     data: function () {
@@ -169,8 +167,8 @@ export default {
             new_password: '',
             new_password_confirmation: '',
 
-            authUserId: null,
-            authUserRole: null,
+            authUserId: this.$root.authUser.id,
+            authUserRole: this.$root.authUser.role,
             errors: null
         }
     },
@@ -178,9 +176,10 @@ export default {
 
     created() {
 
-        this.authUserId = getAuthUserId()
+        console.log(this.$root.authUser)
+        // this.authUserId = getAuthUserId()
 
-        this.authUserRole = getAuthUserRole()
+        // this.authUserRole = getAuthUserRole()
 
         this.fetchUserAndLoadForm()
     },

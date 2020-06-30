@@ -11,6 +11,7 @@ use App\Http\Requests\UserRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -21,7 +22,7 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['check.permission']);
+        $this->middleware(['check.permission'])->except(['user']);
     }
 
     /**
@@ -260,6 +261,17 @@ class UserController extends Controller
         })->paginate(10);
 
         return response()->json(["categories" => $categorycomments, "pages" => $pagecomments]);
+    }
+
+    /**
+     * Logged In User
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function user(Request $request)
+    {
+        $user = Auth::user();
+        return response()->json($user, 200);
     }
 
 }

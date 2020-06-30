@@ -17,30 +17,6 @@ Vue.component('t-modal', require('./ui/TensorModal.vue').default);
 // define the route files for the vue-router
 import routes from './routes.js';
 const router = new VueRouter(routes);
-import { loginValid, isProtected, removeLocalCredential, getLocalUser } from './auth.js';
-
-
-
-// check for authentication status before navigation
-router.beforeEach((route, from, next) => {
-    if (isProtected(route))
-    {
-        if(loginValid())
-        {
-            next();
-        }
-        else
-        {
-            // if login is not valid, ask to login explicitly
-            next({path: "/app/login", query: { redirect: route.fullPath }});
-        }
-    }
-    else {
-        // this route does not require auth
-        // but make sure to always call next()
-        next();
-    }
-});
 
 
 // finally create the vue app
@@ -54,49 +30,15 @@ let app = new Vue({
 
     created() {
         if (this.authUser === null) {
-            this.authUser = getLocalUser()
+            window.axios.get('/api/check').then ((response) => {
+                // console.log(response.data)
+                this.authUser = response.data
+            });
         }
     },
 
 
     methods: {
-
-        onUserLogin (user) { this.authUser = user },
-
-        logout ()
-        {
-            let p = this
-            util.confirm('Logout?', 'Do you want to logout now?', function () {
-
-                removeLocalCredential()
-
-                p.authUser = null
-
-                window.axios.post('/api/logout')
-                    .then(r => {
-                        console.log(r)
-                        p.$router.push('/app/login')
-                    })
-                    .catch(e => { console.log(e) })
-            })
-        },
-
-        logoutDirect ()
-        {
-            let p = this
-
-            removeLocalCredential()
-
-            p.authUser = null
-
-            window.axios.post('/api/logout')
-            .then(r => {
-                console.log(r)
-                p.$router.push('/app/login')
-            })
-            .catch(e => { console.log(e) })
-
-        },
 
         hideOverlayMenu (e) {
             if(e.target.id != 'auth-user-avatar') this.showDropdownMenu = false;

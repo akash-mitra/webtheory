@@ -85,7 +85,7 @@
 
         <div class="w-full">
 
-            <router-view @login="onUserLogin"></router-view>
+            <router-view></router-view>
         </div>
 
 
@@ -96,18 +96,18 @@
 
     <script>
 
-    const toggleBtn = document.getElementById('menu-toggle-button'),
-        navMenu = document.getElementById('nav-menu'),
-        userMenu = document.getElementById('user-menu'),
-        toggleBtnBurger = document.getElementById('menu-toggle-btn-burger'),
-        toggleBtnX = document.getElementById('menu-toggle-btn-x');
+    // const toggleBtn = document.getElementById('menu-toggle-button'),
+    //     navMenu = document.getElementById('nav-menu'),
+    //     userMenu = document.getElementById('user-menu'),
+    //     toggleBtnBurger = document.getElementById('menu-toggle-btn-burger'),
+    //     toggleBtnX = document.getElementById('menu-toggle-btn-x');
 
-    toggleBtn.addEventListener('click', function () {
-        navMenu.classList.toggle('hidden');
-        userMenu.classList.toggle('hidden');
-        toggleBtnBurger.classList.toggle('hidden');
-        toggleBtnX.classList.toggle('hidden');
-    })
+    // toggleBtn.addEventListener('click', function () {
+    //     navMenu.classList.toggle('hidden');
+    //     userMenu.classList.toggle('hidden');
+    //     toggleBtnBurger.classList.toggle('hidden');
+    //     toggleBtnX.classList.toggle('hidden');
+    // })
 
     </script>
 

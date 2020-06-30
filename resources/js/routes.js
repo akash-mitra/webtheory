@@ -2,8 +2,6 @@ import Dashboard from './components/Dashboard.vue';
 import Pages from './components/Pages.vue';
 import Categories from './components/Categories.vue';
 import Templates from './components/Templates.vue';
-import Login from './components/Login.vue';
-import SocialLogin from './components/SocialLogin.vue';
 import CategoryEditor from './components/CategoryEditor.vue';
 import TemplateEditor from './components/TemplateEditor.vue';
 import Users from './components/Users.vue';
@@ -32,7 +30,6 @@ export default {
             path: '/app',
             component: Dashboard,
             name: 'dashboard',
-            meta: { requiresAuth: true }
         },
 
         /*
@@ -42,20 +39,17 @@ export default {
             path: '/app/pages',
             component: Pages,
             name: 'pages.index',
-            meta: { requiresAuth: true }
         },
 
         {
             path: '/app/pages/create',
             component: PageEditor,
             name: 'pages.create',
-            meta: { requiresAuth: true }
         },
         {
             path: '/app/pages/:id',
             component: PageEditor,
             name: 'pages.edit',
-            meta: { requiresAuth: true }
         },
 
 
@@ -66,36 +60,33 @@ export default {
             path: '/app/categories',
             component: Categories,
             name: 'categories.index',
-            meta: { requiresAuth: true }
         },
 
         {
             path: '/app/categories/create',
             component: CategoryEditor,
             name: 'categories.create',
-            meta: { requiresAuth: true }
         },
 
         {
             path: '/app/categories/:id',
             component: CategoryEditor ,
             name: 'categories.edit',
-            meta: { requiresAuth: true }
         },
 
 
         /*
          * Templates related routes
          */
-        { path: '/app/templates', component: Templates, meta: { requiresAuth: true } },
+        { path: '/app/templates', component: Templates, },
 
-        { path: '/app/templates/create', component: TemplateEditor, meta: { requiresAuth: true } },
+        { path: '/app/templates/create', component: TemplateEditor, },
 
-        { path: '/app/templates/:id/get/:fileIdentity', component: TemplateFileEditor, meta: { requiresAuth: true } },
+        { path: '/app/templates/:id/get/:fileIdentity', component: TemplateFileEditor, },
 
-        { path: '/app/templates/:id/create', component: TemplateFileEditor, meta: { requiresAuth: true } },
+        { path: '/app/templates/:id/create', component: TemplateFileEditor, },
 
-        { path: '/app/templates/:id', component: TemplateEditor, meta: { requiresAuth: true } },
+        { path: '/app/templates/:id', component: TemplateEditor, },
 
 
         /*
@@ -105,21 +96,18 @@ export default {
             path: '/app/users',
             component: Users,
             name: 'users.index',
-            meta: { requiresAuth: true }
         },
 
         {
             path: '/app/users/create',
             component: UserForm,
             name: 'users.create',
-            meta: { requiresAuth: true }
         },
 
         {
             path: '/app/users/:id',
             component: UserForm ,
             name: 'users.edit',
-            meta: { requiresAuth: true }
         },
 
 
@@ -130,7 +118,6 @@ export default {
             path: '/app/settings',
             component: Settings,
             name: 'settings.index',
-            meta: { requiresAuth: true }
         },
 
 
@@ -142,16 +129,7 @@ export default {
             path: '/app/gallery',
             component: Gallery,
             name: 'gallery.index',
-            meta: { requiresAuth: true }
         },
-
-
-        /*
-         * Login routes
-         */
-        { path: '/app/login', component: Login },
-
-        { path: "/app/social/login/:provider/callback", component: SocialLogin },
 
     ]
 
