@@ -3,7 +3,9 @@
     <div @click="toggle" class="flex items-center cursor-pointer">
 
         <div class="flex items-center" :class="boxClass + (value === trueValue ? ' justify-start' : ' justify-end')">
-            <div :class="value === trueValue ? trueClass : falseClass"></div>
+            <div :class="value === trueValue ? trueClass : falseClass">
+                <span v-if="showValue">{{ value }}</span>
+            </div>
         </div>
 
         <slot></slot>
@@ -47,18 +49,18 @@ export default {
             default: 'rounded-full h-4 w-4 shadow bg-gray-400'
         },
 
+        showValue: {
+            type: Boolean,
+            value: false
+        },
+
         // disabled: {
         //     type: Boolean,
         //     default: false
         // },
     },
 
-    // computed:  {
 
-    //     compVal () {
-    //         return this.trueVal === this.value
-    //     }
-    // },
 
     // data() {
     //     return {

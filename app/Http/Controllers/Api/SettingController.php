@@ -142,9 +142,9 @@ class SettingController extends Controller
     public function searchProvider(Request $request)
     {
         $data = $request->data;
-        foreach($data as $lov) {
-            $key = $lov['key'];
-            $value = is_null($lov['value']) ? '' : $lov['value'];
+        foreach($data as $key => $value) {
+            // $key = $lov['key'];
+            // $value = is_null($lov['value']) ? '' : $lov['value'];
             Parameter::setKey($key, $value);
         }
 

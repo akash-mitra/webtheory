@@ -23,8 +23,8 @@ class SettingTest extends TestDataSetup
         $response = $this->actingAs($this->adminUser)->get('/api/settings/social');
         $response->assertStatus(200)
             ->assertJsonStructureExact([
-                'FACEBOOK_CLIENT_ID', 'FACEBOOK_CLIENT_SECRET', 
-                'TWITTER_CLIENT_ID', 'TWITTER_CLIENT_SECRET', 
+                'FACEBOOK_CLIENT_ID', 'FACEBOOK_CLIENT_SECRET',
+                'TWITTER_CLIENT_ID', 'TWITTER_CLIENT_SECRET',
                 'LINKEDIN_CLIENT_ID', 'LINKEDIN_CLIENT_SECRET',
                 'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET',
             ]);
@@ -58,7 +58,7 @@ class SettingTest extends TestDataSetup
             ['key' => 'FACEBOOK_CLIENT_ID', 'value' => 'Id1234'],
             ['key' => 'FACEBOOK_CLIENT_SECRET', 'value' => 'Secret1234']
         ]];
-        
+
         /* Unauthenticated user cannot set login provider */
         $response = $this->post('/api/settings/loginprovider', $loginprovider, ['Accept' => 'application/json']);
         $response->assertStatus(401)
@@ -78,7 +78,7 @@ class SettingTest extends TestDataSetup
             ['key' => 'MAIL_DRIVER', 'value' => 'smtp'],
             ['key' => 'MAIL_FROM_ADDRESS', 'value' => 'test@test.com']
         ]];
-        
+
         /* Unauthenticated user cannot set mail provider */
         $response = $this->post('/api/settings/mailprovider', $mailprovider, ['Accept' => 'application/json']);
         $response->assertStatus(401)
@@ -111,7 +111,7 @@ class SettingTest extends TestDataSetup
     public function test_site_update_setting()
     {
         $this->assertTrue(true);
-        
+
         // DO NOT RUN - it will STASH existing uncommited code & refresh local site
         /*
         // Unauthenticated user cannot update site
@@ -126,7 +126,7 @@ class SettingTest extends TestDataSetup
 
         // Queue::assertPushed(UpdateSite::class);
 
-        // Test Site-Update Artisan Command 
+        // Test Site-Update Artisan Command
         $this->artisan('update:site')
             ->assertExitCode(0);
         */
@@ -143,7 +143,7 @@ class SettingTest extends TestDataSetup
         $response = $this->actingAs($this->adminUser)->get('/api/settings/search');
         $response->assertStatus(200)
             ->assertJsonStructureExact([
-                'SEARCHABLE', 'ALGOLIA_COMMUNITY_PLAN', 
+                'SEARCHABLE', 'ALGOLIA_COMMUNITY_PLAN',
                 'ALGOLIA_APP_ID', 'ALGOLIA_SECRET',
             ]);
         $this->assertDatabaseHas('parameters', ['key' => 'SEARCHABLE']);
@@ -153,12 +153,12 @@ class SettingTest extends TestDataSetup
     public function test_search_provider_setting()
     {
         $searchprovider = [ 'data' => [
-            ['key' => 'SEARCHABLE', 'value' => true],
-            ['key' => 'ALGOLIA_COMMUNITY_PLAN', 'value' => false],
-            ['key' => 'ALGOLIA_APP_ID', 'value' => 'Id1234'],
-            ['key' => 'ALGOLIA_SECRET', 'value' => 'Secret1234']
+            'SEARCHABLE' => '1',
+            'ALGOLIA_COMMUNITY_PLAN' => '0',
+            'ALGOLIA_APP_ID' => 'Id1234',
+            'ALGOLIA_SECRET' => 'Secret1234'
         ]];
-        
+
         /* Unauthenticated user cannot set search provider */
         $response = $this->post('/api/settings/searchprovider', $searchprovider, ['Accept' => 'application/json']);
         $response->assertStatus(401)
@@ -167,7 +167,7 @@ class SettingTest extends TestDataSetup
         /* Authenticated user can set search provider */
         $response = $this->actingAs($this->adminUser)->post('/api/settings/searchprovider', $searchprovider, ['Accept' => 'application/json']);
         $response->assertStatus(200);
-        $this->assertDatabaseHas('parameters', ['key' => 'SEARCHABLE', 'value' => true]);
+        $this->assertDatabaseHas('parameters', ['key' => 'SEARCHABLE', 'value' => '1']);
         $this->assertDatabaseHas('parameters', ['key' => 'ALGOLIA_APP_ID', 'value' => 'Id1234']);
     }
 }

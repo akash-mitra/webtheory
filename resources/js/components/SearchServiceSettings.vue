@@ -4,17 +4,37 @@
 
         <div class="rounded bg-white shadow">
 
-            <p class="text-sm px-6 py-4 border-b text-gray-700 uppercase">Full Text Search</p>
+            <p class="text-sm px-6 py-4 border-b text-gray-700 uppercase">
+                Full-Text Search
+            </p>
 
 
-
+            <div class="sm:flex justify-between">
                 <div class="text-sm text-gray-700 p-6">
                     Enable full-text search on every page of your website using Algolia.<br>
                     <a class="text-blue-500 underline" href="https://www.algolia.com/pricing/" target="_blank">Create Algolia account</a> and provide the API details below.
 
                 </div>
 
-                <div class="w-full my-4 bg-gray-100 py-4 px-6 shadow-inner border-b border-t">
+            </div>
+
+            <div>
+                <div class="w-full bg-gray-100 py-4 px-6 shadow-inner border-b border-t">
+                    <div class="w-full sm:flex mt-2">
+                        <label for="appId" class="block w-full sm:w-1/5 mr-4 text-sm py-1">Enable Search</label>
+                        <div class="w-full sm:w-4/5">
+                            <t-toggle
+                                v-model="enabled"
+                                true-value="On"
+                                false-value="Off"
+                                box-class="w-16 shadow-inner bg-white border rounded-l rounded-r cursor-pointer"
+                                true-class="h-6 px-3 bg-blue-400 text-blue-100 rounded shadow-sm"
+                                false-class="h-6 px-3 bg-gray-400 text-gray-100 rounded shadow-sm"
+                                :show-value="true"
+                                >
+                            </t-toggle>
+                        </div>
+                    </div>
                     <div class="w-full sm:flex mt-2">
                         <label for="appId" class="block w-full sm:w-1/5 mr-4 text-sm py-1">Algolia APP ID</label>
                         <input type="text" id="appId" v-model="appId" ref="appId" class="w-full sm:w-4/5 max-w-lg px-2 py-1 rounded appearance-none bg-gray-2001 focus:bg-white border focus:outline-none">
@@ -27,27 +47,24 @@
                         <label for="appId" class="block w-full sm:w-1/5 mr-4 text-sm py-1">Using Community Plan?</label>
                         <t-toggle
                             v-model="communityPlan"
-                            true-value="1"
-                            false-value="0"
-                            box-class="w-12 border shadow-inner bg-white rounded-l-full rounded-r-full cursor-pointer"
-                            true-class="h-6 w-6 bg-green-400 rounded-full shadow-sm"
-                            false-class="h-6 w-6 bg-gray-400 rounded-full shadow-sm"
-                            >
-                            <span class="text-sm text-gray-700 ml-3" v-if="communityPlan === '1'">Yes</span>
-                            <span class="text-sm text-gray-700 ml-3" v-else>No</span>
+                            true-value="Yes"
+                            false-value="No"
+                            box-class="w-16 shadow-inner bg-white border rounded-l rounded-r cursor-pointer"
+                            true-class="h-6 px-3 bg-blue-400 text-blue-100 rounded shadow-sm"
+                            false-class="h-6 px-3 bg-gray-400 text-gray-100 rounded shadow-sm"
+                            :show-value="true">
                         </t-toggle>
                     </div>
+
                 </div>
 
                 <div class="p-6">
-                    <t-button v-if="enabled==='0'" :loadingWheel="isUpdating" textSize="normal" @click.native="updateSearchSettings">
-                        Enable Search
-                    </t-button>
-                    <t-button v-else :loadingWheel="isUpdating" textSize="normal" @click.native="updateSearchSettings">
-                        Disable Search
+                    <t-button :loadingWheel="isUpdating" textSize="normal" @click.native="updateSearchSettings">
+                        Save Setting
                     </t-button>
                 </div>
 
+            </div>
 
         </div>
 
@@ -58,10 +75,10 @@
 export default {
     data() {
         return {
-            enabled: "0",
+            enabled: "Off",
             appId: null,
             appSecret: null,
-            communityPlan: "1",
+            communityPlan: "No",
 
             isUpdating: false,
         }
@@ -71,44 +88,43 @@ export default {
 
         this.isUpdating = true
 
-        // util.ajax ('get', '/api/parameters/socialprovider', {},  (response) => {
-        //         this.socialprovider = JSON.parse(response)
-        // })
+        util.ajax ('get', '/api/settings/search', {},  (response) => {
+            this.appId = response['ALGOLIA_APP_ID']
+            this.appSecret = response['ALGOLIA_SECRET']
+            this.communityPlan = response['ALGOLIA_COMMUNITY_PLAN'] === '0' ? 'No': 'Yes'
+            this.enabled = response['SEARCHABLE'] === '0' ? 'Off': 'On'
 
-        // util.ajax ('get', '/api/parameters/socialprovider_redirect_url', {},  (response) => {
-        //     this.socialProviderRedirectUrl = JSON.parse(response)
-        // })
-
-        // util.ajax ('get', '/api/settings/social', {},  (response) => {
-        //     this.facebookClientId = response['FACEBOOK_CLIENT_ID']
-        //     this.facebookClientSecret = response['FACEBOOK_CLIENT_SECRET']
-        //     this.twitterClientId = response['TWITTER_CLIENT_ID']
-        //     this.twitterClientSecret = response['TWITTER_CLIENT_SECRET']
-        //     this.linkedinClientId = response['LINKEDIN_CLIENT_ID']
-        //     this.linkedinClientSecret = response['LINKEDIN_CLIENT_SECRET']
-        //     this.googleClientId = response['GOOGLE_CLIENT_ID']
-        //     this.googleClientSecret = response['GOOGLE_CLIENT_SECRET']
-
-        //     this.isLoading = false
-        // })
+            this.isUpdating = false
+        })
     },
 
     methods: {
 
         updateSearchSettings () {
 
+            let data = {
+                'ALGOLIA_APP_ID': this.appId,
+                'ALGOLIA_SECRET': this.appSecret,
+                'ALGOLIA_COMMUNITY_PLAN': this.communityPlan === 'Yes' ? '1' : '0',
+                'SEARCHABLE': this.enabled === 'On' ? '1' : '0',
+            }
+
+            this.postToServer(data)
+        },
+
+        postToServer(data) {
             let p = this
             p.isUpdating = true
 
-            // window.axios.post('/api/settings/update/', {"commit_id": commitId})
-            // .then(response => {
-            //     util.notifySuccess ('Success', response.data)
-            //     p.isUpdating = false
-            // })
-            // .catch(error => {
-            //     util.notifyError ('Error', error)
-            //     p.isUpdating = false
-            // })
+            window.axios.post('/api/settings/searchprovider', {data: data})
+            .then(response => {
+                util.notifySuccess ('Success', response.data)
+                p.isUpdating = false
+            })
+            .catch(error => {
+                util.notifyError ('Error', error)
+                p.isUpdating = false
+            })
         }
     }
 }

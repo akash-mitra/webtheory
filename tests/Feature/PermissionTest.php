@@ -46,7 +46,7 @@ class PermissionTest extends TestDataSetup
             $this->get('/api/categories/' . $this->category->id)->assertStatus(200);
             $this->get('/api/categories/' . $this->category->id . '/pages')->assertStatus(200);
         }
-        
+
 
         $users = [$this->adminUser, $this->authorUser1];
         foreach($users as $user) {
@@ -86,7 +86,7 @@ class PermissionTest extends TestDataSetup
         $users = [$this->adminUser, $this->authorUser1];
         foreach($users as $user) {
             $page = $page = factory(Page::class)->make([
-                'category_id' => $this->category->id, 
+                'category_id' => $this->category->id,
                 'body_json' => '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading."}},{"type":"paragraph","data":{"text":"Test Paragraph"}}]}',
                 'editor' => 'editorjs'
             ]);
@@ -255,7 +255,12 @@ class PermissionTest extends TestDataSetup
         $this->actingAs($this->registeredUser)->get('/api/settings/search')->assertStatus(403);
 
 
-        $searchprovider = [ 'data' => [['key' => 'ALGOLIA_APP_ID', 'value' => 'Id1234'], ['key' => 'ALGOLIA_SECRET', 'value' => 'Secret1234']]];
+        $searchprovider = [
+            'data' => [
+                'ALGOLIA_APP_ID' => 'Id1234',
+                'ALGOLIA_SECRET' => 'Secret1234'
+            ]
+        ];
         $this->actingAs($this->adminUser)->post('/api/settings/searchprovider', $searchprovider, ['Accept' => 'application/json'])->assertStatus(200);
         $this->actingAs($this->authorUser1)->post('/api/settings/searchprovider', $this->data, ['Accept' => 'application/json'])->assertStatus(403);
         $this->actingAs($this->registeredUser)->post('/api/settings/searchprovider', $this->data, ['Accept' => 'application/json'])->assertStatus(403);
