@@ -212,3 +212,7 @@ Route::prefix('api')->middleware(['auth'])->group(function () {
 
 
 });
+
+// This is a catchall route.
+// This is required to direct load any blade file based on URL
+Route::any('/{any}', 'HomeController@catchAll')->where('any', '.*');

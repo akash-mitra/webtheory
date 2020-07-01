@@ -8,6 +8,7 @@ use App\User;
 use App\Parameter;
 use App\DataProvider;
 use App\Jobs\CaptureViewEvent;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -146,6 +147,23 @@ class HomeController extends Controller
 
         return view('terms', compact('data'));
     }
+
+
+
+    public function catchAll($any)
+    {
+        $bladeFileName = 'active.' . str_replace('/', '.', htmlentities($any));
+
+        if(view()->exists($bladeFileName))
+        {
+            $data = DataProvider::custom();
+
+            return view($bladeFileName, compact('data'));
+        }
+
+        return abort(404, 'This page does not exist');
+    }
+
 
 
     private function capture_analytics ($content_type, $content_id)

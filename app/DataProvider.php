@@ -69,6 +69,17 @@ class DataProvider {
     }
 
 
+    public static function custom()
+    {
+        return (object) [
+            "ref" => self::ref('custom'),
+            // "pages" => self::pages(),
+            "categories" => self::categories(),
+            "user" => auth()->user()
+        ];
+    }
+
+
 
     public static function categories ()
     {
