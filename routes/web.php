@@ -82,7 +82,7 @@ Route::get('app/{any?}', 'AdminController@app')->where('any', '.*')->name('admin
 // --------------------------------------------------------------------------------------------------------------------------
 
 
-Route::get('api/check', 'Api\UserController@user');
+// Route::get('api/check', 'Api\UserController@user');
 
 // Related to Users pages
 Route::get('api/profiles/{public}/pages', 'Api\ProfileController@pages')->name('profile.pages');

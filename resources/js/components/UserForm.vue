@@ -175,12 +175,6 @@ export default {
 
 
     created() {
-
-        console.log(this.$root.authUser)
-        // this.authUserId = getAuthUserId()
-
-        // this.authUserRole = getAuthUserRole()
-
         this.fetchUserAndLoadForm()
     },
 
@@ -188,11 +182,9 @@ export default {
     computed: {
         showSaveButton ()
         {
-
             if (this.authUserRole === 'admin')
                 return true
-            // else if (this.authUserId == this.id)
-                // return true
+         
             return false
         }
     },
