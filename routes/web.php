@@ -45,6 +45,7 @@ Route::get('app/social/login/{provider}/callback', 'Auth\SocialLoginController@c
 | FRONT-END RELATED ROUTES
 */
 Route::get('/', 'HomeController@root')->name('home');
+Route::get('/blog', 'HomeController@blog')->name('blog');
 Route::get('pages/{page}/{slug?}', 'HomeController@single')->name('pages.show');
 Route::get('categories/{category}/{slug?}', 'HomeController@category')->name('categories.show');
 Route::get('profiles/{public_id}', 'HomeController@profile')->name('profile.show');

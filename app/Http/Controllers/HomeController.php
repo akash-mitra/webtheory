@@ -27,6 +27,20 @@ class HomeController extends Controller
 
 
     /**
+     * Display a blog page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function blog()
+    {
+        $data = DataProvider::home();
+
+        return view('active.blog', compact('data'));
+    }
+
+
+
+    /**
      * Display the single page view.
      *
      * @return \Illuminate\Http\Response

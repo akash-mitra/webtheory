@@ -26,7 +26,7 @@ trait DefaultTemplateTests {
 
             'login-modal.blade.php',
             'user-menu.blade.php',
-
+            'blog.blade.php'
         ],
 
         'Serenity Dark' => [
@@ -39,7 +39,7 @@ trait DefaultTemplateTests {
 
             'login-modal.blade.php',
             'user-menu.blade.php',
-
+            'blog.blade.php'
         ]
     ];
 
