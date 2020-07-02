@@ -73,7 +73,7 @@ class DataProvider {
     {
         return (object) [
             "ref" => self::ref('custom'),
-            // "pages" => self::pages(),
+            "pages" => self::pages(),
             "categories" => self::categories(),
             "user" => auth()->user()
         ];
