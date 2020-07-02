@@ -2,7 +2,7 @@
 
     <div @click="toggle" class="flex items-center cursor-pointer">
 
-        <div class="flex items-center" :class="boxClass + (value === trueValue ? ' justify-start' : ' justify-end')">
+        <div class="flex items-center" :class="boxClass + (value === trueValue ? ' justify-end' : ' justify-start')">
             <div :class="value === trueValue ? trueClass : falseClass">
                 <span v-if="showValue">{{ value }}</span>
             </div>
@@ -54,29 +54,12 @@ export default {
             value: false
         },
 
-        // disabled: {
-        //     type: Boolean,
-        //     default: false
-        // },
     },
 
-
-
-    // data() {
-    //     return {
-    //         toggled: this.value
-    //     };
-    // },
 
     methods: {
 
         toggle() {
-
-            // if (this.disabled || e.keyCode === 9) { // not if disabled or tab is pressed
-            //     e.stop();
-            // }
-
-            // this.toggled = ! this.toggled;
 
             let newValue = this.value === this.trueValue ? this.falseValue : this.trueValue
 

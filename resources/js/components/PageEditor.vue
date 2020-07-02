@@ -188,22 +188,32 @@
                 Publication
             </div>
 
-            <div class="bg-white rounded w-full py-6 px-4 border-t-2 border-blue-400 shadow">
-                <t-toggle id="changeStatus" class="mb-4" v-model="status" true-value="Live" false-value="Draft">
-                    <div class="ml-2 text-gray-700 text-sm">
-                        {{ status }}
-                    </div>
+            <div class="bg-white rounded w-full border-t-2 border-blue-400 shadow">
+                <t-toggle
+                    id="changeStatus"
+                    class="pt-6 px-4 mb-4"
+                    v-model="status"
+                    true-value="Live"
+                    false-value="Draft"
+                    box-class="w-20 shadow-inner bg-gray-100 border rounded-l rounded-r cursor-pointer"
+                    true-class="h-6 px-3 bg-blue-400 text-blue-100 rounded shadow-sm"
+                    false-class="h-6 px-3 bg-gray-400 text-gray-100 rounded shadow-sm"
+                    :show-value="true"
+                >
                 </t-toggle>
-                <div class="w-full mb-2 text-xs text-gray-700">
+                <div class="px-4 w-full mb-4 text-xs text-gray-700">
                     Only Live page will be accessible to site visitors.
+                </div>
+
+                <div class="flex justify-end p-4 text-right bg-gray-100 border-t">
+                    <span id="deletePage" @click="deletePage" class="border border-red-500 cursor-pointer text-red-500 hover:text-white px-3 py-2 rounded text-sm hover:bg-red-500">
+                        Delete this page
+                    </span>
+
                 </div>
             </div>
 
-            <div class="pt-10 pb-3 text-right">
-                <span id="deletePage" class="text-sm text-grey-600 hover:text-red-600 cursor-pointer" @click="deletePage">
-                    Delete this page
-                </span>
-            </div>
+
 
         </div><!-- end of setting section -->
 

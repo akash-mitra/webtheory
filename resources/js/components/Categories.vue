@@ -3,7 +3,8 @@
     <div class="max-w-4xl mx-auto">
 
         <div class="px-6 my-6 w-full flex justify-between items-center">
-            <h2 class="text-gray-600 text-2xl flex items-center">
+            <h2 class="text-indigo-600 text-2xl flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
                 Categories
                 <span class="ml-3 rounded-lg py-1 px-2 shadow-inner text-xs bg-gray-300">{{ categories.length }}</span>
             </h2>

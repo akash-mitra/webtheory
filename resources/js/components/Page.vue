@@ -3,18 +3,23 @@
     <div class="w-full bg-white shadow border-t border-blue-300 rounded my-4">
         <div class="w-full relative">
 
-            <div :id="'change-status-page-' + page.id" class="absolute top-0 mt-4 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
-                @click="changeStatus(page, page.status==='Draft'?'Live':'Draft')">
-
-                <div class="flex items-center">
-                    <div :class="page.status==='Draft'? 'bg-gray-400':'bg-green-400'" class="rounded-full h-3 w-3 mr-2"></div>
-                    <span :class="page.status==='Draft'? 'text-gray-600':'text-green-600'">{{ page.status }}</span>
-                </div>
-            </div>
+            <t-toggle
+                    :id="'change-status-page-' + page.id"
+                    class="absolute top-0 mt-4 right-0 mr-8"
+                    v-model="page.status"
+                    true-value="Live"
+                    false-value="Draft"
+                    box-class="w-20 shadow-inner bg-gray-100 border rounded-l rounded-r cursor-pointer"
+                    true-class="h-6 px-3 bg-blue-400 text-blue-100 rounded shadow-sm"
+                    false-class="h-6 px-3 bg-gray-400 text-gray-100 rounded shadow-sm"
+                    :show-value="true"
+                    @input="changePageStatus(page, page.status)"
+                >
+            </t-toggle>
 
             <h3 class="px-6 pt-4 text-blue-400 text-sm">{{ page.category ? page.category.name : '' }}</h3>
 
-            <h3 :id="'show-page-' + page.id" class="px-6 pt-2 text-blue-800 font-semibold cursor-pointer" @click="openPageEditor(page)">
+            <h3 :id="'show-page-' + page.id" class="px-6 pt-2 text-blue-800 font-semibold cursor-pointer" @click="openPageInEditor(page)">
                 {{ page.title }}
             </h3>
 
@@ -57,7 +62,7 @@ export default {
     methods: {
 
         // open a specific page in editor
-        openPageEditor (page)
+        openPageInEditor (page)
         {
             this.$router.push({ path: '/app/pages/' + page.id })
         },
@@ -69,7 +74,7 @@ export default {
 
 
         // change the status (Draft / Live) of a specific page
-        changeStatus (page, status)
+        changePageStatus (page, status)
         {
             util.ajax ('put', '/api/pages/' + page.id + '/status', { "status": status }, (response) => {
 

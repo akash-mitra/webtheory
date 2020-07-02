@@ -3,7 +3,8 @@
     <div class="max-w-4xl mx-auto mb-12">
 
         <div class="px-6 my-6 w-full flex justify-between items-center">
-            <h2 class="text-gray-600 text-2xl flex items-center">
+            <h2 class="text-indigo-600 text-2xl flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                 Users
                 <span class="ml-3 rounded-lg py-1 px-2 shadow-inner text-xs bg-gray-300">{{ paginatedUsers.data.length }}</span>
             </h2>

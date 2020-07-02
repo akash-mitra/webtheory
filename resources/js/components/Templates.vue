@@ -3,7 +3,12 @@
     <div class="max-w-5xl mx-auto">
 
         <div class="px-6 my-6 w-full flex justify-between items-center">
-            <h2 class="text-gray-600 text-2xl flex items-center">Templates </h2>
+
+            <h2 class="text-indigo-600 text-2xl flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                Templates
+            </h2>
+
             <a id="createTemplate" href="/app/templates/create" class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow">Create</a>
         </div>
 

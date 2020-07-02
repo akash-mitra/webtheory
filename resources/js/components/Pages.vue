@@ -3,7 +3,10 @@
     <div class="max-w-4xl mx-auto mb-12">
 
         <div class="px-6 my-6 w-full flex justify-between items-center">
-            <h2 class="text-gray-600 text-2xl flex items-center">Pages</h2>
+            <h2 class="text-indigo-600 text-2xl flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                Pages
+            </h2>
             <a href="/app/pages/create" class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow">Create</a>
         </div>
 
