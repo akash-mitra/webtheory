@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Exception;
+use ZipArchive;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
@@ -35,7 +37,7 @@ class Template extends Model
     /**
      * Reads template info file if present and returns the data in an array
      */
-    private static function getTemplateInfoFromFile($name)
+    private static function getTemplateInfoFromFile($name, $disk = 'repo')
     {
         $info = [
             'name' => $name,
@@ -45,9 +47,19 @@ class Template extends Model
             'parameters' => (object)[]
         ];
 
-        if(Storage::disk('repo')->exists("templates/{$name}/.info"))
+        $path = '';
+
+        if ($disk === 'repo') {
+            $path = "templates/{$name}/.info";
+        }
+
+        if ($disk === 'templates') {
+            $path = "{$name}/.info";
+        }
+
+        if(Storage::disk($disk)->exists($path))
         {
-            $fileData = json_decode(Storage::disk('repo')->get("templates/{$name}/.info"), true);
+            $fileData = json_decode(Storage::disk($disk)->get($path), true);
 
             $info = array_replace_recursive($info, $fileData);
         }
@@ -228,6 +240,122 @@ class Template extends Model
         }, Storage::disk('repo')->allFiles('templates/' . $from));
 
         return $template;
+    }
+
+
+    public function download()
+    {
+
+        $zipFile = Str::slug($this->name) . '.zip';
+
+        $zipper = new ZipArchive();
+        $zipper->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+        array_map(function ($file) use ($zipper){
+
+            return $zipper->addFile(
+                Storage::disk('templates')->path($file),
+                basename($file)
+            );
+
+        }, Storage::disk('templates')->allFiles($this->name));
+
+        $zipper->close();
+
+        return response()->download($zipFile);
+    }
+
+
+
+    public static function createFromUpload($name, $file)
+    {
+        $template = null;
+
+        try {
+
+            // create the template
+            $template = Template::createNewTemplate(['name' => $name]);
+
+            // save the zip file as 'bundle.zip' in the template folder
+            Storage::disk('templates')->putFileAs($template->name, $file, 'bundle.zip');
+
+            // unzip the bundle.zip
+            self::unzipTemplateBundle($template->name);
+
+            // delete the original bundle.zip file
+            Storage::disk('templates')->delete($template->name . '/bundle.zip');
+
+            // check if there is a .info file in the extract
+            $info = self::getTemplateInfoFromFile($template->name, 'templates');
+            $template->description = $info->description;
+            $template->media_url = $info->media_url;
+            $template->parameters = json_encode($info->parameters);
+            $template->save();
+
+            return $template;
+
+        } catch(\Exception $e) {
+
+            // if there is any error, anywhere above,
+            // we will revert back all the changes.
+
+            // revert database
+            if ($template) {
+                $template->delete();
+            }
+
+            // revert storage
+            if (Storage::disk('templates')->exists($name))
+            {
+                Storage::disk('templates')->deleteDirectory($name);
+            }
+
+            throw $e;
+        }
+    }
+
+
+    private static function unzipTemplateBundle($templateName)
+    {
+        $path = Storage::disk('templates')->path($templateName);
+        $zip = new ZipArchive();
+        $files = [];
+
+        if ($zip->open($path . '/bundle.zip') === TRUE) {
+
+            for ($i = 0; $i < $zip->numFiles; $i++) {
+                $filename = $zip->getNameIndex($i);
+
+                if(substr($filename, 0, 9) === "__MACOSX/") {
+                    continue;
+                }
+
+                if(in_array(basename($filename), ['.DS_Store', '', ' ', null])) {
+                    continue;
+                }
+
+                if (! in_array(
+                    strtolower (pathinfo($filename, PATHINFO_EXTENSION)),
+                    ['bmp', 'css', 'gif', 'htm', 'html', 'ico', 'info', 'jpeg', 'jpg', 'js', 'pdf', 'php', 'png', 'ts', 'txt', 'vue'])
+                )
+                {
+                    continue;
+                }
+
+                array_push($files, $filename);
+
+                if($fileData = $zip->getFromName($filename)) {
+
+                    Storage::disk('templates')->put($templateName . '/' . basename($filename), $fileData);
+                }
+            }
+            $zip->close();
+
+        } else {
+            return [];
+        }
+
+        return $files;
     }
 
 

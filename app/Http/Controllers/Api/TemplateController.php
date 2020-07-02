@@ -154,4 +154,28 @@ class TemplateController extends Controller
 
         return response($contents, 200)->header('Content-Type', 'text/plain');
     }
+
+
+
+    public function download (Template $template)
+    {
+        return $template->download();
+    }
+
+
+
+    public function upload (Request $request)
+    {
+        $request->validate([
+            'file' => 'file',
+            'name' => [
+                'required',
+                'max:100',
+                'regex:/^[\pL0-9\s\-_.]+$/u',
+                'unique:templates'
+            ]
+        ]);
+
+        return Template::createFromUpload($request->input('name'), $request->file('file'));
+    }
 }

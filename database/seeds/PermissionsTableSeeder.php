@@ -79,7 +79,7 @@ class PermissionsTableSeeder extends Seeder
 
         DB::table('permissions')->insert(['role' => 'registered', 'resource' => 'pages', 'action' => 'index', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'registered', 'resource' => 'pages', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
-        
+
 
         /********************
          * MEDIA
@@ -154,6 +154,8 @@ class PermissionsTableSeeder extends Seeder
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'destroy', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'duplicate', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'import', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'download', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'upload', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
 
 
     }

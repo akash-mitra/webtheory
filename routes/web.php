@@ -170,6 +170,8 @@ Route::prefix('api')->middleware(['auth'])->group(function () {
     // --------------------------------------------------------------------------------------------------------------------------
     Route::get('templates', 'Api\TemplateController@index')->name('templates.index');
     Route::get('templates/{template}', 'Api\TemplateController@show')->name('templates.show');
+    Route::get('templates/{template}/download', 'Api\TemplateController@download')->name('templates.download');
+    Route::post('templates/upload', 'Api\TemplateController@upload')->name('templates.upload');
     Route::post('templates', 'Api\TemplateController@store')->name('templates.store');
 
     Route::post('templates/{template}/add', 'Api\TemplateController@add')->name('templates.add');

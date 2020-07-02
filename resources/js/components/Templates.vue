@@ -8,8 +8,12 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
                 Templates
             </h2>
+            <div class="flex items-center">
 
-            <a id="createTemplate" href="/app/templates/create" class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow">Create</a>
+                <FileUploader></FileUploader>
+
+                <a id="createTemplate" href="/app/templates/create" class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow">Create</a>
+            </div>
         </div>
 
 
@@ -40,6 +44,7 @@
                 <div class="bg-white shadow-lg relative overflow-hidden">
                     <div class="w-full flex justify-right absolute top-0 py-6 px-8">
                         <svg v-if="template.active" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 469 469" class="fill-current w-8 h-8 p-1 bg-green-500 text-white text-xs rounded-full shadow-lg font-bold border border-white uppercase"><path d="M463 96l-22-22c-9-8-24-8-33 0L180 302 61 183c-9-9-24-9-33 0L7 205c-9 9-9 23 0 32l157 158a23 23 0 0032 0l266-266c9-9 9-24 1-33z"/></svg>
+
                     </div>
 
                     <div class="block w-full pattern-wall bg-blue-100" style='min-height: 250px; min-width: 400px'>
@@ -48,8 +53,11 @@
 
                     <div class="w-full p-6 flex flex-col justify-around">
 
-                        <h3 class="text-lg font-bold py-1">
+                        <h3 class="text-lg font-bold py-1 flex items-center justify-between">
                             {{ template.name }}
+                            <a :href="'/api/templates/' + template.id + '/download'">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 ml-4 text-gray-400 hover:text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            </a>
                         </h3>
 
                         <div class="text-sm text-gray-700 py-2 h-20 overflow-hidden">
@@ -120,6 +128,9 @@
 </template>
 
 <script>
+
+    import FileUploader from './FileUploader.vue'
+
     export default {
 
         data() {
@@ -133,7 +144,13 @@
                 selected: null,
                 tab: 'installed',
                 searchPhrase: '',
+
+                templateUploadModal: true,
             }
+        },
+
+        components: {
+            FileUploader,
         },
 
         created() {
