@@ -174,7 +174,7 @@
                 util.ajax('post', '/api/templates/' + template.id + '/activate', {}, (response) => {
                     template.active = true
 
-                    util.notifySuccess('Template Changed', template.name + ' is now the default template for "' + template.type + '" pages.')
+                    util.notifySuccess('Template Changed', template.name + ' is now the default template for pages.')
 
                     p.isSaving = false
                 })
