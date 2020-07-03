@@ -150,7 +150,7 @@ def analyze_and_report():
         print(msg + negative)
 
 
-    # check there are no unrecognised files in the templates
+    # check there are no unrecognised files in the repo/templates
     msg = webpackTemplates.bcolors.OKBLUE + '3. repo/templates contains only default templates?'
     files = os.listdir('./storage/repo/templates/')
     # exclude any dot files
@@ -164,8 +164,21 @@ def analyze_and_report():
         print ('Default template(s) is/are:')
         print (configs.DEFAULT_TEMPLATES)
 
+
+    # check there are no unrecognised files in the view/templates
+    msg = webpackTemplates.bcolors.OKBLUE + '4. view/templates contains only Serenity template?'
+    files = os.listdir('./resources/views/templates/')
+    # exclude any dot files
+    templates_present = list(filter(lambda item: item.startswith(".")==False, files))
+    if set(templates_present) == set(['Serenity']):
+        print(msg + positive)
+    else:
+        print(msg + negative)
+        print ('view/templates contains:')
+        print (templates_present)
+
     # check all the css files for the templates are present
-    msg = webpackTemplates.bcolors.OKBLUE + '4. All CSS files for Default templates are present?'
+    msg = webpackTemplates.bcolors.OKBLUE + '5. All CSS files for Default templates are present?'
     present = True
     for file in configs.FE_CSS_FILES:
         if not os.path.isfile('./public/css/' + file):
@@ -179,7 +192,7 @@ def analyze_and_report():
 
 
     # all javascript file is present
-    msg = webpackTemplates.bcolors.OKBLUE + '5. All frontend and backend javascript files are present?'
+    msg = webpackTemplates.bcolors.OKBLUE + '6. All frontend and backend javascript files are present?'
     present = True
     for file in configs.JS_FILES:
         if not os.path.isfile('./public/js/' + file):
@@ -192,7 +205,7 @@ def analyze_and_report():
 
 
     # .gitignore is present in active directory
-    msg = webpackTemplates.bcolors.OKBLUE + '6. .gitignore present in views/active?'
+    msg = webpackTemplates.bcolors.OKBLUE + '7. .gitignore present in views/active?'
     if os.path.isfile('./resources/views/active/.gitignore'):
         print (msg + positive)
     else:
@@ -200,7 +213,7 @@ def analyze_and_report():
 
 
     # .gitignore is present in active directory
-    msg = webpackTemplates.bcolors.OKBLUE + '7. .gitignore present in views/templates?'
+    msg = webpackTemplates.bcolors.OKBLUE + '8. .gitignore present in views/templates?'
     if os.path.isfile('./resources/views/templates/.gitignore'):
         print (msg + positive)
     else:

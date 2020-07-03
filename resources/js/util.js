@@ -86,6 +86,7 @@
     /**
      * ---------------------------------------------------------------
      * Creates an alert as a toast notification
+     * Example use: util.toast({icon: 'error', title: "Try again."})
      * ---------------------------------------------------------------
      **/
     util.toast = function (param) {
