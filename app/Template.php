@@ -182,7 +182,11 @@ class Template extends Model
         $files = array_filter(
             Storage::disk('active')->files(),
             function ($file) {
-                return basename($file) != '.gitignore';
+
+                if (basename($file) === '.gitignore') return false;
+                if (Str::endsWith($file, '___test_bkp')) return false;
+
+                return true;
             }
         );
 

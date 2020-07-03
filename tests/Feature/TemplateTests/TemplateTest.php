@@ -11,9 +11,20 @@ use Illuminate\Support\Facades\Storage;
 class TemplateTest extends TestDataSetup
 {
 
-    use DefaultTemplateTests,
-        InputValidationTests;
+    use DefaultTemplateTests, InputValidationTests;
 
+    // public function setUp(): void {
+    //     parent::setUp();
+
+    //     $this->backupActiveDirBladeViewFiles();
+    // }
+
+    // public function tearDown(): void {
+
+    //     $this->restoreActiveDirBladeViewFiles();
+
+    //     parent::tearDown();
+    // }
 
     public $templateStructureJson = [
         'name',
@@ -391,6 +402,14 @@ class TemplateTest extends TestDataSetup
     }
 
 
+
+    public function test_correct_template_is_loaded_when_visiting_home()
+    {
+        $this->get('/')->assertViewIs('active.home');
+    }
+
+
+
     private function createNewTemplate($name = null)
     {
         $input = is_array($name)? $name : [
@@ -413,7 +432,7 @@ class TemplateTest extends TestDataSetup
         array_map(function ($file) {
             if(Str::endsWith($file, 'blade.php'))
             {
-                Storage::disk('active')->move($file, $file . '_bkp');
+                Storage::disk('active')->move($file, $file . '___test_bkp');
             }
         }, Storage::disk('active')->files());
     }
@@ -423,9 +442,9 @@ class TemplateTest extends TestDataSetup
     {
         array_map(function ($file) {
 
-            if(Str::endsWith($file, '_bkp'))
+            if(Str::endsWith($file, '___test_bkp'))
             {
-                $originalFileName = Str::before($file, '_bkp');
+                $originalFileName = Str::before($file, '___test_bkp');
 
                 if(Storage::disk('active')->exists($originalFileName))
                 {
@@ -439,8 +458,5 @@ class TemplateTest extends TestDataSetup
     }
 
 
-    public function test_correct_template_is_loaded_when_visiting_home()
-    {
-        $this->get('/')->assertViewIs('active.home');
-    }
+
 }

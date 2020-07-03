@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Storage;
 /**
  * This trait contains a collection of tests to make sure that
  * default template is always present in tne directory and activated.
- * This is to make sure that when this code is deployed, it contains
- * the relevant structures and files.
+ * This is to make sure that when this code is deployed,
+ * it contains the relevant structures and files.
  */
 trait DefaultTemplateTests {
 
