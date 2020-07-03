@@ -179,7 +179,14 @@ class Template extends Model
 
     public static function cleanActive()
     {
-        return Storage::delete(Storage::disk('active')->files());
+        $files = array_filter(
+            Storage::disk('active')->files(),
+            function ($file) {
+                return basename($file) != '.gitignore';
+            }
+        );
+
+        return Storage::disk('active')->delete($files);
     }
 
 
