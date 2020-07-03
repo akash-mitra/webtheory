@@ -175,6 +175,7 @@ Route::prefix('api')->middleware(['auth'])->group(function () {
     Route::post('templates', 'Api\TemplateController@store')->name('templates.store');
 
     Route::post('templates/{template}/add', 'Api\TemplateController@add')->name('templates.add');
+    Route::post('templates/{template}/remove', 'Api\TemplateController@remove')->name('templates.remove');
     Route::get('templates/{template}/get/{file}', 'Api\TemplateController@get')->name('templates.get');
 
     Route::post('templates/{template}/activate', 'Api\TemplateController@activate')->name('templates.activate');

@@ -29,6 +29,7 @@ class TemplateTest extends TestDataSetup
         ]
     ];
 
+
     public function test_user_can_create_new_template()
     {
         $template = [
@@ -68,7 +69,7 @@ class TemplateTest extends TestDataSetup
             ->post('/api/templates/' . $template->id . '/add', [
                 'name' => 'home.blade.php',
                 'code' => $content
-            ]);
+            ])->assertSuccessful();
 
         // then the file will be added in the template directory
         $this->assertTrue(
@@ -78,6 +79,29 @@ class TemplateTest extends TestDataSetup
 
         // and the file content will be set to the given content
         $this->assertEquals($content, Storage::disk('templates')->get($template->name . '/' . 'home.blade.php'));
+
+        Storage::disk('templates')->deleteDirectory($template->name);
+    }
+
+
+
+    public function test_a_file_can_be_deleted_from_template()
+    {
+        // given an existing template
+        $template = $this->createNewTemplate();
+
+        // if I send a delete file request...
+        $response = $this->actingAs($this->adminUser)
+            ->post('/api/templates/' . $template->id . '/remove', [
+                'name' => base64_encode('home.blade.php')
+            ]);
+        $response->assertSuccessful();
+
+        // then the file will be deleted in the template directory
+        $this->assertFalse(
+            Storage::disk('templates')->exists($template->name . '/home.blade.php'),
+            'File home.blade.php still exists under template ' . $template->name . ' in spite of deletion request.'
+        );
 
         Storage::disk('templates')->deleteDirectory($template->name);
     }

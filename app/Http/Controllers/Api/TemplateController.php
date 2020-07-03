@@ -139,6 +139,15 @@ class TemplateController extends Controller
 
 
 
+    public function remove (Template $template, Request $request)
+    {
+        $name = base64_decode($request->input('name'));
+
+        $template->deleteFile($name);
+    }
+
+
+
     public function get(Template $template, String $file)
     {
         $path = $template->name . '/' . base64_decode($file);

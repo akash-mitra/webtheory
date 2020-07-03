@@ -148,6 +148,7 @@ class PermissionsTableSeeder extends Seeder
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'store', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'add', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'remove', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'get', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'activate', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'templates', 'action' => 'update', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);

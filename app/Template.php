@@ -34,6 +34,7 @@ class Template extends Model
     }
 
 
+
     /**
      * Reads template info file if present and returns the data in an array
      */
@@ -83,16 +84,12 @@ class Template extends Model
     public function addFile ($name, $code)
     {
         // if the file already exists, delete the file!
-        if (Storage::disk('templates')->exists($this->name . '/' . $name))
-        {
-            Storage::disk('templates')->delete($this->name . '/' . $name);
-        }
+        $this->deleteFile($name);
 
         Storage::disk('templates')->put($this->name . '/' . $name, $code);
 
         if($this->active)
         {
-
             // if this is an active template,
             // we need to update the file in active views directory as well
             // if the file already exists, delete the file!
@@ -103,8 +100,16 @@ class Template extends Model
 
             Storage::disk('active')->put($name, $code);
         }
+    }
 
 
+
+    public function deleteFile($name)
+    {
+        if (Storage::disk('templates')->exists($this->name . '/' . $name))
+        {
+            return Storage::disk('templates')->delete($this->name . '/' . $name);
+        }
     }
 
 
@@ -128,31 +133,13 @@ class Template extends Model
     public function activate ()
     {
 
-        // Copy all the files to the view directory.
+        //clean the contents from active directory
+        self::cleanActive();
 
-        array_map(function ($file) {
-
-            // Exclude the hidden files starting with "."
-            if(! Str::startsWith($file, '.'))
-            {
-                // Before copying, delete the file if it is already there.
-                if(Storage::disk('active')->exists(basename($file)))
-                {
-                    Storage::disk('active')->delete(basename($file));
-                }
-
-                // Then copy the file.
-                Storage::disk('active')->writeStream(
-                    basename($file),
-                    Storage::disk('templates')->readStream($file)
-                );
-            }
-
-        }, Storage::disk('templates')->files($this->name));
-
+        // Copy all the files to the active view directory.
+        $this->copyToActive();
 
         // activate the database
-
         Template::query()->update(['active' => false]);
 
         $this->active = true;
@@ -162,6 +149,39 @@ class Template extends Model
         // delete cache for template paramters
         $this->clearTemplateParametersCache();
     }
+
+
+
+    public function copyToActive()
+    {
+        $files = Storage::disk('templates')->files($this->name);
+
+        foreach($files as $file)
+        {
+            // copy only .php and .info files to active folder
+            if (! in_array(strtolower (pathinfo($file, PATHINFO_EXTENSION)),['info', 'php'])) {
+                continue;
+            }
+
+            if(Storage::disk('active')->exists(basename($file))) {
+                Storage::disk('active')->delete(basename($file));
+            }
+
+            // Then copy the file.
+            Storage::disk('active')->writeStream(
+                basename($file),
+                Storage::disk('templates')->readStream($file)
+            );
+        }
+    }
+
+
+
+    public static function cleanActive()
+    {
+        return Storage::delete(Storage::disk('active')->files());
+    }
+
 
 
 
@@ -227,25 +247,46 @@ class Template extends Model
             'active' => false,
         ]);
 
-        array_map(function ($file) use ($name) {
+        // copy files to template
 
-            if(! Str::startsWith(basename($file), '.'))
-            {
-                Storage::disk('templates')->writeStream(
-                    $name . '/' . basename($file),
-                    Storage::disk('repo')->readStream($file)
-                );
-            }
-
-        }, Storage::disk('repo')->allFiles('templates/' . $from));
+        self::copyFromRepoToTemplate($from, $name);
 
         return $template;
     }
 
 
+
+    public static function copyFromRepoToTemplate($from, $name)
+    {
+        $files = Storage::disk('repo')->allFiles('templates/' . $from);
+
+        foreach($files as $file)
+        {
+            // copy only .php, .info and assets files to template folder
+            if (! in_array(strtolower (pathinfo($file, PATHINFO_EXTENSION)),[
+                'info',
+                'php',
+                'js',
+                'css'
+            ])) {
+                continue;
+            }
+
+            if(Storage::disk('templates')->exists($name . '/' . basename($file))) {
+                Storage::disk('templates')->delete($name . '/' . basename($file));
+            }
+
+            // Then copy the file.
+            Storage::disk('templates')->writeStream(
+                $name . '/' . basename($file),
+                Storage::disk('repo')->readStream($file)
+            );
+        }
+    }
+
+
     public function download()
     {
-
         $zipFile = Str::slug($this->name) . '.zip';
 
         $zipper = new ZipArchive();
@@ -262,7 +303,7 @@ class Template extends Model
 
         $zipper->close();
 
-        return response()->download($zipFile);
+        return response()->download($zipFile)->deleteFileAfterSend();
     }
 
 
@@ -279,6 +320,9 @@ class Template extends Model
             // save the zip file as 'bundle.zip' in the template folder
             Storage::disk('templates')->putFileAs($template->name, $file, 'bundle.zip');
 
+            // // delete the original uploaded zip file from the public folder
+            // Storage::delete($file);
+
             // unzip the bundle.zip
             self::unzipTemplateBundle($template->name);
 
@@ -294,7 +338,7 @@ class Template extends Model
 
             return $template;
 
-        } catch(\Exception $e) {
+        } catch(Exception $e) {
 
             // if there is any error, anywhere above,
             // we will revert back all the changes.
@@ -337,8 +381,7 @@ class Template extends Model
                 if (! in_array(
                     strtolower (pathinfo($filename, PATHINFO_EXTENSION)),
                     ['bmp', 'css', 'gif', 'htm', 'html', 'ico', 'info', 'jpeg', 'jpg', 'js', 'pdf', 'php', 'png', 'ts', 'txt', 'vue'])
-                )
-                {
+                ) {
                     continue;
                 }
 
@@ -351,8 +394,6 @@ class Template extends Model
             }
             $zip->close();
 
-        } else {
-            return [];
         }
 
         return $files;
