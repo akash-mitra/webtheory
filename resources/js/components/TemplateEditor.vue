@@ -23,13 +23,15 @@
 
 
         <div class="px-2 w-full flex justify-start items-center mt-8">
-            <div id="template-general-tab" @click="tab='general'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='general'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">general</div>
             <div id="template-files-tab" @click="tab='files'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='files'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Files</div>
             <div id="template-parameters-tab" @click="tab='parameters'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='parameters'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">Parameters</div>
+            <div id="template-general-tab" @click="tab='general'" class="px-6 text-sm tracking-wide uppercase cursor-pointer" :class="tab==='general'? 'text-gray-700 py-2 border-b-4 border-blue-500': 'text-gray-500 py-2'">general</div>
         </div>
 
+
+
         <div v-show="tab==='files'" class="w-full bg-white px-6 py-6 border-t border-blue-400 rounded overflow-auto mb-12">
-            <div class="text-lg text-gray-800 pb-2">Edit Template Files</div>
+            <div class="text-lg text-gray-800 pb-2">Template Files</div>
 
             <div class="text-sm text-gray-800 pb-4">
                 You can edit or add new files for this template.
@@ -44,11 +46,12 @@
                         </th>
                         <th class="hidden md:block pr-2 py-2 border-b text-left">Size in KB</th>
                         <th class="pr-2 py-2 border-b text-left">Updated</th>
+                        <th class="pr-2 py-2 border-b text-left"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="file in files">
-                        <td :id="'show-file-' + file.id" class="pr-2 py-2 border-b cursor-pointer text-blue-600" @click="editTemplateFile(file)">
+                        <td :id="'show-file-' + file.identity" class="pr-2 py-2 border-b cursor-pointer text-blue-600" @click="editTemplateFile(file)">
                             {{ file.name }}
                         </td>
                         <td class="hidden md:block  pr-2 py-2 border-b">
@@ -57,7 +60,9 @@
                         <td class="pr-2 py-2 border-b">
                             {{ file.updated }}
                         </td>
-
+                        <td class="pr-2 py-2 border-b" @click="deleteTemplateFile(file)">
+                            <svg class="h-4 w-4 mx-auto block text-gray-500 hover:text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -160,7 +165,7 @@
                             <input v-show="row.type==='list'" type="text" v-model="row.options" class="font-mono rounded w-full bg-gray-200 p-2" />
                         </td>
                         <td :id="'delete-parameter-' + row.name" class="pr-2 py-2 border-b text-xs cursor-pointer" @click="deleteTemplateParameter(row)">
-                            <svg class="h-6 w-6 mx-auto block text-gray-500 hover:text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                            <svg class="h-4 w-4 mx-auto block text-gray-500 hover:text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                         </td>
                     </tr>
                 </tbody>
@@ -182,7 +187,7 @@ export default {
 
     data: function () {
         return {
-            tab: 'general',
+            tab: 'files',
             isSaving: false,
 
             id: 0,
@@ -229,6 +234,31 @@ export default {
         editTemplateFile (file) {
             this.$router.push({ path: '/app/templates/' + this.id + '/get/' + file.identity })
         },
+
+        deleteTemplateFile (file) {
+
+            if (this.active) {
+                util.notifyInfo('Template is Active!', 'File from active template can not be deleted.')
+                return
+            }
+
+            let p = this
+
+            util.confirm('Delete Template file?', file.name + ' will be removed permanently.', function () {
+
+                util.ajax('post', '/api/templates/' + p.id + '/remove', {
+
+                    name: file.identity
+
+                }, function (response) {
+
+                    p.files = p.files.filter(f => f.identity != file.identity)
+
+                    util.toast({icon: 'success', title: "File deleted successfully"})
+                })
+            })
+        },
+
 
         // simple front-end validations before starting
         // the saving process. Mandatory fields checking.
