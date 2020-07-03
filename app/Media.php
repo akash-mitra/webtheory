@@ -41,7 +41,7 @@ class Media extends Model
     }
 
     // Static Global Variables
-    protected static $allowedExtensions = ['jpeg', 'jpg', 'png', 'bmp', 'gif'];
+    protected static $allowedExtensions = ['jpeg', 'jpg', 'png', 'bmp', 'gif', 'svg'];
     protected static $maxSize = 10; //megabytes
     protected static $visibility = 'public';
 
