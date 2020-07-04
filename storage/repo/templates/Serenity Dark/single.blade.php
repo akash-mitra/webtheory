@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="{{ $data->ref->site->name }}">
 <meta property="og:title" content="{{ $data->page->title }}">
 <meta property="og:description" content="{{ $data->page->summary }}">
-<meta property="og:image" content="{{ url(optional($data->page->media)->url) }}">
+<meta property="og:image" content="{{ url('/') . optional($data->page->media)->url }}">
 <meta property="og:url" content="{{ url()->current() }}">
 <meta name="twitter:card" content="summary_large_image">
 @endpush

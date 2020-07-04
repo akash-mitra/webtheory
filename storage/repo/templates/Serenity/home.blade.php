@@ -8,7 +8,7 @@
 
     <meta property="og:title" content="{{ $data->ref->site->title }}">
     <meta property="og:description" content="{{ $data->ref->site->desc }}">
-    <meta property="og:image" content="{{ url(optional($data->ref->site)->logo) }}">
+    <meta property="og:image" content="{{ url('/') . optional($data->ref->site)->url }}">
     <meta property="og:url" content="{{ url('/') }}">
     <meta name="twitter:card" content="summary_large_image">
     <meta property="og:site_name" content="{{ $data->ref->site->name }}">
