@@ -18,7 +18,7 @@ trait Shareable
                 'title' => urlencode($this->{array_get($this->shareOptions, 'columns.title')})
             ]));
 
-            return 'https://www.facebook.com/v3.3/dialog/share?' . $query;
+            return 'https://www.facebook.com/dialog/share?' . $query;
         }
 
         if ($type == 'twitter') {
@@ -41,7 +41,7 @@ trait Shareable
         if ($type == 'linkedin') {
             $query = urldecode(http_build_query([
                 'url' => $url,
-                // 'title' => urlencode($this->{array_get($this->shareOptions, 'columns.title')})
+                'title' => urlencode($this->{array_get($this->shareOptions, 'columns.title')})
             ]));
 
             return 'https://www.linkedin.com/shareArticle/?mini=true&' . $query;
