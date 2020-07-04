@@ -1,5 +1,7 @@
 @extends('active.master')
 
+@section('title'){{ $data->category->name }}@endsection
+
 @section('metadesc'){{ $data->category->name . ' -' . $data->ref->site->title  }}@endsection
 
 @section('metakeys'){{ $data->category->metakey }}@endsection
@@ -7,6 +9,13 @@
 @push('headers')
 
 <link rel="canonical" href="{{ $data->category->permalink }}">
+
+<meta property="og:title" content="{{ $data->category->name }}">
+<meta property="og:description" content="{{ $data->category->description }}">
+<meta property="og:image" content="{{ url(optional($data->category->media)->url) }}">
+<meta property="og:url" content="{{ url()->current() }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:site_name" content="{{ $data->ref->site->name }}">
 
 @endpush
 
