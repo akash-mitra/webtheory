@@ -19,7 +19,7 @@
             <div>
                 <div class="w-full bg-gray-100 py-4 px-6 shadow-inner border-b border-t">
                     <div class="w-full sm:flex mt-2">
-                        <label for="appId" class="block w-full sm:w-1/5 mr-4 text-sm py-1">Facebook Share Button</label>
+                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1">Facebook Share Button</label>
                         <div class="w-full sm:w-4/5">
                             <t-toggle
                                 v-model="share.facebook_share"
@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="w-full sm:flex mt-2">
-                        <label for="appId" class="block w-full sm:w-1/5 mr-4 text-sm py-1">Twitter Post Button</label>
+                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1">Twitter Post Button</label>
                         <div class="w-full sm:w-4/5">
                             <t-toggle
                                 v-model="share.twitter_post"
@@ -51,7 +51,7 @@
                     </div>
 
                     <div class="w-full sm:flex mt-2">
-                        <label for="appId" class="block w-full sm:w-1/5 mr-4 text-sm py-1">Pinterest Pin</label>
+                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1">Pinterest Pin</label>
                         <div class="w-full sm:w-4/5">
                             <t-toggle
                                 v-model="share.pinterest_pin"
@@ -67,10 +67,26 @@
                     </div>
 
                     <div class="w-full sm:flex mt-2">
-                        <label for="appId" class="block w-full sm:w-1/5 mr-4 text-sm py-1">LinkedIn Post</label>
+                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1">LinkedIn Post</label>
                         <div class="w-full sm:w-4/5">
                             <t-toggle
                                 v-model="share.linkedin_post"
+                                true-value="On"
+                                false-value="Off"
+                                box-class="w-16 shadow-inner bg-white border rounded-l rounded-r cursor-pointer"
+                                true-class="h-6 px-3 bg-blue-400 text-blue-100 rounded shadow-sm"
+                                false-class="h-6 px-3 bg-gray-400 text-gray-100 rounded shadow-sm"
+                                :show-value="true"
+                                >
+                            </t-toggle>
+                        </div>
+                    </div>
+
+                    <div class="w-full sm:flex mt-2">
+                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1">WhatsApp Send</label>
+                        <div class="w-full sm:w-4/5">
+                            <t-toggle
+                                v-model="share.whatsapp_send"
                                 true-value="On"
                                 false-value="Off"
                                 box-class="w-16 shadow-inner bg-white border rounded-l rounded-r cursor-pointer"
@@ -106,6 +122,7 @@ export default {
                 twitter_post: "Off",
                 pinterest_pin: "Off",
                 linkedin_post: "Off",
+                whatsapp_send: "Off",
             },
             isUpdating: false,
         }
