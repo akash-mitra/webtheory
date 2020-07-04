@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use Exception;
+// use Exception;
 use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Session\TokenMismatchException;
