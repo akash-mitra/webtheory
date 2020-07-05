@@ -24,7 +24,7 @@ class ParameterController extends Controller
      * @param  String  $key
      * @return \Illuminate\Http\Response
      */
-    public function get(String $key)
+    public function get(string $key)
     {
         $value = Parameter::getKey($key);
         return response()->json($value);
@@ -36,7 +36,7 @@ class ParameterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function set(String $key, Request $request)
+    public function set(string $key, Request $request)
     {
         $value = Parameter::setKey($key, $request->value);
         return response()->json($value);

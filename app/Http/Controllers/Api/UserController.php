@@ -37,12 +37,10 @@ class UserController extends Controller
         return $this->queryUsers($usersQuery, $request);
     }
 
-
-
     /**
      * Get list of users who are banned (soft deleted).
      */
-    public function banned (Request $request)
+    public function banned(Request $request)
     {
         $usersQuery = User::query();
 
@@ -51,11 +49,10 @@ class UserController extends Controller
         return $this->queryUsers($usersQuery, $request);
     }
 
-
     /**
      * Get list of users with unverified email addresses.
      */
-    public function unverified (Request $request)
+    public function unverified(Request $request)
     {
         $usersQuery = User::query();
 
@@ -63,7 +60,6 @@ class UserController extends Controller
 
         return $this->queryUsers($usersQuery, $request);
     }
-
 
     /**
      * Perform query to the User model with additional
@@ -84,25 +80,25 @@ class UserController extends Controller
         return $queryBuilder->latest()->paginate(10);
     }
 
-
-
     /**
      * Enhances a query builder with additional conditions for
      * matching the query string with the list of columns.
      */
     private function filterByQueryString(Builder $queryBuilder, array $cols, $queryString)
     {
-        if (! empty($queryString))
-        {
-            $keywords = explode(" ", $queryString);
+        if (!empty($queryString)) {
+            $keywords = explode(' ', $queryString);
 
-            $queryBuilder->where(function ($builder) use($keywords, $cols) {
-                foreach($keywords as $keyword) {
-                    if (! empty($keyword)) {
-                        foreach($cols as $col) {
-                            if (Str::contains($col, ".")) {
-                                $relation = explode(".", $col);
-                                $builder->orWhereHas($relation[0], function (Builder $query) use ($relation, $keyword) {
+            $queryBuilder->where(function ($builder) use ($keywords, $cols) {
+                foreach ($keywords as $keyword) {
+                    if (!empty($keyword)) {
+                        foreach ($cols as $col) {
+                            if (Str::contains($col, '.')) {
+                                $relation = explode('.', $col);
+                                $builder->orWhereHas($relation[0], function (Builder $query) use (
+                                    $relation,
+                                    $keyword
+                                ) {
                                     $query->where($relation[1], 'like', '%' . $keyword . '%');
                                 });
                             } else {
@@ -116,8 +112,6 @@ class UserController extends Controller
         return $queryBuilder;
     }
 
-
-
     /**
      * Store a newly created resource in storage.
      *
@@ -130,16 +124,14 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
-            'preferences' => ["broadcast","database","mail"],
-            'public_id' => Str::random(30)
+            'preferences' => ['broadcast', 'database', 'mail'],
+            'public_id' => Str::random(30),
         ]);
 
         $user->save();
 
         return response()->json($user);
     }
-
-
 
     /**
      * Display the specified resource.
@@ -152,8 +144,6 @@ class UserController extends Controller
         // $user->load('providers');
         return response()->json($user);
     }
-
-
 
     /**
      * Update the specified resource in storage.
@@ -169,8 +159,6 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-
-
     /**
      * Remove the specified resource from storage.
      *
@@ -179,31 +167,29 @@ class UserController extends Controller
      */
     public function destroy($id, Request $request)
     {
-        $user= User::withTrashed()->findOrFail($id);
+        $user = User::withTrashed()->findOrFail($id);
 
         $request->validate([
-            'forceDelete' => 'sometimes|boolean'
+            'forceDelete' => 'sometimes|boolean',
         ]);
 
-        if ($request->has('forceDelete') && $request->forceDelete === true)
-        {
+        if ($request->has('forceDelete') && $request->forceDelete === true) {
             $user->forceDelete();
 
             //todo - should we change the ownership of user's resources?
-        }
-        else
-        {
+        } else {
             $user->delete();
         }
 
-        return response()->json([
-            "status" => "success",
-            "operation" => $request->has('forceDelete') ? 'Delete' : 'Deactivate',
-            "user" => $user,
-        ], 204);
+        return response()->json(
+            [
+                'status' => 'success',
+                'operation' => $request->has('forceDelete') ? 'Delete' : 'Deactivate',
+                'user' => $user,
+            ],
+            204
+        );
     }
-
-
 
     /**
      * Change the password of Auth user.
@@ -221,12 +207,14 @@ class UserController extends Controller
         $user = auth()->user();
 
         // make sure user current password is correct
-        if(! Hash::check($request->current_password, $user->password))
-        {
-            return response([
-                'status' => 'failure',
-                'message' => 'Account password is incorrect.'
-            ], 401);
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response(
+                [
+                    'status' => 'failure',
+                    'message' => 'Account password is incorrect.',
+                ],
+                401
+            );
         }
 
         $user->password = Hash::make($request->new_password);
@@ -235,32 +223,34 @@ class UserController extends Controller
 
         return response([
             'status' => 'success',
-            'message' => 'Account password changed.'
+            'message' => 'Account password changed.',
         ]);
     }
-
 
     public function pages(User $user)
     {
         return $user
-                ->pages()
-                    ->where('status', 'Live')
-                        ->with(['media', 'category'])
-                            ->paginate(10);
+            ->pages()
+            ->where('status', 'Live')
+            ->with(['media', 'category'])
+            ->paginate(10);
     }
-
 
     public function comments(User $user)
     {
-        $categorycomments = Category::with('comments')->whereHas('comments', function ($query) use($user) {
-            $query->where('user_id', $user->id);
-        })->paginate(10);
+        $categorycomments = Category::with('comments')
+            ->whereHas('comments', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->paginate(10);
 
-        $pagecomments = Page::with('comments')->whereHas('comments', function ($query) use($user) {
-            $query->where('user_id', $user->id);
-        })->paginate(10);
+        $pagecomments = Page::with('comments')
+            ->whereHas('comments', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->paginate(10);
 
-        return response()->json(["categories" => $categorycomments, "pages" => $pagecomments]);
+        return response()->json(['categories' => $categorycomments, 'pages' => $pagecomments]);
     }
 
     /**
@@ -273,5 +263,4 @@ class UserController extends Controller
         $user = Auth::user();
         return response()->json($user, 200);
     }
-
 }

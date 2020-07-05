@@ -33,18 +33,24 @@ class LocalTableSeeder extends Seeder
         ]);
 
         // Authors
-        $authorIds = factory(User::class, mt_rand(3, 10))->create([
-            'role' => 'author'
-        ])->pluck('id')->all();
+        $authorIds = factory(User::class, mt_rand(3, 10))
+            ->create([
+                'role' => 'author',
+            ])
+            ->pluck('id')
+            ->all();
 
         // Admin & Authors
         $adminAuthorIds = $authorIds;
         array_push($adminAuthorIds, $admin->id);
 
         // Registered users
-        $userIds = factory(User::class, mt_rand(5, 20))->create([
-            'role' => 'registered'
-        ])->pluck('id')->all();
+        $userIds = factory(User::class, mt_rand(5, 20))
+            ->create([
+                'role' => 'registered',
+            ])
+            ->pluck('id')
+            ->all();
 
         // Media
         $files = Storage::allFiles('public/media');
@@ -86,7 +92,7 @@ class LocalTableSeeder extends Seeder
 
         // Child Categories
         $childCategoryIds = [];
-        foreach($parentCategoryIds as $parentCategoryId) {
+        foreach ($parentCategoryIds as $parentCategoryId) {
             for ($i = 0; $i < mt_rand(1, 5); $i++) {
                 $category = factory(Category::class)->create([
                     'parent_id' => $parentCategoryId,
@@ -124,23 +130,35 @@ class LocalTableSeeder extends Seeder
                 for ($j = 0; $j < mt_rand(3, 7); $j++) {
                     // Heading1
                     $heading = $faker->realText(40);
-                    $body_json .= '{"type":"header","data":{"level":1,"text":"' . str_replace('"', '\"', $heading) . '"}},';
+                    $body_json .=
+                        '{"type":"header","data":{"level":1,"text":"' .
+                        str_replace('"', '\"', $heading) .
+                        '"}},';
                     $body_html .= '<h1>' . $heading . '</h1>';
 
                     // Paragraph
                     $paragraph = $faker->realText() . '.' . $faker->realText();
-                    $body_json .= '{"type":"paragraph","data":{"text":"' . str_replace('"', '\"', $paragraph) . '"}},';
+                    $body_json .=
+                        '{"type":"paragraph","data":{"text":"' .
+                        str_replace('"', '\"', $paragraph) .
+                        '"}},';
                     $body_html .= '<p>' . $paragraph . '</p>';
 
                     // Heading2
                     for ($k = 0; $k < mt_rand(0, 2); $k++) {
                         $heading = $faker->realText(40);
-                        $body_json .= '{"type":"header","data":{"level":2,"text":"' . str_replace('"', '\"', $heading) . '"}},';
+                        $body_json .=
+                            '{"type":"header","data":{"level":2,"text":"' .
+                            str_replace('"', '\"', $heading) .
+                            '"}},';
                         $body_html .= '<h2>' . $heading . '</h2>';
 
                         // Paragraph
                         $paragraph = $faker->realText() . '.' . $faker->realText();
-                        $body_json .= '{"type":"paragraph","data":{"text":"' . str_replace('"', '\"', $paragraph) . '"}},';
+                        $body_json .=
+                            '{"type":"paragraph","data":{"text":"' .
+                            str_replace('"', '\"', $paragraph) .
+                            '"}},';
                         $body_html .= '<p>' . $paragraph . '</p>';
                     }
 
@@ -161,21 +179,38 @@ class LocalTableSeeder extends Seeder
                             $body_html .= '<li>' . $listitem . '</li>';
                         }
 
-                        $body_json = rtrim($body_json, ",") . ']}},';
+                        $body_json = rtrim($body_json, ',') . ']}},';
                         if ($type == 'ordered') {
                             $body_html .= '</ol>';
                         } else {
                             $body_html .= '</ul>';
                         }
-
                     }
 
                     // Code & Table
                     for ($k = 0; $k < mt_rand(0, 1); $k++) {
                         $email = $faker->safeEmail;
-                        $body_json .= '{"type":"code","data":{"code":"' . str_replace('"', '\"', "SELECT * FROM users WHERE email = '" . $email . "'") . '"}},';
+                        $body_json .=
+                            '{"type":"code","data":{"code":"' .
+                            str_replace(
+                                '"',
+                                '\"',
+                                "SELECT * FROM users WHERE email = '" . $email . "'"
+                            ) .
+                            '"}},';
                         $body_html .= '<pre><code class="hljs sql">';
-                        $body_html .= '<span class="hljs-keyword">SELECT</span>' . " * " . '<span class="hljs-keyword">FROM</span>' . " users " . '<span class="hljs-keyword">WHERE</span>' . " email = " . '<span class="hljs-string">' . "'" . $email . "'" . '</span>';
+                        $body_html .=
+                            '<span class="hljs-keyword">SELECT</span>' .
+                            ' * ' .
+                            '<span class="hljs-keyword">FROM</span>' .
+                            ' users ' .
+                            '<span class="hljs-keyword">WHERE</span>' .
+                            ' email = ' .
+                            '<span class="hljs-string">' .
+                            "'" .
+                            $email .
+                            "'" .
+                            '</span>';
                         $body_html .= '</code></pre>';
 
                         // Table
@@ -184,44 +219,87 @@ class LocalTableSeeder extends Seeder
                         $member = $faker->randomElement($array = ['Platinum', 'Gold']);
                         $joined = $faker->date($format = 'Y-m-d', $max = 'now');
 
-                        $json_rows = '["Name","Email","Member","Joined"],["' . str_replace('"', '\"', $name) . '","' . str_replace('"', '\"', $email) . '","' . str_replace('"', '\"', $member)  . '","'  . str_replace('"', '\"', $joined) . '"]';
+                        $json_rows =
+                            '["Name","Email","Member","Joined"],["' .
+                            str_replace('"', '\"', $name) .
+                            '","' .
+                            str_replace('"', '\"', $email) .
+                            '","' .
+                            str_replace('"', '\"', $member) .
+                            '","' .
+                            str_replace('"', '\"', $joined) .
+                            '"]';
                         $body_json .= '{"type":"table","data":{"content":[' . $json_rows . ']}},';
 
                         $body_html .= '<table class="wt-table"><tbody>';
-                        $body_html .= '<tr class="wt-table-tr"><td class="wt-table-td">Name</td><td class="wt-table-td">Email</td><td class="wt-table-td">Member</td><td class="wt-table-td">Joined</td><tr>';
-                        $body_html .= '<tr class="wt-table-tr"><td class="wt-table-td">' . $name . '</td><td class="wt-table-td">' . $email . '</td><td class="wt-table-td">' . $member  . '</td><td class="wt-table-td">'  . $joined . '</td><tr>';
+                        $body_html .=
+                            '<tr class="wt-table-tr"><td class="wt-table-td">Name</td><td class="wt-table-td">Email</td><td class="wt-table-td">Member</td><td class="wt-table-td">Joined</td><tr>';
+                        $body_html .=
+                            '<tr class="wt-table-tr"><td class="wt-table-td">' .
+                            $name .
+                            '</td><td class="wt-table-td">' .
+                            $email .
+                            '</td><td class="wt-table-td">' .
+                            $member .
+                            '</td><td class="wt-table-td">' .
+                            $joined .
+                            '</td><tr>';
                         $body_html .= '</tbody></table>';
-
                     }
 
                     // Paragraph
                     for ($k = 0; $k < mt_rand(1, 5); $k++) {
                         $paragraph = $faker->realText() . '.' . $faker->realText();
-                        $body_json .= '{"type":"paragraph","data":{"text":"' . str_replace('"', '\"', $paragraph) . '"}},';
+                        $body_json .=
+                            '{"type":"paragraph","data":{"text":"' .
+                            str_replace('"', '\"', $paragraph) .
+                            '"}},';
                         $body_html .= '<p>' . $paragraph . '</p>';
 
                         // Media
                         $media = $faker->randomElement($mediaArray);
                         $caption = $faker->catchPhrase;
-                        $withBorder = "false";
-                        $stretched = "false";
-                        $withBackground = "false";
+                        $withBorder = 'false';
+                        $stretched = 'false';
+                        $withBackground = 'false';
 
-                        $body_json .= '{"type":"image","data":{"file":{"id":' . $media->id . ',"path":"' . $media->path . '","url":"' . $media->url . '"},"caption":"' . str_replace('"', '\"', $caption) . '","withBorder":' . $withBorder . ',"stretched":' . $stretched . ',"withBackground":' . $withBackground . '}},';
-                        $body_html .= '<div class="my-4"><figure class="img-fig"><img src="' . $media->url . '" alt="' . $caption . '"></img><figcaption class="text-sm mt-3 img-fig-caption' . (($stretched || $withBackground) ? ' text-center' :'') . '">' . $caption . '</figcaption></figure></div>';
+                        $body_json .=
+                            '{"type":"image","data":{"file":{"id":' .
+                            $media->id .
+                            ',"path":"' .
+                            $media->path .
+                            '","url":"' .
+                            $media->url .
+                            '"},"caption":"' .
+                            str_replace('"', '\"', $caption) .
+                            '","withBorder":' .
+                            $withBorder .
+                            ',"stretched":' .
+                            $stretched .
+                            ',"withBackground":' .
+                            $withBackground .
+                            '}},';
+                        $body_html .=
+                            '<div class="my-4"><figure class="img-fig"><img src="' .
+                            $media->url .
+                            '" alt="' .
+                            $caption .
+                            '"></img><figcaption class="text-sm mt-3 img-fig-caption' .
+                            ($stretched || $withBackground ? ' text-center' : '') .
+                            '">' .
+                            $caption .
+                            '</figcaption></figure></div>';
                     }
                 }
 
-                $body_json = rtrim($body_json, ",") . ']}';
-
+                $body_json = rtrim($body_json, ',') . ']}';
 
                 // Page Contents
                 $pageContent = factory(PageContent::class)->create([
                     'page_id' => $page->id,
                     'body_json' => $body_json,
-                    'body_html' => $body_html
+                    'body_html' => $body_html,
                 ]);
-
             }
         }
         // End of Pages
@@ -240,7 +318,6 @@ class LocalTableSeeder extends Seeder
             }
         }
 
-
         // Page Comment
         // Skip some User from commenting
         $tempUserIds = $userIds;
@@ -254,6 +331,5 @@ class LocalTableSeeder extends Seeder
                 ]);
             }
         }
-
     }
 }

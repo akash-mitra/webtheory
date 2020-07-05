@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\CategoryCommentRequest;
 use App\Category;
 use App\CategoryComment;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryCommentRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryCommentController extends Controller
 {
-    
     public function index(Category $category)
     {
-        $comments = $category->directComments()
+        $comments = $category
+            ->directComments()
             ->with(['user', 'replies.user'])
             ->latest('updated_at')
             ->paginate(5);
@@ -30,8 +30,7 @@ class CategoryCommentController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        if($comment->isReply())
-        {
+        if ($comment->isReply()) {
             $comment->parent()->touch();
         }
 
@@ -47,8 +46,8 @@ class CategoryCommentController extends Controller
     public function destroy(CategoryComment $categorycomment)
     {
         $categorycomment->delete();
-        
-        return response()->json("success", 204);
+
+        return response()->json('success', 204);
     }
 
     /**

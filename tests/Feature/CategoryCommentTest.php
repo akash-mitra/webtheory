@@ -14,35 +14,53 @@ class CategoryCommentTest extends TestDataSetup
 
         /* Unauthenticated user can view categorycomments listing */
         $response = $this->get('/api/categories/' . $this->category->id . '/comments');
-        $response->assertStatus(200)
-            ->assertJsonStructureExact([
-                'current_page',
-                'data' => [
-                    '*' => [
-                        array_merge($this->comment_attributes, [
-                            'user' => $this->user_attributes,
-                            "replies"
-                        ])
-                    ]
+        $response->assertStatus(200)->assertJsonStructureExact([
+            'current_page',
+            'data' => [
+                '*' => [
+                    array_merge($this->comment_attributes, [
+                        'user' => $this->user_attributes,
+                        'replies',
+                    ]),
                 ],
-                'first_page_url', 'from', 'last_page', 'last_page_url', 'next_page_url', 'path', 'per_page', 'prev_page_url', 'to', 'total', 
-            ]);
+            ],
+            'first_page_url',
+            'from',
+            'last_page',
+            'last_page_url',
+            'next_page_url',
+            'path',
+            'per_page',
+            'prev_page_url',
+            'to',
+            'total',
+        ]);
 
         /* Authenticated user can view categorycomments listing */
-        $response = $this->actingAs($this->adminUser)->get('/api/categories/' . $this->category->id . '/comments');
-        $response->assertStatus(200)
-            ->assertJsonStructure([
-                'current_page',
-                'data' => [
-                    '*' => [
-                        array_merge($this->comment_attributes, [
-                            'user' => $this->user_attributes,
-                            "replies"
-                        ])
-                    ]
+        $response = $this->actingAs($this->adminUser)->get(
+            '/api/categories/' . $this->category->id . '/comments'
+        );
+        $response->assertStatus(200)->assertJsonStructure([
+            'current_page',
+            'data' => [
+                '*' => [
+                    array_merge($this->comment_attributes, [
+                        'user' => $this->user_attributes,
+                        'replies',
+                    ]),
                 ],
-                'first_page_url', 'from', 'last_page', 'last_page_url', 'next_page_url', 'path', 'per_page', 'prev_page_url', 'to', 'total', 
-            ]);
+            ],
+            'first_page_url',
+            'from',
+            'last_page',
+            'last_page_url',
+            'next_page_url',
+            'path',
+            'per_page',
+            'prev_page_url',
+            'to',
+            'total',
+        ]);
         $this->assertDatabaseHas('category_comments', ['body' => $categorycomment->body]);
     }
 
@@ -52,13 +70,20 @@ class CategoryCommentTest extends TestDataSetup
         $categorycomment = factory(CategoryComment::class)->make();
 
         /* Unauthenticated user cannot save categorycomment */
-        $response = $this->post('/api/categories/' . $this->category->id . '/comments', $categorycomment->toArray(), ['Accept' => 'application/json']);
-        $response->assertStatus(401)
-            ->assertJson(['message' => 'Unauthenticated.']);
+        $response = $this->post(
+            '/api/categories/' . $this->category->id . '/comments',
+            $categorycomment->toArray(),
+            ['Accept' => 'application/json']
+        );
+        $response->assertStatus(401)->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can save categorycomment */
-        $response = $this->actingAs($this->adminUser)->post('/api/categories/' . $this->category->id . '/comments', $categorycomment->toArray());
-        $response->assertStatus(200)
+        $response = $this->actingAs($this->adminUser)->post(
+            '/api/categories/' . $this->category->id . '/comments',
+            $categorycomment->toArray()
+        );
+        $response
+            ->assertStatus(200)
             ->assertJsonFragment(['body' => $categorycomment->body])
             ->assertJsonStructure($this->comment_attributes_store);
         $this->assertDatabaseHas('category_comments', ['body' => $categorycomment->body]);
@@ -132,5 +157,4 @@ class CategoryCommentTest extends TestDataSetup
     }
 
     */
-
 }

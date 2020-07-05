@@ -38,14 +38,15 @@ class MediaController extends Controller
          */
         $query = $request->input('query');
 
-        if (! empty($query))
-        {
-            $queryArray = explode(" ", $query);
+        if (!empty($query)) {
+            $queryArray = explode(' ', $query);
             // a false where statement so that "or" condition below works
             $media->where('id', 0);
 
-            foreach($queryArray as $q) {
-                if (! empty($q)) $media->orWhere('name', 'like', '%' . $q . '%');
+            foreach ($queryArray as $q) {
+                if (!empty($q)) {
+                    $media->orWhere('name', 'like', '%' . $q . '%');
+                }
             }
         }
 
@@ -62,15 +63,15 @@ class MediaController extends Controller
     {
         if ($request->file('image')->isValid()) {
             $uploadedFile = $request->file('image');
-            $media =  Media::store($uploadedFile);
+            $media = Media::store($uploadedFile);
             return [
-                "success" => 1,
-                "file" => $media
+                'success' => 1,
+                'file' => $media,
             ];
         } else {
             return [
-                "success" => 0,
-                "file" => [ 'id' => null, 'path' => null, 'url' => null ]
+                'success' => 0,
+                'file' => ['id' => null, 'path' => null, 'url' => null],
             ];
         }
     }
@@ -79,11 +80,10 @@ class MediaController extends Controller
     {
         if ($request->has('url')) {
             $url = $request->url;
-        }
-        else {
+        } else {
             return [
-                "success" => 0,
-                "file" => [ 'id' => null, 'path' => null, 'url' => null ]
+                'success' => 0,
+                'file' => ['id' => null, 'path' => null, 'url' => null],
             ];
         }
 
@@ -91,10 +91,10 @@ class MediaController extends Controller
         // we can simply return the URL as no need to save the image again.
         if (parse_url($url, PHP_URL_HOST) === parse_url(url('/'), PHP_URL_HOST)) {
             return [
-                "success" => 1,
-                "file" => [
-                    "url" => $url
-                ]
+                'success' => 1,
+                'file' => [
+                    'url' => $url,
+                ],
             ];
         }
 
@@ -105,12 +105,11 @@ class MediaController extends Controller
         file_put_contents($tempfilepath, $urlcontent);
         $uploadedFile = new UploadedFile($tempfilepath, 'test');
 
-        $media =  Media::store($uploadedFile);
+        $media = Media::store($uploadedFile);
         return [
-            "success" => 1,
-            "file" => $media
+            'success' => 1,
+            'file' => $media,
         ];
-
     }
 
     /**

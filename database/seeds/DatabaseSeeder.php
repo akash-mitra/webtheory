@@ -14,14 +14,12 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(ProductionTableSeeder::class);
 
-        if (App::Environment() === 'local')
-        {
+        if (App::Environment() === 'local') {
             $this->call(LocalTableSeeder::class);
             $this->call(PermissionsTableSeeder::class);
         }
 
-        if (App::Environment() === 'testing')
-        {
+        if (App::Environment() === 'testing') {
             $this->call(PermissionsTableSeeder::class);
         }
     }

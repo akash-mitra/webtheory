@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
-
     public function __construct()
     {
         if (Auth::check()) {
@@ -14,12 +13,11 @@ class AdminController extends Controller
         }
     }
 
-
     public function app()
     {
         if (Auth::check()) {
             return view('app', [
-                'authUser' =>  Auth::user()->only(['id', 'name', 'email', 'avatar', 'role'])
+                'authUser' => Auth::user()->only(['id', 'name', 'email', 'avatar', 'role']),
             ]);
         } else {
             return redirect('/');

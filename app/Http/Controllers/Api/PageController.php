@@ -25,7 +25,7 @@ class PageController extends Controller
     public function __construct()
     {
         $this->middleware(['check.permission'])->except(['search']);
-        
+
         if (Parameter::getKey('SEARCHABLE')) {
             config(['scout.driver' => 'algolia']);
             config(['scout.algolia.id' => Parameter::getKey('ALGOLIA_APP_ID')]);
@@ -33,20 +33,16 @@ class PageController extends Controller
         }
     }
 
-
-
     public function index(Request $request)
     {
         $pagesQuery = Page::query()->with('category', 'author', 'media');
 
-        if($request->input('type') === 'draft') {
+        if ($request->input('type') === 'draft') {
             $pagesQuery->where('status', 'Draft');
         }
 
         return $this->queryPages($pagesQuery, $request);
     }
-
-
 
     private function queryPages($queryBuilder, $request)
     {
@@ -62,7 +58,6 @@ class PageController extends Controller
 
         return $queryBuilder->latest()->paginate(10);
     }
-
 
     // public function index(Request $request)
     // {
@@ -98,8 +93,6 @@ class PageController extends Controller
     //     return $pages->latest()->paginate(2);
     // }
 
-
-
     /**
      * Store a newly created resource in storage.
      *
@@ -113,7 +106,6 @@ class PageController extends Controller
         Page::invalidateCache();
 
         DB::transaction(function () use ($request, &$page) {
-
             $page = new Page([
                 'category_id' => $request->category_id,
                 'user_id' => Auth::id(),
@@ -122,7 +114,7 @@ class PageController extends Controller
                 'metakey' => $request->metakey,
                 'metadesc' => $request->metadesc,
                 'media_id' => $request->media_id,
-                'status' => $request->status
+                'status' => $request->status,
             ]);
 
             $page->save();
@@ -143,8 +135,6 @@ class PageController extends Controller
         return response()->json($page);
     }
 
-
-
     /**
      * Display the specified resource.
      *
@@ -158,8 +148,6 @@ class PageController extends Controller
         return response()->json($page);
     }
 
-
-
     /**
      * Update the specified resource in storage.
      *
@@ -172,10 +160,19 @@ class PageController extends Controller
         Page::invalidateCache();
 
         DB::transaction(function () use ($request, &$page) {
-
-            $page->fill(request([
-                'category_id', 'title', 'summary', 'metakey', 'metadesc', 'media_id', 'status'
-            ]))->save();
+            $page
+                ->fill(
+                    request([
+                        'category_id',
+                        'title',
+                        'summary',
+                        'metakey',
+                        'metadesc',
+                        'media_id',
+                        'status',
+                    ])
+                )
+                ->save();
 
             $converter = new ContentsConverter($request->body_json, $request->editor);
 
@@ -191,8 +188,6 @@ class PageController extends Controller
         return response()->json($page);
     }
 
-
-
     /**
      * Update the page status.
      *
@@ -204,14 +199,14 @@ class PageController extends Controller
     {
         Page::invalidateCache();
 
-        $page->fill([
-            'status' => $request->status
-        ])->save();
+        $page
+            ->fill([
+                'status' => $request->status,
+            ])
+            ->save();
 
         return response()->json($page);
     }
-
-
 
     /**
      * Update the page owner.
@@ -229,8 +224,6 @@ class PageController extends Controller
         return response()->json($page);
     }
 
-
-
     /**
      * Remove the specified resource from storage.
      *
@@ -243,11 +236,8 @@ class PageController extends Controller
 
         $page->delete();
 
-        return response()->json("success", 204);
+        return response()->json('success', 204);
     }
-
-
-
 
     /**
      * Enhances a query builder with additional conditions for
@@ -255,17 +245,19 @@ class PageController extends Controller
      */
     private function filterByQueryString(Builder $queryBuilder, array $cols, $queryString)
     {
-        if (! empty($queryString))
-        {
-            $keywords = explode(" ", $queryString);
+        if (!empty($queryString)) {
+            $keywords = explode(' ', $queryString);
 
-            $queryBuilder->where(function ($builder) use($keywords, $cols) {
-                foreach($keywords as $keyword) {
-                    if (! empty($keyword)) {
-                        foreach($cols as $col) {
-                            if (Str::contains($col, ".")) {
-                                $relation = explode(".", $col);
-                                $builder->orWhereHas($relation[0], function (Builder $query) use ($relation, $keyword) {
+            $queryBuilder->where(function ($builder) use ($keywords, $cols) {
+                foreach ($keywords as $keyword) {
+                    if (!empty($keyword)) {
+                        foreach ($cols as $col) {
+                            if (Str::contains($col, '.')) {
+                                $relation = explode('.', $col);
+                                $builder->orWhereHas($relation[0], function (Builder $query) use (
+                                    $relation,
+                                    $keyword
+                                ) {
                                     $query->where($relation[1], 'like', '%' . $keyword . '%');
                                 });
                             } else {

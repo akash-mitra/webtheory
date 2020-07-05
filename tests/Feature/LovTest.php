@@ -21,12 +21,9 @@ class LovTest extends TestDataSetup
 
         /* Authenticated user can view categories lov listing */
         $response = $this->actingAs($this->adminUser)->get('/api/lov/categories');
-        $response->assertStatus(200)
-            ->assertJsonStructureExact([
-                '*' => [
-                    'key', 'value', 'trashed'
-                ]
-            ]);
+        $response->assertStatus(200)->assertJsonStructureExact([
+            '*' => ['key', 'value', 'trashed'],
+        ]);
         $this->assertDatabaseHas('categories', ['name' => $category->name]);
     }
 
@@ -36,14 +33,11 @@ class LovTest extends TestDataSetup
         /* Unauthenticated user cannot view authors lov listing */
         $response = $this->get('/api/lov/authors');
         $response->assertStatus(302);
-        
+
         /* Authenticated user can view authors lov listing */
         $response = $this->actingAs($this->adminUser)->get('/api/lov/authors');
-        $response->assertStatus(200)
-            ->assertJsonStructureExact([
-                '*' => [
-                    'key', 'value', 'trashed'
-                ]
-            ]);
+        $response->assertStatus(200)->assertJsonStructureExact([
+            '*' => ['key', 'value', 'trashed'],
+        ]);
     }
 }

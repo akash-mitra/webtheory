@@ -14,7 +14,6 @@ trait SetMailConfig
         $mailDriver = Parameter::getKey('MAIL_DRIVER');
 
         if ($mailDriver != '') {
-
             try {
                 if ($mailDriver == 'smtp') {
                     SendEmail::dispatch($to, $mailable);
@@ -25,25 +24,34 @@ trait SetMailConfig
 
                     if ($mailDriver == 'ses') {
                         config(['mail.mailers.ses.key' => Parameter::getKey('AWS_ACCESS_KEY_ID')]);
-                        config(['mail.mailers.ses.secret' => Parameter::getKey('AWS_SECRET_ACCESS_KEY')]);
-                        config(['mail.mailers.ses.region' => Parameter::getKey('AWS_DEFAULT_REGION')]);
-                    } else if ($mailDriver == 'mailgun') {
-                        config(['mail.mailers.mailgun.domain' => Parameter::getKey('MAILGUN_DOMAIN')]);
-                        config(['mail.mailers.mailgun.secret' => Parameter::getKey('MAILGUN_SECRET')]);
-                    } else if ($mailDriver == 'postmark') {
-                        config(['mail.mailers.postmark.token' => Parameter::getKey('POSTMARK_TOKEN')]);
+                        config([
+                            'mail.mailers.ses.secret' => Parameter::getKey('AWS_SECRET_ACCESS_KEY'),
+                        ]);
+                        config([
+                            'mail.mailers.ses.region' => Parameter::getKey('AWS_DEFAULT_REGION'),
+                        ]);
+                    } elseif ($mailDriver == 'mailgun') {
+                        config([
+                            'mail.mailers.mailgun.domain' => Parameter::getKey('MAILGUN_DOMAIN'),
+                        ]);
+                        config([
+                            'mail.mailers.mailgun.secret' => Parameter::getKey('MAILGUN_SECRET'),
+                        ]);
+                    } elseif ($mailDriver == 'postmark') {
+                        config([
+                            'mail.mailers.postmark.token' => Parameter::getKey('POSTMARK_TOKEN'),
+                        ]);
                     }
 
                     Mail::to($to)->send($mailable);
                 }
 
-                return response()->json("Mail Sent", 200);
-
+                return response()->json('Mail Sent', 200);
             } catch (Exception $e) {
                 return abort(400, $e);
             }
         }
 
-        return response()->json("Mail Driver not set", 400);
+        return response()->json('Mail Driver not set', 400);
     }
 }

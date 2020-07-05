@@ -17,8 +17,8 @@ class ParameterTest extends TestDataSetup
         $response = $this->actingAs($this->adminUser)->get('/api/parameters/siteinfo');
         $response->assertStatus(200);
         $value = $response->decodeResponseJson();
-        $this->assertEquals( 
-            '{"name": "My Blog", "title": "My Blog Title", "desc": "My Blog Description"}', 
+        $this->assertEquals(
+            '{"name": "My Blog", "title": "My Blog Title", "desc": "My Blog Description"}',
             $value
         );
         $this->assertDatabaseHas('parameters', ['key' => 'siteinfo']);
@@ -32,12 +32,18 @@ class ParameterTest extends TestDataSetup
         $response->assertStatus(302);
 
         /* Authenticated user can save parameters */
-        $response = $this->actingAs($this->adminUser)->post('/api/parameters/siteinfo', 
-            ['value' => '{"name": "My Test Blog", "title": "My Test Blog Title", "desc": "My Test Blog Description"}'], ['Accept' => 'application/json']);
+        $response = $this->actingAs($this->adminUser)->post(
+            '/api/parameters/siteinfo',
+            [
+                'value' =>
+                    '{"name": "My Test Blog", "title": "My Test Blog Title", "desc": "My Test Blog Description"}',
+            ],
+            ['Accept' => 'application/json']
+        );
         $response->assertStatus(200);
         $value = $response->decodeResponseJson();
-        $this->assertEquals( 
-            '{"name": "My Test Blog", "title": "My Test Blog Title", "desc": "My Test Blog Description"}', 
+        $this->assertEquals(
+            '{"name": "My Test Blog", "title": "My Test Blog Title", "desc": "My Test Blog Description"}',
             $value
         );
         $this->assertDatabaseHas('parameters', ['key' => 'siteinfo']);
