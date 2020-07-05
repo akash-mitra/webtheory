@@ -5,14 +5,18 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Exception;
 use App\Parameter;
 use App\Mail\TestMail;
-use App\Jobs\SendEmail;
+// use App\Jobs\SendEmail;
+use App\Traits\SetMailConfig;
 use App\Jobs\UpdateSite;
 
 class SettingController extends Controller
 {
+    use SetMailConfig;
+
     /**
      * Create a new controller instance.
      *
@@ -86,20 +90,37 @@ class SettingController extends Controller
 
     public function testMail()
     {
+        $siteinfo = json_decode(Parameter::getKey('siteinfo'), true);
+
+        return $this->sendEmail(Auth::user()->email, new TestMail($siteinfo['title']));
+        
+        /*
         $mailDriver = Parameter::getKey('MAIL_DRIVER');
 
         if ($mailDriver != '') {
             $siteinfo = json_decode(Parameter::getKey('siteinfo'), true);
 
             try {
-                // Mail::raw('Test Mail from ' . $siteinfo['title'], function ($message){
-                //     $message->to(Auth::user()->email);
-                // });
+                if ($mailDriver == 'smtp') {
+                    SendEmail::dispatch(Auth::user()->email, new TestMail($siteinfo['title']));
+                } else {
+                    config(['mail.default' => Parameter::getKey('MAIL_DRIVER')]);
+                    config(['mail.from.address' => Parameter::getKey('MAIL_FROM_ADDRESS')]);
+                    config(['mail.from.name' => Parameter::getKey('MAIL_FROM_NAME')]);
 
-                SendEmail::dispatch(
-                    Auth::user()->email,
-                    new TestMail($siteinfo['title'])
-                );
+                    if ($mailDriver == 'ses') {
+                        config(['mail.mailers.ses.key' => Parameter::getKey('AWS_ACCESS_KEY_ID')]);
+                        config(['mail.mailers.ses.secret' => Parameter::getKey('AWS_SECRET_ACCESS_KEY')]);
+                        config(['mail.mailers.ses.region' => Parameter::getKey('AWS_DEFAULT_REGION')]);
+                    } else if ($mailDriver == 'mailgun') {
+                        config(['mail.mailers.mailgun.domain' => Parameter::getKey('MAILGUN_DOMAIN')]);
+                        config(['mail.mailers.mailgun.secret' => Parameter::getKey('MAILGUN_SECRET')]);
+                    } else if ($mailDriver == 'postmark') {
+                        config(['mail.mailers.postmark.token' => Parameter::getKey('POSTMARK_TOKEN')]);
+                    }
+
+                    Mail::to(Auth::user()->email)->send(new TestMail($siteinfo['title']));
+                }
 
                 return response()->json("Mail Sent. Please check your email inbox", 200);
 
@@ -109,6 +130,7 @@ class SettingController extends Controller
         }
 
         return response()->json("Mail Driver not set", 400);
+        */
     }
 
 

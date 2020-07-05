@@ -25,7 +25,8 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
         "predis/predis": "^1.1",
-        "scrivo/highlight.php": "^9.18"
+        "scrivo/highlight.php": "^9.18",
+        "wildbit/swiftmailer-postmark": "^3.1"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.7",

@@ -6,13 +6,16 @@ use App\User;
 use Socialite;
 use Exception;
 use App\Parameter;
-use App\Jobs\SendEmail;
+// use App\Jobs\SendEmail;
+use App\Traits\SetMailConfig;
 use App\Mail\WelcomeNewSocialUser;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class SocialLoginController extends Controller
 {
+    use SetMailConfig;
+
     protected $providers = ['facebook', 'twitter', 'linkedin', 'google'];
 
 
@@ -71,10 +74,9 @@ class SocialLoginController extends Controller
             'avatar'           => $socialUser->getAvatar()
         ]);
 
-        SendEmail::dispatch(
-            $user->email,
-            new WelcomeNewSocialUser($user)
-        );
+        // SendEmail::dispatch($user->email, new WelcomeNewSocialUser($user));
+        
+        $this->sendEmail($user->email, new WelcomeNewSocialUser($user));
 
         return $user;
     }
