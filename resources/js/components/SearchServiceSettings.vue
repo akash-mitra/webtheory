@@ -2,7 +2,7 @@
 
     <div class="w-full">
 
-        <div class="rounded bg-white shadow">
+        <div class="bg-white shadow rounded">
 
             <p class="text-sm px-6 py-4 border-b text-gray-700 uppercase">
                 Full-Text Search

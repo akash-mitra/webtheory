@@ -128,6 +128,7 @@ class DataProvider {
             "contentType" => $contentType,
             "template" => self::template(),
             "site" => self::site(),
+            "share" => self::share(),
             "login" => (object) [
                 "socialprovider" => json_decode(Parameter::getKey('socialprovider'), false)
             ]
@@ -157,6 +158,12 @@ class DataProvider {
     public static function site () : object
     {
         return (object) json_decode(Parameter::getKey('siteinfo'));
+
+    }
+
+    public static function share () : object
+    {
+        return (object) json_decode(Parameter::getKey('share'));
 
     }
 

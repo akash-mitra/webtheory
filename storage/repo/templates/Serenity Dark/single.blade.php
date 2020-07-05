@@ -1,11 +1,20 @@
 @extends('active.master')
 
+@section('title'){{ $data->page->title  }}@endsection
+
 @section('metadesc'){{ $data->page->metadesc  }}@endsection
 
 @section('metakeys'){{ $data->page->metakey }}@endsection
 
 @push('headers')
 <link rel="canonical" href="{{ $data->page->permalink }}">
+
+<meta property="og:site_name" content="{{ $data->ref->site->name }}">
+<meta property="og:title" content="{{ $data->page->title }}">
+<meta property="og:description" content="{{ $data->page->summary }}">
+<meta property="og:image" content="{{ url('/') . optional($data->page->media)->url }}">
+<meta property="og:url" content="{{ url()->current() }}">
+<meta name="twitter:card" content="summary_large_image">
 @endpush
 
 @section('contents')
@@ -42,11 +51,13 @@
                         </div>
                     </div>
 
-                    <p class="wt-summary bg-{{$data->ref->template->primaryColor}}-900">{{ $data->page->summary }}</p>
+                    <p class="mb-3 wt-summary bg-{{$data->ref->template->primaryColor}}-900">{{ $data->page->summary }}</p>
 
-
+                    <div class="flex">
+                        @sharepost
+                    </div>
                 </header>
-                <div class="mt-4 text-base wt-body text-{{$data->ref->template->primaryColor}}-100">
+                <div class="mt-2 text-base wt-body text-{{$data->ref->template->primaryColor}}-100">
                     {!! $data->page->content->body_html !!}
                 </div>
             </article>

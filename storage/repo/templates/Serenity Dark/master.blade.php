@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
 
-  @yield('title')
+  <title>@yield('title')</title>
 
   <meta name="description" content="@yield('metadesc')">
 
@@ -20,7 +20,6 @@
   {{-- <link href="/css/style.css" rel="stylesheet"> --}}
 
   @favicon
-
 
 
   @if(!empty(optional($data->ref->template)->headingFont))

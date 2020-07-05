@@ -60,7 +60,26 @@
 
         <div v-if="tab=='services'">
 
-            <SearchServiceSettings></SearchServiceSettings>
+            <div class="w-full flex px-6">
+                <div class="text-right text-gray-700 text-sm max-w-xs bg-gray-1001">
+
+                    <div class='w-full pr-8 py-4 cursor-pointer' @click="subtab='search'" :class="subtab==='search'? 'text-indigo-500 font-bold':''">
+                        Full-text Search
+                    </div>
+
+                    <div class='w-full pr-8 py-4 cursor-pointer' @click="subtab='share'" :class="subtab==='share'? 'text-indigo-500 font-bold':''">
+                        Social Share
+                    </div>
+
+                </div>
+                <div class="flex-grow">
+                    <div class='w-full'>
+                        <SearchServiceSettings v-if="subtab==='search'"></SearchServiceSettings>
+                        <SocialShareSettings v-if="subtab==='share'"></SocialShareSettings>
+                    </div>
+
+                </div>
+            </div>
 
         </div>
 
@@ -81,6 +100,7 @@
     import MailSettings from './MailSettings.vue'
     import UpdateSettings from './UpdateSettings.vue'
     import SearchServiceSettings from './SearchServiceSettings.vue'
+    import SocialShareSettings from './SocialShareSettings.vue'
 
     export default {
 
@@ -90,11 +110,13 @@
             MailSettings,
             UpdateSettings,
             SearchServiceSettings,
+            SocialShareSettings,
         },
 
         data() {
             return {
-                tab: 'site',
+                tab: 'services',
+                subtab: 'share',
             }
         },
     }
