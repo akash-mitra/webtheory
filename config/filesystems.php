@@ -77,6 +77,15 @@ return [
         ],
 
         /*
+         * backup is used to store/generate site backup. This is
+         * not-version controlled.
+         */
+        'backup' => [
+            'driver' => 'local',
+            'root' => storage_path('backup'),
+        ],
+
+        /*
          * "templates" is used to store the local copies of the template. This is
          * not-version controlled.
          */
