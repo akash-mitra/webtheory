@@ -215,7 +215,7 @@ class ProductionTableSeeder extends Seeder
         ]);
         DB::table('parameters')->insert([
             'key' => 'MAILGUN_ENDPOINT',
-            'value' => '',
+            'value' => 'api.mailgun.net',
             'created_at' => now(),
             'updated_at' => now()
         ]);

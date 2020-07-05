@@ -47,12 +47,13 @@ class DynamicMailServiceProvider extends ServiceProvider implements DeferrablePr
             $swift_mailer = new Swift_Mailer($transport);
 
             $mailer = new Mailer(
+                $parameters['driver'],
                 $app->get('view'),
                 $swift_mailer,
                 $app->get('events')
             );
 
-            $mailer->alwaysFrom($parameters['username'], $parameters['name']);
+            $mailer->alwaysFrom($parameters['email'], $parameters['name']);
 
             // Log::info($parameters);
 

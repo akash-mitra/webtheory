@@ -68,8 +68,10 @@ class SendEmail implements ShouldQueue
     private function getMailTransportParameters ()
     {
         $parameters = [
+            'driver'     => Parameter::getKey('MAIL_DRIVER'),
             'host'       => Parameter::getKey('MAIL_HOST'),
             'port'       => Parameter::getKey('MAIL_PORT'),
+            'email'      => Parameter::getKey('MAIL_FROM_ADDRESS'),
             'name'       => Parameter::getKey('MAIL_FROM_NAME'),
             'username'   => Parameter::getKey('MAIL_USERNAME'),
             'password'   => Parameter::getKey('MAIL_PASSWORD'),

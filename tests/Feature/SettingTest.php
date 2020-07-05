@@ -93,7 +93,7 @@ class SettingTest extends TestDataSetup
 
     public function test_email_success_setting()
     {
-        Parameter::setKey('MAIL_DRIVER', 'array');
+        Parameter::setKey('MAIL_DRIVER', 'smtp');
 
         /* Unauthenticated user cannot test email setup */
         $response = $this->get('/api/settings/testmail');
@@ -102,7 +102,7 @@ class SettingTest extends TestDataSetup
         /* Authenticated user can set email setup */
         $response = $this->actingAs($this->adminUser)->get('/api/settings/testmail');
         $response->assertStatus(200)
-            ->assertSee('Mail Sent. Please check your email inbox');
+            ->assertSee('Mail Sent');
 
         Queue::assertPushed(SendEmail::class);
         // Mail::assertSent(TestMail::class);

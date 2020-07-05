@@ -4,7 +4,8 @@ namespace App;
 
 
 use App\Template;
-use App\Jobs\SendEmail;
+// use App\Jobs\SendEmail;
+use App\Traits\SetMailConfig;
 use Laravel\Cashier\Billable;
 use Illuminate\Support\Carbon;
 use App\Mail\ResetPasswordLink;
@@ -23,7 +24,8 @@ class User extends Authenticatable implements MustVerifyEmail
     use Notifiable,
         SoftDeletes,
         Billable,
-        EnableDummyAvatar;
+        EnableDummyAvatar,
+        SetMailConfig;
 
     /**
      * The attributes that are mass assignable.
@@ -165,12 +167,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         // $this->notify(new VerifyEmail);
 
+        // SendEmail::dispatch($this->email, new VerifyEmailAddress($this));
 
-
-        SendEmail::dispatch(
-            $this->email,
-            new VerifyEmailAddress($this)
-        );
+        $this->sendEmail($this->email, new VerifyEmailAddress($this));
     }
 
 
@@ -185,10 +184,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         // $this->notify(new ResetPasswordNotification($token));
 
-        SendEmail::dispatch(
-            $this->email,
-            new ResetPasswordLink($this, $token)
-        );
+        // SendEmail::dispatch($this->email, new ResetPasswordLink($this, $token));
+
+        $this->sendEmail($this->email, new ResetPasswordLink($this, $token));
     }
 
 
