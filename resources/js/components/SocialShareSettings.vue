@@ -1,25 +1,22 @@
 <template>
-
     <div class="w-full">
-
         <div class="bg-white shadow rounded">
-
             <p class="text-sm px-6 py-4 border-b text-gray-700 uppercase">
                 Social Sharing
             </p>
-
 
             <div class="sm:flex justify-between">
                 <div class="text-sm text-gray-700 p-6">
                     Easily enable or disable Social Media sharing for the pages you create.
                 </div>
-
             </div>
 
             <div>
                 <div class="w-full bg-gray-100 py-4 px-6 shadow-inner border-b border-t">
                     <div class="w-full sm:flex mt-2">
-                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1">Facebook Share Button</label>
+                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1"
+                            >Facebook Share Button</label
+                        >
                         <div class="w-full sm:w-4/5">
                             <t-toggle
                                 v-model="share.facebook_share"
@@ -29,13 +26,15 @@
                                 true-class="h-6 px-3 bg-blue-400 text-blue-100 rounded shadow-sm"
                                 false-class="h-6 px-3 bg-gray-400 text-gray-100 rounded shadow-sm"
                                 :show-value="true"
-                                >
+                            >
                             </t-toggle>
                         </div>
                     </div>
 
                     <div class="w-full sm:flex mt-2">
-                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1">Twitter Post Button</label>
+                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1"
+                            >Twitter Post Button</label
+                        >
                         <div class="w-full sm:w-4/5">
                             <t-toggle
                                 v-model="share.twitter_post"
@@ -45,7 +44,7 @@
                                 true-class="h-6 px-3 bg-blue-400 text-blue-100 rounded shadow-sm"
                                 false-class="h-6 px-3 bg-gray-400 text-gray-100 rounded shadow-sm"
                                 :show-value="true"
-                                >
+                            >
                             </t-toggle>
                         </div>
                     </div>
@@ -61,7 +60,7 @@
                                 true-class="h-6 px-3 bg-blue-400 text-blue-100 rounded shadow-sm"
                                 false-class="h-6 px-3 bg-gray-400 text-gray-100 rounded shadow-sm"
                                 :show-value="true"
-                                >
+                            >
                             </t-toggle>
                         </div>
                     </div>
@@ -77,7 +76,7 @@
                                 true-class="h-6 px-3 bg-blue-400 text-blue-100 rounded shadow-sm"
                                 false-class="h-6 px-3 bg-gray-400 text-gray-100 rounded shadow-sm"
                                 :show-value="true"
-                                >
+                            >
                             </t-toggle>
                         </div>
                     </div>
@@ -93,23 +92,23 @@
                                 true-class="h-6 px-3 bg-blue-400 text-blue-100 rounded shadow-sm"
                                 false-class="h-6 px-3 bg-gray-400 text-gray-100 rounded shadow-sm"
                                 :show-value="true"
-                                >
+                            >
                             </t-toggle>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="p-6">
-                    <t-button :loadingWheel="isUpdating" textSize="normal" @click.native="postToServer">
+                    <t-button
+                        :loadingWheel="isUpdating"
+                        textSize="normal"
+                        @click.native="postToServer"
+                    >
                         Save Setting
                     </t-button>
                 </div>
-
             </div>
-
         </div>
-
     </div>
 </template>
 
@@ -118,27 +117,25 @@ export default {
     data() {
         return {
             share: {
-                facebook_share: "Off",
-                twitter_post: "Off",
-                pinterest_pin: "Off",
-                linkedin_post: "Off",
-                whatsapp_send: "Off",
+                facebook_share: 'Off',
+                twitter_post: 'Off',
+                pinterest_pin: 'Off',
+                linkedin_post: 'Off',
+                whatsapp_send: 'Off',
             },
             isUpdating: false,
         }
     },
 
     created() {
-
         let p = this
         this.isUpdating = true
 
-        util.ajax ('get', '/api/parameters/share', {},  (response) => {
-
-            if(response) {
+        util.ajax('get', '/api/parameters/share', {}, (response) => {
+            if (response) {
                 try {
                     p.share = JSON.parse(response)
-                } catch(e) {
+                } catch (e) {
                     // console.log(e)
                 }
             }
@@ -148,22 +145,21 @@ export default {
     },
 
     methods: {
-
         postToServer() {
-
             let p = this
             this.isUpdating = true
 
-            window.axios.post('/api/parameters/share', { "value": JSON.stringify(this.share) })
-            .then(response => {
-                util.notifySuccess ('Saved', 'Successfully saved Social Media Sharing Settings.')
-                p.isUpdating = false
-            })
-            .catch(error => {
-                util.notifyError ('Error', error)
-                p.isUpdating = false
-            })
-        }
-    }
+            window.axios
+                .post('/api/parameters/share', { value: JSON.stringify(this.share) })
+                .then((response) => {
+                    util.notifySuccess('Saved', 'Successfully saved Social Media Sharing Settings.')
+                    p.isUpdating = false
+                })
+                .catch((error) => {
+                    util.notifyError('Error', error)
+                    p.isUpdating = false
+                })
+        },
+    },
 }
 </script>

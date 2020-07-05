@@ -1,12 +1,6 @@
 <template>
-
-    <div :class="containerClasses" @click="showImageBrowser=true">
-
-        <img
-            v-if="!!value"
-            :src="imageUrl"
-            :class="imageClasses"
-        >
+    <div :class="containerClasses" @click="showImageBrowser = true">
+        <img v-if="!!value" :src="imageUrl" :class="imageClasses" />
 
         <svg
             v-else
@@ -19,20 +13,23 @@
             stroke="currentColor"
             stroke-width="1"
             stroke-linecap="round"
-            stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline>
+            stroke-linejoin="round"
+        >
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
         </svg>
 
-
-        <t-modal :show="showImageBrowser" @close="showImageBrowser=false" @go-ahead="showImageBrowser=false">
-
+        <t-modal
+            :show="showImageBrowser"
+            @close="showImageBrowser = false"
+            @go-ahead="showImageBrowser = false"
+        >
             <template v-slot:header>
                 <p class="text-xl text-gray-600 px-6 py-4">Browse Images</p>
             </template>
 
-            <div style="max-height: 300px" class="px-6 overflow-y-auto border-t">
-
-
+            <div style="max-height: 300px;" class="px-6 overflow-y-auto border-t">
                 <VueImageBrowser
                     :images="photos"
                     :image-properties="imageFields"
@@ -43,56 +40,48 @@
                     @selected="onSelect"
                     @saved="onSave"
                     @searched="onSearch"
-                    >
+                >
                 </VueImageBrowser>
-
             </div>
 
             <template v-slot:action-btn-content>&nbsp;</template>
-
         </t-modal>
-
     </div>
-
 </template>
 
 <script>
-
 import VueImageBrowser from '@akashmitra/vue-image-browser'
 
 export default {
-
     components: {
-        VueImageBrowser
+        VueImageBrowser,
     },
 
     props: {
-
         value: {
             type: [Object, String],
-            default: null
+            default: null,
         },
 
         imageList: {
             type: String,
-            default: '/api/media'
+            default: '/api/media',
         },
 
         containerClasses: {
             type: String,
-            default: 'w-full bg-gray-100 flex items-center p-6 border cursor-pointer'
+            default: 'w-full bg-gray-100 flex items-center p-6 border cursor-pointer',
         },
 
         imageClasses: {
             type: String,
-            default: 'block mx-auto border'
+            default: 'block mx-auto border',
         },
 
         defaultImageClasses: {
             type: String,
-            default: 'block mx-auto stroke-current text-gray-500'
-        }
-
+            default: 'block mx-auto stroke-current text-gray-500',
+        },
     },
 
     data() {
@@ -100,17 +89,17 @@ export default {
             showImageBrowser: false,
             photos: [],
             headers: {
-                "X-CSRF-Token": document.head.querySelector('meta[name="csrf-token"]').content
+                'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
             },
             imageFields: {
-                'id': 'File ID',
-                'name': 'Image Name',
-                'url': 'url',
-                'size': 'File Size (KB)',
-                'type': 'Image Type',
-                'storage': 'Storage Type',
-                'created_ago': 'Created'
-            }
+                id: 'File ID',
+                name: 'Image Name',
+                url: 'url',
+                size: 'File Size (KB)',
+                type: 'Image Type',
+                storage: 'Storage Type',
+                created_ago: 'Created',
+            },
         }
     },
 
@@ -122,11 +111,10 @@ export default {
         // This supports sending both object or string as the value prop
         imageUrl() {
             return typeof this.value === 'object' ? this.value.url : this.value
-        }
+        },
     },
 
     methods: {
-
         onSelect(image) {
             this.showImageBrowser = false
 
@@ -143,19 +131,16 @@ export default {
 
         getFromServer(query) {
             const p = this
-            let url = '/api/media' + ((typeof query != 'undefined' && query != null) ? '?query=' + encodeURIComponent(query):'')
+            let url =
+                '/api/media' +
+                (typeof query != 'undefined' && query != null
+                    ? '?query=' + encodeURIComponent(query)
+                    : '')
 
-            util.ajax(
-                'GET',
-                url,
-                {},
-                (response) => {
-                    p.photos = response.data
-                }
-            )
+            util.ajax('GET', url, {}, (response) => {
+                p.photos = response.data
+            })
         },
-    }
-
+    },
 }
-
 </script>

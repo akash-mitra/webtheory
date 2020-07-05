@@ -11,9 +11,7 @@ class Permission extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'role', 'resource', 'action', 'permission',
-    ];
+    protected $fillable = ['role', 'resource', 'action', 'permission'];
 
     /**
      * The attributes that should be cast to native types.
@@ -29,7 +27,5 @@ class Permission extends Model
      *
      * @var array
      */
-    protected $hidden = [
-        'id', 'created_at', 'updated_at',
-    ];
+    protected $hidden = ['id', 'created_at', 'updated_at'];
 }

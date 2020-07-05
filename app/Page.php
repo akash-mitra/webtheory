@@ -14,22 +14,30 @@ class Page extends Model
 {
     use SoftDeletes, Searchable, Shareable;
 
-    protected $fillable = ['category_id', 'user_id', 'title', 'summary', 'metakey', 'metadesc', 'status', 'media_id'];
+    protected $fillable = [
+        'category_id',
+        'user_id',
+        'title',
+        'summary',
+        'metakey',
+        'metadesc',
+        'status',
+        'media_id',
+    ];
 
     protected $appends = ['url', 'permalink', 'created_ago', 'updated_ago'];
 
     protected $shareOptions = [
         'columns' => [
-            'title' => 'title'
+            'title' => 'title',
         ],
-        'url' => 'url'
+        'url' => 'url',
     ];
 
     public function scopePublished($query)
     {
         return $query->where('status', 'Live');
     }
-
 
     public function content()
     {
@@ -73,7 +81,6 @@ class Page extends Model
         return url('pages/' . $this->id . '/' . Str::slug($this->title));
     }
 
-
     public function getPermalinkAttribute()
     {
         return url('pages/' . $this->id);
@@ -81,20 +88,18 @@ class Page extends Model
 
     public function getCreatedAgoAttribute()
     {
-        return empty($this->created_at)? null : $this->created_at->diffForHumans();
+        return empty($this->created_at) ? null : $this->created_at->diffForHumans();
     }
 
     public function getUpdatedAgoAttribute()
     {
-        return empty($this->updated_at)? null : $this->updated_at->diffForHumans();
+        return empty($this->updated_at) ? null : $this->updated_at->diffForHumans();
     }
-
 
     public static function invalidateCache()
     {
         Cache::forget('pages');
     }
-
 
     public function shouldBeSearchable()
     {

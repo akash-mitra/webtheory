@@ -11,10 +11,17 @@ use Illuminate\Support\Facades\Storage;
 
 class Template extends Model
 {
-    protected $fillable = ['name', 'description', 'type', 'active', 'parameters', 'media_url', 'user_id'];
+    protected $fillable = [
+        'name',
+        'description',
+        'type',
+        'active',
+        'parameters',
+        'media_url',
+        'user_id',
+    ];
 
     protected $appends = ['files'];
-
 
     /**
      * Returns a list of templates from repository that can be imported
@@ -25,15 +32,11 @@ class Template extends Model
         $templateFiles = Storage::disk('repo')->allDirectories('templates');
 
         return array_map(function ($templateFileName) {
-
             $templateName = Str::after($templateFileName, 'templates/');
 
             return self::getTemplateInfoFromFile($templateName);
-
         }, $templateFiles);
     }
-
-
 
     /**
      * Reads template info file if present and returns the data in an array
@@ -45,7 +48,7 @@ class Template extends Model
             'description' => 'No description is available for this template.',
             'version' => 0,
             'media_url' => 'https://source.unsplash.com/random',
-            'parameters' => (object)[]
+            'parameters' => (object) [],
         ];
 
         $path = '';
@@ -58,8 +61,7 @@ class Template extends Model
             $path = "{$name}/.info";
         }
 
-        if(Storage::disk($disk)->exists($path))
-        {
+        if (Storage::disk($disk)->exists($path)) {
             $fileData = json_decode(Storage::disk($disk)->get($path), true);
 
             $info = array_replace_recursive($info, $fileData);
@@ -68,33 +70,30 @@ class Template extends Model
         return (object) $info;
     }
 
-
-
-    public static function createNewTemplate (array $attributes = [])
+    public static function createNewTemplate(array $attributes = [])
     {
-        $template = auth()->user()->templates()->create($attributes);
+        $template = auth()
+            ->user()
+            ->templates()
+            ->create($attributes);
 
         Storage::disk('templates')->makeDirectory($attributes['name']);
 
         return $template;
     }
 
-
-
-    public function addFile ($name, $code)
+    public function addFile($name, $code)
     {
         // if the file already exists, delete the file!
         $this->deleteFile($name);
 
         Storage::disk('templates')->put($this->name . '/' . $name, $code);
 
-        if($this->active)
-        {
+        if ($this->active) {
             // if this is an active template,
             // we need to update the file in active views directory as well
             // if the file already exists, delete the file!
-            if (Storage::disk('active')->exists($name))
-            {
+            if (Storage::disk('active')->exists($name)) {
                 Storage::disk('active')->delete($name);
             }
 
@@ -102,37 +101,28 @@ class Template extends Model
         }
     }
 
-
-
     public function deleteFile($name)
     {
-        if (Storage::disk('templates')->exists($this->name . '/' . $name))
-        {
+        if (Storage::disk('templates')->exists($this->name . '/' . $name)) {
             return Storage::disk('templates')->delete($this->name . '/' . $name);
         }
     }
 
-
-
-    public function updateTemplate (array $attributes = [])
+    public function updateTemplate(array $attributes = [])
     {
         $oldName = $this->name;
 
         $this->fill($attributes)->save();
 
-        if($oldName != $this->name)
-        {
+        if ($oldName != $this->name) {
             Storage::disk('templates')->move($oldName, $this->name);
         }
 
         $this->clearTemplateParametersCache();
     }
 
-
-
-    public function activate ()
+    public function activate()
     {
-
         //clean the contents from active directory
         self::cleanActive();
 
@@ -150,20 +140,17 @@ class Template extends Model
         $this->clearTemplateParametersCache();
     }
 
-
-
     public function copyToActive()
     {
         $files = Storage::disk('templates')->files($this->name);
 
-        foreach($files as $file)
-        {
+        foreach ($files as $file) {
             // copy only .php and .info files to active folder
-            if (! in_array(strtolower (pathinfo($file, PATHINFO_EXTENSION)),['info', 'php'])) {
+            if (!in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), ['info', 'php'])) {
                 continue;
             }
 
-            if(Storage::disk('active')->exists(basename($file))) {
+            if (Storage::disk('active')->exists(basename($file))) {
                 Storage::disk('active')->delete(basename($file));
             }
 
@@ -175,33 +162,27 @@ class Template extends Model
         }
     }
 
-
-
     public static function cleanActive()
     {
-        $files = array_filter(
-            Storage::disk('active')->files(),
-            function ($file) {
-
-                if (basename($file) === '.gitignore') return false;
-                if (Str::endsWith($file, '___test_bkp')) return false;
-
-                return true;
+        $files = array_filter(Storage::disk('active')->files(), function ($file) {
+            if (basename($file) === '.gitignore') {
+                return false;
             }
-        );
+            if (Str::endsWith($file, '___test_bkp')) {
+                return false;
+            }
+
+            return true;
+        });
 
         return Storage::disk('active')->delete($files);
     }
-
-
-
 
     public function getFilesAttribute()
     {
         $files = Storage::disk('templates')->files($this->name);
 
         return array_map(function ($file) {
-
             $fileName = basename($file);
 
             return [
@@ -210,13 +191,10 @@ class Template extends Model
                     Storage::disk('templates')->lastModified($file)
                 )->format('d M, Y. H:m'),
                 'size' => round(Storage::disk('templates')->size($file) / 1024, 1),
-                'identity' => base64_encode($fileName)
+                'identity' => base64_encode($fileName),
             ];
-
         }, $files);
     }
-
-
 
     public function deleteTemplate()
     {
@@ -224,8 +202,6 @@ class Template extends Model
 
         $this->delete();
     }
-
-
 
     public function duplicate($saveAs)
     {
@@ -238,13 +214,9 @@ class Template extends Model
         ]);
 
         array_map(function ($file) use ($saveAs) {
-
             Storage::disk('templates')->copy($file, $saveAs . '/' . basename($file));
-
         }, Storage::disk('templates')->files($this->name));
     }
-
-
 
     public static function import($from, $name)
     {
@@ -265,25 +237,24 @@ class Template extends Model
         return $template;
     }
 
-
-
     public static function copyFromRepoToTemplate($from, $name)
     {
         $files = Storage::disk('repo')->allFiles('templates/' . $from);
 
-        foreach($files as $file)
-        {
+        foreach ($files as $file) {
             // copy only .php, .info and assets files to template folder
-            if (! in_array(strtolower (pathinfo($file, PATHINFO_EXTENSION)),[
-                'info',
-                'php',
-                'js',
-                'css'
-            ])) {
+            if (
+                !in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), [
+                    'info',
+                    'php',
+                    'js',
+                    'css',
+                ])
+            ) {
                 continue;
             }
 
-            if(Storage::disk('templates')->exists($name . '/' . basename($file))) {
+            if (Storage::disk('templates')->exists($name . '/' . basename($file))) {
                 Storage::disk('templates')->delete($name . '/' . basename($file));
             }
 
@@ -295,7 +266,6 @@ class Template extends Model
         }
     }
 
-
     public function download()
     {
         $zipFile = Str::slug($this->name) . '.zip';
@@ -303,28 +273,22 @@ class Template extends Model
         $zipper = new ZipArchive();
         $zipper->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
-        array_map(function ($file) use ($zipper){
-
-            return $zipper->addFile(
-                Storage::disk('templates')->path($file),
-                basename($file)
-            );
-
+        array_map(function ($file) use ($zipper) {
+            return $zipper->addFile(Storage::disk('templates')->path($file), basename($file));
         }, Storage::disk('templates')->allFiles($this->name));
 
         $zipper->close();
 
-        return response()->download($zipFile)->deleteFileAfterSend();
+        return response()
+            ->download($zipFile)
+            ->deleteFileAfterSend();
     }
-
-
 
     public static function createFromUpload($name, $file)
     {
         $template = null;
 
         try {
-
             // create the template
             $template = Template::createNewTemplate(['name' => $name]);
 
@@ -348,9 +312,7 @@ class Template extends Model
             $template->save();
 
             return $template;
-
-        } catch(Exception $e) {
-
+        } catch (Exception $e) {
             // if there is any error, anywhere above,
             // we will revert back all the changes.
 
@@ -360,8 +322,7 @@ class Template extends Model
             }
 
             // revert storage
-            if (Storage::disk('templates')->exists($name))
-            {
+            if (Storage::disk('templates')->exists($name)) {
                 Storage::disk('templates')->deleteDirectory($name);
             }
 
@@ -369,51 +330,64 @@ class Template extends Model
         }
     }
 
-
     private static function unzipTemplateBundle($templateName)
     {
         $path = Storage::disk('templates')->path($templateName);
         $zip = new ZipArchive();
         $files = [];
 
-        if ($zip->open($path . '/bundle.zip') === TRUE) {
-
+        if ($zip->open($path . '/bundle.zip') === true) {
             for ($i = 0; $i < $zip->numFiles; $i++) {
                 $filename = $zip->getNameIndex($i);
 
-                if(substr($filename, 0, 9) === "__MACOSX/") {
+                if (substr($filename, 0, 9) === '__MACOSX/') {
                     continue;
                 }
 
-                if(in_array(basename($filename), ['.DS_Store', '', ' ', null])) {
+                if (in_array(basename($filename), ['.DS_Store', '', ' ', null])) {
                     continue;
                 }
 
-                if (! in_array(
-                    strtolower (pathinfo($filename, PATHINFO_EXTENSION)),
-                    ['bmp', 'css', 'gif', 'htm', 'html', 'ico', 'info', 'jpeg', 'jpg', 'js', 'pdf', 'php', 'png', 'ts', 'txt', 'vue'])
+                if (
+                    !in_array(strtolower(pathinfo($filename, PATHINFO_EXTENSION)), [
+                        'bmp',
+                        'css',
+                        'gif',
+                        'htm',
+                        'html',
+                        'ico',
+                        'info',
+                        'jpeg',
+                        'jpg',
+                        'js',
+                        'pdf',
+                        'php',
+                        'png',
+                        'ts',
+                        'txt',
+                        'vue',
+                    ])
                 ) {
                     continue;
                 }
 
                 array_push($files, $filename);
 
-                if($fileData = $zip->getFromName($filename)) {
-
-                    Storage::disk('templates')->put($templateName . '/' . basename($filename), $fileData);
+                if ($fileData = $zip->getFromName($filename)) {
+                    Storage::disk('templates')->put(
+                        $templateName . '/' . basename($filename),
+                        $fileData
+                    );
                 }
             }
             $zip->close();
-
         }
 
         return $files;
     }
 
-
     public static function clearTemplateParametersCache()
     {
         Cache::forget('template.parameters');
     }
-
 }

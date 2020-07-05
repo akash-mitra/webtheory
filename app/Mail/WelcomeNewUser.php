@@ -32,8 +32,7 @@ class WelcomeNewUser extends Mailable
     {
         $this->subject('Welcome ' . ucfirst($this->user->name));
 
-        if(Storage::disk('active')->exists('WelcomeNewUser.blade.php'))
-        {
+        if (Storage::disk('active')->exists('WelcomeNewUser.blade.php')) {
             return $this->view('active.WelcomeNewUser');
         }
 

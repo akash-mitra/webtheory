@@ -1,12 +1,10 @@
 <template>
     <t-modal :show="showGallery" @close="close" @go-ahead="copy">
-
         <template v-slot:header>
             <p class="text-xl text-gray-600 px-6 py-4">Gallery Images</p>
         </template>
 
-        <div style="max-height: 300px" class="px-6 overflow-y-auto border-t">
-
+        <div style="max-height: 300px;" class="px-6 overflow-y-auto border-t">
             <VueImageBrowser
                 :images="photos"
                 enable-lazy-load
@@ -15,26 +13,20 @@
                 :save-request-headers="headers"
                 @selected="onSelect"
                 @saved="onSave"
-                @searched="onSearch">
+                @searched="onSearch"
+            >
             </VueImageBrowser>
-
         </div>
 
         <template v-slot:action-btn-content>
-            <span
-                v-show="showCopyBtn"
-                class="px-6 py-2 text-white bg-green-600 rounded"
-            >
+            <span v-show="showCopyBtn" class="px-6 py-2 text-white bg-green-600 rounded">
                 Copy Image Link
             </span>
         </template>
-
     </t-modal>
-
 </template>
 
 <script>
-
 import VueImageBrowser from '@akashmitra/vue-image-browser'
 
 export default {
@@ -44,7 +36,7 @@ export default {
 
     props: {
         showGallery: {
-            type: Boolean
+            type: Boolean,
         },
     },
 
@@ -55,7 +47,7 @@ export default {
             selectedPhoto: null,
 
             headers: {
-                "X-CSRF-Token": document.head.querySelector('meta[name="csrf-token"]').content
+                'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
             },
 
             showCopyBtn: false,
@@ -67,22 +59,18 @@ export default {
     },
 
     methods: {
-
         onSelect(image) {
-
             this.showCopyBtn = true
 
             this.selectedPhoto = image
-
         },
 
         copy() {
-
             let p = this
             let fqdn = window.location.origin + this.selectedPhoto.url
 
             if (navigator.clipboard) {
-                navigator.clipboard.writeText(fqdn).then(()=>{
+                navigator.clipboard.writeText(fqdn).then(() => {
                     p.$emit('selected', p.selectedPhoto)
                     p.$emit('close')
                 })
@@ -98,24 +86,21 @@ export default {
         },
 
         onSave(image) {
-
             this.photos.unshift(image.file)
         },
 
         getFromServer(query) {
             const p = this
-            let url = '/api/media' + ((typeof query != 'undefined' && query != null) ? '?query=' + encodeURIComponent(query):'')
+            let url =
+                '/api/media' +
+                (typeof query != 'undefined' && query != null
+                    ? '?query=' + encodeURIComponent(query)
+                    : '')
 
-            util.ajax(
-                'GET',
-                url,
-                {},
-                (response) => {
-                    p.photos = response.data
-                }
-            )
+            util.ajax('GET', url, {}, (response) => {
+                p.photos = response.data
+            })
         },
-
-    }
+    },
 }
 </script>

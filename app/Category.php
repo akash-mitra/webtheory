@@ -11,7 +11,15 @@ class Category extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name', 'description', 'parent_id', 'metakey', 'metadesc', 'media_id', 'user_id'];
+    protected $fillable = [
+        'name',
+        'description',
+        'parent_id',
+        'metakey',
+        'metadesc',
+        'media_id',
+        'user_id',
+    ];
 
     protected $appends = ['url', 'permalink', 'created_ago', 'updated_ago'];
 
@@ -72,14 +80,13 @@ class Category extends Model
 
     public function getCreatedAgoAttribute()
     {
-        return empty($this->created_at)? null : $this->created_at->diffForHumans();
+        return empty($this->created_at) ? null : $this->created_at->diffForHumans();
     }
 
     public function getUpdatedAgoAttribute()
     {
-        return empty($this->updated_at)? null : $this->updated_at->diffForHumans();
+        return empty($this->updated_at) ? null : $this->updated_at->diffForHumans();
     }
-
 
     public static function invalidateCache()
     {

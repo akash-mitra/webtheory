@@ -30,8 +30,7 @@ class VerifyEmailAddress extends Mailable
      */
     public function build()
     {
-        if(Storage::disk('active')->exists('VerifyEmailAddress.blade.php'))
-        {
+        if (Storage::disk('active')->exists('VerifyEmailAddress.blade.php')) {
             return $this->view('active.VerifyEmailAddress');
         }
 

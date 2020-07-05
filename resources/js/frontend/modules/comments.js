@@ -1,1 +1,1 @@
-Vue.component('wt-comments', require('./Comments.vue').default);
+Vue.component('wt-comments', require('./Comments.vue').default)

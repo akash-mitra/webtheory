@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class View  extends Model
+class View extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,6 +12,15 @@ class View  extends Model
      * @var array
      */
     protected $fillable = [
-        'ip', 'user_id', 'at', 'url', 'content_type', 'content_id', 'platform', 'browser', 'version', 'referrer', 
+        'ip',
+        'user_id',
+        'at',
+        'url',
+        'content_type',
+        'content_id',
+        'platform',
+        'browser',
+        'version',
+        'referrer',
     ];
 }
