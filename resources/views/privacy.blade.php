@@ -6,7 +6,7 @@
   <title>{{ $data->ref->site->title }}</title>
   <meta name="description" content="Privacy Policy">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="/css/style-{{$data->ref->template->primaryColor}}.css" rel="stylesheet">
+  <link href="/css/serenity.{{$data->ref->template->primaryColor}}.css" rel="stylesheet">
   <meta name="theme-color" content="#fafafa">
 </head>
 
