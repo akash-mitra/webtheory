@@ -46,9 +46,12 @@ class BackupSite extends Command
 
         try {
             $this->call('down');
-            
 
-            $shell = view('vendor.backup.script', ['db' => $this->option('db'), 'assets' => $this->option('assets'), 'templates' => $this->option('templates')]);
+            $shell = view('vendor.backup.script', [
+                'db' => $this->option('db'),
+                'assets' => $this->option('assets'),
+                'templates' => $this->option('templates'),
+            ]);
             $process = Process::fromShellCommandline($shell);
             $process->run();
 
@@ -58,13 +61,13 @@ class BackupSite extends Command
             }
 
             $this->info($process->getOutput());
-            
 
             $this->call('up');
 
             $this->info('Site backup complete');
+
             return 0;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             \Log::info($e);
             $this->call('up');
             $this->error('Something went wrong!');
