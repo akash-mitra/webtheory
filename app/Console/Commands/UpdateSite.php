@@ -55,9 +55,9 @@ class UpdateSite extends Command
             
             exec("composer install -d " . base_path());
             
-            // TEMP- Remove Later below 2 lines
-            exec("cp -rf /var/www/app/webtheory/storage/repo/templates/Serenity/* /var/www/app/webtheory/resources/views/active/");
-            exec("cp -rf /var/www/app/webtheory/storage/repo/templates/Serenity /var/www/app/webtheory/resources/views/templates/");
+            // Temporary Use - Remove below 2 lines
+            // exec("cp -rf /var/www/app/webtheory/storage/repo/templates/Serenity/* /var/www/app/webtheory/resources/views/active/");
+            // exec("cp -rf /var/www/app/webtheory/storage/repo/templates/Serenity /var/www/app/webtheory/resources/views/templates/");
 
             $this->info('Composer command success.');
 
@@ -78,7 +78,6 @@ class UpdateSite extends Command
             $this->info('Site updated successfully');
             return 0;
         } catch(Exception $e) {
-            \Log::info($e);
             $this->call('up');
             $this->error('Something went wrong!');
             return 1;
