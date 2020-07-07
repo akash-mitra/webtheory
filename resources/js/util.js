@@ -1,6 +1,7 @@
 ;(function (util, undefined) {
     //Private Property
     var isHot = true
+    var timer = null
 
     // Public properties
 
@@ -157,6 +158,14 @@
             title: title,
             text: text,
         })
+    }
+
+    util.debounce = function (milliseconds, fn) {
+        if (util.timer) clearTimeout(util.timer)
+
+        util.timer = setTimeout(() => {
+            fn()
+        }, milliseconds)
     }
 
     /**

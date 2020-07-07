@@ -8,6 +8,8 @@ import Users from './components/Users.vue'
 import UserForm from './components/UserForm.vue'
 import Settings from './components/Settings.vue'
 import Gallery from './components/Gallery.vue'
+import Forms from './components/Forms.vue'
+import FormEditor from './components/FormEditor.vue'
 
 /* dynamic components */
 const PageEditor = () =>
@@ -107,22 +109,28 @@ export default {
             name: 'users.edit',
         },
 
-        /*
-         * Setting related routes
-         */
         {
             path: '/app/settings',
             component: Settings,
             name: 'settings.index',
         },
 
-        /*
-         * Setting related routes
-         */
         {
             path: '/app/gallery',
             component: Gallery,
             name: 'gallery.index',
+        },
+
+        {
+            path: '/app/forms',
+            component: Forms,
+            name: 'forms.index',
+        },
+
+        {
+            path: '/app/forms/:id',
+            component: FormEditor,
+            name: 'forms.edit',
         },
     ],
 }
