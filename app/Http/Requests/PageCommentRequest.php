@@ -38,7 +38,7 @@ class PageCommentRequest extends FormRequest
     public function messages()
     {
         return [
-            //
-        ];
+                //
+            ];
     }
 }

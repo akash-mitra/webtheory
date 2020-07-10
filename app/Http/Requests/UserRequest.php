@@ -26,7 +26,12 @@ class UserRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($this->user)],
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($this->user),
+            ],
             'role' => ['required', Rule::in(['admin', 'author', 'registered'])],
         ];
     }
@@ -39,7 +44,7 @@ class UserRequest extends FormRequest
     public function messages()
     {
         return [
-            //
-        ];
+                //
+            ];
     }
 }

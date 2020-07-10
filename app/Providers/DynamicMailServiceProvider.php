@@ -21,8 +21,6 @@ class DynamicMailServiceProvider extends ServiceProvider implements DeferrablePr
         //
     }
 
-
-
     /**
      * Register the application services.
      *
@@ -30,15 +28,10 @@ class DynamicMailServiceProvider extends ServiceProvider implements DeferrablePr
      */
     public function register()
     {
-
         // We define a custom mail service provider and bind the same
         // to the service container under the name 'webtheory.mail'.
         $this->app->bind('webtheory.mail', function ($app, $parameters) {
-
-            $transport = new Swift_SmtpTransport(
-                $parameters['host'],
-                $parameters['port']
-            );
+            $transport = new Swift_SmtpTransport($parameters['host'], $parameters['port']);
 
             $transport->setUsername($parameters['username']);
             $transport->setPassword($parameters['password']);
@@ -60,8 +53,6 @@ class DynamicMailServiceProvider extends ServiceProvider implements DeferrablePr
             return $mailer;
         });
     }
-
-
 
     /**
      * Get the services provided by the provider.

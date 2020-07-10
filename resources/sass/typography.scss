@@ -3,17 +3,14 @@
  *
  */
 
-
-
 .wt-typography {
-
     // ------------------------------------------------
     // Headers and Paragraph styles
     // ------------------------------------------------
 
     & h1 {
         @apply text-4xl pt-3 pb-1 my-0 antialiased tracking-tight leading-tight;
-      }
+    }
 
     @media (min-width: 640px) {
         & h1 {
@@ -25,39 +22,34 @@
         @apply pt-2 pb-3 px-2 text-base leading-relaxed;
     }
 
-    & h2, h3, h4 {
-
+    & h2,
+    h3,
+    h4 {
         @apply pt-4 pb-1 my-0 antialiased;
-
     }
-
 
     & h2 {
         @apply text-3xl leading-tight font-semibold py-4 tracking-tight;
-
     }
-
 
     & h3 {
         @apply text-3xl leading-snug tracking-tight;
     }
 
-
     & h4 {
         @apply text-xl font-bold leading-snug tracking-normal pb-1;
     }
-
 
     & .wt-summary {
         @apply py-4 px-6 rounded -mx-6 text-xl;
     }
 
-
     // ------------------------------------------------
     // List styles (UL/OL)
     // ------------------------------------------------
 
-    & ul>li, & ol>li {
+    & ul > li,
+    & ol > li {
         @apply text-base ml-4 pb-2 pr-0 leading-relaxed;
     }
 
@@ -69,17 +61,17 @@
         @apply list-disc;
     }
 
-    & ul, & ol {
+    & ul,
+    & ol {
         @apply list-inside ml-3 my-2;
     }
 
     @media (min-width: 640px) {
-        & ul, & ol {
+        & ul,
+        & ol {
             @apply ml-6;
         }
     }
-
-
 
     // ------------------------------------------------
     // Image styles
@@ -112,8 +104,6 @@
         @apply border p-4 shadow;
     }
 
-
-
     // ------------------------------------------------
     // Table styles
     // ------------------------------------------------
@@ -130,9 +120,6 @@
         @apply py-2;
     }
 
-
-
-
     // ------------------------------------------------
     // Inline Tag styles
     // ------------------------------------------------
@@ -145,8 +132,6 @@
         @apply font-bold;
     }
 
-
-
     // ------------------------------------------------
     // Code Block styling
     // ------------------------------------------------
@@ -158,5 +143,4 @@
     & code.hljs {
         @apply p-6 my-6 -ml-6 bg-gray-200 rounded;
     }
-
 }

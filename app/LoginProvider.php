@@ -11,9 +11,7 @@ class LoginProvider extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'user_id', 'provider_user_id', 'provider', 'avatar',
-    ];
+    protected $fillable = ['user_id', 'provider_user_id', 'provider', 'avatar'];
 
     /**
      * returns the user associated with

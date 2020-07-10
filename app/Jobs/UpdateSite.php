@@ -33,7 +33,7 @@ class UpdateSite implements ShouldQueue
     public function handle()
     {
         $exitCode = Artisan::call('update:site', [
-            'commit' => $this->commitId
+            'commit' => $this->commitId,
         ]);
 
         // \Log::info($exitCode);

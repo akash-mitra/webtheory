@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Storage;
  * This is to make sure that when this code is deployed,
  * it contains the relevant structures and files.
  */
-trait DefaultTemplateTests {
-
+trait DefaultTemplateTests
+{
     public $defaultTemplateName = 'Serenity';
 
     public $preloadedTemplates = [
@@ -26,7 +26,7 @@ trait DefaultTemplateTests {
 
             'login-modal.blade.php',
             'user-menu.blade.php',
-            'blog.blade.php'
+            'blog.blade.php',
         ],
 
         'Serenity Dark' => [
@@ -39,11 +39,9 @@ trait DefaultTemplateTests {
 
             'login-modal.blade.php',
             'user-menu.blade.php',
-            'blog.blade.php'
-        ]
+            'blog.blade.php',
+        ],
     ];
-
-
 
     public function test_default_template_is_set_as_active()
     {
@@ -53,25 +51,24 @@ trait DefaultTemplateTests {
         ]);
     }
 
-
-
-    public function test_active_dir_is_preloaded_with_default_template ()
+    public function test_active_dir_is_preloaded_with_default_template()
     {
         array_map(function ($file) {
-
-            if (! Str::startsWith(basename($file), ".")) { // ignore hidden files
+            if (!Str::startsWith(basename($file), '.')) {
+                // ignore hidden files
 
                 $sourceFileContent = Storage::disk('templates')->get($file);
 
                 $targetFileContent = Storage::disk('active')->get(basename($file));
 
-                $this->assertEquals($sourceFileContent, $targetFileContent, $file . ' is different between active and template directories.');
+                $this->assertEquals(
+                    $sourceFileContent,
+                    $targetFileContent,
+                    $file . ' is different between active and template directories.'
+                );
             }
-        },
-        Storage::disk('templates')->files($this->defaultTemplateName));
+        }, Storage::disk('templates')->files($this->defaultTemplateName));
     }
-
-
 
     public function test_templates_dir_is_preloaded_with_default_template()
     {
@@ -90,13 +87,10 @@ trait DefaultTemplateTests {
         }, $this->preloadedTemplates[$this->defaultTemplateName]);
     }
 
-
-
     public function test_repo_is_preloaded_with_templates()
     {
-        foreach($this->preloadedTemplates as $dir => $files)
-        {
-            array_map(function ($fileName) use ($dir){
+        foreach ($this->preloadedTemplates as $dir => $files) {
+            array_map(function ($fileName) use ($dir) {
                 $this->assertTrue(
                     Storage::disk('repo')->exists('templates/' . $dir . '/' . $fileName),
                     $fileName . ' file is missing in ' . $dir
@@ -105,23 +99,15 @@ trait DefaultTemplateTests {
         }
     }
 
-
-
     public function test_all_repo_templates_contain_info_json()
     {
         $templateDirectories = Storage::disk('repo')->directories('templates');
 
         array_map(function ($dir) {
-
             $this->assertTrue(
                 Storage::disk('repo')->exists($dir . '/.info'),
                 'File .info is missing in ' . $dir
             );
-
         }, $templateDirectories);
     }
-
-
-
-
 }

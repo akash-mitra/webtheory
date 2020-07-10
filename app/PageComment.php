@@ -42,11 +42,11 @@ class PageComment extends Model
 
     public function getCreatedAgoAttribute()
     {
-        return empty($this->created_at)? null : $this->created_at->diffForHumans();
+        return empty($this->created_at) ? null : $this->created_at->diffForHumans();
     }
 
     public function getUpdatedAgoAttribute()
     {
-        return empty($this->updated_at)? null : $this->updated_at->diffForHumans();
+        return empty($this->updated_at) ? null : $this->updated_at->diffForHumans();
     }
 }

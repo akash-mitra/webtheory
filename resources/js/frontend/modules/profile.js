@@ -1,1 +1,1 @@
-Vue.component('wt-profile', require('./Profile.vue').default);
+Vue.component('wt-profile', require('./Profile.vue').default)

@@ -38,7 +38,7 @@ class CategoryCommentRequest extends FormRequest
     public function messages()
     {
         return [
-            //
-        ];
+                //
+            ];
     }
 }

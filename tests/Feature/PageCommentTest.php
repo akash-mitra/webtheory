@@ -14,35 +14,53 @@ class PageCommentTest extends TestDataSetup
 
         /* Unauthenticated user can view pagecomments listing */
         $response = $this->get('/api/pages/' . $this->page->id . '/comments');
-        $response->assertStatus(200)
-            ->assertJsonStructureExact([
-                'current_page',
-                'data' => [
-                    '*' => [
-                        array_merge($this->comment_attributes, [
-                            'user' => $this->user_attributes,
-                            "replies"
-                        ])
-                    ]
+        $response->assertStatus(200)->assertJsonStructureExact([
+            'current_page',
+            'data' => [
+                '*' => [
+                    array_merge($this->comment_attributes, [
+                        'user' => $this->user_attributes,
+                        'replies',
+                    ]),
                 ],
-                'first_page_url', 'from', 'last_page', 'last_page_url', 'next_page_url', 'path', 'per_page', 'prev_page_url', 'to', 'total', 
-            ]);
+            ],
+            'first_page_url',
+            'from',
+            'last_page',
+            'last_page_url',
+            'next_page_url',
+            'path',
+            'per_page',
+            'prev_page_url',
+            'to',
+            'total',
+        ]);
 
         /* Authenticated user can view pagecomments listing */
-        $response = $this->actingAs($this->adminUser)->get('/api/pages/' . $this->page->id . '/comments');
-        $response->assertStatus(200)
-            ->assertJsonStructureExact([
-                'current_page',
-                'data' => [
-                    '*' => [
-                        array_merge($this->comment_attributes, [
-                            'user' => $this->user_attributes,
-                            "replies"
-                        ])
-                    ]
+        $response = $this->actingAs($this->adminUser)->get(
+            '/api/pages/' . $this->page->id . '/comments'
+        );
+        $response->assertStatus(200)->assertJsonStructureExact([
+            'current_page',
+            'data' => [
+                '*' => [
+                    array_merge($this->comment_attributes, [
+                        'user' => $this->user_attributes,
+                        'replies',
+                    ]),
                 ],
-                'first_page_url', 'from', 'last_page', 'last_page_url', 'next_page_url', 'path', 'per_page', 'prev_page_url', 'to', 'total', 
-            ]);
+            ],
+            'first_page_url',
+            'from',
+            'last_page',
+            'last_page_url',
+            'next_page_url',
+            'path',
+            'per_page',
+            'prev_page_url',
+            'to',
+            'total',
+        ]);
         $this->assertDatabaseHas('page_comments', ['body' => $pagecomment->body]);
     }
 
@@ -52,13 +70,20 @@ class PageCommentTest extends TestDataSetup
         $pagecomment = factory(PageComment::class)->make();
 
         /* Unauthenticated user cannot save pagecomment */
-        $response = $this->post('/api/pages/' . $this->page->id . '/comments', $pagecomment->toArray(), ['Accept' => 'application/json']);
-        $response->assertStatus(401)
-            ->assertJson(['message' => 'Unauthenticated.']);
+        $response = $this->post(
+            '/api/pages/' . $this->page->id . '/comments',
+            $pagecomment->toArray(),
+            ['Accept' => 'application/json']
+        );
+        $response->assertStatus(401)->assertJson(['message' => 'Unauthenticated.']);
 
         /* Authenticated user can save pagecomment */
-        $response = $this->actingAs($this->adminUser)->post('/api/pages/' . $this->page->id . '/comments', $pagecomment->toArray());
-        $response->assertStatus(200)
+        $response = $this->actingAs($this->adminUser)->post(
+            '/api/pages/' . $this->page->id . '/comments',
+            $pagecomment->toArray()
+        );
+        $response
+            ->assertStatus(200)
             ->assertJsonFragment(['body' => $pagecomment->body])
             ->assertJsonStructureExact($this->comment_attributes_store);
         $this->assertDatabaseHas('page_comments', ['body' => $pagecomment->body]);
@@ -130,6 +155,6 @@ class PageCommentTest extends TestDataSetup
             ->assertJsonStructureExact($this->comment_attributes);
         $this->assertDatabaseHas('page_comments', ['dislikes' => $pagecomment->dislikes + 1]);
     }
-    
+
     */
 }

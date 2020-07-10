@@ -2,7 +2,6 @@
 
 namespace App;
 
-
 use App\Template;
 // use App\Jobs\SendEmail;
 use App\Traits\SetMailConfig;
@@ -18,14 +17,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable,
-        SoftDeletes,
-        Billable,
-        EnableDummyAvatar,
-        SetMailConfig;
+    use Notifiable, SoftDeletes, Billable, EnableDummyAvatar, SetMailConfig;
 
     /**
      * The attributes that are mass assignable.
@@ -33,8 +27,21 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'email_verified_at', 'role', 'avatar', 'about_me', 'gender', 'dob', 'preferences', 'public_id', 
-        'stripe_id', 'card_brand', 'card_last_four', 'trial_ends_at', 
+        'name',
+        'email',
+        'password',
+        'email_verified_at',
+        'role',
+        'avatar',
+        'about_me',
+        'gender',
+        'dob',
+        'preferences',
+        'public_id',
+        'stripe_id',
+        'card_brand',
+        'card_last_four',
+        'trial_ends_at',
     ];
 
     /**
@@ -43,7 +50,12 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'stripe_id', 'card_brand', 'card_last_four', 'trial_ends_at',
+        'password',
+        'remember_token',
+        'stripe_id',
+        'card_brand',
+        'card_last_four',
+        'trial_ends_at',
     ];
 
     /**
@@ -99,7 +111,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->role == 'author';
     }
 
-
     public function getCreatedAgoAttribute()
     {
         return optional($this->created_at)->diffForHumans();
@@ -115,7 +126,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return route('profile.show', $this->public_id);
     }
 
-
     public function providers($provider = null)
     {
         if (empty($provider)) {
@@ -125,7 +135,7 @@ class User extends Authenticatable implements MustVerifyEmail
         }
     }
 
-    public function createOrUpdateProvider(String $provider, $providerUser)
+    public function createOrUpdateProvider(string $provider, $providerUser)
     {
         $authProvider = $this->providers($provider)->first();
 
@@ -133,7 +143,7 @@ class User extends Authenticatable implements MustVerifyEmail
             $this->providers()->create([
                 'provider' => $provider,
                 'provider_user_id' => $providerUser->getId(),
-                'avatar' => $providerUser->getAvatar()
+                'avatar' => $providerUser->getAvatar(),
             ]);
         } else {
             $authProvider->avatar = $providerUser->getAvatar();
@@ -145,17 +155,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->save();
     }
 
-
-
-    public static function findByPublicId ($publicId)
+    public static function findByPublicId($publicId)
     {
         $user = User::where('public_id', $publicId)->first();
 
-        if ($user === null) abort(404, 'User Not Found');
+        if ($user === null) {
+            abort(404, 'User Not Found');
+        }
 
         return $user;
     }
-
 
     /**
      * This method is a override of the originl method present in the
@@ -172,8 +181,6 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->sendEmail($this->email, new VerifyEmailAddress($this));
     }
 
-
-
     /**
      * This method is a override of the originl method present in the
      * Illuminate\Auth\Passwords\CanResetPassword trait. This over-
@@ -189,7 +196,6 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->sendEmail($this->email, new ResetPasswordLink($this, $token));
     }
 
-
     public function verificationUrl()
     {
         return URL::temporarySignedRoute(
@@ -201,5 +207,4 @@ class User extends Authenticatable implements MustVerifyEmail
             ]
         );
     }
-
 }

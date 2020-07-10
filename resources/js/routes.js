@@ -1,31 +1,33 @@
-import Dashboard from './components/Dashboard.vue';
-import Pages from './components/Pages.vue';
-import Categories from './components/Categories.vue';
-import Templates from './components/Templates.vue';
-import CategoryEditor from './components/CategoryEditor.vue';
-import TemplateEditor from './components/TemplateEditor.vue';
-import Users from './components/Users.vue';
-import UserForm from './components/UserForm.vue';
-import Settings from './components/Settings.vue';
-import Gallery from './components/Gallery.vue';
+import Dashboard from './components/Dashboard.vue'
+import Pages from './components/Pages.vue'
+import Categories from './components/Categories.vue'
+import Templates from './components/Templates.vue'
+import CategoryEditor from './components/CategoryEditor.vue'
+import TemplateEditor from './components/TemplateEditor.vue'
+import Users from './components/Users.vue'
+import UserForm from './components/UserForm.vue'
+import Settings from './components/Settings.vue'
+import Gallery from './components/Gallery.vue'
+import Forms from './components/Forms.vue'
+import FormEditor from './components/FormEditor.vue'
 
 /* dynamic components */
-const PageEditor = () => import (
-    /* webpackChunkName: "PageEditor" */
-    './components/PageEditor.vue'
-);
+const PageEditor = () =>
+    import(
+        /* webpackChunkName: "PageEditor" */
+        './components/PageEditor.vue'
+    )
 
-const TemplateFileEditor = () => import (
-    /* webpackChunkName: "TemplateFileEditor" */
-    './components/TemplateFileEditor.vue'
-);
+const TemplateFileEditor = () =>
+    import(
+        /* webpackChunkName: "TemplateFileEditor" */
+        './components/TemplateFileEditor.vue'
+    )
 
 export default {
-
     mode: 'history',
 
     routes: [
-
         {
             path: '/app',
             component: Dashboard,
@@ -52,7 +54,6 @@ export default {
             name: 'pages.edit',
         },
 
-
         /*
          * Category related routes
          */
@@ -70,24 +71,22 @@ export default {
 
         {
             path: '/app/categories/:id',
-            component: CategoryEditor ,
+            component: CategoryEditor,
             name: 'categories.edit',
         },
-
 
         /*
          * Templates related routes
          */
-        { path: '/app/templates', component: Templates, },
+        { path: '/app/templates', component: Templates },
 
-        { path: '/app/templates/create', component: TemplateEditor, },
+        { path: '/app/templates/create', component: TemplateEditor },
 
-        { path: '/app/templates/:id/get/:fileIdentity', component: TemplateFileEditor, },
+        { path: '/app/templates/:id/get/:fileIdentity', component: TemplateFileEditor },
 
-        { path: '/app/templates/:id/create', component: TemplateFileEditor, },
+        { path: '/app/templates/:id/create', component: TemplateFileEditor },
 
-        { path: '/app/templates/:id', component: TemplateEditor, },
-
+        { path: '/app/templates/:id', component: TemplateEditor },
 
         /*
          * User related routes
@@ -106,31 +105,32 @@ export default {
 
         {
             path: '/app/users/:id',
-            component: UserForm ,
+            component: UserForm,
             name: 'users.edit',
         },
 
-
-        /*
-         * Setting related routes
-         */
         {
             path: '/app/settings',
             component: Settings,
             name: 'settings.index',
         },
 
-
-
-        /*
-         * Setting related routes
-         */
         {
             path: '/app/gallery',
             component: Gallery,
             name: 'gallery.index',
         },
 
-    ]
+        {
+            path: '/app/forms',
+            component: Forms,
+            name: 'forms.index',
+        },
 
+        {
+            path: '/app/forms/:id',
+            component: FormEditor,
+            name: 'forms.edit',
+        },
+    ],
 }

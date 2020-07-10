@@ -2,13 +2,15 @@
  * THIS IS THE MIX FILE FOR COMPILING TAILWIND CSS USED IN TEMPLATES
  */
 
-const mix = require('laravel-mix');
+const mix = require('laravel-mix')
 const tailwindcss = require('tailwindcss')('./tailwind.config.js')
 const purgecss = require('@fullhuman/postcss-purgecss')
 
-const postCssPluginsFrontEnd = [tailwindcss];
+const postCssPluginsFrontEnd = [tailwindcss]
 
-const tailwindClassExtractor = function (content) { return content.match(/[\w-/:]+(?<!:)/g) || [] }
+const tailwindClassExtractor = function (content) {
+    return content.match(/[\w-/:]+(?<!:)/g) || []
+}
 
 /**
  * While using the purgeCss plugin to remove unused css classes,
@@ -19,22 +21,21 @@ const tailwindClassExtractor = function (content) { return content.match(/[\w-/:
  */
 
 const templateScanPaths = [
-  './resources/views/active/*.php',
-  './resources/views/modules/*.php',
-  './resources/sass/typography.scss',
-  './resources/js/frontend/modules/*.vue',
-  './resources/js/frontend/pages/*.vue',
-  './resources/js/frontend/users/*.vue',
-];
+    './resources/views/active/*.php',
+    './resources/views/modules/*.php',
+    './resources/sass/typography.scss',
+    './resources/js/frontend/modules/*.vue',
+    './resources/js/frontend/pages/*.vue',
+    './resources/js/frontend/users/*.vue',
+]
 
 // frontend
-postCssPluginsFrontEnd.push (
-  purgecss({
-    content: templateScanPaths,
-    defaultExtractor: tailwindClassExtractor
-  })
-);
-
+postCssPluginsFrontEnd.push(
+    purgecss({
+        content: templateScanPaths,
+        defaultExtractor: tailwindClassExtractor,
+    })
+)
 
 /*
  * This is to circumvent an odd browser cache issue
@@ -47,7 +48,6 @@ postCssPluginsFrontEnd.push (
 //   }
 // });
 
-
 /*
  * Since we will be using CSS preprocessors (SASS), we will use
  * Laravel Mix's options method to add tailwindcss as a PostCSS
@@ -56,10 +56,9 @@ postCssPluginsFrontEnd.push (
  * will need to disable processCssUrls. For details, refer -
  * https://tailwindcss.com/docs/installation#laravel-mix
  */
-mix.options({ processCssUrls: false });
+mix.options({ processCssUrls: false })
 
 mix.sass('resources/sass/style.scss', 'public/css', {}, postCssPluginsFrontEnd)
 
-
 // This is added to give webpack the ability to do dynamic import
-mix.babelConfig({ plugins: ['@babel/plugin-syntax-dynamic-import'], });
+mix.babelConfig({ plugins: ['@babel/plugin-syntax-dynamic-import'] })

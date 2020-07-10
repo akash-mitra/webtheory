@@ -31,8 +31,7 @@ class ResetPasswordLink extends Mailable
      */
     public function build()
     {
-        if(Storage::disk('active')->exists('ResetPasswordLink.blade.php'))
-        {
+        if (Storage::disk('active')->exists('ResetPasswordLink.blade.php')) {
             return $this->view('active.ResetPasswordLink');
         }
 

@@ -3,25 +3,22 @@
 namespace App\Http\Controllers\Api;
 
 use App\Page;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PageCommentRequest;
 
-
 class PageCommentController extends Controller
 {
-
     public function index(Page $page)
     {
-        $comments = $page->directComments()
+        $comments = $page
+            ->directComments()
             ->with(['user', 'replies.user'])
             ->latest('updated_at')
             ->paginate(5);
 
         return response()->json($comments);
     }
-
 
     public function store(Page $page, PageCommentRequest $request)
     {
@@ -31,8 +28,7 @@ class PageCommentController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        if($comment->isReply())
-        {
+        if ($comment->isReply()) {
             $comment->parent()->touch();
         }
 

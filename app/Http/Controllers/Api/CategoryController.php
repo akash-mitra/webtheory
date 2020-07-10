@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Category;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CategoryRequest;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -19,8 +19,6 @@ class CategoryController extends Controller
         $this->middleware(['check.permission']);
     }
 
-
-
     /**
      * Display a listing of the resource.
      *
@@ -30,8 +28,6 @@ class CategoryController extends Controller
     {
         return response()->json(Category::with('media', 'author')->get());
     }
-
-
 
     /**
      * Store a newly created resource in storage.
@@ -57,8 +53,6 @@ class CategoryController extends Controller
         return response()->json($category);
     }
 
-
-
     /**
      * Display the specified resource.
      *
@@ -71,8 +65,6 @@ class CategoryController extends Controller
         return response()->json($category);
     }
 
-
-
     /**
      * Update the specified resource in storage.
      *
@@ -84,12 +76,12 @@ class CategoryController extends Controller
     {
         Category::invalidateCache();
 
-        $category->fill(request(['name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id']))->save();
+        $category
+            ->fill(request(['name', 'parent_id', 'description', 'metakey', 'metadesc', 'media_id']))
+            ->save();
 
         return response()->json($category);
     }
-
-
 
     /**
      * Remove the specified resource from storage.
@@ -100,22 +92,23 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         if ($category->hasContent()) {
-            return response()->json([
-                "message" => "Unable to delete the category",
-                "errors" => [
-                    "name" => ["This category is not empty."]
-                ]
-            ], 422);
+            return response()->json(
+                [
+                    'message' => 'Unable to delete the category',
+                    'errors' => [
+                        'name' => ['This category is not empty.'],
+                    ],
+                ],
+                422
+            );
         }
 
         Category::invalidateCache();
 
         $category->delete();
 
-        return response()->json("success", 204);
+        return response()->json('success', 204);
     }
-
-
 
     /**
      * Display the pages under a category.

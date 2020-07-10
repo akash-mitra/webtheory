@@ -40,21 +40,14 @@ class ProfileController extends Controller
         $user = $request->user();
 
         if ($request->has('avatarfile')) {
-
             $uploadedFile = $request->file('avatarfile');
 
-            $media =  Media::store(
-                $uploadedFile,
-                Str::slug($user->id),
-                'media/profiles',
-                false
-            );
+            $media = Media::store($uploadedFile, Str::slug($user->id), 'media/profiles', false);
 
             $user->avatar = $media->url;
         }
 
         if ($request->has('avatar_base64')) {
-
             $media = Media::storeFromBase64(
                 $request->avatar_base64,
                 Str::slug($user->id),
@@ -65,37 +58,37 @@ class ProfileController extends Controller
             $user->avatar = $media->url;
         }
 
-
-        $user->fill(request(['name', 'about_me', 'gender', 'dob', 'preferences']))
-            ->save();
+        $user->fill(request(['name', 'about_me', 'gender', 'dob', 'preferences']))->save();
 
         return response()->json($user);
     }
-
 
     public function pages($public)
     {
         $user = User::findByPublicId($public);
 
         return $user
-                ->pages()
-                    ->where('status', 'Live')
-                        ->with(['media', 'category'])
-                            ->paginate(4);
+            ->pages()
+            ->where('status', 'Live')
+            ->with(['media', 'category'])
+            ->paginate(4);
     }
-
 
     // Comments made by the Auth User under categories or pages
     public function comments()
     {
-        $categorycomments = Category::with('comments')->whereHas('comments', function ($query) {
-            $query->where('user_id', Auth::id());
-        })->get();
+        $categorycomments = Category::with('comments')
+            ->whereHas('comments', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->get();
 
-        $pagecomments = Page::with('comments')->whereHas('comments', function ($query) {
-            $query->where('user_id', Auth::id());
-        })->get();
+        $pagecomments = Page::with('comments')
+            ->whereHas('comments', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->get();
 
-        return response()->json(["categories" => $categorycomments, "pages" => $pagecomments]);
+        return response()->json(['categories' => $categorycomments, 'pages' => $pagecomments]);
     }
 }

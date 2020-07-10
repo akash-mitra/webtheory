@@ -32,10 +32,7 @@ class PageRequest extends FormRequest
             'metadesc' => ['nullable', 'string', 'max:255'],
             'media_id' => ['nullable', 'integer', 'exists:media,id'],
             'body_json' => ['required', 'json'],
-            'status' => [
-                'required',
-                Rule::in(['Draft', 'Live'])
-            ],
+            'status' => ['required', Rule::in(['Draft', 'Live'])],
             'editor' => ['required', 'string', 'max:50'],
         ];
     }
@@ -48,7 +45,7 @@ class PageRequest extends FormRequest
     public function messages()
     {
         return [
-            //
-        ];
+                //
+            ];
     }
 }

@@ -30,14 +30,18 @@ class SettingController extends Controller
     public function getSocial()
     {
         $keys = [
-            'FACEBOOK_CLIENT_ID', 'FACEBOOK_CLIENT_SECRET',
-            'TWITTER_CLIENT_ID', 'TWITTER_CLIENT_SECRET',
-            'LINKEDIN_CLIENT_ID', 'LINKEDIN_CLIENT_SECRET',
-            'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET'
+            'FACEBOOK_CLIENT_ID',
+            'FACEBOOK_CLIENT_SECRET',
+            'TWITTER_CLIENT_ID',
+            'TWITTER_CLIENT_SECRET',
+            'LINKEDIN_CLIENT_ID',
+            'LINKEDIN_CLIENT_SECRET',
+            'GOOGLE_CLIENT_ID',
+            'GOOGLE_CLIENT_SECRET',
         ];
 
         $social = [];
-        foreach($keys as $key) {
+        foreach ($keys as $key) {
             $value = Parameter::getKey($key);
             $social[$key] = $value;
         }
@@ -48,15 +52,25 @@ class SettingController extends Controller
     public function getMail()
     {
         $keys = [
-            'MAIL_DRIVER', 'MAIL_FROM_ADDRESS', 'MAIL_FROM_NAME',
-            'MAIL_HOST', 'MAIL_PORT', 'MAIL_ENCRYPTION', 'MAIL_USERNAME', 'MAIL_PASSWORD',
-            'MAILGUN_DOMAIN', 'MAILGUN_SECRET', 'MAILGUN_ENDPOINT',
+            'MAIL_DRIVER',
+            'MAIL_FROM_ADDRESS',
+            'MAIL_FROM_NAME',
+            'MAIL_HOST',
+            'MAIL_PORT',
+            'MAIL_ENCRYPTION',
+            'MAIL_USERNAME',
+            'MAIL_PASSWORD',
+            'MAILGUN_DOMAIN',
+            'MAILGUN_SECRET',
+            'MAILGUN_ENDPOINT',
             'POSTMARK_TOKEN',
-            'AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_DEFAULT_REGION'
+            'AWS_ACCESS_KEY_ID',
+            'AWS_SECRET_ACCESS_KEY',
+            'AWS_DEFAULT_REGION',
         ];
 
         $mail = [];
-        foreach($keys as $key) {
+        foreach ($keys as $key) {
             $value = Parameter::getKey($key);
             $mail[$key] = $value;
         }
@@ -67,25 +81,25 @@ class SettingController extends Controller
     public function loginProvider(Request $request)
     {
         $data = $request->data;
-        foreach($data as $lov) {
+        foreach ($data as $lov) {
             $key = $lov['key'];
             $value = is_null($lov['value']) ? '' : $lov['value'];
             Parameter::setKey($key, $value);
         }
 
-        return response()->json("Saved", 200);
+        return response()->json('Saved', 200);
     }
 
     public function mailProvider(Request $request)
     {
         $data = $request->data;
-        foreach($data as $lov) {
+        foreach ($data as $lov) {
             $key = $lov['key'];
             $value = is_null($lov['value']) ? '' : $lov['value'];
             Parameter::setKey($key, $value);
         }
 
-        return response()->json("Saved", 200);
+        return response()->json('Saved', 200);
     }
 
     public function testMail()
@@ -93,7 +107,7 @@ class SettingController extends Controller
         $siteinfo = json_decode(Parameter::getKey('siteinfo'), true);
 
         return $this->sendEmail(Auth::user()->email, new TestMail($siteinfo['title']));
-        
+
         /*
         $mailDriver = Parameter::getKey('MAIL_DRIVER');
 
@@ -133,26 +147,21 @@ class SettingController extends Controller
         */
     }
 
-
     public function update(Request $request)
     {
         $commitId = $request->commit_id;
 
         UpdateSite::dispatchAfterResponse($commitId);
 
-        return response()->json("Site update is in progress", 200);
+        return response()->json('Site update is in progress', 200);
     }
-
 
     public function getSearch()
     {
-        $keys = [
-            'SEARCHABLE', 'ALGOLIA_COMMUNITY_PLAN',
-            'ALGOLIA_APP_ID', 'ALGOLIA_SECRET',
-        ];
+        $keys = ['SEARCHABLE', 'ALGOLIA_COMMUNITY_PLAN', 'ALGOLIA_APP_ID', 'ALGOLIA_SECRET'];
 
         $search = [];
-        foreach($keys as $key) {
+        foreach ($keys as $key) {
             $value = Parameter::getKey($key);
             $search[$key] = $value;
         }
@@ -160,16 +169,15 @@ class SettingController extends Controller
         return response()->json($search);
     }
 
-
     public function searchProvider(Request $request)
     {
         $data = $request->data;
-        foreach($data as $key => $value) {
+        foreach ($data as $key => $value) {
             // $key = $lov['key'];
             // $value = is_null($lov['value']) ? '' : $lov['value'];
             Parameter::setKey($key, $value);
         }
 
-        return response()->json("Saved", 200);
+        return response()->json('Saved', 200);
     }
 }
