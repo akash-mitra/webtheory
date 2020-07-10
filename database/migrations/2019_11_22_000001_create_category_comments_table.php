@@ -15,9 +15,9 @@ class CreateCategoryCommentsTable extends Migration
     {
         Schema::create('category_comments', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('parent_id')->nullable();
-            $table->unsignedBigInteger('reference_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('parent_id')->nullable()->index();
+            $table->unsignedBigInteger('reference_id')->index();
+            $table->unsignedBigInteger('user_id')->index();
             $table->text('body');
             $table->unsignedBigInteger('likes')->default(0);
             $table->unsignedBigInteger('dislikes')->default(0);
