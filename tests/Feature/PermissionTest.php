@@ -10,6 +10,8 @@ use App\Media;
 use Illuminate\Http\UploadedFile;
 use App\User;
 use App\Parameter;
+use App\Form;
+use App\FormResponse;
 
 class PermissionTest extends TestDataSetup
 {
@@ -529,4 +531,81 @@ class PermissionTest extends TestDataSetup
             ->post('/api/templates/import', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
     }
+
+    // Form
+    public function test_form_permission()
+    {
+        $this->actingAs($this->adminUser)
+            ->get('/api/forms')
+            ->assertStatus(200);
+        $this->actingAs($this->authorUser1)
+            ->get('/api/forms')
+            ->assertStatus(403);
+        $this->actingAs($this->registeredUser)
+            ->get('/api/forms')
+            ->assertStatus(403);
+
+        $this->actingAs($this->adminUser)
+            ->get('/api/forms/' . $this->form->id)
+            ->assertStatus(200);
+        $this->actingAs($this->authorUser1)
+            ->get('/api/forms/' . $this->form->id)
+            ->assertStatus(403);
+        $this->actingAs($this->registeredUser)
+            ->get('/api/forms/'  . $this->form->id)
+            ->assertStatus(403);
+
+        $form = factory(Form::class)->make();
+        $this->actingAs($this->adminUser)
+            ->post('/api/forms', $form->toArray(), ['Accept' => 'application/json'])
+            ->assertStatus(200);
+        $this->actingAs($this->authorUser1)
+            ->post('/api/forms', $this->data, ['Accept' => 'application/json'])
+            ->assertStatus(403);
+        $this->actingAs($this->registeredUser)
+            ->post('/api/forms', $this->data, ['Accept' => 'application/json'])
+            ->assertStatus(403);
+
+        $form = factory(Form::class)->create();
+        $this->actingAs($this->adminUser)
+            ->put('/api/forms/' . $form->id, $form->toArray(), ['Accept' => 'application/json'])
+            ->assertStatus(200);
+        $this->actingAs($this->authorUser1)
+            ->put('/api/forms/1', $this->data, ['Accept' => 'application/json'])
+            ->assertStatus(403);
+        $this->actingAs($this->registeredUser)
+            ->put('/api/forms/1', $this->data, ['Accept' => 'application/json'])
+            ->assertStatus(403);
+
+        $form = factory(Form::class)->create();
+        $this->actingAs($this->adminUser)
+            ->delete('/api/forms/' . $form->id, [], ['Accept' => 'application/json'])
+            ->assertStatus(204);
+        $this->actingAs($this->authorUser1)
+            ->delete('/api/forms/1', [], ['Accept' => 'application/json'])
+            ->assertStatus(403);
+        $this->actingAs($this->registeredUser)
+            ->delete('/api/forms/1', [], ['Accept' => 'application/json'])
+            ->assertStatus(403);
+
+        $users = [$this->adminUser, $this->authorUser1, $this->registeredUser];
+        foreach($users as $user) {
+            $this->actingAs($user);
+            $form = factory(Form::class)->create();
+            $formresponse = factory(FormResponse::class)->create(['form_id' => $form->id]);
+            $this->post('/api/forms/' . $form->id . '/response', $formresponse->toArray(), ['Accept' => 'application/json'])
+                ->assertStatus(200);
+        }
+
+        $this->actingAs($this->adminUser)
+            ->get('/api/forms/1/responses')
+            ->assertStatus(200);
+        $this->actingAs($this->authorUser1)
+            ->get('/api/forms/1/responses')
+            ->assertStatus(403);
+        $this->actingAs($this->registeredUser)
+            ->get('/api/forms/1/responses')
+            ->assertStatus(403);
+    }
+
 }

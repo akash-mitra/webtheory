@@ -10,6 +10,8 @@ use App\Page;
 use App\PageContent;
 use App\CategoryComment;
 use App\PageComment;
+use App\Form;
+use App\FormResponse;
 
 class LocalTableSeeder extends Seeder
 {
@@ -331,5 +333,13 @@ class LocalTableSeeder extends Seeder
                 ]);
             }
         }
+
+        // Form
+        $form = factory(Form::class)->create();
+
+        factory(FormResponse::class, mt_rand(1, 10))->create([
+            'form_id' => $form->id,
+        ]);
+
     }
 }

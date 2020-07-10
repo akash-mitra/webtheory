@@ -7,6 +7,8 @@ use App\User;
 use App\Media;
 use App\Category;
 use App\PageContent;
+use App\Form;
+use App\FormResponse;
 use Tests\Support\AssertJson;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Notification;
@@ -91,6 +93,13 @@ class TestDataSetup extends TestCase
         $this->draftPagecontent = factory(PageContent::class)->create([
             'page_id' => $this->draftPage->id,
         ]);
+
+        $this->form = factory(Form::class)->create();
+
+        $this->formResponse = factory(FormResponse::class)->create([
+            'form_id' => $this->form->id,
+        ]);
+
     }
 
     private function setModelAttributes()
@@ -106,10 +115,10 @@ class TestDataSetup extends TestCase
             'gender',
             'dob',
             'preferences',
+            'public_id',
             'created_at',
             'updated_at',
             'deleted_at',
-            'public_id',
             'created_ago',
             'updated_ago',
             'url',
@@ -293,6 +302,28 @@ class TestDataSetup extends TestCase
             'created_ago',
             'updated_ago',
             'parent',
+        ];
+
+        $this->form_attributes = [
+            'id',
+            'name',
+            'description',
+            'status',
+            'captcha',
+            'fields',
+            'created_at',
+            'updated_at',
+            'created_ago',
+            'updated_ago', 
+        ];
+
+        $this->formresponse_attributes = [
+            'id',
+            'form_id',
+            'ip',
+            'responses',
+            'created_at',
+            'updated_at', 
         ];
     }
 }
