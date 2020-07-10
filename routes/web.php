@@ -45,7 +45,7 @@ Route::get('app/social/login/{provider}/callback', 'Auth\SocialLoginController@c
 | FRONT-END RELATED ROUTES
 */
 Route::get('/', 'HomeController@root')->name('home');
-Route::get('/blog', 'HomeController@blog')->name('blog');
+Route::get('blog', 'HomeController@blog')->name('blog');
 Route::get('pages/{page}/{slug?}', 'HomeController@single')->name('pages.show');
 Route::get('categories/{category}/{slug?}', 'HomeController@category')->name('categories.show');
 Route::get('profiles/{public_id}', 'HomeController@profile')->name('profile.show');
@@ -83,8 +83,6 @@ Route::get('app/{any?}', 'AdminController@app')->where('any', '.*')->name('admin
 // --------------------------------------------------------------------------------------------------------------------------
 
 
-// Route::get('api/check', 'Api\UserController@user');
-
 // Related to Users pages
 Route::get('api/profiles/{public}/pages', 'Api\ProfileController@pages')->name('profile.pages');
 
@@ -95,6 +93,9 @@ Route::get('api/pages/{page}/comments', 'Api\PageCommentController@index')->name
 // Page Search Listing
 Route::get('api/pages/search', 'Api\PageController@search')->name('pages.search');
 
+
+// Form Response 
+Route::post('api/forms/{form}/response', 'Api\FormController@storeResponse')->name('forms.storeresponse');
 
 // --------------------------------------------------------------------------------------------------------------------------
 // Authenticated API Routes
@@ -213,6 +214,18 @@ Route::prefix('api')->middleware(['auth'])->group(function () {
     // --------------------------------------------------------------------------------------------------------------------------
     Route::get('lov/categories', 'Api\LovController@categories')->name('lov.categories');
     Route::get('lov/authors', 'Api\LovController@authors')->name('lov.authors');
+
+
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Forms API
+    // --------------------------------------------------------------------------------------------------------------------------
+    Route::get('forms', 'Api\FormController@index')->name('forms.index');
+    Route::get('forms/{form}', 'Api\FormController@show')->name('forms.show');
+    Route::post('forms', 'Api\FormController@store')->name('forms.store');
+    Route::put('forms/{form}', 'Api\FormController@update')->name('forms.update');
+    Route::delete('forms/{form}', 'Api\FormController@destroy')->name('forms.destroy');
+    Route::get('forms/{form}/responses', 'Api\FormController@formResponses')->name('forms.responses');
+    // Route::get('formresponses/{formresponse}', 'Api\FormController@formResponse')->name('forms.response');
 
 
 });
