@@ -41,7 +41,7 @@ class CustomFormRequest extends FormRequest
     public function messages()
     {
         return [
-            //
-        ];
+                //
+            ];
     }
 }

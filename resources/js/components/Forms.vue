@@ -41,17 +41,19 @@
         </div>
 
         <div class="p-6">
-            <div class="w-full flex items-center justify-between py-2 bg-white border-b">
+            <div
+                class="w-full md:flex items-center justify-between py-2 bg-white border-b text-gray-600 hidden"
+            >
                 <div class="w-1/3 px-4">Form</div>
                 <div class="w-1/3 px-4">Status</div>
-                <div class="w-1/3 px-4">Responses</div>
+                <div class="w-1/3 px-4">Actions</div>
             </div>
             <Form
                 :item="form"
                 :needle="searchPhrase"
                 v-for="form in screened"
                 :key="form.id"
-                class="bg-gray-100 border-b"
+                class="border-b p-4 text-sm"
             >
             </Form>
         </div>
@@ -74,147 +76,7 @@ export default {
     components: { Form },
 
     created() {
-        this.forms = [
-            {
-                id: 1,
-                name: 'Contact form',
-                description: 'Stores contact requests',
-                status: 'Live',
-                created_ago: '2 days ago',
-                fields: [
-                    {
-                        name: 'name',
-                        type: 'text',
-                        desc: 'Provide your name',
-                        placeholder: 'Harry Potter',
-                        validation: 'min:2|max:100',
-                        default: '',
-                        options: [],
-                    },
-                    {
-                        name: 'email',
-                        type: 'email',
-                        desc: 'Provide a valid email id.',
-                        placeholder: 'harry.potter@example.com',
-                        validation: 'email',
-                        default: '',
-                        options: [],
-                    },
-                    {
-                        name: 'address',
-                        type: 'textbox',
-                        desc: 'Contact Address',
-                        placeholder: '4 Privet Drive, Surrey, UK',
-                        validation: '',
-                        default: '',
-                        options: [],
-                    },
-                    {
-                        name: 'magic_house',
-                        type: 'radio',
-                        desc: 'Which Hogwarts House do you belong?',
-                        placeholder: 'Gryffindor',
-                        validation: '',
-                        default: 'Gryffindor',
-                        options: ['Hufflepuff', 'Ravenclaw', 'Gryffindor', 'Slytherin'],
-                    },
-                    {
-                        name: 'mentor',
-                        type: 'select',
-                        desc: 'Best defence against the dark art teacher',
-                        placeholder: 'Dumbledor',
-                        validation: '',
-                        default: '',
-                        options: ['Dumbledor', 'Severus Snape', 'Remus Lupin', 'Mad-eye Moody'],
-                    },
-                    {
-                        name: 'friends',
-                        type: 'multiselect',
-                        desc: '',
-                        placeholder: 'Friends versus enemies',
-                        validation: '',
-                        default: '',
-                        options: [
-                            'Ron Weasley',
-                            'Hermione',
-                            'Neville Longbottom',
-                            'Lucious Malfoy',
-                        ],
-                    },
-                ],
-            },
-            {
-                id: 2,
-                name: 'Product Survey',
-                description: 'Stores contact requests',
-                status: 'Live',
-                created_ago: '2 days ago',
-                fields: [
-                    {
-                        name: 'name',
-                        type: 'text',
-                        desc: 'Provide your name',
-                        placeholder: 'Harry Potter',
-                        validation: 'min:2|max:100',
-                        default: '',
-                        options: [],
-                    },
-                    {
-                        name: 'email',
-                        type: 'email',
-                        desc: 'Provide a valid email id.',
-                        placeholder: 'harry.potter@example.com',
-                        validation: 'email',
-                        default: '',
-                        options: [],
-                    },
-                    {
-                        name: 'address',
-                        type: 'textbox',
-                        desc: 'Contact Address',
-                        placeholder: '4 Privet Drive, Surrey, UK',
-                        validation: '',
-                        default: '',
-                        options: [],
-                    },
-                    {
-                        name: 'magic_house',
-                        type: 'radio',
-                        desc: 'Which Hogwarts House do you belong?',
-                        placeholder: 'Gryffindor',
-                        validation: '',
-                        default: 'Gryffindor',
-                        options: ['Hufflepuff', 'Ravenclaw', 'Gryffindor', 'Slytherin'],
-                    },
-                    {
-                        name: 'mentor',
-                        type: 'select',
-                        desc: 'Best defence against the dark art teacher',
-                        placeholder: 'Dumbledor',
-                        validation: '',
-                        default: '',
-                        options: ['Dumbledor', 'Severus Snape', 'Remus Lupin', 'Mad-eye Moody'],
-                    },
-                    {
-                        name: 'friends',
-                        type: 'multiselect',
-                        desc: '',
-                        placeholder: 'Friends versus enemies',
-                        validation: '',
-                        default: '',
-                        options: [
-                            'Ron Weasley',
-                            'Hermione',
-                            'Neville Longbottom',
-                            'Lucious Malfoy',
-                        ],
-                    },
-                ],
-            },
-        ]
-        // util.ajax('get', '/api/forms', {}, (response) => {
-
-        // })
+        util.ajax('get', '/api/forms', {}, (response) => (this.forms = response.data))
     },
 
     computed: {

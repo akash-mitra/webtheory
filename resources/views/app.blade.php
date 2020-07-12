@@ -10,8 +10,6 @@
 
         <link href="{{ mix('/css/app.css') }}" rel="stylesheet" />
 
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
-
         @yield('css')
 
     </head>

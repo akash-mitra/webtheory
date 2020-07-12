@@ -21,15 +21,39 @@
                     {{ form.name }}
                 </div>
             </div>
-            <a href="#" class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow"
-                >Save Form</a
-            >
+            <div class="flex">
+                <div
+                    @click="$router.push({ name: 'forms.index' })"
+                    class="h-10 text-blue-500 text-sm px-4 py-2 border border-blue-500 rounded cursor-pointer mr-3"
+                >
+                    Close
+                </div>
+                <div
+                    @click="saveForm"
+                    class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow cursor-pointer"
+                >
+                    Save Form
+                </div>
+            </div>
         </div>
         <div class="px-6">
             {{ form.description }}
         </div>
 
-        <div class="px-6 w-full flex justify-start items-center my-8 border-b">
+        <div class="px-6 w-full flex justify-start items-center mt-8 border-b">
+            <div
+                id="general"
+                @click="tab = 'general'"
+                class="px-4 text-sm uppercase cursor-pointer"
+                :class="
+                    tab === 'general'
+                        ? 'text-gray-700 py-2 border-b-4 border-blue-500'
+                        : 'text-gray-500 py-2'
+                "
+            >
+                General
+            </div>
+
             <div
                 id="fields"
                 @click="tab = 'fields'"
@@ -45,18 +69,7 @@
                     this.form.fields.length
                 }}</span>
             </div>
-            <div
-                id="general"
-                @click="tab = 'general'"
-                class="px-4 text-sm uppercase cursor-pointer"
-                :class="
-                    tab === 'general'
-                        ? 'text-gray-700 py-2 border-b-4 border-blue-500'
-                        : 'text-gray-500 py-2'
-                "
-            >
-                General
-            </div>
+
             <div
                 id="responses"
                 @click="tab = 'responses'"
@@ -84,58 +97,59 @@
             </button>
         </div>
 
-        <div v-if="tab === 'general'" class="px-6">
+        <div v-if="tab === 'general'" class="px-6 bg-white py-4">
             <label class="block pb-2 text-gray-600">Form Name</label>
-            <input v-model="form.name" class="w-full max-w-lg border px-4 py-2" />
+            <input
+                v-model="form.name"
+                class="w-full bg-gray-100 rounded max-w-lg border px-4 py-2"
+            />
             <label class="block pb-2 text-gray-600 mt-3">Description</label>
             <textarea
                 v-model="form.description"
-                class="w-full max-w-lg border px-4 py-2"
+                class="w-full max-w-lg border bg-gray-100 rounded px-4 py-2"
             ></textarea>
+
+            <label class="block pb-2 text-gray-600 mt-3">Status</label>
+            <t-toggle
+                v-model="form.status"
+                true-value="Live"
+                false-value="Draft"
+                class="w-20"
+                box-class="w-20 inline shadow-inner bg-white border rounded-l rounded-r cursor-pointer"
+                true-class="h-6 px-3 bg-green-500 text-blue-100 rounded shadow-sm"
+                false-class="h-6 px-3 bg-gray-500 text-white rounded shadow-sm"
+                :show-value="true"
+            >
+            </t-toggle>
         </div>
 
-        <div v-if="tab === 'responses'" class="px-6">
-            <div class="flex flex-col">
-                <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-                    <div
-                        class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200"
-                    >
-                        <table class="min-w-full">
-                            <thead>
-                                <tr>
-                                    <th
-                                        v-for="f in form.fields"
-                                        class="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider"
-                                    >
-                                        {{ f.name }}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white text-sm">
-                                <tr v-for="(r, i) in responses">
-                                    <td
-                                        v-for="(f, i) in form.fields"
-                                        class="px-6 py-4 whitespace-no-wrap border-b border-gray-200"
-                                    >
-                                        {{ r[i] }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+        <div v-if="tab === 'general'" class="px-6 bg-gray-100 mt-41 py-4 flex justify-end">
+            <span class="text-sm text-red-500 py-2 cursor-pointer" @click="deleteForm"
+                >Delete Form</span
+            >
+        </div>
+
+        <div v-if="tab === 'responses' && form.hasOwnProperty('id')" class="px-6">
+            <FormResponses :form="form.id"></FormResponses>
         </div>
     </div>
 </template>
 
 <script>
 import FormEditorField from './FormEditorField.vue'
+import FormResponses from './FormResponses.vue'
 
 export default {
     data() {
         return {
-            form: null,
+            form: {
+                name: 'New Form',
+                description: '',
+                fields: [],
+                status: 'Live',
+                fields: [{ name: 'Add New Field' }],
+            },
+            isSaving: true,
             responses: null,
             tab: 'general',
         }
@@ -143,71 +157,16 @@ export default {
 
     components: {
         FormEditorField,
+        FormResponses,
     },
 
     created() {
-        this.form = {
-            id: 2,
-            name: 'Magician Enrollment Form',
-            description: 'Enroll your favorite magician with all the trivia',
-            status: 'Live',
-            created_ago: '2 days ago',
-            fields: [
-                {
-                    name: 'name',
-                    type: 'text',
-                    desc: 'Provide your name',
-                    placeholder: 'Harry Potter',
-                    validation: 'min:2|max:100',
-                    default: '',
-                    options: [],
-                },
-                {
-                    name: 'email',
-                    type: 'email',
-                    desc: 'Provide a valid email id.',
-                    placeholder: 'harry.potter@example.com',
-                    validation: 'email',
-                    default: '',
-                    options: [],
-                },
-                {
-                    name: 'address',
-                    type: 'textbox',
-                    desc: 'Contact Address',
-                    placeholder: '4 Privet Drive, Surrey, UK',
-                    validation: '',
-                    default: '',
-                    options: [],
-                },
-                {
-                    name: 'magic_house',
-                    type: 'radio',
-                    desc: 'Which Hogwarts House do you belong?',
-                    placeholder: 'Gryffindor',
-                    validation: '',
-                    default: 'Gryffindor',
-                    options: ['Hufflepuff', 'Ravenclaw', 'Gryffindor', 'Slytherin'],
-                },
-                {
-                    name: 'mentor',
-                    type: 'select',
-                    desc: 'Best defence against the dark art teacher',
-                    placeholder: 'Dumbledor',
-                    validation: '',
-                    default: '',
-                    options: ['Dumbledor', 'Severus Snape', 'Remus Lupin', 'Mad-eye Moody'],
-                },
-                {
-                    name: 'friends',
-                    type: 'multiselect',
-                    desc: '',
-                    placeholder: 'Friends versus enemies',
-                    validation: '',
-                    default: '',
-                    options: ['Ron Weasley', 'Hermione', 'Neville Longbottom', 'Lucious Malfoy'],
-                },
-            ],
+        if (typeof this.$route.params.id != 'undefined' && parseInt(this.$route.params.id) > 0) {
+            util.ajax('get', '/api/forms/' + this.$route.params.id, {}, (response) => {
+                this.form = response
+                this.form.fields = JSON.parse(this.form.fields)
+                this.isSaving = false
+            })
         }
 
         this.responses = [
@@ -231,6 +190,54 @@ export default {
     },
 
     methods: {
+        getSaveUrl: function () {
+            if (this.form.id > 0) return '/api/forms/' + this.form.id
+            else return '/api/forms'
+        },
+
+        getSaveMethod: function () {
+            if (this.form.id > 0) return 'put'
+            else return 'post'
+        },
+
+        isJustCreated: function () {
+            return !(this.form.hasOwnProperty('id') && this.form.id > 0)
+        },
+
+        saveForm() {
+            //console.log(this.getSaveMethod())
+            this.isSaving = true
+            util.ajax(
+                this.getSaveMethod(),
+                this.getSaveUrl(),
+                {
+                    name: this.form.name,
+                    description: this.form.description,
+                    status: this.form.status || 'Draft',
+                    captcha: this.form.captcha || true,
+                    fields: JSON.stringify(this.form.fields),
+                },
+                this.postSaveProcessing,
+                this.handleError
+            )
+        },
+
+        postSaveProcessing(response) {
+            if (this.isJustCreated()) {
+                let id = parseInt(response.id)
+                this.form.id = id
+
+                this.$router.replace({ path: '/app/forms/' + id })
+            }
+
+            this.isSaving = false
+
+            util.toast({
+                icon: 'success',
+                titleText: 'Form is Saved.',
+            })
+        },
+
         deleteField(index) {
             util.confirm('Delete Field?', 'Are you sure to delete this field?', () => {
                 this.form.fields.splice(index, 1)
@@ -241,13 +248,23 @@ export default {
 
         addField() {
             this.form.fields.push({
-                name: 'New Field',
+                name: 'Add New Field',
                 type: null,
                 desc: null,
                 placeholder: null,
                 validation: null,
                 default: null,
                 options: [],
+            })
+        },
+
+        deleteForm() {
+            util.confirm('Delete this form?', 'This action can not be reverted', () => {
+                util.ajax('delete', '/api/forms/' + this.form.id, {}, () => {
+                    util.notifySuccess('Deleted', 'The form has been successfully deleted')
+
+                    p.$router.push('/app/forms')
+                })
             })
         },
     },

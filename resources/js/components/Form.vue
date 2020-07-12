@@ -1,9 +1,9 @@
 <template>
-    <div class="w-full bg-white px-4 py-2 flex items-center justify-between">
-        <div class="w-1/3 flex text-gray-800">
+    <div class="w-full bg-white px-4 md:flex justify-between">
+        <div class="w-full md:w-1/3 flex text-gray-800">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-8 w-8 mt-2 flex-shrink-0 text-gray-400"
+                class="h-6 w-6 mt-2 flex-shrink-0"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -18,32 +18,23 @@
             </svg>
             <div class="px-4">
                 <div>
-                    <router-link
-                        :to="{ name: 'forms.edit', params: { id: item.id } }"
-                        class="text-blue-600 text-xl"
-                    >
-                        {{ item.name }}
-                    </router-link>
+                    {{ item.name }}
                 </div>
-                <div class="text-xs py-2">Created {{ item.created_ago }}</div>
+                <div class="text-xs text-gray-800 pt-1">Created {{ item.created_ago }}</div>
             </div>
         </div>
 
-        <div class="w-1/3 px-4">
-            <t-toggle
-                v-model="item.status"
-                true-value="Live"
-                false-value="Draft"
-                box-class="w-16 shadow-inner bg-white border rounded-l rounded-r cursor-pointer"
-                true-class="h-6 px-3 bg-blue-400 text-blue-100 rounded shadow-sm"
-                false-class="h-6 px-3 bg-gray-400 text-gray-100 rounded shadow-sm"
-                :show-value="true"
-            >
-            </t-toggle>
+        <div class="w-full md:w-1/3 md:px-4 mt-4 md:mt-0">
+            {{ item.status }}
         </div>
 
-        <div class="w-1/3 px-4">
-            {{ responses }}
+        <div class="w-full md:w-1/3 md:px-4 mt-4 md:mt-0">
+            <router-link
+                :to="{ name: 'forms.edit', params: { id: item.id } }"
+                class="text-blue-500 px-4 py-2 border rounded"
+            >
+                Open
+            </router-link>
         </div>
     </div>
 </template>
@@ -54,12 +45,6 @@ export default {
         item: {
             type: Object,
         },
-    },
-
-    data() {
-        return {
-            responses: 0,
-        }
     },
 }
 </script>
