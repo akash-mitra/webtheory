@@ -20,8 +20,6 @@ class FormController extends Controller
         $this->middleware(['check.permission'])->except(['storeResponse']);
     }
 
-
-
     /**
      * Display a listing of the resource.
      *
@@ -31,8 +29,6 @@ class FormController extends Controller
     {
         return response()->json(Form::paginate(10));
     }
-
-
 
     /**
      * Store a newly created resource in storage.
@@ -54,8 +50,6 @@ class FormController extends Controller
         return response()->json($form);
     }
 
-
-
     /**
      * Display the specified resource.
      *
@@ -67,8 +61,6 @@ class FormController extends Controller
         return response()->json($form);
     }
 
-
-
     /**
      * Update the specified resource in storage.
      *
@@ -79,20 +71,21 @@ class FormController extends Controller
     public function update(CustomFormRequest $request, Form $form)
     {
         if ($form->hasFormResponses()) {
-            return response()->json([
-                "message" => "Unable to update the form",
-                "errors" => [
-                    "name" => ["This form has responses."]
-                ]
-            ], 422);
+            return response()->json(
+                [
+                    'message' => 'Unable to update the form',
+                    'errors' => [
+                        'name' => ['This form has responses.'],
+                    ],
+                ],
+                422
+            );
         }
 
         $form->fill(request(['name', 'description', 'status', 'captcha', 'fields']))->save();
 
         return response()->json($form);
     }
-
-
 
     /**
      * Remove the specified resource from storage.
@@ -103,20 +96,21 @@ class FormController extends Controller
     public function destroy(Form $form)
     {
         if ($form->hasFormResponses()) {
-            return response()->json([
-                "message" => "Unable to delete the form",
-                "errors" => [
-                    "name" => ["This form has responses."]
-                ]
-            ], 422);
+            return response()->json(
+                [
+                    'message' => 'Unable to delete the form',
+                    'errors' => [
+                        'name' => ['This form has responses.'],
+                    ],
+                ],
+                422
+            );
         }
 
         $form->delete();
 
-        return response()->json("success", 204);
+        return response()->json('success', 204);
     }
-
-
 
     /**
      * Display the responses under a form.
@@ -129,19 +123,17 @@ class FormController extends Controller
         return response()->json(FormResponse::where('form_id', $form->id)->paginate(10));
     }
 
-
     /**
      * Display the form response.
      *
-     * @param  FormResponse  $formresponse
+     * @param  FormResponse  $formResponse
      * @return \Illuminate\Http\Response
      */
-    public function formResponse(FormResponse $formresponse)
+    public function formResponse(FormResponse $formResponse)
     {
-        // $formresponse->load('form');
-        return response()->json($formresponse);
+        // $formResponse->load('form');
+        return response()->json($formResponse);
     }
-
 
     /**
      * Store a response to a form.
@@ -151,20 +143,34 @@ class FormController extends Controller
      */
     public function storeResponse(Request $request, Form $form)
     {
-        $request->validate([
-            'responses' => [
-                'required',
-                'string'
-            ],
-        ]);
+        // $request->validate([
+        //     'responses' => [
+        //         'required',
+        //         'string'
+        //     ],
+        // ]);
 
-        $formresponse = new FormResponse([
+        $fields = array_map(function ($field) {
+            return $field->name;
+        }, json_decode($form->fields));
+
+        $validations = array_map(function ($field) {
+            return $field->validation;
+        }, json_decode($form->fields));
+
+        $request->validate(array_combine($fields, $validations));
+
+        $responses = $request->only($fields);
+
+        $formResponse = new FormResponse([
             'form_id' => $form->id,
             'ip' => $request->server('REMOTE_ADDR'), // $_SERVER["REMOTE_ADDR"],
-            'responses' => $request->responses,
+            'responses' => json_encode($responses),
         ]);
-        $formresponse->save();
+        $formResponse->save();
 
-        return response()->json("success", 200);
+        // return response()->json("success", 200);
+
+        return back()->with('status', 'success');
     }
 }

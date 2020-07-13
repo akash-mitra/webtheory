@@ -552,7 +552,7 @@ class PermissionTest extends TestDataSetup
             ->get('/api/forms/' . $this->form->id)
             ->assertStatus(403);
         $this->actingAs($this->registeredUser)
-            ->get('/api/forms/'  . $this->form->id)
+            ->get('/api/forms/' . $this->form->id)
             ->assertStatus(403);
 
         $form = factory(Form::class)->make();
@@ -589,12 +589,13 @@ class PermissionTest extends TestDataSetup
             ->assertStatus(403);
 
         $users = [$this->adminUser, $this->authorUser1, $this->registeredUser];
-        foreach($users as $user) {
+        foreach ($users as $user) {
             $this->actingAs($user);
             $form = factory(Form::class)->create();
             $formresponse = factory(FormResponse::class)->create(['form_id' => $form->id]);
-            $this->post('/api/forms/' . $form->id . '/response', $formresponse->toArray(), ['Accept' => 'application/json'])
-                ->assertStatus(200);
+            $this->post('/api/forms/' . $form->id . '/response', $formresponse->toArray(), [
+                'Accept' => 'application/json',
+            ])->assertSessionHas('status', 'success');
         }
 
         $this->actingAs($this->adminUser)
@@ -607,5 +608,4 @@ class PermissionTest extends TestDataSetup
             ->get('/api/forms/1/responses')
             ->assertStatus(403);
     }
-
 }

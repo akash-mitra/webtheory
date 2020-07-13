@@ -19,14 +19,22 @@ class FormTest extends TestDataSetup
 
         // Authenticated user can view forms listing
         $response = $this->actingAs($this->adminUser)->get('/api/forms');
-        $response->assertOk()
-            ->assertJsonStructureExact([
-                'current_page',
-                'data' => [
-                    '*' => $this->form_attributes
-                ],
-                'first_page_url', 'from', 'last_page', 'last_page_url', 'next_page_url', 'path', 'per_page', 'prev_page_url', 'to', 'total', 
-            ]);
+        $response->assertOk()->assertJsonStructureExact([
+            'current_page',
+            'data' => [
+                '*' => $this->form_attributes,
+            ],
+            'first_page_url',
+            'from',
+            'last_page',
+            'last_page_url',
+            'next_page_url',
+            'path',
+            'per_page',
+            'prev_page_url',
+            'to',
+            'total',
+        ]);
         $this->assertDatabaseHas('forms', ['name' => $form->name]);
     }
 
@@ -41,7 +49,8 @@ class FormTest extends TestDataSetup
 
         // Authenticated user can view form
         $response = $this->actingAs($this->adminUser)->get('/api/forms/' . $form->id);
-        $response->assertOk()
+        $response
+            ->assertOk()
             ->assertJsonFragment(['name' => $form->name])
             ->assertJsonStructureExact($this->form_attributes);
         $this->assertDatabaseHas('forms', ['name' => $form->name]);
@@ -54,22 +63,32 @@ class FormTest extends TestDataSetup
 
         // Unauthenticated user cannot save form
         $response = $this->post('/api/forms', $form->toArray(), ['Accept' => 'application/json']);
-        $response->assertStatus(401)
-            ->assertJson(['message' => 'Unauthenticated.']);
+        $response->assertStatus(401)->assertJson(['message' => 'Unauthenticated.']);
 
         // Registered user cannot save form
-        $response = $this->actingAs($this->registeredUser)->post('/api/forms', $form->toArray(), ['Accept' => 'application/json']);
-        $response->assertStatus(403)
-            ->assertJson(['message' => 'Restricted Access']);
+        $response = $this->actingAs($this->registeredUser)->post('/api/forms', $form->toArray(), [
+            'Accept' => 'application/json',
+        ]);
+        $response->assertStatus(403)->assertJson(['message' => 'Restricted Access']);
 
         // Authenticated user can save form
-        $response = $this->actingAs($this->adminUser)->post('/api/forms', $form->toArray(), ['Accept' => 'application/json']);
-        $response->assertOk()
+        $response = $this->actingAs($this->adminUser)->post('/api/forms', $form->toArray(), [
+            'Accept' => 'application/json',
+        ]);
+        $response
+            ->assertOk()
             ->assertJsonFragment(['name' => $form->name])
             ->assertJsonStructureExact([
-                'name', 'description', 'status', 'captcha', 'fields',
-                'updated_at', 'created_at',  
-                'id', 'created_ago', 'updated_ago' 
+                'name',
+                'description',
+                'status',
+                'captcha',
+                'fields',
+                'updated_at',
+                'created_at',
+                'id',
+                'created_ago',
+                'updated_ago',
             ]);
         $this->assertDatabaseHas('forms', ['name' => $form->name]);
     }
@@ -83,18 +102,27 @@ class FormTest extends TestDataSetup
         $form->name = 'Test Form Updated';
 
         // Unauthenticated user cannot update form
-        $response = $this->put('/api/forms/' . $form->id, $form->toArray(), ['Accept' => 'application/json']);
-        $response->assertStatus(401)
-            ->assertJson(['message' => 'Unauthenticated.']);
+        $response = $this->put('/api/forms/' . $form->id, $form->toArray(), [
+            'Accept' => 'application/json',
+        ]);
+        $response->assertStatus(401)->assertJson(['message' => 'Unauthenticated.']);
 
         // Registered user cannot update form
-        $response = $this->actingAs($this->registeredUser)->put('/api/forms/' . $form->id, $form->toArray(), ['Accept' => 'application/json']);
-        $response->assertStatus(403)
-            ->assertJson(['message' => 'Restricted Access']);
+        $response = $this->actingAs($this->registeredUser)->put(
+            '/api/forms/' . $form->id,
+            $form->toArray(),
+            ['Accept' => 'application/json']
+        );
+        $response->assertStatus(403)->assertJson(['message' => 'Restricted Access']);
 
         // Authenticated user can update form
-        $response = $this->actingAs($this->adminUser)->put('/api/forms/' . $form->id, $form->toArray(), ['Accept' => 'application/json']);
-        $response->assertOk()
+        $response = $this->actingAs($this->adminUser)->put(
+            '/api/forms/' . $form->id,
+            $form->toArray(),
+            ['Accept' => 'application/json']
+        );
+        $response
+            ->assertOk()
             ->assertJsonFragment(['name' => 'Test Form Updated'])
             ->assertJsonStructureExact($this->form_attributes);
         $this->assertDatabaseHas('forms', ['name' => 'Test Form Updated']);
@@ -108,16 +136,22 @@ class FormTest extends TestDataSetup
 
         // Unauthenticated user cannot delete form
         $response = $this->delete('/api/forms/' . $form->id, [], ['Accept' => 'application/json']);
-        $response->assertStatus(401)
-            ->assertJson(['message' => 'Unauthenticated.']);
+        $response->assertStatus(401)->assertJson(['message' => 'Unauthenticated.']);
 
         // Registered user cannot delete form
-        $response = $this->actingAs($this->registeredUser)->delete('/api/forms/' . $form->id, [], ['Accept' => 'application/json']);
-        $response->assertStatus(403)
-            ->assertJson(['message' => 'Restricted Access']);
+        $response = $this->actingAs($this->registeredUser)->delete(
+            '/api/forms/' . $form->id,
+            [],
+            ['Accept' => 'application/json']
+        );
+        $response->assertStatus(403)->assertJson(['message' => 'Restricted Access']);
 
         // Authenticated user can delete form
-        $response = $this->actingAs($this->adminUser)->delete('/api/forms/' . $form->id, [], ['Accept' => 'application/json']);
+        $response = $this->actingAs($this->adminUser)->delete(
+            '/api/forms/' . $form->id,
+            [],
+            ['Accept' => 'application/json']
+        );
         $response->assertStatus(204);
         $this->assertDatabaseMissing('forms', ['name' => $form->name]);
     }
@@ -135,17 +169,26 @@ class FormTest extends TestDataSetup
         $response = $this->get('/api/forms/' . $form->id . '/responses');
         $response->assertStatus(302);
 
-
         // Authenticated user can view form pages
-        $response = $this->actingAs($this->adminUser)->get('/api/forms/' . $form->id . '/responses');
-        $response->assertOk()
-            ->assertJsonStructureExact([
-                'current_page',
-                'data' => [
-                    '*' => $this->formresponse_attributes
-                ],
-                'first_page_url', 'from', 'last_page', 'last_page_url', 'next_page_url', 'path', 'per_page', 'prev_page_url', 'to', 'total', 
-            ]);
+        $response = $this->actingAs($this->adminUser)->get(
+            '/api/forms/' . $form->id . '/responses'
+        );
+        $response->assertOk()->assertJsonStructureExact([
+            'current_page',
+            'data' => [
+                '*' => $this->formresponse_attributes,
+            ],
+            'first_page_url',
+            'from',
+            'last_page',
+            'last_page_url',
+            'next_page_url',
+            'path',
+            'per_page',
+            'prev_page_url',
+            'to',
+            'total',
+        ]);
         $this->assertDatabaseHas('forms', ['id' => $form->id]);
         $this->assertDatabaseHas('form_responses', ['id' => $formresponse->id]);
     }
@@ -154,27 +197,31 @@ class FormTest extends TestDataSetup
     public function test_form_store_response()
     {
         $form = factory(Form::class)->create();
-        
+
         $formresponse = factory(FormResponse::class)->make([
             'form_id' => $form->id,
         ]);
 
         // Unauthenticated user can save form response
-        $response = $this->post('/api/forms/' . $form->id . '/response', $formresponse->toArray(), ['Accept' => 'application/json']);
-        $response->assertOk()
-            ->assertSee('success');
+        $response = $this->post(
+            '/api/forms/' . $form->id . '/response',
+            $formresponse->toArray()
+        )->assertSessionHas('status', 'success');
+
         $this->assertDatabaseHas('form_responses', ['form_id' => $form->id]);
 
         // Registered user can save form response
-        $response = $this->actingAs($this->registeredUser)->post('/api/forms/' . $form->id . '/response', $formresponse->toArray(), ['Accept' => 'application/json']);
-        $response->assertOk()
-            ->assertSee('success');
+        $response = $this->actingAs($this->registeredUser)
+            ->post('/api/forms/' . $form->id . '/response', $formresponse->toArray())
+            ->assertSessionHas('status', 'success');
+
         $this->assertDatabaseHas('form_responses', ['form_id' => $form->id]);
 
         // Authenticated user can save form response
-        $response = $this->actingAs($this->adminUser)->post('/api/forms/' . $form->id . '/response', $formresponse->toArray(), ['Accept' => 'application/json']);
-        $response->assertOk()
-            ->assertSee('success');
+        $response = $this->actingAs($this->adminUser)
+            ->post('/api/forms/' . $form->id . '/response', $formresponse->toArray())
+            ->assertSessionHas('status', 'success');
+
         $this->assertDatabaseHas('form_responses', ['form_id' => $form->id]);
     }
 }
