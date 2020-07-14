@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\User;
 use App\Form;
 use App\FormResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\CustomFormRequest;
+use App\Traits\SetMailConfig;
+use App\Mail\FormResponseNotification;
 
 class FormController extends Controller
 {
+    use SetMailConfig;
+
     /**
      * Create a new controller instance.
      *
@@ -143,13 +148,6 @@ class FormController extends Controller
      */
     public function storeResponse(Request $request, Form $form)
     {
-        // $request->validate([
-        //     'responses' => [
-        //         'required',
-        //         'string'
-        //     ],
-        // ]);
-
         $fields = array_map(function ($field) {
             return $field->name;
         }, json_decode($form->fields));
@@ -169,8 +167,11 @@ class FormController extends Controller
         ]);
         $formResponse->save();
 
-        // return response()->json("success", 200);
-
+        $users = User::where('role', 'admin')->whereJsonContains('preferences', 'mail')->get();
+        foreach($users as $user) {
+            $this->sendEmail($user->email, new FormResponseNotification($formResponse));
+        }
+        
         return back()->with('status', 'success');
     }
 }
