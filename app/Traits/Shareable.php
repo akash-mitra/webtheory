@@ -38,18 +38,6 @@ trait Shareable
             return 'https://twitter.com/intent/tweet?' . $query;
         }
 
-        if ($type == 'whatsapp') {
-            $query = urldecode(
-                http_build_query([
-                    'text' => urlencode(
-                        $this->{array_get($this->shareOptions, 'columns.title')} . ' ' . $url
-                    ),
-                ])
-            );
-
-            return 'https://wa.me/?' . $query;
-        }
-
         if ($type == 'linkedin') {
             $query = urldecode(
                 http_build_query([
@@ -74,14 +62,48 @@ trait Shareable
             return 'https://pinterest.com/pin/create/button/?media=&' . $query;
         }
 
-        if ($type == 'google') {
+        if ($type == 'whatsapp') {
             $query = urldecode(
                 http_build_query([
-                    'url' => $url,
+                    'text' => urlencode(
+                        $this->{array_get($this->shareOptions, 'columns.title')} . ' ' . $url
+                    ),
                 ])
             );
 
-            return 'https://plus.google.com/share?' . $query;
+            return 'https://wa.me/?' . $query;
         }
+        
+        if ($type == 'reddit') {
+            $query = urldecode(
+                http_build_query([
+                    'url' => $url,
+                    'title' => urlencode($this->{array_get($this->shareOptions, 'columns.title')}),
+                ])
+            );
+
+            return 'https://www.reddit.com/submit?' . $query;
+        }
+
+        if ($type == 'tumblr') {
+            $query = urldecode(
+                http_build_query([
+                    'url' => $url,
+                    'title' => urlencode($this->{array_get($this->shareOptions, 'columns.title')}),
+                ])
+            );
+
+            return 'https://www.tumblr.com/widgets/share/tool/preview?shareSource=legacy&canonicalUrl=&' . $query;
+        }
+
+        // if ($type == 'google') {
+        //     $query = urldecode(
+        //         http_build_query([
+        //             'url' => $url,
+        //         ])
+        //     );
+
+        //     return 'https://plus.google.com/share?' . $query;
+        // }
     }
 }
