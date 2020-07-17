@@ -196,31 +196,34 @@ class FormTest extends TestDataSetup
     /* Form Response Store */
     public function test_form_store_response()
     {
-        $form = factory(Form::class)->create();
+        $form = factory(Form::class)->create([
+            'captcha' => false,
+        ]);
 
         $formresponse = factory(FormResponse::class)->make([
             'form_id' => $form->id,
         ]);
 
         // Unauthenticated user can save form response
-        $response = $this->post(
-            '/api/forms/' . $form->id . '/response',
-            $formresponse->toArray()
-        )->assertSessionHas('status', 'success');
+        $this->post('/api/forms/' . $form->id . '/response', $formresponse->toArray())
+            ->assertSessionHasNoErrors()
+            ->assertSessionHas('success');
 
         $this->assertDatabaseHas('form_responses', ['form_id' => $form->id]);
 
         // Registered user can save form response
-        $response = $this->actingAs($this->registeredUser)
+        $this->actingAs($this->registeredUser)
             ->post('/api/forms/' . $form->id . '/response', $formresponse->toArray())
-            ->assertSessionHas('status', 'success');
+            ->assertSessionHasNoErrors()
+            ->assertSessionHas('success');
 
         $this->assertDatabaseHas('form_responses', ['form_id' => $form->id]);
 
         // Authenticated user can save form response
-        $response = $this->actingAs($this->adminUser)
+        $this->actingAs($this->adminUser)
             ->post('/api/forms/' . $form->id . '/response', $formresponse->toArray())
-            ->assertSessionHas('status', 'success');
+            ->assertSessionHasNoErrors()
+            ->assertSessionHas('success');
 
         $this->assertDatabaseHas('form_responses', ['form_id' => $form->id]);
     }

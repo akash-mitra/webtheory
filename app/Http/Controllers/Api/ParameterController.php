@@ -28,6 +28,7 @@ class ParameterController extends Controller
     {
         $value = Parameter::getKey($key);
         return response()->json($value);
+        // return response()->json([$key => $value]);
     }
 
     /**

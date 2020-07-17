@@ -24,16 +24,16 @@
         <div class="px-6 w-full flex justify-between items-center my-8 border-b">
             <div class="flex justify-start">
                 <div
-                    id="settings-site-tab"
-                    @click="tab = 'site'"
-                    class="-ml-4 px-4 text-sm tracking-wide uppercase cursor-pointer"
+                    id="settings-services-tab"
+                    @click="tab = 'services'"
+                    class="px-4 text-sm tracking-wide uppercase cursor-pointer"
                     :class="
-                        tab === 'site'
+                        tab === 'services'
                             ? 'text-gray-700 py-2 border-b-4 border-blue-500'
                             : 'text-gray-500 py-2'
                     "
                 >
-                    Site
+                    services
                 </div>
 
                 <div
@@ -63,16 +63,16 @@
                 </div>
 
                 <div
-                    id="settings-services-tab"
-                    @click="tab = 'services'"
-                    class="px-4 text-sm tracking-wide uppercase cursor-pointer"
+                    id="settings-site-tab"
+                    @click="tab = 'site'"
+                    class="-ml-4 px-4 text-sm tracking-wide uppercase cursor-pointer"
                     :class="
-                        tab === 'services'
+                        tab === 'site'
                             ? 'text-gray-700 py-2 border-b-4 border-blue-500'
                             : 'text-gray-500 py-2'
                     "
                 >
-                    services
+                    Site
                 </div>
 
                 <div
@@ -88,18 +88,6 @@
                     maintainance
                 </div>
             </div>
-        </div>
-
-        <div v-if="tab == 'site'">
-            <SiteSettings></SiteSettings>
-        </div>
-
-        <div v-if="tab == 'login'">
-            <LoginSettings></LoginSettings>
-        </div>
-
-        <div v-if="tab == 'notification'">
-            <MailSettings></MailSettings>
         </div>
 
         <div v-if="tab == 'services'">
@@ -120,14 +108,37 @@
                     >
                         Social Share
                     </div>
+
+                    <div
+                        class="w-full pr-8 py-4 cursor-pointer"
+                        @click="subtab = 'security'"
+                        :class="subtab === 'security' ? 'text-indigo-500 font-bold' : ''"
+                    >
+                        Security
+                    </div>
                 </div>
                 <div class="flex-grow">
                     <div class="w-full">
                         <SearchServiceSettings v-if="subtab === 'search'"></SearchServiceSettings>
                         <SocialShareSettings v-if="subtab === 'share'"></SocialShareSettings>
+                        <SecurityServicesSettings
+                            v-if="subtab === 'security'"
+                        ></SecurityServicesSettings>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div v-if="tab == 'login'">
+            <LoginSettings></LoginSettings>
+        </div>
+
+        <div v-if="tab == 'notification'">
+            <MailSettings></MailSettings>
+        </div>
+
+        <div v-if="tab == 'site'">
+            <SiteSettings></SiteSettings>
         </div>
 
         <div v-if="tab == 'maintainance'">
@@ -143,6 +154,7 @@ import MailSettings from './MailSettings.vue'
 import UpdateSettings from './UpdateSettings.vue'
 import SearchServiceSettings from './SearchServiceSettings.vue'
 import SocialShareSettings from './SocialShareSettings.vue'
+import SecurityServicesSettings from './SecurityServicesSettings.vue'
 
 export default {
     components: {
@@ -152,12 +164,13 @@ export default {
         UpdateSettings,
         SearchServiceSettings,
         SocialShareSettings,
+        SecurityServicesSettings,
     },
 
     data() {
         return {
             tab: 'services',
-            subtab: 'share',
+            subtab: 'search',
         }
     },
 }
