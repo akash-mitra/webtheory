@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\User;
 use App\Form;
 use App\FormResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\CustomFormRequest;
 use App\Traits\BotScanner;
-use ReCaptcha\ReCaptcha;
+use App\Traits\SetMailConfig;
+use App\Mail\FormResponseNotification;
 
 class FormController extends Controller
 {
+    use SetMailConfig;
     use BotScanner;
+
     /**
      * Create a new controller instance.
      *
@@ -167,7 +171,10 @@ class FormController extends Controller
             'ip' => $request->ip(),
             'responses' => json_encode($data),
         ]);
+
         $formResponse->save();
+
+        $formResponse->email();
 
         $request->session()->flash('success', 'Your data has been saved successfully');
 
