@@ -111,6 +111,23 @@
         </div>
 
         <div class="px-6 w-full">
+            <div
+                class="w-full bg-white border-b shadow flex"
+                v-for="i in Array(7).keys()"
+                v-show="isLoading"
+            >
+                <div class="p-4 w-12">
+                    <div class="rounded-full h-8 w-8 bg-blue-200"></div>
+                </div>
+                <div class="p-4">
+                    <div><span class="text-gray-300 bg-gray-300">Name of the user</span></div>
+                    <div>
+                        <span class="text-gray-200 bg-gray-200 mt-1">
+                            Email ID of the user given above
+                        </span>
+                    </div>
+                </div>
+            </div>
             <Paginator
                 :page-data="paginatedUsers"
                 @next="fetchFromServer"
@@ -148,6 +165,7 @@ export default {
             searchPhrase: '',
             searchStatus: '',
             authUserRole: this.$root.authUser.role,
+            isLoading: true,
         }
     },
 
@@ -171,9 +189,11 @@ export default {
 
             oUrl.searchParams.set('query', this.searchPhrase)
 
+            this.isLoading = true
             util.ajax('get', oUrl, {}, (response) => {
                 this.paginatedUsers = response
                 this.searchStatus = ''
+                this.isLoading = false
             })
         },
 

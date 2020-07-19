@@ -12,6 +12,21 @@
 
         @yield('css')
 
+        <style>
+            .fade-enter-active, .fade-leave-active {
+                transition-property: opacity;
+                transition-duration: .3s;
+            }
+
+            .fade-enter-active {
+                transition-delay: 0;
+            }
+
+            .fade-enter, .fade-leave-active {
+                opacity: 0
+            }
+        </style>
+
     </head>
 
     <body class="bg-gray-200">
@@ -84,8 +99,10 @@
             </div>
 
             <div class="w-full">
+                <transition name="fade" mode="out-in">
 
-                <router-view></router-view>
+                    <router-view></router-view>
+                </transition>
             </div>
 
             <form method="post" action="/logout" id="loform" ref="loform">@csrf</form>

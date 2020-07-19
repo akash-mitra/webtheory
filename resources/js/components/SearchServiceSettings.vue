@@ -41,7 +41,15 @@
                         <label for="appId" class="block w-full sm:w-1/5 mr-4 text-sm py-1"
                             >Algolia APP ID</label
                         >
+
                         <input
+                            v-if="isUpdating"
+                            type="text"
+                            class="w-full sm:w-4/5 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200"
+                        />
+
+                        <input
+                            v-else
                             type="text"
                             id="appId"
                             v-model="appId"
@@ -54,6 +62,12 @@
                             >Algolia Secret</label
                         >
                         <input
+                            v-if="isUpdating"
+                            type="text"
+                            class="w-full sm:w-4/5 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200"
+                        />
+                        <input
+                            v-else
                             type="text"
                             id="appSecret"
                             v-model="appSecret"

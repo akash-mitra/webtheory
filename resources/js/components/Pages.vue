@@ -66,6 +66,35 @@
         </div>
 
         <div class="px-6">
+            <div
+                class="w-full bg-white mt-6 shadow border-t border-blue-400"
+                v-for="i in Array(3).keys()"
+                v-show="isLoading"
+            >
+                <div class="px-6 flex justify-between">
+                    <span class="bg-blue-100 text-blue-100 mt-4">Category Name</span>
+                    <span class="bg-gray-200 text-gray-200 mt-3">Draft View</span>
+                </div>
+
+                <div class="px-6 mt-3">
+                    <span class="bg-blue-200 text-blue-200">
+                        Lorem ipsum dolor sit amet consectetur
+                    </span>
+                </div>
+                <div class="px-6 mt-3">
+                    <span class="bg-gray-200 text-gray-200">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit excepturi
+                        assumenda dolore asperiores
+                    </span>
+                </div>
+                <div class="px-6 mt-1">
+                    <span class="bg-gray-200 text-gray-200">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea, deserunt!
+                    </span>
+                </div>
+                <div class="mt-3 bg-gray-100 h-8"></div>
+            </div>
+
             <Paginator
                 :page-data="paginatedPages"
                 @next="fetchFromServer"
@@ -95,6 +124,7 @@ export default {
             tab: 'all',
             searchPhrase: '',
             searchStatus: '',
+            isLoading: true,
         }
     },
 
@@ -121,9 +151,11 @@ export default {
 
             oUrl.searchParams.set('query', this.searchPhrase)
 
+            this.isLoading = true
             util.ajax('get', oUrl, {}, (response) => {
                 this.paginatedPages = response
                 this.searchStatus = ''
+                this.isLoading = false
             })
         },
 
