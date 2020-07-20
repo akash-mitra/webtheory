@@ -11,9 +11,7 @@ class Form extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'description', 'status', 'captcha', 'fields', 
-    ];
+    protected $fillable = ['name', 'description', 'status', 'captcha', 'fields'];
 
     protected $appends = ['created_ago', 'updated_ago'];
 
@@ -28,14 +26,14 @@ class Form extends Model
 
     public function getCreatedAgoAttribute()
     {
-        return empty($this->created_at)? null : $this->created_at->diffForHumans();
+        return empty($this->created_at) ? null : $this->created_at->diffForHumans();
     }
 
     public function getUpdatedAgoAttribute()
     {
-        return empty($this->updated_at)? null : $this->updated_at->diffForHumans();
+        return empty($this->updated_at) ? null : $this->updated_at->diffForHumans();
     }
-    
+
     public function formResponses()
     {
         return $this->hasMany('App\FormResponse');
@@ -44,5 +42,21 @@ class Form extends Model
     public function hasFormResponses()
     {
         return $this->formResponses()->count();
+    }
+
+    public function currentFields()
+    {
+        return array_map(function ($field) {
+            return $field->name;
+        }, json_decode($this->fields));
+    }
+
+    public function fieldValidationRules()
+    {
+        $validations = array_map(function ($field) {
+            return optional($field)->validation ?? '';
+        }, json_decode($this->fields));
+
+        return array_combine($this->currentFields(), $validations);
     }
 }

@@ -189,7 +189,7 @@ export default {
 
     data() {
         return {
-            types: ['text', 'email', 'textbox', 'radio', 'select', 'multiselect'],
+            types: ['text', 'email', 'textbox', 'radio', 'select', 'multiselect', 'checkbox'],
             timeout: null,
         }
     },

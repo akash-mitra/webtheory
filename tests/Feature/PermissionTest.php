@@ -591,11 +591,11 @@ class PermissionTest extends TestDataSetup
         $users = [$this->adminUser, $this->authorUser1, $this->registeredUser];
         foreach ($users as $user) {
             $this->actingAs($user);
-            $form = factory(Form::class)->create();
+            $form = factory(Form::class)->create(['captcha' => false]);
             $formresponse = factory(FormResponse::class)->create(['form_id' => $form->id]);
             $this->post('/api/forms/' . $form->id . '/response', $formresponse->toArray(), [
                 'Accept' => 'application/json',
-            ])->assertSessionHas('status', 'success');
+            ])->assertSessionHas('success');
         }
 
         $this->actingAs($this->adminUser)

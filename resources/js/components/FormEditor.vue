@@ -97,30 +97,62 @@
             </button>
         </div>
 
-        <div v-if="tab === 'general'" class="px-6 bg-white py-4">
-            <label class="block pb-2 text-gray-600">Form Name</label>
-            <input
-                v-model="form.name"
-                class="w-full bg-gray-100 rounded max-w-lg border px-4 py-2"
-            />
-            <label class="block pb-2 text-gray-600 mt-3">Description</label>
-            <textarea
-                v-model="form.description"
-                class="w-full max-w-lg border bg-gray-100 rounded px-4 py-2"
-            ></textarea>
+        <div
+            v-if="tab === 'general'"
+            class="px-6 bg-white py-4 grid grid-cols-1 md:grid-cols-3 gap-4"
+        >
+            <div class="col-span-2 md:border-r">
+                <label class="block pb-2 text-gray-600 mt-4 text-sm">Form Name</label>
+                <input
+                    v-model="form.name"
+                    class="w-full bg-gray-100 rounded max-w-lg border px-4 py-2"
+                />
+                <label class="block pb-2 text-gray-600 mt-4 text-sm">Description</label>
+                <textarea
+                    v-model="form.description"
+                    class="w-full max-w-lg border bg-gray-100 rounded px-4 py-2"
+                ></textarea>
 
-            <label class="block pb-2 text-gray-600 mt-3">Status</label>
-            <t-toggle
-                v-model="form.status"
-                true-value="Live"
-                false-value="Draft"
-                class="w-20"
-                box-class="w-20 inline shadow-inner bg-white border rounded-l rounded-r cursor-pointer"
-                true-class="h-6 px-3 bg-green-500 text-blue-100 rounded shadow-sm"
-                false-class="h-6 px-3 bg-gray-500 text-white rounded shadow-sm"
-                :show-value="true"
-            >
-            </t-toggle>
+                <label class="block pb-2 text-gray-600 mt-4 text-sm">Status</label>
+                <t-toggle
+                    v-model="form.status"
+                    true-value="Live"
+                    false-value="Draft"
+                    class="w-20"
+                    box-class="w-20 inline shadow-inner bg-white border rounded-l rounded-r cursor-pointer"
+                    true-class="h-6 px-3 bg-green-500 text-blue-100 rounded shadow-sm"
+                    false-class="h-6 px-3 bg-gray-500 text-white rounded shadow-sm"
+                    :show-value="true"
+                >
+                </t-toggle>
+
+                <label class="block pb-2 text-gray-600 mt-4 text-sm">Spam Protection</label>
+                <t-toggle
+                    v-model="spamProtect"
+                    class="w-20"
+                    true-value="On"
+                    false-value="Off"
+                    box-class="w-20 inline shadow-inner bg-white border rounded-l rounded-r cursor-pointer"
+                    true-class="h-6 px-3 bg-green-500 text-blue-100 rounded shadow-sm"
+                    false-class="h-6 px-3 bg-gray-500 text-white rounded shadow-sm"
+                    :show-value="true"
+                >
+                </t-toggle>
+            </div>
+            <div class="col-span-1 md:px-4 py-4 text-sm" v-if="form.id > 0">
+                <div class="font-bold">Embed</div>
+                <div class="">
+                    To embed the form directly in template files, use below code. <br />
+                    <code class="text-red-700 bg-red-100 p-1">@form(['id' => {{ form.id }}])</code>
+                </div>
+                <div class="font-bold mt-3">API Endpoint</div>
+                <div class="">
+                    You may post the form data manually to be below URL. <br />
+                    <code class="text-red-700 bg-red-100 p-1"
+                        >/api/forms/{{ form.id }}/response</code
+                    >
+                </div>
+            </div>
         </div>
 
         <div v-if="tab === 'general'" class="px-6 bg-gray-100 mt-41 py-4 flex justify-end">
@@ -132,6 +164,8 @@
         <div v-if="tab === 'responses' && form.hasOwnProperty('id')" class="px-6">
             <FormResponses :form="form.id"></FormResponses>
         </div>
+
+        <div class="py-4"></div>
     </div>
 </template>
 
@@ -145,10 +179,20 @@ export default {
             form: {
                 name: 'New Form',
                 description: '',
-                fields: [],
                 status: 'Live',
-                fields: [{ name: 'Add New Field' }],
+                fields: [
+                    {
+                        name: 'Add New Field',
+                        type: 'text',
+                        desc: '',
+                        placeholder: '',
+                        validation: 'required',
+                        default: '',
+                        options: [],
+                    },
+                ],
             },
+            spamProtect: 'On',
             isSaving: true,
             responses: null,
             tab: 'general',
@@ -162,31 +206,27 @@ export default {
 
     created() {
         if (typeof this.$route.params.id != 'undefined' && parseInt(this.$route.params.id) > 0) {
-            util.ajax('get', '/api/forms/' + this.$route.params.id, {}, (response) => {
-                this.form = response
-                this.form.fields = JSON.parse(this.form.fields)
-                this.isSaving = false
-            })
+            util.ajax(
+                'get',
+                '/api/forms/' + this.$route.params.id,
+                {},
+                (response) => {
+                    this.form = response
+                    this.form.fields = JSON.parse(this.form.fields)
+                    this.spamProtect = this.form.captcha ? 'On' : 'Off'
+                    this.isSaving = false
+                },
+                (error) => {
+                    if (error === 404) {
+                        util.notifySuccess(
+                            'Not Found',
+                            'No form found for this url. Taking you back to form list'
+                        )
+                        this.$router.push('/app/forms')
+                    }
+                }
+            )
         }
-
-        this.responses = [
-            [
-                'Harry Potter',
-                'harry.potter@gmail.com',
-                '4 Privet Dr, Surrey, UK',
-                'Gryffindor',
-                'Dumbledor',
-                ['Ron Weasley', 'Hermione', 'Neville Longbottom'],
-            ],
-            [
-                'Harmione Gringer',
-                'harmony@gmail.com',
-                'Richter, UK',
-                'Gryffindor',
-                'Remus Lupin',
-                ['Harry'],
-            ],
-        ]
     },
 
     methods: {
@@ -214,7 +254,7 @@ export default {
                     name: this.form.name,
                     description: this.form.description,
                     status: this.form.status || 'Draft',
-                    captcha: this.form.captcha || true,
+                    captcha: this.spamProtect === 'On' ? true : false,
                     fields: JSON.stringify(this.form.fields),
                 },
                 this.postSaveProcessing,
@@ -262,8 +302,7 @@ export default {
             util.confirm('Delete this form?', 'This action can not be reverted', () => {
                 util.ajax('delete', '/api/forms/' + this.form.id, {}, () => {
                     util.notifySuccess('Deleted', 'The form has been successfully deleted')
-
-                    p.$router.push('/app/forms')
+                    this.$router.push('/app/forms')
                 })
             })
         },

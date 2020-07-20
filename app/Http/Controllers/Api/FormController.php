@@ -8,12 +8,14 @@ use App\FormResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\CustomFormRequest;
+use App\Traits\BotScanner;
 use App\Traits\SetMailConfig;
 use App\Mail\FormResponseNotification;
 
 class FormController extends Controller
 {
     use SetMailConfig;
+    use BotScanner;
 
     /**
      * Create a new controller instance.
@@ -75,17 +77,17 @@ class FormController extends Controller
      */
     public function update(CustomFormRequest $request, Form $form)
     {
-        if ($form->hasFormResponses()) {
-            return response()->json(
-                [
-                    'message' => 'Unable to update the form',
-                    'errors' => [
-                        'name' => ['This form has responses.'],
-                    ],
-                ],
-                422
-            );
-        }
+        // if ($form->hasFormResponses()) {
+        //     return response()->json(
+        //         [
+        //             'message' => 'Unable to update the form',
+        //             'errors' => [
+        //                 'name' => ['This form has responses.'],
+        //             ],
+        //         ],
+        //         422
+        //     );
+        // }
 
         $form->fill(request(['name', 'description', 'status', 'captcha', 'fields']))->save();
 
@@ -125,7 +127,11 @@ class FormController extends Controller
      */
     public function formResponses(Form $form)
     {
-        return response()->json(FormResponse::where('form_id', $form->id)->paginate(10));
+        return response()->json(
+            FormResponse::where('form_id', $form->id)
+                ->latest()
+                ->paginate(10)
+        );
     }
 
     /**
@@ -148,30 +154,30 @@ class FormController extends Controller
      */
     public function storeResponse(Request $request, Form $form)
     {
-        $fields = array_map(function ($field) {
-            return $field->name;
-        }, json_decode($form->fields));
+        $data = $request->only($form->currentFields());
 
-        $validations = array_map(function ($field) {
-            return $field->validation;
-        }, json_decode($form->fields));
+        // if we are enabling captcha, then perform captcha check
+        if ($form->captcha) {
+            $score = $this->preventBotSubmission();
+            $data['score'] = $score;
+        }
 
-        $request->validate(array_combine($fields, $validations));
+        // validate according to user given validation rules
+        $request->validate($form->fieldValidationRules());
 
-        $responses = $request->only($fields);
-
+        // store the response
         $formResponse = new FormResponse([
             'form_id' => $form->id,
-            'ip' => $request->server('REMOTE_ADDR'), // $_SERVER["REMOTE_ADDR"],
-            'responses' => json_encode($responses),
+            'ip' => $request->ip(),
+            'responses' => json_encode($data),
         ]);
+
         $formResponse->save();
 
-        $users = User::where('role', 'admin')->whereJsonContains('preferences', 'mail')->get();
-        foreach($users as $user) {
-            $this->sendEmail($user->email, new FormResponseNotification($formResponse));
-        }
-        
-        return back()->with('status', 'success');
+        $formResponse->email();
+
+        $request->session()->flash('success', 'Your data has been saved successfully');
+
+        return back();
     }
 }
