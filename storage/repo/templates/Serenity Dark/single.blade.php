@@ -47,7 +47,10 @@
                         </a>
                         <div class="ml-4">
                             <div class="w-full">{{ $data->page->author->name }}</div>
-                            <div class="w-full">Updated on {{ $data->page->updated_at->format('M d, Y') }}</div>
+                            <div class="w-full flex items-center">
+                                <span>Updated on {{ $data->page->updated_at->format('M d, Y') }}</span>
+                                <span class="ml-3 px-2 text-gray-400 bg-gray-800">@readtime</span>
+                            </div>
                         </div>
                     </div>
 

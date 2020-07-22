@@ -25,6 +25,8 @@ class BladeExtensionServiceProvider extends ServiceProvider
 
         Blade::include('modules.favicon', 'favicon');
 
+        Blade::include('modules.readtime', 'readtime');
+
         Blade::include('modules.sharepost', 'sharepost');
 
         Blade::include('modules.form', 'form');
