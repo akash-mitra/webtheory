@@ -33,7 +33,14 @@
         <div class="px-6 py-2 bg-gray-100 text-xs flex justify-between items-center">
             <div class="mr-4 text-gray-700 flex items-center">
                 <img :src="page.author.avatar" class="h-6 w-6 rounded-full mr-4" />
-                {{ page.author.name }} updated {{ page.updated_ago }}
+                {{ page.author.name }} updated {{ page.updated_ago }}.
+                <span
+                    class="ml-4 hover:underline text-blue-400 cursor-pointer"
+                    @click="changeOwner"
+                    v-if="canChangeOwner"
+                >
+                    Make me Author
+                </span>
             </div>
 
             <div
@@ -61,6 +68,16 @@ export default {
         }
     },
 
+    computed: {
+        canChangeOwner() {
+            return (
+                ['admin', 'author'].indexOf(this.$root.authUser.role) > -1 &&
+                this.$root.authUser.id != this.page.author.id &&
+                this.page.deleted_at === null
+            )
+        },
+    },
+
     methods: {
         // open a specific page in editor
         openPageInEditor(page) {
@@ -84,6 +101,22 @@ export default {
                         icon: 'success',
                         titleText: 'Status Updated',
                         text: ' Page in ' + status + ' mode now.',
+                    })
+                }
+            )
+        },
+        changeOwner() {
+            util.ajax(
+                'put',
+                '/api/pages/' + this.page.id + '/owner',
+                { user_id: this.$root.authUser.id },
+                (response) => {
+                    this.page.author = response.author
+
+                    util.toast({
+                        icon: 'success',
+                        titleText: 'Owner Updated',
+                        text: 'Page author is ' + response.author.name + ' now.',
                     })
                 }
             )

@@ -221,7 +221,7 @@ class PageController extends Controller
 
         $page->fill(request(['user_id']))->save();
 
-        return response()->json($page);
+        return response()->json($page->load('author'));
     }
 
     /**
