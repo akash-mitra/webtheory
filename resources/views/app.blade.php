@@ -8,6 +8,8 @@
 
         <title>WebTheory Control Panel</title>
 
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/tensor.svg">
+
         <link href="{{ mix('/css/app.css') }}" rel="stylesheet" />
 
         @yield('css')
@@ -131,7 +133,7 @@
                         '84': (p) => { p.browseToRoute ('templates.index') },
                         '70': (p) => { p.browseToRoute ('forms.index') },
                         '83': (p) => { p.browseToRoute ('settings.index') },
-                        '87': (p) => { p.browseToRoute ('dashboard') },
+                        '68': (p) => { p.browseToRoute ('dashboard') },
                     }
                 },
 
