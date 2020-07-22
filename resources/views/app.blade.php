@@ -131,6 +131,7 @@
                         '84': (p) => { p.browseToRoute ('templates.index') },
                         '70': (p) => { p.browseToRoute ('forms.index') },
                         '83': (p) => { p.browseToRoute ('settings.index') },
+                        '87': (p) => { p.browseToRoute ('dashboard') },
                     }
                 },
 
