@@ -36,6 +36,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'about_me',
         'gender',
         'dob',
+        'profile',
         'preferences',
         'public_id',
         'stripe_id',

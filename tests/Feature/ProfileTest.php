@@ -51,7 +51,7 @@ class ProfileTest extends TestDataSetup
     }
 
     /* User Profile Update */
-    public function test_user_update()
+    public function test_profile_update()
     {
         $user = factory(User::class)->create([
             'email' => 'dummyuser@example.com',
