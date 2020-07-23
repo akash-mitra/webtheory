@@ -8,6 +8,7 @@ use App\Parameter;
 use App\DataProvider;
 use App\Jobs\CaptureViewEvent;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -110,6 +111,15 @@ class HomeController extends Controller
                 '</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>';
         }
 
+        foreach ($this->custom_pages() as $page) {
+            $content .=
+                '<url><loc>' .
+                $page['url'] .
+                '</loc><lastmod>' .
+                $page['updated_at']->format('Y-m-d') .
+                '</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>';
+        }
+
         $content .= '</urlset>';
 
         return response($content, '200')->header('Content-Type', 'text/xml');
@@ -206,5 +216,53 @@ class HomeController extends Controller
             'agent' => $_SERVER['HTTP_USER_AGENT'],
             'referrer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null,
         ];
+    }
+
+    private function custom_pages()
+    {
+        $preloadedTemplateFiles = [
+            'master.blade.php',
+
+            'home.blade.php',
+            'single.blade.php',
+            'category.blade.php',
+            'profile.blade.php',
+
+            'login-modal.blade.php',
+            'user-menu.blade.php',
+            'blog.blade.php',
+        ];
+
+        $errorTemplateFiles = [
+            '401.blade.php',
+            '403.blade.php',
+            '404.blade.php',
+            '419.blade.php',
+            '429.blade.php',
+            '500.blade.php',
+            '503.blade.php',
+        ];
+
+        $activeTemplateFiles = preg_grep('/\b(\.blade.php)\b/', Storage::disk('active')->files('/'));
+        $activeTemplateFiles = collect($activeTemplateFiles)->flatten()->toArray();
+        
+        $customFiles = array_diff($activeTemplateFiles, $preloadedTemplateFiles, $errorTemplateFiles);
+        $customFiles = collect($customFiles)->flatten()->toArray();
+        
+        $customPages = [];
+        foreach ($customFiles as $file) {
+            $content = Storage::disk('active')->get($file);
+            
+            if ( (strpos($content, '<!doctype html>') !== false && ! strpos($content, '@yield') !== false) || (strpos($content, '@extends') !== false) ) {
+                $lastModifiedUnix = Storage::disk('active')->lastModified($file);
+                $lastModified = new \DateTime("@$lastModifiedUnix");
+                array_push($customPages, [
+                    'url' => url('/') . '/' . str_replace('.blade.php', '', $file),
+                    'updated_at' => $lastModified
+                ]);
+            }
+        }
+        
+        return $customPages;
     }
 }

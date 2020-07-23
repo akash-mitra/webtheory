@@ -4,9 +4,13 @@ namespace App;
 
 use App\Mail\FormResponseNotification;
 use Illuminate\Database\Eloquent\Model;
+// use App\Jobs\SendEmail;
+use App\Traits\SetMailConfig;
 
 class FormResponse extends Model
 {
+    use SetMailConfig;
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -21,14 +25,12 @@ class FormResponse extends Model
 
     public function email()
     {
-        //TODO rewrite the whereJsonContains part
+        $users = User::where('role', 'admin')->get();
 
-        // $users = User::where('role', 'admin')
-        //     ->whereJsonContains('preferences', 'mail')
-        //     ->get();
-
-        // foreach ($users as $user) {
-        //     $this->sendEmail($user->email, new FormResponseNotification($this));
-        // }
+        foreach ($users as $user) {
+            if ($user->receiveMail()) {
+                $this->sendEmail($user->email, new FormResponseNotification($this));
+            }
+        }
     }
 }

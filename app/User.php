@@ -111,6 +111,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->role == 'author';
     }
 
+    public function receiveMail()
+    {
+        if (in_array("mail", $this->preferences)) {
+            return true;
+        }
+        return false;
+    }
+
     public function getCreatedAgoAttribute()
     {
         return optional($this->created_at)->diffForHumans();
