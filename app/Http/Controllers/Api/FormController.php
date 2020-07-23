@@ -180,4 +180,69 @@ class FormController extends Controller
 
         return back();
     }
+
+    /**
+     * Download the responses under a form.
+     *
+     * @param  Form  $form
+     * @return \Illuminate\Http\Response
+     */
+    public function formResponsesDownload(Form $form)
+    {
+        $formHeader[0] = 'Response#';
+        
+        $formFields = json_decode($form->fields);
+        foreach($formFields as $field) {
+            array_push($formHeader, $field->name);
+        }
+        
+        if ($form->captcha)
+            array_push($formHeader, 'SCORE');
+
+        array_push($formHeader, 'RECEIVE TIMESTAMP');
+        array_push($formHeader, 'FROM IP');
+
+        $formResponses = FormResponse::where('form_id', $form->id)
+            ->latest()
+            ->get();
+        
+        \header('Content-Type: text/csv; charset=utf-8');  
+        \header('Content-Disposition: attachment; filename=' . $form->name . '_responses.csv');  
+        $output = fopen(storage_path('/app/' . $form->name . '_responses.csv'), 'w');  
+        
+        fputcsv($output, $formHeader);
+
+        foreach($formResponses as $formResponse) {
+            $feedback = [];
+            $feedback[0] = $formResponse->id;
+            
+            $formFields = json_decode($form->fields);
+            $responses = json_decode($formResponse->responses, true);
+            
+            foreach($formFields as $field) {
+                $fieldName = $field->name;
+                if (array_key_exists($fieldName, $responses))
+                    array_push($feedback, $responses[$fieldName]);
+                else
+                    array_push($feedback, null);
+            }
+
+            if ($form->captcha) {
+                if (array_key_exists('score', $responses))
+                    array_push($feedback, $responses['score']);
+                else
+                    array_push($feedback, null);
+            }
+                
+
+            array_push($feedback, $formResponse->created_at);
+            array_push($feedback, $formResponse->ip);
+
+            fputcsv($output, $feedback);
+        }
+        
+        fclose($output);
+        
+        return response()->download(storage_path('/app/' . $form->name . '_responses.csv'));
+    }
 }
