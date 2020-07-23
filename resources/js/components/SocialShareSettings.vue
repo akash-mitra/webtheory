@@ -96,6 +96,42 @@
                             </t-toggle>
                         </div>
                     </div>
+
+                    <div class="w-full sm:flex mt-2">
+                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1"
+                            >Reddit Share Button</label
+                        >
+                        <div class="w-full sm:w-4/5">
+                            <t-toggle
+                                v-model="share.reddit_share"
+                                true-value="On"
+                                false-value="Off"
+                                box-class="w-16 shadow-inner bg-white border rounded-l rounded-r cursor-pointer"
+                                true-class="h-6 px-3 bg-blue-400 text-blue-100 rounded shadow-sm"
+                                false-class="h-6 px-3 bg-gray-400 text-gray-100 rounded shadow-sm"
+                                :show-value="true"
+                            >
+                            </t-toggle>
+                        </div>
+                    </div>
+
+                    <div class="w-full sm:flex mt-2">
+                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1"
+                            >Tumblr Share Button</label
+                        >
+                        <div class="w-full sm:w-4/5">
+                            <t-toggle
+                                v-model="share.tumblr_share"
+                                true-value="On"
+                                false-value="Off"
+                                box-class="w-16 shadow-inner bg-white border rounded-l rounded-r cursor-pointer"
+                                true-class="h-6 px-3 bg-blue-400 text-blue-100 rounded shadow-sm"
+                                false-class="h-6 px-3 bg-gray-400 text-gray-100 rounded shadow-sm"
+                                :show-value="true"
+                            >
+                            </t-toggle>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="p-6">
@@ -122,6 +158,8 @@ export default {
                 pinterest_pin: 'Off',
                 linkedin_post: 'Off',
                 whatsapp_send: 'Off',
+                reddit_share: 'Off',
+                tumblr_share: 'Off',
             },
             isUpdating: false,
         }

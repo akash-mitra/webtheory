@@ -242,10 +242,12 @@ class PageTest extends TestDataSetup
             '/api/pages/' . $page->id . '/owner',
             $page->toArray()
         );
-        $response
-            ->assertStatus(200)
-            ->assertJsonFragment(['user_id' => $this->authorUser2->id])
-            ->assertJsonStructureExact($this->page_attributes);
+
+        $response->assertStatus(200)->assertJsonFragment([
+            'user_id' => $this->authorUser2->id,
+        ]);
+        $response->assertJsonStructure(array_merge($this->page_attributes, ['author']));
+
         $this->assertDatabaseHas('pages', ['user_id' => $this->authorUser2->id]);
         $this->assertDatabaseMissing('pages', [
             'id' => $page->id,
