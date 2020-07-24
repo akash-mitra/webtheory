@@ -42,11 +42,11 @@
 
         <div class="p-6">
             <div
-                class="w-full md:flex items-center justify-between py-2 bg-white border-b text-gray-600 hidden"
+                class="w-full md:flex items-center justify-between py-2 text-sm uppercase border-b text-gray-600 hidden"
             >
-                <div class="w-1/3 px-4">Form</div>
-                <div class="w-1/3 px-4">Status</div>
-                <div class="w-1/3 px-4">Actions</div>
+                <div class="w-full md:w-1/3 px-4">Form</div>
+                <div class="w-full md:w-1/3 px-4">Status</div>
+                <div class="w-full md:w-1/3 px-4">Actions</div>
             </div>
             <Form
                 :item="form"
