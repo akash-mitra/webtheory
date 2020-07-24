@@ -58,7 +58,7 @@ class ProfileController extends Controller
             $user->avatar = $media->url;
         }
 
-        $user->fill(request(['name', 'about_me', 'gender', 'dob', 'preferences']))->save();
+        $user->fill(request(['name', 'about_me', 'gender', 'dob', 'profile', 'preferences']))->save();
 
         return response()->json($user);
     }

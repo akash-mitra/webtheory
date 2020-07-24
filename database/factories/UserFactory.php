@@ -31,6 +31,7 @@ $factory->define(User::class, function (Faker $faker) {
         'about_me' => $faker->paragraph(),
         'gender' => $faker->randomElement($array = [true, false]),
         'dob' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        'profile' => null,
         'preferences' => ["broadcast","database","mail"],
         'stripe_id' => $faker->uuid,
         'card_brand' => $faker->creditCardType,

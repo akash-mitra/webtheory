@@ -226,6 +226,7 @@ Route::prefix('api')->middleware(['auth'])->group(function () {
     Route::delete('forms/{form}', 'Api\FormController@destroy')->name('forms.destroy');
     Route::get('forms/{form}/responses', 'Api\FormController@formResponses')->name('forms.responses');
     // Route::get('formresponses/{formresponse}', 'Api\FormController@formResponse')->name('forms.response');
+    Route::get('forms/{form}/responses/download', 'Api\FormController@formResponsesDownload')->name('forms.responsesdownload');
 
 
 });

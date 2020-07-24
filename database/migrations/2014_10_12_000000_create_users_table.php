@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->text('about_me')->nullable();
             $table->boolean('gender')->nullable();
             $table->date('dob')->nullable();
+            $table->longText('profile')->nullable();
             $table->text('preferences')->nullable();
             $table->string('public_id', 30);
             $table->timestamps();
