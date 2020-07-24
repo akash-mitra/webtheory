@@ -229,6 +229,16 @@ Route::prefix('api')->middleware(['auth'])->group(function () {
     Route::get('forms/{form}/responses/download', 'Api\FormController@formResponsesDownload')->name('forms.responsesdownload');
 
 
+    // --------------------------------------------------------------------------------------------------------------------------
+    // Dashboard API
+    // --------------------------------------------------------------------------------------------------------------------------
+    Route::get('dashboard/topcomments', 'Api\DashboardController@topComments')->name('dashboard.topcomments');
+    Route::post('dashboard/clearcache', 'Api\DashboardController@clearCache')->name('dashboard.clearcache');
+
+    
+
+
+
 });
 
 // This is a catchall route.
