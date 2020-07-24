@@ -66,7 +66,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'gender' => 'boolean',
+        // 'gender' => 'boolean',
         'preferences' => 'array',
     ];
 
@@ -114,7 +114,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function receiveMail()
     {
-        if (in_array("mail", $this->preferences)) {
+        if (in_array('mail', $this->preferences)) {
             return true;
         }
         return false;

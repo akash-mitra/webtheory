@@ -71,17 +71,19 @@ class HomeController extends Controller
         $user = User::findByPublicId($public_id);
 
         $data = DataProvider::profile(
-            $user->only([
-                'id',
-                'name',
-                'about_me',
-                'url',
-                'avatar',
-                'public_id',
-                'created_ago',
-                'role',
-                'email_verified_at',
-            ])
+            auth()->user()->public_id === $public_id
+                ? $user
+                : $user->only([
+                    'id',
+                    'name',
+                    'about_me',
+                    'url',
+                    'avatar',
+                    'public_id',
+                    'created_ago',
+                    'role',
+                    'email_verified_at',
+                ])
         );
 
         CaptureViewEvent::dispatchAfterResponse($this->capture_analytics('App\User', $user->id));
@@ -243,26 +245,41 @@ class HomeController extends Controller
             '503.blade.php',
         ];
 
-        $activeTemplateFiles = preg_grep('/\b(\.blade.php)\b/', Storage::disk('active')->files('/'));
-        $activeTemplateFiles = collect($activeTemplateFiles)->flatten()->toArray();
-        
-        $customFiles = array_diff($activeTemplateFiles, $preloadedTemplateFiles, $errorTemplateFiles);
-        $customFiles = collect($customFiles)->flatten()->toArray();
-        
+        $activeTemplateFiles = preg_grep(
+            '/\b(\.blade.php)\b/',
+            Storage::disk('active')->files('/')
+        );
+        $activeTemplateFiles = collect($activeTemplateFiles)
+            ->flatten()
+            ->toArray();
+
+        $customFiles = array_diff(
+            $activeTemplateFiles,
+            $preloadedTemplateFiles,
+            $errorTemplateFiles
+        );
+        $customFiles = collect($customFiles)
+            ->flatten()
+            ->toArray();
+
         $customPages = [];
         foreach ($customFiles as $file) {
             $content = Storage::disk('active')->get($file);
-            
-            if ( (strpos($content, '<!doctype html>') !== false && ! strpos($content, '@yield') !== false) || (strpos($content, '@extends') !== false) ) {
+
+            if (
+                (strpos($content, '<!doctype html>') !== false &&
+                    !strpos($content, '@yield') !== false) ||
+                strpos($content, '@extends') !== false
+            ) {
                 $lastModifiedUnix = Storage::disk('active')->lastModified($file);
                 $lastModified = new \DateTime("@$lastModifiedUnix");
                 array_push($customPages, [
                     'url' => url('/') . '/' . str_replace('.blade.php', '', $file),
-                    'updated_at' => $lastModified
+                    'updated_at' => $lastModified,
                 ]);
             }
         }
-        
+
         return $customPages;
     }
 }
