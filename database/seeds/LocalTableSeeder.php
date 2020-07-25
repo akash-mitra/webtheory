@@ -12,6 +12,7 @@ use App\CategoryComment;
 use App\PageComment;
 use App\Form;
 use App\FormResponse;
+use App\View;
 
 class LocalTableSeeder extends Seeder
 {
@@ -301,6 +302,12 @@ class LocalTableSeeder extends Seeder
                     'page_id' => $page->id,
                     'body_json' => $body_json,
                     'body_html' => $body_html,
+                ]);
+
+                // Page Views
+                $pageView = factory(View::class, mt_rand(0, 10))->create([
+                    'content_id' => $page->id,
+                    'url' => $page->url
                 ]);
             }
         }

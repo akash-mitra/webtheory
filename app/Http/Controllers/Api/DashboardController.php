@@ -41,4 +41,21 @@ class DashboardController extends Controller
 
         return response()->json('Saved', 200);
     }
+
+    public function visitors()
+    {
+        return DB::table('views')
+            ->select(DB::raw('count(distinct ip) as visitors'))
+            ->where('content_type', 'App\Page')
+            ->get();
+    }
+
+    public function views()
+    {
+        return DB::table('views')
+            ->select(DB::raw('count(1) as views'))
+            ->where('content_type', 'App\Page')
+            ->get();
+    }
+
 }

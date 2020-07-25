@@ -180,7 +180,10 @@ class PermissionsTableSeeder extends Seeder
         DB::table('permissions')->insert(['role' => 'author', 'resource' => 'dashboard', 'action' => 'topcomments', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'dashboard', 'action' => 'clearcache', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'author', 'resource' => 'dashboard', 'action' => 'clearcache', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
-
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'dashboard', 'action' => 'visitors', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'dashboard', 'action' => 'visitors', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'dashboard', 'action' => 'views', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'dashboard', 'action' => 'views', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
 
     }
 }

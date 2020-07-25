@@ -235,7 +235,8 @@ Route::prefix('api')->middleware(['auth'])->group(function () {
     // --------------------------------------------------------------------------------------------------------------------------
     Route::get('dashboard/topcomments', 'Api\DashboardController@topComments')->name('dashboard.topcomments');
     Route::post('dashboard/clearcache', 'Api\DashboardController@clearCache')->name('dashboard.clearcache');
-
+    Route::get('dashboard/visitors', 'Api\DashboardController@visitors')->name('dashboard.visitors');
+    Route::get('dashboard/views', 'Api\DashboardController@views')->name('dashboard.views');
     
 
 
