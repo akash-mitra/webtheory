@@ -8,9 +8,26 @@
 
         <title>WebTheory Control Panel</title>
 
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/tensor.svg">
+
         <link href="{{ mix('/css/app.css') }}" rel="stylesheet" />
 
         @yield('css')
+
+        <style>
+            .fade-enter-active, .fade-leave-active {
+                transition-property: opacity;
+                transition-duration: .3s;
+            }
+
+            .fade-enter-active {
+                transition-delay: 0;
+            }
+
+            .fade-enter, .fade-leave-active {
+                opacity: 0
+            }
+        </style>
 
     </head>
 
@@ -81,14 +98,13 @@
                         <div class="px-6 py-2 border-b cursor-pointer hover:bg-gray-100" id="loform" @click="logout">Logout</div>
                     </div>
                 </div>
-
             </div>
 
-
-
             <div class="w-full">
+                <transition name="fade" mode="out-in">
 
-                <router-view></router-view>
+                    <router-view></router-view>
+                </transition>
             </div>
 
             <form method="post" action="/logout" id="loform" ref="loform">@csrf</form>
@@ -108,10 +124,71 @@
                     authUser: @json($authUser),
                     showDropdownMenu: false,
                     hamBurgerMenu: false,
+                    keyboardMap: {
+                        // order is: keycode.alt.ctrl.shift
+                        '67': (p) => { p.browseToRoute ('categories.index') },
+                        '80': (p) => { p.browseToRoute ('pages.index') },
+                        '71': (p) => { p.browseToRoute ('gallery.index') },
+                        '85': (p) => { p.browseToRoute ('users.index') },
+                        '84': (p) => { p.browseToRoute ('templates.index') },
+                        '70': (p) => { p.browseToRoute ('forms.index') },
+                        '83': (p) => { p.browseToRoute ('settings.index') },
+                        '68': (p) => { p.browseToRoute ('dashboard') },
+                    }
                 },
 
+                mounted() {
+                    window.document.addEventListener('keydown', this.keyboardHook)
+                },
+                beforeDestroy() {
+                    window.document.removeEventListener('keydown', this.keyboardHook)
+                },
+
+                watch: {
+                    $route: function(to) {
+                        this.$nextTick(function () {
+                            // Change document title
+                            document.title = to.meta.title || 'WebTheory Control Panel'
+                        });
+                    }
+                },
 
                 methods: {
+
+                    keyboardHook(event) {
+
+                        let e = event || window.event
+                        let target = e.target || e.srcElement
+                        let tag = target.tagName.toUpperCase()
+
+                        //console.log('detected command:' + cmd)
+
+                        // do not do anything if the key is pressed in a input field
+                        // or content editable field.
+                        if (tag == 'INPUT') return;
+                        if (tag == 'TEXTAREA') return;
+                        if (tag == 'SELECT') return;
+                        if (target.isContentEditable) return;
+
+                        // determine the keyboard command
+                        let cmd = (e.which || e.keyCode)
+                                    + (e.altKey? '.alt' : '')
+                                    + (e.ctrlKey? '.ctrl': '')
+                                    + (e.shiftKey? '.shift' : '')
+
+                        // if an action is defined for the command, call it.
+                        if (this.keyboardMap.hasOwnProperty(cmd)) {
+                            this.keyboardMap[cmd](this)
+                        }
+
+                        //console.log(cmd)
+                    },
+
+                    browseToRoute(name) {
+                        if (this.$route.name != name) {
+                            this.$router.push({name: name})
+                        }
+                    },
 
                     hideOverlayMenu (e) {
                         if(e.target.id != 'auth-user-avatar') this.showDropdownMenu = false;
@@ -122,7 +199,6 @@
                     },
                 }
             })
-
         </script>
 
     </body>

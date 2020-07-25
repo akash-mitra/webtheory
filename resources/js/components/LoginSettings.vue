@@ -1,8 +1,19 @@
 <template>
     <div class="w-full">
         <div
+            class="px-8 py-2 border-b bg-white rounded h-16 flex justify-between items-center"
+            v-for="i in Array(3).keys()"
+            v-show="isLoading"
+        >
+            <div class="flex items-center">
+                <div class="rounded-full w-8 h-8 bg-red-200"></div>
+                <div class="w-32 h-6 bg-gray-300 ml-4"></div>
+            </div>
+            <div class="w-24 h-6 border rounded-lg mr-6"></div>
+        </div>
+        <div
             v-if="socialprovider !== null && socialProviderRedirectUrl !== null"
-            class="rounded w-full mb-6 shadow"
+            class="rounded w-full shadow"
         >
             <div class="px-6 py-3 border-b bg-white rounded">
                 <div class="w-full relative">
@@ -257,7 +268,12 @@
             </div>
         </div>
 
-        <t-button :loadingWheel="isSaving" textSize="normal" @click.native="saveSocialLogin">
+        <t-button
+            :loadingWheel="isSaving"
+            textSize="normal"
+            @click.native="saveSocialLogin"
+            class="mt-6"
+        >
             Save Login Settings
         </t-button>
     </div>

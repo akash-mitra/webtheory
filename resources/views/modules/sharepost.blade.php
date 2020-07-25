@@ -29,13 +29,13 @@
 </a>
 @endif
 
-@if(optional($data->ref->share)->reddit_send === 'On')
+@if(optional($data->ref->share)->reddit_share === 'On')
 <a href="{{ $data->page->getShareUrl('reddit') }}" target="_blank" rel="noopener" class="mr-4">
     <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#f40"/><g fill="#fff"><ellipse cx="256" cy="307" rx="166" ry="117"/><circle cx="106" cy="256" r="42"/><circle cx="407" cy="256" r="42"/><circle cx="375" cy="114" r="32"/></g><g stroke-linecap="round" stroke-linejoin="round" fill="none"><path d="m256 196 23-101 73 15" stroke="#fff" stroke-width="16"/><path d="m191 359c33 25 97 26 130 0" stroke="#f40" stroke-width="13"/></g><g fill="#f40"><circle cx="191" cy="287" r="31"/><circle cx="321" cy="287" r="31"/></g></svg>
 </a>
 @endif
 
-@if(optional($data->ref->share)->tumblr_send === 'On')
+@if(optional($data->ref->share)->tumblr_share === 'On')
 <a href="{{ $data->page->getShareUrl('tumblr') }}" target="_blank" rel="noopener" class="mr-4">
     <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 512 512"><rect width="512" height="512" rx="15%" fill="#35465c"/><path fill="#fff" d="M361 415c-12 13-40 21-65 21h-3c-85 0-103-61-103-98V236h-35c-3 0-6-3-6-8v-47c0-6 3-10 7-11 44-17 57-54 60-83 0-8 5-11 12-11h50c4 0 6 3 6 6v82h58c5 0 8 3 8 8v56c0 4-3 7-8 7h-58v94c0 24 16 30 25 30 10 0 18-2 23-4 8-4 13 1 14 4l15 45c2 4 3 8 0 11z"/></svg>
 </a>

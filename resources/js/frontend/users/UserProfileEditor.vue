@@ -28,6 +28,30 @@
             </div>
 
             <div class="my-2">
+                <div :class="labelClass">Gender</div>
+                <div class="mb-2">
+                    <select v-model="gender" :class="inputClass">
+                        <option value="0" default>Not Specified</option>
+                        <option value="1">Female</option>
+                        <option value="2">Male</option>
+                        <option value="3">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="my-2">
+                <div :class="labelClass">Preferences</div>
+                <div class="mb-2 inline-flex justify-center items-center">
+                    <input
+                        type="checkbox"
+                        v-model="prefer_email"
+                        class="mr-2 bg-transparent h-6 w-6 border"
+                    />
+                    Receive Notifications via Email.
+                </div>
+            </div>
+
+            <div class="my-2">
                 <div :class="labelClass">Security</div>
                 <div class="mb-2">
                     <span
@@ -62,10 +86,7 @@
             </TensorFormError>
 
             <div class="px-6 w-full mb-4">
-                <label
-                    for="currrent_password"
-                    class="block text-gray-700 text-sm mb-2 flex justify-between"
-                >
+                <label for="currrent_password" class="block text-gray-700 text-sm mb-2">
                     Current Password
                 </label>
 
@@ -82,10 +103,7 @@
             </div>
 
             <div class="px-6 w-full mb-4">
-                <label
-                    for="new_password"
-                    class="block text-gray-700 text-sm mb-2 flex justify-between"
-                >
+                <label for="new_password" class="block text-gray-700 text-sm mb-2">
                     New Password
                 </label>
 
@@ -99,10 +117,7 @@
                     placeholder="********"
                 />
 
-                <label
-                    for="new_password_confirrmation"
-                    class="block text-gray-700 text-sm my-2 flex justify-between"
-                >
+                <label for="new_password_confirrmation" class="block text-gray-700 text-sm my-2">
                     Re-type New Password
                 </label>
 
@@ -123,9 +138,7 @@
                     class="block px-6 py-2 text-white bg-green-600 rounded cursor-pointer"
                     >Change Password</span
                 >
-                <span
-                    @click="tab = 'info'"
-                    class="block ml-4 text-blue-600 cursor-pointer inline-block"
+                <span @click="tab = 'info'" class="ml-4 text-blue-600 cursor-pointer inline-block"
                     >Back</span
                 >
             </div>
@@ -182,6 +195,8 @@ export default {
             avatarBase64Data: null,
             aboutMe: this.user.about_me,
             name: this.user.name,
+            gender: this.user.gender,
+            prefer_email: this.user.preferences.indexOf('mail') > -1,
             current_password: '',
             new_password: '',
             new_password_confirmation: '',
@@ -198,10 +213,15 @@ export default {
         },
 
         save() {
+            let preferences = []
+            if (this.prefer_email) {
+                preferences.push('mail')
+            }
             let data = {
                 name: this.name,
                 about_me: this.aboutMe,
-                // 'gender': this.user.gender,
+                gender: this.gender,
+                preferences: preferences,
                 // 'dob': this.user.dob,
             }
 

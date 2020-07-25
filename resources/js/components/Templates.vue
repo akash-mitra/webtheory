@@ -67,6 +67,22 @@
         </div>
 
         <div class="sm:flex sm:flex-wrap" v-show="tab === 'installed'">
+            <div class="w-full sm:w-1/2 p-3 lg:p-6" v-for="i in Array(2).keys()" v-show="isLoading">
+                <div class="bg-white shadow-lg relative overflow-hidden">
+                    <div class="h-64 bg-blue-100"></div>
+                    <div class="h-48 bg-white p-6">
+                        <div><span class="text-gray-400 bg-gray-400">Template Name</span></div>
+                        <div class="mt-2">
+                            <span class="text-gray-200 bg-gray-200"
+                                >A detail Template Description goes here, With multiline texts that
+                                can wrap here</span
+                            >
+                        </div>
+                        <div class="h-8 w-32 border border-blue-200 rounded mt-8"></div>
+                    </div>
+                </div>
+            </div>
+
             <div v-for="template in templates.installed" class="w-full sm:w-1/2 p-3 lg:p-6">
                 <div class="bg-white shadow-lg relative overflow-hidden">
                     <div class="w-full flex justify-right absolute top-0 py-6 px-8">
@@ -219,7 +235,7 @@ export default {
             selected: null,
             tab: 'installed',
             searchPhrase: '',
-
+            isLoading: true,
             templateUploadModal: true,
         }
     },
@@ -229,8 +245,10 @@ export default {
     },
 
     created() {
+        this.isLoading = true
         util.ajax('get', '/api/templates', {}, (response) => {
             this.templates = response
+            this.isLoading = false
         })
     },
 

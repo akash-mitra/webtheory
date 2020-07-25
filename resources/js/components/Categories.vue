@@ -40,6 +40,43 @@
         </div>
 
         <div class="p-6">
+            <div
+                class="w-full bg-white mt-1 shadow"
+                v-for="i in Array(7).keys()"
+                v-show="isLoading"
+            >
+                <div class="flex items-center">
+                    <div class="p-4 w-full flex items-start justify-start rounded border">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="w-8 h-8 mr-3 flex-shrink-0 text-indigo-600"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path
+                                d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"
+                            ></path>
+                        </svg>
+
+                        <div class="flex-grow">
+                            <span class="text-blue-100 bg-blue-100">
+                                Category Header
+                            </span>
+                            <span class="text-xs text-gray-100 bg-gray-100 mt-1 block">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            </span>
+                        </div>
+
+                        <div class="text-right flex-grow-0 text-blue-100 bg-blue-100 px-4 mr-6">
+                            view
+                        </div>
+                    </div>
+                </div>
+            </div>
             <Category
                 :item="category"
                 :needle="searchPhrase"
@@ -61,14 +98,17 @@ export default {
             selected: null,
             tab: 'all',
             searchPhrase: '',
+            isLoading: true,
         }
     },
 
     components: { Category },
 
     created() {
+        this.isLoading = true
         util.ajax('get', '/api/categories', {}, (response) => {
             this.categories = this.toTree(response)
+            this.isLoading = false
         })
     },
 
