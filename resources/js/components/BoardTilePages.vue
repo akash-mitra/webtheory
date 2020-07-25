@@ -1,5 +1,5 @@
 <template>
-    <BoardTile tile-color="blue">
+    <BoardTile tile-class="bg-blue-500" text-class="text-blue-100" cta-class="text-blue-200">
         <template v-slot:metric>
             {{ metric }}
         </template>
@@ -7,7 +7,7 @@
             {{ header }}
         </template>
         <template v-slot:text>
-            <a href="/app/pages/create" class="text-blue-200">{{ text }}</a>
+            <a href="/app/pages/create">{{ text }}</a>
         </template>
     </BoardTile>
 </template>

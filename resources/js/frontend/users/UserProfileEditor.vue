@@ -31,10 +31,10 @@
                 <div :class="labelClass">Gender</div>
                 <div class="mb-2">
                     <select v-model="gender" :class="inputClass">
-                        <option value="0" default>Not Specified</option>
-                        <option value="1">Female</option>
-                        <option value="2">Male</option>
-                        <option value="3">Other</option>
+                        <option value="Not Specified" default>Not Specified</option>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Other">Other</option>
                     </select>
                 </div>
             </div>
