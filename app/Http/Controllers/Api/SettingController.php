@@ -12,6 +12,7 @@ use App\Mail\TestMail;
 // use App\Jobs\SendEmail;
 use App\Traits\SetMailConfig;
 use App\Jobs\UpdateSite;
+use Illuminate\Support\Facades\Artisan;
 
 class SettingController extends Controller
 {
@@ -179,5 +180,18 @@ class SettingController extends Controller
         }
 
         return response()->json('Saved', 200);
+    }
+
+    public function backupDownload()
+    {
+        $status = Artisan::call('backup:site --db --assets --templates');
+        
+        if ($status == 0) {
+            return response()
+                ->download(storage_path('/backup/wt_backup_' . \Carbon\Carbon::parse(now())->format('Ymd')) . '.zip')
+                ->deleteFileAfterSend();
+        } else {
+            return response()->json('There was an error', 401);
+        }
     }
 }
