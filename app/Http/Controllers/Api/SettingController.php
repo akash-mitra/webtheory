@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Exception;
 use App\Parameter;
+use App\Page;
 use App\Mail\TestMail;
 // use App\Jobs\SendEmail;
 use App\Traits\SetMailConfig;
@@ -159,7 +160,7 @@ class SettingController extends Controller
 
     public function getSearch()
     {
-        $keys = ['SEARCHABLE', 'ALGOLIA_COMMUNITY_PLAN', 'ALGOLIA_APP_ID', 'ALGOLIA_SECRET'];
+        $keys = ['SEARCHABLE', 'ALGOLIA_COMMUNITY_PLAN', 'ALGOLIA_APP_ID', 'ALGOLIA_SECRET', 'ALGOLIA_SEARCH_KEY'];
 
         $search = [];
         foreach ($keys as $key) {
@@ -174,11 +175,17 @@ class SettingController extends Controller
     {
         $data = $request->data;
         foreach ($data as $key => $value) {
-            // $key = $lov['key'];
-            // $value = is_null($lov['value']) ? '' : $lov['value'];
             Parameter::setKey($key, $value);
         }
 
+        if (Parameter::getKey('SEARCHABLE')) {
+            config(['scout.driver' => 'algolia']);
+            config(['scout.algolia.id' => Parameter::getKey('ALGOLIA_APP_ID')]);
+            config(['scout.algolia.secret' => Parameter::getKey('ALGOLIA_SECRET')]);
+
+            Page::where('id', '>', 0)->searchable();
+        }
+        
         return response()->json('Saved', 200);
     }
 
