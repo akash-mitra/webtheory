@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('role', 20)->index();
             $table->string('avatar')->nullable();
             $table->text('about_me')->nullable();
-            $table->boolean('gender')->nullable();
+            $table->string('gender', 20)->nullable();
             $table->date('dob')->nullable();
             $table->longText('profile')->nullable();
             $table->text('preferences')->nullable();
