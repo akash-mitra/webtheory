@@ -235,10 +235,14 @@ Route::prefix('api')->middleware(['auth'])->group(function () {
     // --------------------------------------------------------------------------------------------------------------------------
     Route::get('dashboard/topcomments', 'Api\DashboardController@topComments')->name('dashboard.topcomments');
     Route::post('dashboard/clearcache', 'Api\DashboardController@clearCache')->name('dashboard.clearcache');
-    Route::get('dashboard/visitors', 'Api\DashboardController@visitors')->name('dashboard.visitors');
     Route::get('dashboard/views', 'Api\DashboardController@views')->name('dashboard.views');
-    
-
+    Route::get('dashboard/daily', 'Api\DashboardController@daily')->name('dashboard.daily');
+    Route::get('dashboard/content', 'Api\DashboardController@content')->name('dashboard.content');
+    Route::get('dashboard/referrer', 'Api\DashboardController@referrer')->name('dashboard.referrer');
+    Route::get('dashboard/platform', 'Api\DashboardController@platform')->name('dashboard.platform');
+    Route::get('dashboard/browser', 'Api\DashboardController@browser')->name('dashboard.browser');
+    Route::get('dashboard/country', 'Api\DashboardController@country')->name('dashboard.country');
+    Route::get('dashboard/city', 'Api\DashboardController@city')->name('dashboard.city');
 
 
 });

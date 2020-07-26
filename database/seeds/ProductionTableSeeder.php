@@ -19,6 +19,8 @@ class ProductionTableSeeder extends Seeder
         $this->addDefaultParameters();
 
         $this->addDefaultTemplates();
+
+        $this->addDefaultBatchJob();
     }
 
     private function addDefaultCategory()
@@ -312,6 +314,33 @@ class ProductionTableSeeder extends Seeder
             'active' => 1,
             'user_id' => 1,
             'parameters' => json_encode($templateParameters),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+
+    private function addDefaultBatchJob()
+    {
+        DB::table('batch_jobs')->insert([
+            'batch_date' => \Carbon\Carbon::yesterday(),
+            'batch_name' => 'enrich_geolocation_views_table',
+            'start_datetime' => now(),
+            'end_datetime' => now(),
+            'start_view_id' => 0,
+            'end_view_id' => 0,
+            'status' => 'success',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('batch_jobs')->insert([
+            'batch_date' => \Carbon\Carbon::yesterday(),
+            'batch_name' => 'process_views_analytics_table',
+            'start_datetime' => now(),
+            'end_datetime' => now(),
+            'start_view_id' => 0,
+            'end_view_id' => 0,
+            'status' => 'success',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

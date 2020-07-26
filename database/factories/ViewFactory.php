@@ -19,6 +19,7 @@ use Illuminate\Support\Str;
 $factory->define(View::class, function (Faker $faker) {
 
     $fakeEmail = $faker->unique()->safeEmail;
+    $url = $faker->randomElement($array = [$faker->url, env('APP_URL'), null]);
 
     return [
         'ip' => $faker->ipv4,
@@ -30,7 +31,13 @@ $factory->define(View::class, function (Faker $faker) {
         'platform' => $faker->randomElement($array = ['Macintosh', 'Windows', 'Linux', 'iPhone', 'Android']),
         'browser' => $faker->randomElement($array = ['Safari', 'Firefox', 'Opera Next', 'Chrome', 'Edge']),
         'version' => $faker->numberBetween($min = 10, $max = 100),
-        'referrer' => $faker->randomElement($array = [env('APP_URL'), null]),
+        'referrer' => $url,
+        'referrer_domain' => str_ireplace('www.', '', parse_url($url, PHP_URL_HOST)),
+        'session_id' => $faker->numberBetween($min = 10, $max = 30), // $faker->md5,
+        'country' => $faker->country,
+        'city' => $faker->city,
+        'latitude' => $faker->latitude,
+        'longitude' => $faker->longitude,
         'created_at' => now(),
         'updated_at' => now(),
     ];

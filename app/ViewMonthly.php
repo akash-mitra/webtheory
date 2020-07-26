@@ -4,29 +4,31 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class View extends Model
+class ViewMonthly extends Model
 {
+    protected $table = 'views_monthly';
+
+    protected $primaryKey = 'month_key';
+
+    public $incrementing = false;
+
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'ip',
-        'user_id',
-        'at',
-        'url',
+        'month_key',
+        'total_views',
+        'unique_vistors',
         'content_type',
         'content_id',
         'platform',
         'browser',
-        'version',
-        'referrer',
         'referrer_domain',
-        'session_id',
         'country',
         'city',
-        'lat',
-        'long',
     ];
 }

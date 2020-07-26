@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateViewsTable extends Migration
+class CreateViewsMonthlyStagingTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,25 +13,17 @@ class CreateViewsTable extends Migration
      */
     public function up()
     {
-        Schema::create('views', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('views_monthly_staging', function (Blueprint $table) {
             $table->ipAddress('ip');
-            $table->unsignedBigInteger('user_id')->nullable()->index();
-            $table->decimal('at', 15, 4);
-            $table->string('url', 500);
+            $table->timestamp('created_at');
             $table->string('content_type', 255)->index();
             $table->unsignedBigInteger('content_id')->index();
             $table->string('platform', 255)->nullable();
             $table->string('browser', 255);
-            $table->string('version', 255);
-            $table->string('referrer', 500)->nullable();
             $table->string('referrer_domain', 255)->nullable();
             $table->string('session_id');
             $table->string('country', 255)->nullable();
             $table->string('city', 255)->nullable();
-            $table->decimal('latitude', 10, 6)->nullable();
-            $table->decimal('longitude', 10, 6)->nullable();
-            $table->timestamps();
         });
     }
 
@@ -42,6 +34,6 @@ class CreateViewsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('views');
+        Schema::dropIfExists('views_monthly_staging');
     }
 }

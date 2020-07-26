@@ -217,6 +217,8 @@ class HomeController extends Controller
             'content_id' => $content_id,
             'agent' => $_SERVER['HTTP_USER_AGENT'],
             'referrer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null,
+            'referrer_domain' => isset($_SERVER['HTTP_REFERER']) ? str_ireplace('www.', '', parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST)) : null,
+            'session_id' => session()->getId(),
         ];
     }
 
