@@ -120,6 +120,8 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
+        User::invalidateCache();
+
         $user = new User([
             'name' => $request->name,
             'email' => $request->email,
@@ -141,7 +143,6 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        // $user->load('providers');
         return response()->json($user);
     }
 
@@ -251,16 +252,5 @@ class UserController extends Controller
             ->paginate(10);
 
         return response()->json(['categories' => $categorycomments, 'pages' => $pagecomments]);
-    }
-
-    /**
-     * Logged In User
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function user(Request $request)
-    {
-        $user = Auth::user();
-        return response()->json($user, 200);
     }
 }

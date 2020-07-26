@@ -1,7 +1,7 @@
 <template>
     <div>
         <div
-            class="flex items-center p-2 my-2 rounded-lg bg-white"
+            class="flex items-center p-2 my-3 rounded-lg bg-white shadow"
             v-if="isLoading"
             v-for="i in Array(5).keys()"
         >
@@ -23,15 +23,8 @@
             :user="u"
             :key="u.id"
             v-if="index < 7"
-            class="p-2 my-2 rounded-lg bg-white"
+            class="p-2 my-3 rounded-lg bg-white shadow"
         ></UserStrip>
-
-        <router-link
-            :to="{ name: 'users.index' }"
-            class="block text-right text-blue-400 my-2 text-sm"
-        >
-            See All
-        </router-link>
     </div>
 </template>
 

@@ -5,7 +5,8 @@
                 class="text-3xl sm:text-4xl lg:text-5xl xl:text-5xl font-bold text-right"
                 :class="metricClass"
             >
-                <slot name="metric"></slot>
+                <div v-if="loading">...</div>
+                <slot v-else name="metric"></slot>
             </div>
             <div class="">
                 <div class="text-normal md:text-lg xl:text-2xl text-right" :class="textClass">
@@ -21,6 +22,10 @@
 <script>
 export default {
     props: {
+        loading: {
+            type: Boolean,
+            default: false,
+        },
         tileClass: {
             type: String,
             default: 'bg-blue-500',

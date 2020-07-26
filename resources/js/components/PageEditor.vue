@@ -730,7 +730,8 @@ export default {
     computed: {
         url() {
             return (
-                'https://yoursite.com/' +
+                window.location.hostname +
+                '/pages/' +
                 this.id +
                 '-' +
                 (!!this.title ? this.title.replace(/\W+/g, '-').toLowerCase() : '')

@@ -1,50 +1,53 @@
 <template>
     <div class="w-full">
-        <div
-            class="px-8 py-2 border-b bg-white rounded h-16 flex justify-between items-center"
-            v-for="i in Array(3).keys()"
-            v-show="isLoading"
-        >
-            <div class="flex items-center">
-                <div class="rounded-full w-8 h-8 bg-red-200"></div>
-                <div class="w-32 h-6 bg-gray-300 ml-4"></div>
+        <div v-for="i in Array(3).keys()" v-show="isLoading">
+            <div class="border-b bg-white rounded mb-3 pb-3">
+                <div class="w-full border-b px-6 py-2">
+                    <h3 class="text-blue-800 font-semibold flex items-center py-1">
+                        <div class="rounded-full w-8 h-8 bg-blue-200"></div>
+                        <div class="w-32 h-6 bg-gray-300 ml-4"></div>
+                    </h3>
+                </div>
+
+                <div class="px-6 py-2 flex">
+                    <div class="w-1/4">
+                        <label class="text-sm py-1 bg-gray-200 text-gray-200">Lorem, ipsum.</label>
+                    </div>
+                    <div class="w-3/4">
+                        <span class="px-2 py-1 bg-blue-200 text-blue-200">
+                            Lorem
+                        </span>
+                    </div>
+                </div>
+                <div class="px-6 py-2 flex">
+                    <div class="w-1/4">
+                        <label class="text-sm py-1 bg-gray-200 text-gray-200">Lorem, ipsum.</label>
+                    </div>
+                    <div class="w-3/4">
+                        <span class="px-2 py-1 bg-gray-200 text-gray-200">
+                            Lorem ipsum dolor sit amet consectetur adipisicing shdjgc.
+                        </span>
+                    </div>
+                </div>
+                <div class="px-6 py-2 flex">
+                    <div class="w-1/4">
+                        <label class="text-sm py-1 bg-gray-200 text-gray-200">Lorem, ipsum.</label>
+                    </div>
+                    <div class="w-3/4">
+                        <span class="px-2 py-1 bg-gray-200 text-gray-200">
+                            Lorem ipsum dolor sit amet consectetur adipisicing shdjgc.
+                        </span>
+                    </div>
+                </div>
             </div>
-            <div class="w-24 h-6 border rounded-lg mr-6"></div>
         </div>
+
         <div
             v-if="socialprovider !== null && socialProviderRedirectUrl !== null"
             class="rounded w-full shadow"
         >
-            <div class="px-6 py-3 border-b bg-white rounded">
-                <div class="w-full relative">
-                    <div
-                        class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
-                        @click="
-                            changeStatus(
-                                'google',
-                                socialprovider.google === 'Disabled' ? 'Enabled' : 'Disabled'
-                            )
-                        "
-                    >
-                        <div class="flex items-center">
-                            <div
-                                :class="
-                                    socialprovider.google === 'Disabled'
-                                        ? 'bg-gray-400'
-                                        : 'bg-green-400'
-                                "
-                                class="rounded-full h-3 w-3 mr-2"
-                            ></div>
-                            <span
-                                :class="
-                                    socialprovider.google === 'Disabled'
-                                        ? 'text-gray-600'
-                                        : 'text-green-600'
-                                "
-                                >{{ socialprovider.google }}</span
-                            >
-                        </div>
-                    </div>
+            <div class="border-b bg-white rounded mb-3 pb-3">
+                <div class="w-full border-b px-6 py-2 flex justify-between items-center">
                     <h3 class="text-blue-800 font-semibold flex items-center py-1">
                         <svg
                             viewBox="0 0 512 512"
@@ -63,9 +66,30 @@
                         </svg>
                         Google
                     </h3>
+                    <a
+                        href="https://console.developers.google.com/"
+                        target="_blank"
+                        class="text-blue-400 cursor-pointer"
+                        >Google Developer Console</a
+                    >
                 </div>
 
-                <div class="p-3" v-if="socialprovider.google == 'Enabled'">
+                <div class="px-6 py-2">
+                    <div class="w-full sm:flex mt-2">
+                        <label for="google-enabled" class="block w-full sm:w-1/4 text-sm py-1"
+                            >Google Login</label
+                        >
+                        <t-toggle
+                            v-model="socialprovider.google"
+                            true-value="On"
+                            false-value="Off"
+                            box-class="w-16 shadow-inner bg-white border rounded-l rounded-r cursor-pointer"
+                            true-class="h-6 px-3 bg-blue-400 text-blue-100 rounded shadow-sm"
+                            false-class="h-6 px-3 bg-gray-400 text-gray-100 rounded shadow-sm"
+                            :show-value="true"
+                        >
+                        </t-toggle>
+                    </div>
                     <div class="w-full sm:flex mt-2">
                         <label for="googleClientId" class="block w-full sm:w-1/4 text-sm py-1"
                             >Client Id</label
@@ -91,9 +115,9 @@
                         />
                     </div>
                     <div class="w-full sm:flex mt-2">
-                        <label for="google_redirect" class="block w-full sm:w-1/4 text-sm py-1"
-                            >Redirect URL</label
-                        >
+                        <div for="google_redirect" class="block w-full sm:w-1/4 text-sm py-1">
+                            Redirect URL
+                        </div>
                         <div class="text-gray-800 text-sm w-full sm:w-3/4 max-w-lg py-1">
                             {{ socialProviderRedirectUrl.google }}
                         </div>
@@ -101,36 +125,8 @@
                 </div>
             </div>
 
-            <div class="px-6 py-3 border-b bg-white rounded">
-                <div class="w-full relative">
-                    <div
-                        class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
-                        @click="
-                            changeStatus(
-                                'facebook',
-                                socialprovider.facebook === 'Disabled' ? 'Enabled' : 'Disabled'
-                            )
-                        "
-                    >
-                        <div class="flex items-center">
-                            <div
-                                :class="
-                                    socialprovider.facebook === 'Disabled'
-                                        ? 'bg-gray-400'
-                                        : 'bg-green-400'
-                                "
-                                class="rounded-full h-3 w-3 mr-2"
-                            ></div>
-                            <span
-                                :class="
-                                    socialprovider.facebook === 'Disabled'
-                                        ? 'text-gray-600'
-                                        : 'text-green-600'
-                                "
-                                >{{ socialprovider.facebook }}</span
-                            >
-                        </div>
-                    </div>
+            <div class="border-b bg-white rounded mb-3 pb-3">
+                <div class="w-full border-b px-6 py-2 flex justify-between items-center">
                     <h3 class="text-blue-800 font-semibold flex items-center">
                         <svg
                             class="w-8 h-8 mr-4 fill-current text-blue-400"
@@ -148,9 +144,30 @@
                         </svg>
                         Facebook
                     </h3>
+                    <a
+                        href="https://developers.facebook.com/apps/"
+                        target="_blank"
+                        class="text-blue-400 cursor-pointer"
+                        >Facebook Developer Console</a
+                    >
                 </div>
 
-                <div class="p-3" v-if="socialprovider.facebook == 'Enabled'">
+                <div class="px-6 py-2">
+                    <div class="w-full sm:flex mt-2">
+                        <label for="facebook-enabled" class="block w-full sm:w-1/4 text-sm py-1"
+                            >Facebook Login</label
+                        >
+                        <t-toggle
+                            v-model="socialprovider.facebook"
+                            true-value="On"
+                            false-value="Off"
+                            box-class="w-16 shadow-inner bg-white border rounded-l rounded-r cursor-pointer"
+                            true-class="h-6 px-3 bg-blue-400 text-blue-100 rounded shadow-sm"
+                            false-class="h-6 px-3 bg-gray-400 text-gray-100 rounded shadow-sm"
+                            :show-value="true"
+                        >
+                        </t-toggle>
+                    </div>
                     <div class="w-full sm:flex mt-2">
                         <label for="facebookClientId" class="block w-full sm:w-1/4 text-sm py-1"
                             >App Id</label
@@ -186,36 +203,8 @@
                 </div>
             </div>
 
-            <div class="px-6 py-3 border-b bg-white rounded">
-                <div class="w-full relative">
-                    <div
-                        class="absolute top-0 right-0 mr-8 text-xs border py-1 px-2 rounded-lg cursor-pointer"
-                        @click="
-                            changeStatus(
-                                'twitter',
-                                socialprovider.twitter === 'Disabled' ? 'Enabled' : 'Disabled'
-                            )
-                        "
-                    >
-                        <div class="flex items-center">
-                            <div
-                                :class="
-                                    socialprovider.twitter === 'Disabled'
-                                        ? 'bg-gray-400'
-                                        : 'bg-green-400'
-                                "
-                                class="rounded-full h-3 w-3 mr-2"
-                            ></div>
-                            <span
-                                :class="
-                                    socialprovider.twitter === 'Disabled'
-                                        ? 'text-gray-600'
-                                        : 'text-green-600'
-                                "
-                                >{{ socialprovider.twitter }}</span
-                            >
-                        </div>
-                    </div>
+            <div class="border-b bg-white rounded mb-3 pb-3">
+                <div class="w-full border-b px-6 py-2 flex justify-between items-center">
                     <h3 class="text-blue-800 font-semibold flex items-center">
                         <svg
                             viewBox="0 0 512 512"
@@ -229,9 +218,30 @@
                         </svg>
                         Twitter
                     </h3>
+                    <a
+                        href="https://developer.twitter.com/"
+                        target="_blank"
+                        class="text-blue-400 cursor-pointer"
+                        >Twitter Developer Console</a
+                    >
                 </div>
 
-                <div class="p-3" v-if="socialprovider.twitter == 'Enabled'">
+                <div class="px-6 py-2">
+                    <div class="w-full sm:flex mt-2">
+                        <label for="twitter-enabled" class="block w-full sm:w-1/4 text-sm py-1"
+                            >Twiiter Login</label
+                        >
+                        <t-toggle
+                            v-model="socialprovider.twitter"
+                            true-value="On"
+                            false-value="Off"
+                            box-class="w-16 shadow-inner bg-white border rounded-l rounded-r cursor-pointer"
+                            true-class="h-6 px-3 bg-blue-400 text-blue-100 rounded shadow-sm"
+                            false-class="h-6 px-3 bg-gray-400 text-gray-100 rounded shadow-sm"
+                            :show-value="true"
+                        >
+                        </t-toggle>
+                    </div>
                     <div class="w-full sm:flex mt-2">
                         <label for="twitterClientId" class="block w-full sm:w-1/4 text-sm py-1"
                             >API Key</label
@@ -344,35 +354,17 @@ export default {
             ]
 
             util.ajax('post', '/api/settings/loginprovider', { data }, function () {
-                p.isSaving = false
+                util.ajax(
+                    'post',
+                    '/api/parameters/socialprovider',
+                    { value: JSON.stringify(p.socialprovider) },
+                    () => {
+                        p.isSaving = false
 
-                util.notifySuccess(
-                    'Saved',
-                    'Login provider constants have been successfully saved.'
+                        util.notifySuccess('Saved', 'Login provider have been ' + status)
+                    }
                 )
             })
-        },
-
-        changeStatus(provider, status) {
-            let p = this
-
-            p.isSaving = true
-
-            if (provider == 'facebook') this.socialprovider.facebook = status
-            else if (provider == 'twitter') this.socialprovider.twitter = status
-            else if (provider == 'linkedin') this.socialprovider.linkedin = status
-            else if (provider == 'google') this.socialprovider.google = status
-
-            util.ajax(
-                'post',
-                '/api/parameters/socialprovider',
-                { value: JSON.stringify(this.socialprovider) },
-                function () {
-                    p.isSaving = false
-
-                    util.notifySuccess('Saved', 'Login provider have been ' + status)
-                }
-            )
         },
     },
 }

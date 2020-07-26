@@ -3,15 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redis;
-use Illuminate\Support\Facades\Artisan;
-use Exception;
-use DB;
+use App\Page;
 use App\PageComment;
-use App\View;
+use App\User;
+use Cache;
+use Illuminate\Support\Facades\Artisan;
 
 class DashboardController extends Controller
 {
@@ -25,6 +21,24 @@ class DashboardController extends Controller
         $this->middleware(['check.permission']);
     }
 
+    public function pagesCount()
+    {
+        $count = Cache::rememberForever('pages.count', function () {
+            return Page::count();
+        });
+
+        return $count;
+    }
+
+    public function usersCount()
+    {
+        $count = Cache::rememberForever('users.count', function () {
+            return User::count();
+        });
+
+        return $count;
+    }
+
     public function topComments()
     {
         $comments = PageComment::with(['page', 'user'])
@@ -36,7 +50,7 @@ class DashboardController extends Controller
         return response()->json($comments);
     }
 
-    public function clearCache(Request $request)
+    public function clearCache()
     {
         Artisan::call('cache:clear');
 

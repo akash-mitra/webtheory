@@ -147,18 +147,12 @@ class DataProvider
         return (object) json_decode(Parameter::getKey('share'));
     }
 
-    public static function keylist(): array
-    {
-        return [
-            'template.parameters',
+    // public static function keylist(): array
+    // {
+    //     return [
 
-            'parameters.siteinfo',
-
-            'pages',
-            'categories',
-            'categories.lov',
-        ];
-    }
+    //     ];
+    // }
 
     public static function keys(): array
     {
