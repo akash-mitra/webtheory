@@ -141,8 +141,9 @@
             <SiteSettings></SiteSettings>
         </div>
 
-        <div v-if="tab == 'maintainance'">
-            <UpdateSettings></UpdateSettings>
+        <div v-if="tab == 'maintainance'" class="flex flex-wrap">
+            <UpdateSettings class="px-6 mb-4 w-full md:w-1/2 max-w-lg"></UpdateSettings>
+            <BackupSettings class="px-6 mb-4 w-full md:w-1/2 max-w-lg"></BackupSettings>
         </div>
     </div>
 </template>
@@ -152,6 +153,7 @@ import SiteSettings from './SiteSettings.vue'
 import LoginSettings from './LoginSettings.vue'
 import MailSettings from './MailSettings.vue'
 import UpdateSettings from './UpdateSettings.vue'
+import BackupSettings from './BackupSettings.vue'
 import SearchServiceSettings from './SearchServiceSettings.vue'
 import SocialShareSettings from './SocialShareSettings.vue'
 import SecurityServicesSettings from './SecurityServicesSettings.vue'
@@ -162,6 +164,7 @@ export default {
         LoginSettings,
         MailSettings,
         UpdateSettings,
+        BackupSettings,
         SearchServiceSettings,
         SocialShareSettings,
         SecurityServicesSettings,

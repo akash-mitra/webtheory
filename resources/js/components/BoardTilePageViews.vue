@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-gray-100 rounded-lg border px-3 py-4 shadow1">
+    <div class="bg-gray-100 rounded-lg border px-3 py-4 w-full">
         <TrendChart :datasets="data" :grid="grids" :labels="labels" :min="0"> </TrendChart>
     </div>
 </template>
