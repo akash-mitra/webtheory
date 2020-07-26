@@ -176,6 +176,10 @@ class PermissionsTableSeeder extends Seeder
         /********************
          * DASHBOARD
          *******************/
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'dashboard', 'action' => 'pages-count', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'dashboard', 'action' => 'pages-count', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'dashboard', 'action' => 'users-count', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'author', 'resource' => 'dashboard', 'action' => 'users-count', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'dashboard', 'action' => 'topcomments', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'author', 'resource' => 'dashboard', 'action' => 'topcomments', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'dashboard', 'action' => 'clearcache', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
