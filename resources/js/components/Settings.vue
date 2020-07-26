@@ -65,7 +65,7 @@
                 <div
                     id="settings-site-tab"
                     @click="tab = 'site'"
-                    class="-ml-4 px-4 text-sm tracking-wide uppercase cursor-pointer"
+                    class="px-4 text-sm tracking-wide uppercase cursor-pointer"
                     :class="
                         tab === 'site'
                             ? 'text-gray-700 py-2 border-b-4 border-blue-500'

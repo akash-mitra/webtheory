@@ -36,6 +36,31 @@
                             </svg>
                         </div>
                     </div>
+
+                    <div v-if="showMailgun">
+                        <a
+                            href="https://app.mailgun.com/app/"
+                            target="_blank"
+                            class="ml-3 text-sm text-blue-400 cursor-pointer"
+                            >Mailgun Setup</a
+                        >
+                    </div>
+                    <div v-if="showPostmark">
+                        <a
+                            href="https://account.postmarkapp.com/servers"
+                            target="_blank"
+                            class="ml-3 text-sm text-blue-400 cursor-pointer"
+                            >Postmark Setup</a
+                        >
+                    </div>
+                    <div v-if="showSes">
+                        <a
+                            href="https://console.aws.amazon.com/ses/home"
+                            target="_blank"
+                            class="ml-3 text-sm text-blue-400 cursor-pointer"
+                            >Amazon SES Setup</a
+                        >
+                    </div>
                 </div>
 
                 <div class="w-full sm:flex mt-2">
