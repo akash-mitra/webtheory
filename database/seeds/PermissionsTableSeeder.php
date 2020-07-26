@@ -130,6 +130,7 @@ class PermissionsTableSeeder extends Seeder
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'settings', 'action' => 'update', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'settings', 'action' => 'search', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'settings', 'action' => 'searchprovider', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'settings', 'action' => 'backupdownload', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
 
 
         /********************

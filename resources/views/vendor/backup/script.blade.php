@@ -38,3 +38,4 @@ cd {{ base_path() }}
 rm -rf {{ $backupFile }}.zip
 # zip -r -q {{ $backupFile }} {{ 'public/storage/media' }} {{ 'resources/views/active' }} {{ 'resources/views/templates' }} {{ 'storage/backup/' . env('DB_DATABASE') . '_' . \Carbon\Carbon::parse(now())->format('Ymd') . '.sql' }}
 zip -r -q {{ $backupFile }} {{ $directories }}
+rm -rf {{ base_path() . '/storage/backup/' . env('DB_DATABASE') . '_' . \Carbon\Carbon::parse(now())->format('Ymd') . '.sql' }}

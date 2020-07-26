@@ -206,6 +206,7 @@ Route::prefix('api')->middleware(['auth'])->group(function () {
     Route::post('settings/update', 'Api\SettingController@update')->name('settings.update');
     Route::get('settings/search', 'Api\SettingController@getSearch')->name('settings.search');
     Route::post('settings/searchprovider', 'Api\SettingController@searchProvider')->name('settings.searchprovider');
+    Route::get('settings/backup/download', 'Api\SettingController@backupDownload')->name('settings.backupdownload');
 
 
 
