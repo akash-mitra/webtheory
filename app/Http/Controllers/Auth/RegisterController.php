@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-
 use App\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
@@ -42,7 +41,6 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-
     /**
      * Get a validator for an incoming registration request.
      *
@@ -58,7 +56,6 @@ class RegisterController extends Controller
         ]);
     }
 
-
     /**
      * Create a new user instance after a valid registration.
      *
@@ -67,13 +64,15 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        User::invalidateCache();
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'role' => 'registered',
-            'preferences' => ["broadcast","database","mail"],
-            'public_id' => Str::random(30)
+            'preferences' => ['broadcast', 'database', 'mail'],
+            'public_id' => Str::random(30),
         ]);
     }
 }

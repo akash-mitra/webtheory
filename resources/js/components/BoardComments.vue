@@ -17,7 +17,7 @@
         </div>
 
         <CommentStrip
-            v-for="(c, index) in paginatedComments.data"
+            v-for="(c, index) in paginatedComments"
             :comment="c"
             :key="c.id"
             v-if="index < 10"
@@ -38,11 +38,12 @@ export default {
     },
     components: { CommentStrip },
     created() {
-        let url = '/api/pages/57/comments'
+        let url = '/api/dashboard/top-comments'
 
         this.isLoading = true
 
         util.ajax('get', url, {}, (response) => {
+            console.log(response)
             this.paginatedComments = response
 
             this.isLoading = false

@@ -19,13 +19,38 @@
             </div>
 
             <div class="md:flex w-full">
-                <div class="w-full max-w-sm p-2">
-                    <div class="text-sm uppercase text-gray-500 px-2 my-4">New Members</div>
-                    <BoardUsers></BoardUsers>
-                </div>
                 <div class="w-full flex-grow p-2">
-                    <div class="text-sm uppercase text-gray-500 px-2 my-4">Recent Comments</div>
-                    <BoardComments></BoardComments>
+                    <div class="text-sm uppercase text-gray-500 my-4">
+                        Recent Comments
+                    </div>
+                    <div
+                        class="overflow-auto p-2 md:px-6 rounded-lg bg-gray-100"
+                        style="max-height: 30rem;"
+                    >
+                        <BoardComments></BoardComments>
+                    </div>
+                    <router-link
+                        :to="{ name: 'users.index' }"
+                        class="block text-right text-blue-400 my-2 text-sm"
+                    >
+                        Read Comments
+                    </router-link>
+                </div>
+
+                <div class="w-full max-w-sm md:px-6 py-2">
+                    <div class="text-sm uppercase text-gray-500 my-4">New Members</div>
+                    <div
+                        class="overflow-auto p-2 md:px-6 rounded-lg bg-gray-100"
+                        style="max-height: 30rem;"
+                    >
+                        <BoardUsers></BoardUsers>
+                    </div>
+                    <router-link
+                        :to="{ name: 'users.index' }"
+                        class="block text-right text-blue-400 my-2 text-sm"
+                    >
+                        See All
+                    </router-link>
                 </div>
             </div>
         </div>

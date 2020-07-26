@@ -16,6 +16,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Cache;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -173,6 +174,11 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         return $user;
+    }
+
+    public static function invalidateCache()
+    {
+        Cache::forget('users.count');
     }
 
     /**

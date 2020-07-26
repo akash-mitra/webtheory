@@ -69,13 +69,6 @@ class Page extends Model
         return $this->comments()->whereNull('parent_id');
     }
 
-    // public function getBodyAttribute()
-    // {
-    //     $contents = $this->content;
-    //     if ($contents === null) return '';
-    //     else return $contents->body;
-    // }
-
     public function getUrlAttribute()
     {
         return url('pages/' . $this->id . '/' . Str::slug($this->title));
@@ -99,6 +92,7 @@ class Page extends Model
     public static function invalidateCache()
     {
         Cache::forget('pages');
+        Cache::forget('pages.count');
     }
 
     public function shouldBeSearchable()
