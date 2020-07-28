@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Http;
 use App\View;
 
 class CaptureViewEvent implements ShouldQueue
@@ -35,6 +36,13 @@ class CaptureViewEvent implements ShouldQueue
         $view = new View(
             array_merge($this->viewerData, $this->parse_user_agent($this->viewerData['agent']))
         );
+
+        $geolocation = json_decode(Http::get('http://api.ipstack.com/' . $view->ip . '?access_key=' . env('ip_access_key')));
+        $view->country = $geolocation->country_name;
+        $view->city = $geolocation->city;
+        $view->latitude = $geolocation->latitude;
+        $view->longitude = $geolocation->longitude;
+        
         $view->save();
 
         return true;

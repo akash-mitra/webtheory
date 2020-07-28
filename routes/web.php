@@ -40,8 +40,8 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('passw
 /*
 | SOCIAL AUTHENTICATION RELATED ROUTES
 */
-Route::get('app/social/login/{provider}', 'Auth\SocialLoginController@login')->name('social.login');
-Route::get('app/social/login/{provider}/callback', 'Auth\SocialLoginController@callback')->name(
+Route::get('social/login/{provider}', 'Auth\SocialLoginController@login')->name('social.login');
+Route::get('social/login/{provider}/callback', 'Auth\SocialLoginController@callback')->name(
     'social.callback'
 );
 

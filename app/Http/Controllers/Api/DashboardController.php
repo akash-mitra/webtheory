@@ -7,6 +7,7 @@ use App\Page;
 use App\PageComment;
 use App\User;
 use Cache;
+use DB;
 use Illuminate\Support\Facades\Artisan;
 
 class DashboardController extends Controller

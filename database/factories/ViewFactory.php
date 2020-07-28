@@ -24,7 +24,7 @@ $factory->define(View::class, function (Faker $faker) {
     return [
         'ip' => $faker->ipv4,
         'user_id' => null,
-        'at' => $faker->unixTime($faker->dateTimeBetween($startDate = "-60 days", $endDate = "now")),
+        'at' => $faker->dateTimeBetween($startDate = "-30 days", $endDate = "now")->format('U'),
         // 'url' => env('APP_URL'),
         'content_type' => 'App\Page',
         // 'content_id' => 1,
