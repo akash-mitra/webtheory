@@ -195,8 +195,8 @@ class SettingController extends Controller
         
         if ($status == 0) {
             return response()
-                ->download(storage_path('/backup/wt_backup_' . \Carbon\Carbon::parse(now())->format('Ymd')) . '.zip')
-                ->deleteFileAfterSend();
+                ->download(storage_path('/backup/wt_backup_' . \Carbon\Carbon::parse(now())->format('Ymd')) . '.zip');
+                // ->deleteFileAfterSend();
         } else {
             return response()->json('There was an error', 401);
         }
