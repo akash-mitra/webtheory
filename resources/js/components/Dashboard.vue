@@ -9,40 +9,34 @@
 
                     <BoardTileUsers></BoardTileUsers>
 
-                    <BoardTileVisitors></BoardTileVisitors>
+                    <BoardTileVisitors :metric="visitors"></BoardTileVisitors>
 
-                    <BoardTileViews></BoardTileViews>
+                    <BoardTileViews :metric="pageviews"></BoardTileViews>
                 </div>
                 <div class="flex w-full xl:w-2/3 px-2 py-3">
                     <BoardTilePageViews></BoardTilePageViews>
                 </div>
             </div>
 
-            <div class="md:flex w-full">
-                <div class="w-full flex-grow p-2">
+            <div class="md:flex w-full flex-no-wrap">
+                <div class="w-full lg:w-2/3 p-2">
                     <div class="text-sm uppercase text-gray-500 my-4">
                         Recent Comments
                     </div>
-                    <div
-                        class="overflow-auto p-2 md:px-6 rounded-lg bg-gray-100"
-                        style="max-height: 30rem;"
-                    >
+                    <div class="overflow-auto p-2" style="max-height: 30rem;">
                         <BoardComments></BoardComments>
                     </div>
                     <router-link
                         :to="{ name: 'users.index' }"
-                        class="block text-right text-blue-400 my-2 text-sm"
+                        class="block text-blue-400 my-3 text-sm"
                     >
                         Read Comments
                     </router-link>
                 </div>
 
-                <div class="w-full max-w-sm md:px-6 py-2">
+                <div class="w-full lg:w-1/3 p-2">
                     <div class="text-sm uppercase text-gray-500 my-4">New Members</div>
-                    <div
-                        class="overflow-auto p-2 md:px-6 rounded-lg bg-gray-100"
-                        style="max-height: 30rem;"
-                    >
+                    <div class="overflow-auto p-2" style="max-height: 30rem;">
                         <BoardUsers></BoardUsers>
                     </div>
                     <router-link
@@ -67,10 +61,18 @@ import BoardUsers from './BoardUsers.vue'
 import BoardComments from './BoardComments.vue'
 export default {
     data() {
-        return {}
+        return {
+            visitors: '...',
+            pageviews: '...',
+        }
     },
 
-    created() {},
+    created() {
+        util.ajax('get', '/api/dashboard/views', {}, (response) => {
+            this.visitors = response[0].unique_visitors
+            this.pageviews = response[0].total_views
+        })
+    },
 
     components: {
         BoardTilePages,

@@ -282,12 +282,8 @@ Route::prefix('api')
         Route::post('dashboard/clearcache', 'Api\DashboardController@clearCache')->name(
             'dashboard.clearcache'
         );
-        Route::get('dashboard/views', 'Api\DashboardController@views')->name(
-            'dashboard.views'
-        );
-        Route::get('dashboard/daily', 'Api\DashboardController@daily')->name(
-            'dashboard.daily'
-        );
+        Route::get('dashboard/views', 'Api\DashboardController@views')->name('dashboard.views');
+        Route::get('dashboard/daily', 'Api\DashboardController@daily')->name('dashboard.daily');
         Route::get('dashboard/content', 'Api\DashboardController@content')->name(
             'dashboard.content'
         );
@@ -303,9 +299,7 @@ Route::prefix('api')
         Route::get('dashboard/country', 'Api\DashboardController@country')->name(
             'dashboard.country'
         );
-        Route::get('dashboard/city', 'Api\DashboardController@city')->name(
-            'dashboard.city'
-        );
+        Route::get('dashboard/city', 'Api\DashboardController@city')->name('dashboard.city');
     });
 
 // This is a catchall route.

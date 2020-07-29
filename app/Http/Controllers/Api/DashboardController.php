@@ -7,6 +7,7 @@ use App\Page;
 use App\PageComment;
 use App\User;
 use Cache;
+use DB;
 use Illuminate\Support\Facades\Artisan;
 
 class DashboardController extends Controller
@@ -61,7 +62,11 @@ class DashboardController extends Controller
     {
         return Cache::remember('dashboard.views', now()->addMinutes(60), function () {
             return DB::table('views_monthly')
-                ->select(DB::raw('sum(total_views) as total_views, sum(unique_vistors) as unique_vistors'))
+                ->select(
+                    DB::raw(
+                        'sum(total_views) as total_views, sum(unique_vistors) as unique_visitors'
+                    )
+                )
                 ->where('content_type', 'App\Page')
                 ->get();
         });
@@ -70,10 +75,16 @@ class DashboardController extends Controller
     public function daily()
     {
         return Cache::remember('dashboard.daily', now()->addMinutes(60), function () {
-            $start = now()->subDays(8)->format('Ymd');
+            $start = now()
+                ->subDays(8)
+                ->format('Ymd');
             $end = now()->format('Ymd');
             return DB::table('views_daily')
-                ->select(DB::raw('date_key, sum(total_views) as total_views, sum(unique_vistors) as unique_vistors'))
+                ->select(
+                    DB::raw(
+                        'date_key, sum(total_views) as total_views, sum(unique_vistors) as unique_vistors'
+                    )
+                )
                 ->where('content_type', 'App\Page')
                 ->whereBetween('date_key', [$start, $end])
                 ->groupBy('date_key')
@@ -85,7 +96,11 @@ class DashboardController extends Controller
     {
         return Cache::remember('dashboard.content', now()->addMinutes(60), function () {
             return DB::table('views_monthly')
-                ->select(DB::raw('content_id, sum(total_views) as total_views, sum(unique_vistors) as unique_vistors'))
+                ->select(
+                    DB::raw(
+                        'content_id, sum(total_views) as total_views, sum(unique_vistors) as unique_vistors'
+                    )
+                )
                 ->where('content_type', 'App\Page')
                 ->groupBy('content_id')
                 ->get();
@@ -96,7 +111,11 @@ class DashboardController extends Controller
     {
         return Cache::remember('dashboard.referrer', now()->addMinutes(60), function () {
             return DB::table('views_monthly')
-                ->select(DB::raw('referrer_domain, sum(total_views) as total_views, sum(unique_vistors) as unique_vistors'))
+                ->select(
+                    DB::raw(
+                        'referrer_domain, sum(total_views) as total_views, sum(unique_vistors) as unique_vistors'
+                    )
+                )
                 ->where('content_type', 'App\Page')
                 ->groupBy('referrer_domain')
                 ->get();
@@ -107,7 +126,11 @@ class DashboardController extends Controller
     {
         return Cache::remember('dashboard.platform', now()->addMinutes(60), function () {
             return DB::table('views_monthly')
-                ->select(DB::raw('platform, sum(total_views) as total_views, sum(unique_vistors) as unique_vistors'))
+                ->select(
+                    DB::raw(
+                        'platform, sum(total_views) as total_views, sum(unique_vistors) as unique_vistors'
+                    )
+                )
                 ->where('content_type', 'App\Page')
                 ->groupBy('platform')
                 ->get();
@@ -118,7 +141,11 @@ class DashboardController extends Controller
     {
         return Cache::remember('dashboard.browser', now()->addMinutes(60), function () {
             return DB::table('views_monthly')
-                ->select(DB::raw('browser, sum(total_views) as total_views, sum(unique_vistors) as unique_vistors'))
+                ->select(
+                    DB::raw(
+                        'browser, sum(total_views) as total_views, sum(unique_vistors) as unique_vistors'
+                    )
+                )
                 ->where('content_type', 'App\Page')
                 ->groupBy('browser')
                 ->get();
@@ -129,7 +156,11 @@ class DashboardController extends Controller
     {
         return Cache::remember('dashboard.country', now()->addMinutes(60), function () {
             return DB::table('views_monthly')
-                ->select(DB::raw('country, sum(total_views) as total_views, sum(unique_vistors) as unique_vistors'))
+                ->select(
+                    DB::raw(
+                        'country, sum(total_views) as total_views, sum(unique_vistors) as unique_vistors'
+                    )
+                )
                 ->where('content_type', 'App\Page')
                 ->groupBy('country')
                 ->get();
@@ -140,11 +171,14 @@ class DashboardController extends Controller
     {
         return Cache::remember('dashboard.city', now()->addMinutes(60), function () {
             return DB::table('views_monthly')
-                ->select(DB::raw('city, sum(total_views) as total_views, sum(unique_vistors) as unique_vistors'))
+                ->select(
+                    DB::raw(
+                        'city, sum(total_views) as total_views, sum(unique_vistors) as unique_vistors'
+                    )
+                )
                 ->where('content_type', 'App\Page')
                 ->groupBy('city')
                 ->get();
         });
     }
-
 }

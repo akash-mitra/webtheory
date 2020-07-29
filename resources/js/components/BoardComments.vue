@@ -16,13 +16,14 @@
             <div class="h-12 flex items-center p-4 bg-gray-100 justify-between border-t"></div>
         </div>
 
-        <CommentStrip
-            v-for="(c, index) in paginatedComments"
-            :comment="c"
-            :key="c.id"
-            v-if="index < 10"
-            class="flex-grow-0 max-w-full md:max-w-sm bg-white border rounded m-2 shadow"
-        ></CommentStrip>
+        <div class="pr-3 mb-3 w-full xl:max-w-sm" v-for="(c, index) in paginatedComments">
+            <CommentStrip
+                :comment="c"
+                :key="c.id"
+                v-if="index < 10"
+                class="bg-white border rounded-lg shadow"
+            ></CommentStrip>
+        </div>
     </div>
 </template>
 
@@ -43,7 +44,6 @@ export default {
         this.isLoading = true
 
         util.ajax('get', url, {}, (response) => {
-            console.log(response)
             this.paginatedComments = response
 
             this.isLoading = false

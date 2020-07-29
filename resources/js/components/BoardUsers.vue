@@ -1,7 +1,7 @@
 <template>
     <div>
         <div
-            class="flex items-center p-2 my-3 rounded-lg bg-white shadow"
+            class="flex items-center p-2 mb-3 rounded-lg bg-white shadow"
             v-if="isLoading"
             v-for="i in Array(5).keys()"
         >
@@ -23,7 +23,7 @@
             :user="u"
             :key="u.id"
             v-if="index < 7"
-            class="p-2 my-3 rounded-lg bg-white shadow"
+            class="p-2 mb-3 rounded-lg bg-white shadow"
         ></UserStrip>
     </div>
 </template>

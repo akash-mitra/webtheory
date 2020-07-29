@@ -9,9 +9,9 @@
 <script>
 import BoardTile from './BoardTile.vue'
 export default {
+    props: ['metric'],
     data() {
         return {
-            metric: '15K',
             header: 'Visitors',
             text: 'July',
         }
