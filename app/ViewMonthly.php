@@ -30,5 +30,6 @@ class ViewMonthly extends Model
         'referrer_domain',
         'country',
         'city',
+        'created_at',
     ];
 }

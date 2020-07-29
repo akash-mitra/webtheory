@@ -45,7 +45,9 @@ class HomeController extends Controller
     {
         $data = DataProvider::single($page);
 
-        CaptureViewEvent::dispatchAfterResponse($this->capture_analytics('App\Page', $page));
+        CaptureViewEvent::dispatchAfterResponse(
+            $this->capture_analytics('App\Page', $page)
+        );
 
         return view('active.single', compact('data'));
     }
@@ -86,7 +88,9 @@ class HomeController extends Controller
                 ])
         );
 
-        CaptureViewEvent::dispatchAfterResponse($this->capture_analytics('App\User', $user->id));
+        CaptureViewEvent::dispatchAfterResponse(
+            $this->capture_analytics('App\User', $user->id)
+        );
 
         return view('active.profile', compact('data'));
     }
@@ -209,6 +213,8 @@ class HomeController extends Controller
         $id = optional(request()->user())->id;
 
         return [
+            // Public IP address of localhost for testing
+            // 'ip' => file_get_contents('https://api.ipify.org'),
             'ip' => $_SERVER['REMOTE_ADDR'],
             'user_id' => $id,
             'at' => $_SERVER['REQUEST_TIME_FLOAT'],

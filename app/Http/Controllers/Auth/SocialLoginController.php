@@ -11,6 +11,7 @@ use App\Traits\SetMailConfig;
 use App\Mail\WelcomeNewSocialUser;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class SocialLoginController extends Controller
 {
@@ -63,7 +64,9 @@ class SocialLoginController extends Controller
             'email' => $socialUser->getEmail(),
             'role' => 'registered',
             'avatar' => $socialUser->getAvatar(),
-            'email_verified_at' => now()
+            'email_verified_at' => now(),
+            'preferences' => ['broadcast', 'database', 'mail'],
+            'public_id' => Str::random(30),
         ]);
 
         $user->save();

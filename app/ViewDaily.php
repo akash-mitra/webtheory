@@ -21,6 +21,7 @@ class ViewDaily extends Model
      */
     protected $fillable = [
         'date_key',
+        'viewed_at',
         'total_views',
         'unique_vistors',
         'content_type',
@@ -30,5 +31,6 @@ class ViewDaily extends Model
         'referrer_domain',
         'country',
         'city',
+        'created_at',
     ];
 }

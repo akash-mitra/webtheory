@@ -15,7 +15,7 @@ class CreateViewsMonthlyStagingTable extends Migration
     {
         Schema::create('views_monthly_staging', function (Blueprint $table) {
             $table->ipAddress('ip');
-            $table->timestamp('created_at');
+            $table->date('viewed_at');
             $table->string('content_type', 255)->index();
             $table->unsignedBigInteger('content_id')->index();
             $table->string('platform', 255)->nullable();
@@ -24,6 +24,7 @@ class CreateViewsMonthlyStagingTable extends Migration
             $table->string('session_id');
             $table->string('country', 255)->nullable();
             $table->string('city', 255)->nullable();
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 
