@@ -174,6 +174,7 @@
                         let cmd = (e.which || e.keyCode)
                                     + (e.altKey? '.alt' : '')
                                     + (e.ctrlKey? '.ctrl': '')
+                                    + (e.metaKey? '.meta': '')
                                     + (e.shiftKey? '.shift' : '')
 
                         // if an action is defined for the command, call it.
