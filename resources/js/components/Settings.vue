@@ -116,6 +116,13 @@
                     >
                         Security
                     </div>
+                    <div
+                        class="w-full pr-8 py-4 cursor-pointer"
+                        @click="subtab = 'ads'"
+                        :class="subtab === 'ads' ? 'text-indigo-500 font-bold' : ''"
+                    >
+                        Ads
+                    </div>
                 </div>
                 <div class="flex-grow">
                     <div class="w-full">
@@ -124,6 +131,7 @@
                         <SecurityServicesSettings
                             v-if="subtab === 'security'"
                         ></SecurityServicesSettings>
+                        <AdServicesSettings v-if="subtab === 'ads'"></AdServicesSettings>
                     </div>
                 </div>
             </div>
@@ -157,6 +165,7 @@ import BackupSettings from './BackupSettings.vue'
 import SearchServiceSettings from './SearchServiceSettings.vue'
 import SocialShareSettings from './SocialShareSettings.vue'
 import SecurityServicesSettings from './SecurityServicesSettings.vue'
+import AdServicesSettings from './AdServicesSettings.vue'
 
 export default {
     components: {
@@ -168,6 +177,7 @@ export default {
         SearchServiceSettings,
         SocialShareSettings,
         SecurityServicesSettings,
+        AdServicesSettings,
     },
 
     data() {
