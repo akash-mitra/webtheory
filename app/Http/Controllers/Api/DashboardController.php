@@ -64,7 +64,7 @@ class DashboardController extends Controller
             return DB::table('views_monthly')
                 ->select(
                     DB::raw(
-                        'sum(total_views) as total_views, sum(unique_vistors) as unique_visitors'
+                        'sum(total_views) as total_views, sum(unique_vistors) as unique_vistors'
                     )
                 )
                 ->where('content_type', 'App\Page')
@@ -74,9 +74,9 @@ class DashboardController extends Controller
 
     public function daily()
     {
-        return Cache::remember('dashboard.daily', now()->addMinutes(60), function () {
+        return Cache::remember('dashboard.daily', now()->addDays(1), function () {
             $start = now()
-                ->subDays(8)
+                ->subDays(15)
                 ->format('Ymd');
             $end = now()->format('Ymd');
             return DB::table('views_daily')
@@ -103,6 +103,7 @@ class DashboardController extends Controller
                 )
                 ->where('content_type', 'App\Page')
                 ->groupBy('content_id')
+                ->take(10)
                 ->get();
         });
     }
