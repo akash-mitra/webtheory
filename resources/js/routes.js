@@ -7,7 +7,7 @@ import TemplateEditor from './components/TemplateEditor.vue'
 import Users from './components/Users.vue'
 import UserForm from './components/UserForm.vue'
 import Settings from './components/Settings.vue'
-import Gallery from './components/Gallery.vue'
+import Library from './components/Library.vue'
 import Forms from './components/Forms.vue'
 import FormEditor from './components/FormEditor.vue'
 
@@ -184,11 +184,11 @@ export default {
         },
 
         {
-            path: '/app/gallery',
-            component: Gallery,
+            path: '/app/library',
+            component: Library,
             name: 'gallery.index',
             meta: {
-                title: 'Gallery',
+                title: 'Library',
             },
         },
 

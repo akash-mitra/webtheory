@@ -60,8 +60,8 @@
                         </router-link>
 
 
-                        <router-link class="block tracking-wide outline-none border-t md:border-none text-sm py-3 px-6 md:px-0" active-class="font-bold text-blue-700" id="nav-menu-3" to="/app/gallery">
-                            Gallery
+                        <router-link class="block tracking-wide outline-none border-t md:border-none text-sm py-3 px-6 md:px-0" active-class="font-bold text-blue-700" id="nav-menu-3" to="/app/library">
+                            Library
                         </router-link>
 
 
@@ -128,7 +128,7 @@
                         // order is: keycode.alt.ctrl.shift
                         '67': (p) => { p.browseToRoute ('categories.index') },
                         '80': (p) => { p.browseToRoute ('pages.index') },
-                        '71': (p) => { p.browseToRoute ('gallery.index') },
+                        '76': (p) => { p.browseToRoute ('gallery.index') },
                         '85': (p) => { p.browseToRoute ('users.index') },
                         '84': (p) => { p.browseToRoute ('templates.index') },
                         '70': (p) => { p.browseToRoute ('forms.index') },
