@@ -10,9 +10,10 @@ $factory->define(FormResponse::class, function (Faker $faker) {
         'name' => $faker->name,
         'email' => $faker->email,
         'address' => $faker->streetAddress,
-        'magic_house' => $faker->randomElement($array = ['Hufflepuff', 'Ravenclaw', 'Gryffindor', 'Slytherin']),
-        'mentor' => $faker->randomElement($array = ['Dumbledor', 'Severus Snape', 'Remus Lupin', 'Mad-eye Moody']),
-        'friends' => $faker->randomElement($array = ['Ron Weasley', 'Hermione', 'Neville Longbottom', 'Lucious Malfoy']),
+        'magic_house' => $faker->randomElement(['Hufflepuff', 'Ravenclaw', 'Gryffindor', 'Slytherin']),
+        'mentor' => $faker->randomElement(['Dumbledor', 'Severus Snape', 'Remus Lupin', 'Mad-eye Moody']),
+        'friends' => $faker->randomElement(['Ron Weasley', 'Hermione', 'Neville Longbottom', 'Lucious Malfoy']),
+        'score' => $faker->numberBetween($min = 6, $max = 10),
     ];
 
     return [

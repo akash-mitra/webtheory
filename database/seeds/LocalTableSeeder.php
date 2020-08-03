@@ -25,6 +25,16 @@ class LocalTableSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
 
+        $vistors = [];
+        for($i = 0; $i < 100; $i++) {
+            array_push($vistors, factory(View::class)->make([
+                'country' => $faker->randomElement([
+                    'Russia', 'Canada', 'China', 'United States', 'Brazil', 'France', 'Germany', 'United Kingdom',
+                    'Australia', 'India', 'Argentina', 'Singapore', 'Malaysia', 'Japan', 'United Arab Emirates'
+                ])
+            ]));
+        }
+
         // Admin user
         $admin = factory(User::class)->create([
             'name' => env('ADMIN_USER_NAME', 'Administrator'),
@@ -48,12 +58,26 @@ class LocalTableSeeder extends Seeder
         array_push($adminAuthorIds, $admin->id);
 
         // Registered users
-        $userIds = factory(User::class, mt_rand(5, 20))
+        $userIds = factory(User::class, mt_rand(5, 15))
             ->create([
                 'role' => 'registered',
             ])
             ->pluck('id')
             ->all();
+
+        // Unverified users
+        factory(User::class, mt_rand(2, 5))
+            ->create([
+                'role' => 'registered',
+                'email_verified_at' => null,
+            ]);
+
+        // Banned users
+        factory(User::class, mt_rand(2, 5))
+            ->create([
+                'role' => 'registered',
+                'deleted_at' => now(),
+            ]);
 
         // Media
         $files = Storage::allFiles('public/media');
@@ -304,11 +328,6 @@ class LocalTableSeeder extends Seeder
                     'body_html' => $body_html,
                 ]);
 
-                // Page Views
-                $pageView = factory(View::class, mt_rand(0, 10))->create([
-                    'content_id' => $page->id,
-                    'url' => $page->url
-                ]);
             }
         }
         // End of Pages
@@ -341,10 +360,55 @@ class LocalTableSeeder extends Seeder
             }
         }
 
-        // Form
-        $form = factory(Form::class)->create();
+        // Page Views
+        
+        // Days Loop
+        for($view_date = now()->subDays(70)->startOfDay(); $view_date <= now(); $view_date->addDay()) {
+            
+            // User Loop
+            for ($i = 0; $i < mt_rand(10, 20); $i++) {
+                $view = $faker->randomElement($vistors);
 
-        factory(FormResponse::class, mt_rand(1, 10))->create([
+
+                // Skip some Pages
+                shuffle($pageIds);
+                $pages = array_slice($pageIds, count($pageIds) - mt_rand(1, 5));
+
+                // Pages Loop
+                foreach ($pages as $page) {
+                    $pageView = factory(View::class)->create([
+                        'ip' => $view->ip,
+                        'at' => $view_date->addSeconds(mt_rand(0, 120))->format('U'),
+                        'url' => url('pages/' . $page),
+                        'content_type' => 'App\Page',
+                        'content_id' => $page,
+                        'platform' => $view->platform,
+                        'browser' => $view->browser,
+                        'version' => $view->version,
+                        'referrer' => $view->referrer,
+                        'referrer_domain' => str_ireplace('www.', '', parse_url($view->referrer, PHP_URL_HOST)),
+                        'session_id' => mt_rand(0, 5),
+                        'country' => $view->country,
+                        'city' => $view->city,
+                        'latitude' => $view->latitude,
+                        'longitude' => $view->longitude,
+                    ]);
+                }
+            }
+        }
+        
+
+
+        // Form
+        $form = factory(Form::class)->create([
+            'name' => 'Contact Us',
+            'description' => 'Contact Us Form',
+            'captcha' => 1,
+            'status' => 'Live',
+        ]);
+
+        // Form Response
+        factory(FormResponse::class, mt_rand(10, 30))->create([
             'form_id' => $form->id,
         ]);
 

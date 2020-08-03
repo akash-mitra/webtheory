@@ -67,7 +67,7 @@ $factory->define(Form::class, function (Faker $faker) {
         'name' => $faker->name,
         'description' => $faker->catchPhrase,
         'status' => $faker->randomElement(['Draft', 'Live']),
-        'captcha' => $faker->randomElement([true, false]),
+        'captcha' => $faker->randomElement([1, 0]),
         'fields' => json_encode($fields),
     ];
 });
