@@ -13,6 +13,7 @@ $factory->define(PageContent::class, function (Faker $faker) {
         'page_id' => null,
         'body_json' => '{"blocks":[{"type":"header","data":{"level":1,"text":"' . $heading . '"}},{"type":"paragraph","data":{"text":"' . $paragraph . '"}}]}',
         'body_html' => '<h1>' . $heading . '</h1>' . '<p>' . $paragraph . '</p>',
-        'editor' => 'editorjs'
+        'type' => 'editorjs',
+        'display_order' => 1,
     ];
 });

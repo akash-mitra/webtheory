@@ -31,9 +31,12 @@ class PageRequest extends FormRequest
             'metakey' => ['nullable', 'string', 'max:255'],
             'metadesc' => ['nullable', 'string', 'max:255'],
             'media_id' => ['nullable', 'integer', 'exists:media,id'],
-            'body_json' => ['required', 'json'],
             'status' => ['required', Rule::in(['Draft', 'Live'])],
-            'editor' => ['required', 'string', 'max:50'],
+            'access_plan' => ['nullable', 'string', 'max:255'],
+            'content' => ['nullable', 'array'],
+            'content.*.body_json' => ['required', 'json'],
+            'content.*.type' => ['required', 'string', 'max:255'],
+            'content.*.display_order' => ['required', 'integer'],
         ];
     }
 

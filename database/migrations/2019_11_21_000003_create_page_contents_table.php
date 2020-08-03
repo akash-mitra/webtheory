@@ -18,8 +18,10 @@ class CreatePageContentsTable extends Migration
             $table->unsignedBigInteger('page_id')->nullable()->index();
             $table->longText('body_json')->nullable();
             $table->longText('body_html');
-            $table->string('editor')->nullable();
+            $table->string('type')->nullable();
+            $table->integer('display_order')->nullable();
             $table->timestamps();
+            $table->unique(['page_id', 'display_order']);
         });
     }
 

@@ -91,12 +91,18 @@ class PageTest extends TestDataSetup
             'summary' => 'Test Summary',
             'metakey' => 'Test, Meta, Key',
             'metadesc' => 'Test Meta Description',
-            'body_json' =>
-                '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading."}},{"type":"paragraph","data":{"text":"Test Paragraph"}}]}',
             'status' => 'Live',
-            'editor' => 'editorjs',
+            'access_plan' => null,
+            'content' => [
+                0 => [
+                    'body_json' =>
+                        '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading."}},{"type":"paragraph","data":{"text":"Test Paragraph"}}]}',
+                    'type' => 'editorjs',
+                    'display_order' => 1
+                ]
+            ]
         ];
-
+        
         // Unauthenticated user cannot save page
         $response = $this->post('/api/pages', $page, ['Accept' => 'application/json']);
         $response->assertStatus(401)->assertJson(['message' => 'Unauthenticated.']);
@@ -125,26 +131,34 @@ class PageTest extends TestDataSetup
             'status' => 'Live',
         ]);
 
-        factory(PageContent::class)->create([
+        $pagecontent = factory(PageContent::class)->create([
             'page_id' => $page->id,
             'body_json' =>
-                '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading."}},{"type":"paragraph","data":{"text":"Test Paragraph"}}]}',
-            'editor' => 'editorjs',
+                '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading"}},{"type":"paragraph","data":{"text":"Test Paragraph."}}]}',
+            'body_html' => '<h1>Test Heading</h1><p>Test Paragraph.</p>',
+            'type' => 'editorjs',
+            'display_order' => 1
         ]);
 
         $page->title = 'Test Title Updated';
-        $page->body_json =
-            '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading Updated."}},{"type":"paragraph","data":{"text":"Test Paragraph Updated"}}]}';
-        $updateRequestInfo = array_merge($page->toArray(), ['editor' => 'editorjs']);
-
+        $page->content = [
+            0 => [
+                'id' => $pagecontent->id,
+                'body_json' =>
+                    '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading Updated"}},{"type":"paragraph","data":{"text":"Test Paragraph Updated."}}]}',
+                'type' => 'editorjs',
+                'display_order' => 1
+            ]
+        ];
+            
         // Unauthenticated user cannot update page
-        $response = $this->put('/api/pages/' . $page->id, $updateRequestInfo);
+        $response = $this->put('/api/pages/' . $page->id, $page->toArray());
         $response->assertStatus(302);
 
         // Authenticated user can update page
         $response = $this->actingAs($this->adminUser)->put(
             '/api/pages/' . $page->id,
-            $updateRequestInfo
+            $page->toArray()
         );
 
         $response
@@ -160,6 +174,7 @@ class PageTest extends TestDataSetup
                 'metadesc',
                 'media_id',
                 'status',
+                'access_plan',
                 'created_at',
                 'updated_at',
                 'deleted_at',
@@ -168,13 +183,16 @@ class PageTest extends TestDataSetup
                 'created_ago',
                 'updated_ago',
                 'content' => [
-                    'id',
-                    'page_id',
-                    'body_json',
-                    'body_html',
-                    'created_at',
-                    'updated_at',
-                    'editor',
+                    '*' => [
+                        'id',
+                        'page_id',
+                        'body_json',
+                        'body_html',
+                        'type',
+                        'display_order',
+                        'created_at',
+                        'updated_at',
+                    ]
                 ],
             ]);
         $this->assertDatabaseHas('pages', ['title' => 'Test Title Updated']);
@@ -272,5 +290,32 @@ class PageTest extends TestDataSetup
         $response = $this->actingAs($this->adminUser)->delete('/api/pages/' . $page->id);
         $response->assertStatus(204);
         $this->assertSoftDeleted('pages', ['title' => $page->title]);
+    }
+
+    /* Page Content Destroy */
+    public function test_pagecontent_destroy()
+    {
+        $page = factory(Page::class)->create([
+            'category_id' => $this->category->id,
+            'user_id' => $this->adminUser->id,
+            'status' => 'Live',
+        ]);
+        $pagecontent = factory(PageContent::class)->create([
+            'page_id' => $page->id,
+            'body_json' =>
+                '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading"}},{"type":"paragraph","data":{"text":"Test Paragraph."}}]}',
+            'body_html' => '<h1>Test Heading</h1><p>Test Paragraph.</p>',
+            'type' => 'editorjs',
+            'display_order' => 1
+        ]);
+
+        // Unauthenticated user cannot delete page content
+        $response = $this->delete('/api/pagecontent/' . $pagecontent->id, [], ['Accept' => 'application/json']);
+        $response->assertStatus(401)->assertJson(['message' => 'Unauthenticated.']);
+
+        // Authenticated user can delete page content
+        $response = $this->actingAs($this->adminUser)->delete('/api/pagecontent/' . $pagecontent->id);
+        $response->assertStatus(204);
+        $this->assertDatabaseMissing('page_contents', ['page_id' => $pagecontent->page_id, 'display_order' => $pagecontent->display_order]);
     }
 }

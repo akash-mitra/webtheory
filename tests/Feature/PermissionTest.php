@@ -130,14 +130,25 @@ class PermissionTest extends TestDataSetup
 
         $users = [$this->adminUser, $this->authorUser1];
         foreach ($users as $user) {
-            $page = $page = factory(Page::class)->make([
+            $page = [
                 'category_id' => $this->category->id,
-                'body_json' =>
-                    '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading."}},{"type":"paragraph","data":{"text":"Test Paragraph"}}]}',
-                'editor' => 'editorjs',
-            ]);
+                'title' => 'Test Title',
+                'summary' => 'Test Summary',
+                'metakey' => 'Test, Meta, Key',
+                'metadesc' => 'Test Meta Description',
+                'status' => 'Live',
+                'access_plan' => null,
+                'content' => [
+                    0 => [
+                        'body_json' =>
+                            '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading."}},{"type":"paragraph","data":{"text":"Test Paragraph"}}]}',
+                        'type' => 'editorjs',
+                        'display_order' => 1
+                    ]
+                ]
+            ];
             $this->actingAs($user);
-            $this->post('/api/pages', $page->toArray(), [
+            $this->post('/api/pages', $page, [
                 'Accept' => 'application/json',
             ])->assertStatus(200);
         }
@@ -147,13 +158,37 @@ class PermissionTest extends TestDataSetup
 
         $users = [$this->adminUser, $this->authorUser1];
         foreach ($users as $user) {
-            $page = factory(Page::class)->create(['category_id' => $this->category->id]);
-            factory(PageContent::class)->create(['page_id' => $page->id]);
-            $page->body_json =
-                '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading."}},{"type":"paragraph","data":{"text":"Test Paragraph"}}]}';
-            $updateRequestInfo = array_merge($page->toArray(), ['editor' => 'editorjs']);
+            $page = factory(Page::class)->create([
+                'category_id' => $this->category->id,
+                'user_id' => $this->adminUser->id,
+                'title' => 'Test Title',
+                'summary' => 'Test Summary',
+                'metakey' => 'Test, Meta, Key',
+                'metadesc' => 'Test Meta Description',
+                'status' => 'Live',
+            ]);
+    
+            $pagecontent = factory(PageContent::class)->create([
+                'page_id' => $page->id,
+                'body_json' =>
+                    '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading"}},{"type":"paragraph","data":{"text":"Test Paragraph."}}]}',
+                'body_html' => '<h1>Test Heading</h1><p>Test Paragraph.</p>',
+                'type' => 'editorjs',
+                'display_order' => 1
+            ]);
+    
+            $page->title = 'Test Title Updated';
+            $page->content = [
+                0 => [
+                    'id' => $pagecontent->id,
+                    'body_json' =>
+                        '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading Updated"}},{"type":"paragraph","data":{"text":"Test Paragraph Updated."}}]}',
+                    'type' => 'editorjs',
+                    'display_order' => 1
+                ]
+            ];
             $this->actingAs($user);
-            $this->put('/api/pages/' . $page->id, $updateRequestInfo, [
+            $this->put('/api/pages/' . $page->id, $page->toArray(), [
                 'Accept' => 'application/json',
             ])->assertStatus(200);
         }
@@ -190,6 +225,20 @@ class PermissionTest extends TestDataSetup
             ->assertStatus(403);
         $this->actingAs($this->registeredUser)
             ->delete('/api/pages/' . $this->page->id, [], ['Accept' => 'application/json'])
+            ->assertStatus(403);
+
+        $users = [$this->adminUser, $this->authorUser1];
+        foreach ($users as $user) {
+            $page = factory(Page::class)->create(['category_id' => $this->category->id]);
+            $pagecontent = factory(PageContent::class)->create(['page_id' => $page->id]);
+            $this->actingAs($user)
+            ->delete('/api/pagecontent/' . $pagecontent->id, [], ['Accept' => 'application/json'])
+            ->assertStatus(204);
+        }
+        $page = factory(Page::class)->create(['category_id' => $this->category->id]);
+        $pagecontent = factory(PageContent::class)->create(['page_id' => $page->id]);
+        $this->actingAs($this->registeredUser)
+            ->delete('/api/pagecontent/' . $this->pagecontent->id, [], ['Accept' => 'application/json'])
             ->assertStatus(403);
     }
 
