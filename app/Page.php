@@ -23,7 +23,8 @@ class Page extends Model
         'metadesc',
         'media_id',
         'status',
-        'access_plan'
+        'access_plan',
+        'options',
     ];
 
     protected $appends = ['url', 'permalink', 'created_ago', 'updated_ago'];

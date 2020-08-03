@@ -115,6 +115,8 @@ class PageController extends Controller
                 'metadesc' => $request->metadesc,
                 'media_id' => $request->media_id,
                 'status' => $request->status,
+                'access_plan' => $request->access_plan,
+                'options' => $request->options,
             ]);
 
             $page->save();
@@ -165,6 +167,8 @@ class PageController extends Controller
                         'metadesc',
                         'media_id',
                         'status',
+                        'access_plan',
+                        'options',
                     ])
                 )
                 ->save();

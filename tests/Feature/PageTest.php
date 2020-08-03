@@ -175,6 +175,7 @@ class PageTest extends TestDataSetup
                 'media_id',
                 'status',
                 'access_plan',
+                'options',
                 'created_at',
                 'updated_at',
                 'deleted_at',

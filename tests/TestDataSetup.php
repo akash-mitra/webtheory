@@ -203,6 +203,7 @@ class TestDataSetup extends TestCase
             'media_id',
             'status',
             'access_plan',
+            'options',
             'created_at',
             'updated_at',
             'deleted_at',

@@ -18,5 +18,6 @@ $factory->define(Page::class, function (Faker $faker) {
         'media_id' => null,
         'status' => $faker->randomElement(['Draft', 'Live']),
         'access_plan' => $faker->randomElement(['registered', null]),
+        'options' => null,
     ];
 });
