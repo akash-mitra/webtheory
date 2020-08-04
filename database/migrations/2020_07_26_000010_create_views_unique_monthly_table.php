@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateViewsDailyTable extends Migration
+class CreateViewsUniqueMonthlyTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateViewsDailyTable extends Migration
      */
     public function up()
     {
-        Schema::create('views_daily', function (Blueprint $table) {
-            $table->integer('date_key')->unique()->index();
-            $table->integer('total_views');
+        Schema::create('views_unique_monthly', function (Blueprint $table) {
+            $table->integer('month_key')->unique()->index();
             $table->integer('unique_visitors');
-            $table->integer('bounce_rate');
-            $table->integer('avg_visit_duration')->nullable();
             $table->timestamp('created_at')->useCurrent();
         });
     }
@@ -30,6 +27,6 @@ class CreateViewsDailyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('views_daily');
+        Schema::dropIfExists('views_unique_monthly');
     }
 }

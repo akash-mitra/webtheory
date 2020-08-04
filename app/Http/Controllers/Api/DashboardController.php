@@ -7,6 +7,7 @@ use App\Page;
 use App\PageComment;
 use App\User;
 use App\ViewDaily;
+use App\ViewUniqueMonthly;
 use App\ViewContent;
 use App\ViewReferrer;
 use App\ViewPlatform;
@@ -69,16 +70,23 @@ class DashboardController extends Controller
     public function viewsdaily()
     {
         
-        // return Cache::rememberForever('dashboard.views', function () {
+        // return Cache::rememberForever('dashboard.views-daily', function () {
             return ViewDaily::daily();
         // });
     }
 
 
-    public function viewsMonthly()
+    public function viewsmonthly()
     {
-        // return Cache::rememberForever('dashboard.views', function () {
+        // return Cache::rememberForever('dashboard.views-monthly', function () {
             return ViewDaily::monthly();
+        // });
+    }
+
+    public function uniquemonthly()
+    {
+        // return Cache::rememberForever('dashboard.views-unique-monthly', function () {
+            return ViewUniqueMonthly::monthly();
         // });
     }
 

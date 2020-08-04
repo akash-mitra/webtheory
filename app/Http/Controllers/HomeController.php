@@ -211,13 +211,15 @@ class HomeController extends Controller
     private function capture_analytics($content_type, $content_id)
     {
         $id = optional(request()->user())->id;
+        $viewed_at = new \DateTime("@$_SERVER[REQUEST_TIME]");
 
         return [
             // Public IP address of localhost for testing
             // 'ip' => file_get_contents('https://api.ipify.org'),
             'ip' => $_SERVER['REMOTE_ADDR'],
             'user_id' => $id,
-            'at' => $_SERVER['REQUEST_TIME_FLOAT'],
+            'at' => $viewed_at,
+            'date_key' => $viewed_at->format('Ymd'),
             'url' => $_SERVER['REQUEST_URI'],
             'content_type' => $content_type,
             'content_id' => $content_id,

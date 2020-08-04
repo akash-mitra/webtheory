@@ -15,6 +15,7 @@ class View extends Model
         'ip',
         'user_id',
         'at',
+        'date_key',
         'url',
         'content_type',
         'content_id',

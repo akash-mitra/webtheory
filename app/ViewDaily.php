@@ -23,7 +23,6 @@ class ViewDaily extends Model
      */
     protected $fillable = [
         'date_key',
-        'viewed_at',
         'total_views',
         'unique_visitors',
         'bounce_rate',
@@ -38,6 +37,7 @@ class ViewDaily extends Model
         $end_date_key = request()->input('end_date_key', $start_date_key);
         
         return ViewDaily::whereBetween('date_key', [$start_date_key, $end_date_key])
+            ->select('date_key', 'total_views', 'unique_visitors', 'bounce_rate', 'avg_visit_duration')
             ->orderBy('date_key')
             ->get();
     }
