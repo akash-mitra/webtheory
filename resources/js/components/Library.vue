@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full my-6 max-w-4xl mx-auto">
+    <div class="w-full my-6 max-w-4xl mx-auto px-6">
         <h2 class="text-indigo-600 text-2xl flex items-center">
             <svg
                 xmlns="http://www.w3.org/2000/svg"

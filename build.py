@@ -263,7 +263,7 @@ def reset_env():
         subprocess.run('php artisan event:clear', shell=True, check=True)
         subprocess.run('php artisan route:clear', shell=True, check=True)
         subprocess.run('php artisan view:clear', shell=True, check=True)
-
+        subprocess.run('php artisan view:analytics', shell=True, check=True)
         subprocess.run('composer dump-autoload', shell=True, check=True)
 
         return 0

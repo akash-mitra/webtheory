@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-4xl mx-auto">
         <div class="px-6 my-6 w-full flex justify-between items-center">
             <h2 class="text-indigo-600 text-2xl flex items-center">
                 <svg
