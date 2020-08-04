@@ -59,7 +59,8 @@ class ProductionTableSeeder extends Seeder
                 '{"time":1588996014099,"blocks":[{"type":"header","data":{"text":"Welcome aboard!","level":3}},{"type":"paragraph","data":{"text":"We at WebTheory, have put our heart, soul and sweat to bring you the next-generation  Content Management System."}},{"type":"paragraph","data":{"text":"You now have access to highly advanced and superfast platform - integrated with powerful tools such as analytics, social integration, media management, CDN, AMP, SEO tools etc."}},{"type":"paragraph","data":{"text":"As you start writing your first article in the WebTheory platform, we wish you very best of writing time. We are always available a mail away from you but very close to the CMS."}},{"type":"paragraph","data":{"text":"Feel free to reach out when you are stuck anywhere in between."}},{"type":"paragraph","data":{"text":"Enjoy writing creating delightful and successful site using WebTheory."}},{"type":"paragraph","data":{"text":"Spread the love and word about us to the world."}},{"type":"paragraph","data":{"text":"Thank you very much for choosing us."}},{"type":"paragraph","data":{"text":"*Note: *This is a default page created and it is published on your site by us. Kindly go to Pages —&gt;  and switch it to Draft to take it down from Live."}}],"version":"2.16.1"}',
             'body_html' =>
                 '<h3>Welcome aboard!</h3><p>We at WebTheory, have put our heart, soul and sweat to bring you the next-generation  Content Management System.</p><p>You now have access to highly advanced and superfast platform - integrated with powerful tools such as analytics, social integration, media management, CDN, AMP, SEO tools etc.</p><p>As you start writing your first article in the WebTheory platform, we wish you very best of writing time. We are always available a mail away from you but very close to the CMS.</p><p>Feel free to reach out when you are stuck anywhere in between.</p><p>Enjoy writing creating delightful and successful site using WebTheory.</p><p>Spread the love and word about us to the world.</p><p>Thank you very much for choosing us.</p><p>*Note: *This is a default page created and it is published on your site by us. Kindly go to Pages —&gt;  and switch it to Draft to take it down from Live.</p>',
-            'editor' => 'editorjs',
+            'type' => 'editorjs',
+            'display_order' => 1,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -321,10 +322,10 @@ class ProductionTableSeeder extends Seeder
     private function addDefaultBatchJob()
     {
         DB::table('batch_jobs')->insert([
-            'batch_date' => \Carbon\Carbon::yesterday(),
+            'batch_date' => '2000-01-01 00:00:00',
             'batch_name' => 'process_views_analytics_table',
-            'start_datetime' => now(),
-            'end_datetime' => now(),
+            'start_datetime' => '2000-02-02 00:00:00',
+            'end_datetime' => '2000-02-02  00:00:00',
             'start_view_id' => 0,
             'end_view_id' => 0,
             'status' => 'success',

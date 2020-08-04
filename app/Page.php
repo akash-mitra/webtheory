@@ -21,8 +21,10 @@ class Page extends Model
         'summary',
         'metakey',
         'metadesc',
-        'status',
         'media_id',
+        'status',
+        'access_plan',
+        'options',
     ];
 
     protected $appends = ['url', 'permalink', 'created_ago', 'updated_ago'];
@@ -41,7 +43,7 @@ class Page extends Model
 
     public function content()
     {
-        return $this->hasOne('App\PageContent');
+        return $this->hasMany('App\PageContent');
     }
 
     public function author()

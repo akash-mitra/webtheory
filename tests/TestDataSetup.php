@@ -202,6 +202,8 @@ class TestDataSetup extends TestCase
             'metadesc',
             'media_id',
             'status',
+            'access_plan',
+            'options',
             'created_at',
             'updated_at',
             'deleted_at',
@@ -216,9 +218,10 @@ class TestDataSetup extends TestCase
             'page_id',
             'body_json',
             'body_html',
+            'type',
+            'display_order',
             'created_at',
             'updated_at',
-            'editor',
         ];
 
         $this->category_attributes_list = array_merge($this->category_attributes, [
@@ -241,14 +244,18 @@ class TestDataSetup extends TestCase
         ]);
 
         $this->page_attributes_show = array_merge($this->page_attributes, [
-            'content' => $this->pagecontent_attributes,
+            'content' => [ 
+                '*' => $this->pagecontent_attributes
+            ],
             'category' => $this->category_attributes,
             'author' => $this->user_attributes,
             'media',
         ]);
 
         $this->page_attributes_show_media = array_merge($this->page_attributes, [
-            'content' => $this->pagecontent_attributes,
+            'content' => [ 
+                '*' => $this->pagecontent_attributes
+            ],
             'category' => $this->category_attributes,
             'author' => $this->user_attributes,
             'media' => $this->media_attributes,
@@ -270,7 +277,9 @@ class TestDataSetup extends TestCase
             'permalink',
             'created_ago',
             'updated_ago',
-            'content' => $this->pagecontent_attributes,
+            'content' => [
+                '*' => $this->pagecontent_attributes
+            ]
         ];
 
         $this->user_pages_attributes = array_merge($this->page_attributes, [

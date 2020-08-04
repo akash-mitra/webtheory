@@ -23,6 +23,8 @@ class CreatePagesTable extends Migration
             $table->string('metadesc')->nullable();
             $table->unsignedInteger('media_id')->nullable()->index();
             $table->string('status', 30)->default('Draft')->index();
+            $table->string('access_plan')->nullable()->index();
+            $table->string('options', 255)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

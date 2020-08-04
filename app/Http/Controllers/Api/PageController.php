@@ -115,19 +115,16 @@ class PageController extends Controller
                 'metadesc' => $request->metadesc,
                 'media_id' => $request->media_id,
                 'status' => $request->status,
+                'access_plan' => $request->access_plan,
+                'options' => $request->options,
             ]);
 
             $page->save();
-
-            $converter = new ContentsConverter($request->body_json, $request->editor);
-
-            $pagecontent = new PageContent([
-                'body_json' => $request->body_json,
-                'body_html' => $converter->getHtml(),
-                'editor' => $request->editor,
-            ]);
-
-            $page->content()->save($pagecontent);
+            
+            $content = $request->content;
+            foreach($content as $pagecontent) {
+                PageContent::addOrModify($page, $pagecontent);
+            }
         });
 
         $page->load('content');
@@ -170,17 +167,16 @@ class PageController extends Controller
                         'metadesc',
                         'media_id',
                         'status',
+                        'access_plan',
+                        'options',
                     ])
                 )
                 ->save();
 
-            $converter = new ContentsConverter($request->body_json, $request->editor);
-
-            $page->content()->update([
-                'body_json' => $request->body_json,
-                'body_html' => $converter->getHtml(),
-                'editor' => $request->editor,
-            ]);
+            $content = $request->content;
+            foreach($content as $pagecontent) {
+                PageContent::addOrModify($page, $pagecontent);
+            }
         });
 
         $page->load('content');
@@ -235,6 +231,21 @@ class PageController extends Controller
         Page::invalidateCache();
 
         $page->delete();
+
+        return response()->json('success', 204);
+    }
+
+    /**
+     * Remove the specified page content from storage.
+     *
+     * @param  Page  $page
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyContent(PageContent $pagecontent)
+    {
+        Page::invalidateCache();
+
+        $pagecontent->delete();
 
         return response()->json('success', 204);
     }

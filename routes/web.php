@@ -138,6 +138,9 @@ Route::prefix('api')
             'pages.updateowner'
         );
         Route::delete('pages/{page}', 'Api\PageController@destroy')->name('pages.destroy');
+        Route::delete('pagecontent/{pagecontent}', 'Api\PageController@destroyContent')->name(
+            'pages.destroycontent'
+        );
 
         // --------------------------------------------------------------------------------------------------------------------------
         // Media API
@@ -282,8 +285,16 @@ Route::prefix('api')
         Route::post('dashboard/clearcache', 'Api\DashboardController@clearCache')->name(
             'dashboard.clearcache'
         );
-        Route::get('dashboard/views', 'Api\DashboardController@views')->name('dashboard.views');
-        Route::get('dashboard/daily', 'Api\DashboardController@daily')->name('dashboard.daily');
+
+        Route::get('dashboard/views/daily', 'Api\DashboardController@viewsdaily')->name(
+            'dashboard.viewsdaily'
+        );
+        Route::get('dashboard/views/monthly', 'Api\DashboardController@viewsmonthly')->name(
+            'dashboard.viewsmonthly'
+        );
+        Route::get('dashboard/unique/monthly', 'Api\DashboardController@uniquemonthly')->name(
+            'dashboard.uniquemonthly'
+        );
         Route::get('dashboard/content', 'Api\DashboardController@content')->name(
             'dashboard.content'
         );

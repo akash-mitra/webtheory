@@ -19,21 +19,21 @@ use Illuminate\Support\Str;
 $factory->define(View::class, function (Faker $faker) {
 
     $fakeEmail = $faker->unique()->safeEmail;
-    $url = $faker->randomElement($array = [$faker->url, env('APP_URL'), null]);
+    $url = $faker->randomElement(['https://google.com', 'https://facebook.com', 'https://instagram.com', 'https://wikipedia.com', null]);
 
     return [
         'ip' => $faker->ipv4,
         'user_id' => null,
-        'at' => $faker->dateTimeBetween($startDate = "-30 days", $endDate = "now")->format('U'),
+        'at' => $faker->dateTimeBetween($startDate = "-75 days", $endDate = "now")->format('U'),
         // 'url' => env('APP_URL'),
-        'content_type' => 'App\Page',
+        'content_type' => $faker->randomElement(['App\Page', 'App\Category']),
         // 'content_id' => 1,
-        'platform' => $faker->randomElement($array = ['Macintosh', 'Windows', 'Linux', 'iPhone', 'Android']),
-        'browser' => $faker->randomElement($array = ['Safari', 'Firefox', 'Opera Next', 'Chrome', 'Edge']),
+        'platform' => $faker->randomElement(['Macintosh', 'Windows', 'Linux', 'iPhone', 'iPad', 'Android', 'Tizen']),
+        'browser' => $faker->randomElement(['Safari', 'Firefox', 'Opera Next', 'Chrome', 'Edge', 'IEMobile', 'SamsungBrowser']),
         'version' => $faker->numberBetween($min = 10, $max = 100),
         'referrer' => $url,
         'referrer_domain' => str_ireplace('www.', '', parse_url($url, PHP_URL_HOST)),
-        'session_id' => $faker->numberBetween($min = 10, $max = 30), // $faker->md5,
+        'session_id' => $faker->numberBetween($min = 10, $max = 10000), // $faker->md5,
         'country' => $faker->country,
         'city' => $faker->city,
         'latitude' => $faker->latitude,

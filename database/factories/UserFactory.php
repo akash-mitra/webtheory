@@ -29,7 +29,7 @@ $factory->define(User::class, function (Faker $faker) {
         'role' => 'guest',
         'avatar' => 'https://i.pravatar.cc/100?u=' . $fakeEmail,
         'about_me' => $faker->paragraph(),
-        'gender' => $faker->randomElement($array = ['Male', 'Female']),
+        'gender' => $faker->randomElement(['Male', 'Female']),
         'dob' => $faker->date($format = 'Y-m-d', $max = 'now'),
         'profile' => null,
         'preferences' => ["broadcast","database","mail"],

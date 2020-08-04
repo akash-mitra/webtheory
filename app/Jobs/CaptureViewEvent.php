@@ -37,11 +37,17 @@ class CaptureViewEvent implements ShouldQueue
             array_merge($this->viewerData, $this->parse_user_agent($this->viewerData['agent']))
         );
 
-        $geolocation = json_decode(Http::get('http://api.ipstack.com/' . $view->ip . '?access_key=' . env('ip_access_key')));
-        $view->country = $geolocation->country_name;
-        $view->city = $geolocation->city;
-        $view->latitude = $geolocation->latitude;
-        $view->longitude = $geolocation->longitude;
+        // $geolocation = json_decode(Http::get('http://api.ipstack.com/' . $view->ip . '?access_key=' . env('ip_access_key')));
+        // $view->country = $geolocation->country_name;
+        // $view->city = $geolocation->city;
+        // $view->latitude = $geolocation->latitude;
+        // $view->longitude = $geolocation->longitude;
+
+        $geolocation = json_decode(Http::get('https://api.ipgeolocationapi.com/geolocate/' . $view->ip ));
+        $view->country = $geolocation->name;
+        $view->city = $geolocation->region;
+        $view->latitude = $geolocation->geo->latitude;
+        $view->longitude = $geolocation->geo->longitude;
         
         $view->save();
 
