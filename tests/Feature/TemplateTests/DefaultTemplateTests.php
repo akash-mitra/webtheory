@@ -51,7 +51,7 @@ trait DefaultTemplateTests
         ]);
     }
 
-    public function test_active_dir_is_preloaded_with_default_template()
+    public function test_default_template_files_in_active_and_template_dir_are_same()
     {
         array_map(function ($file) {
             if (!Str::startsWith(basename($file), '.')) {
