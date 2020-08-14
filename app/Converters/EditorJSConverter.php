@@ -10,13 +10,16 @@ class EditorJSConverter
     private static $body_json;
     private static $langSearchSpace = ['java', 'python', 'javascript', 'php', 'sql'];
 
-    public static function getHtml(String $body_json)
+    public static function getHtml(array $body_json)
     {
-        self::$body_json = json_decode($body_json);
+        self::$body_json = $body_json;
+
+        dump($body_json);
+        dump(gettype(self::$body_json));
 
         $body_html = '';
-        foreach (self::$body_json->blocks as $block) {
-            $body_html .= self::processContent($block->type, $block->data);
+        foreach (self::$body_json['blocks'] as $block) {
+            $body_html .= self::processContent($block['type'], $block['data']);
         }
 
         return $body_html;
@@ -24,29 +27,29 @@ class EditorJSConverter
 
     private static function processHeader($data)
     {
-        return '<h' . $data->level . '>' . $data->text . '</h' . $data->level . '>';
+        return '<h' . $data['level'] . '>' . $data['text'] . '</h' . $data['level'] . '>';
     }
 
     private static function processParagraph($data)
     {
-        return '<p>' . $data->text . '</p>';
+        return '<p>' . $data['text'] . '</p>';
     }
 
     private static function processList($data)
     {
-        $list = $data->style == 'ordered' ? '<ol>' : '<ul>';
-        $items = $data->items;
+        $list = $data['style'] == 'ordered' ? '<ol>' : '<ul>';
+        $items = $data['items'];
         foreach ($items as $item) {
             $list .= '<li>' . $item . '</li>';
         }
-        $list .= $data->style == 'ordered' ? '</ol>' : '</ul>';
+        $list .= $data['style'] == 'ordered' ? '</ol>' : '</ul>';
         return $list;
     }
 
     private static function processTable($data)
     {
         $table = '<table class="border border-collapse wt-table"><tbody>';
-        $content = $data->content;
+        $content = $data['content'];
         foreach ($content as $rows) {
             $table .= '<tr class="wt-table-tr">';
             foreach ($rows as $row) {
@@ -61,8 +64,7 @@ class EditorJSConverter
 
     private static function processCode($data)
     {
-        return self::getCodeHighLighted($data->code);
-
+        return self::getCodeHighLighted($data['code']);
     }
 
     private static function processImage($data)
@@ -70,35 +72,64 @@ class EditorJSConverter
         $containerClass = 'my-4';
         $imgClass = '';
 
-        if ($data->stretched) {
+        if ($data['stretched']) {
             $containerClass .= ' img-container-stretched ';
             $imgClass = 'img-self-stretched ';
         }
 
-        if ($data->withBackground) {
+        if ($data['withBackground']) {
             $containerClass .= ' img-container-background';
         }
 
-        if ($data->withBorder) {
+        if ($data['withBorder']) {
             $imgClass .= 'img-self-border';
         }
 
-        return '<div class="' . $containerClass .'">'
-                . '<figure class="img-fig">'
-                    . '<img src="' . $data->file->url . '" alt="' . $data->caption . '" class="' . $imgClass .'"></img>'
-                    . '<figcaption class="text-sm mt-3 img-fig-caption' . (($data->stretched || $data->withBackground) ? ' text-center' :'') . '">'
-                        . $data->caption
-                    . '</figcaption>'
-                . '</figure>'
-            .'</div>';
+        return '<div class="' .
+            $containerClass .
+            '">' .
+            '<figure class="img-fig">' .
+            '<img src="' .
+            $data['file']->url .
+            '" alt="' .
+            $data['caption'] .
+            '" class="' .
+            $imgClass .
+            '"></img>' .
+            '<figcaption class="text-sm mt-3 img-fig-caption' .
+            ($data['stretched'] || $data['withBackground'] ? ' text-center' : '') .
+            '">' .
+            $data['caption'] .
+            '</figcaption>' .
+            '</figure>' .
+            '</div>';
     }
 
     private static function processEmbeded($data)
     {
-        if ($data->service == "youtube")
-            return '<iframe src="' . $data->embed . '" width="' . $data->width . '" height="' . $data->height . '" title="' . $data->caption . '" frameborder="0" allowfullscreen></iframe>';
-        else
-            return '<embed type="' . $data->type . '" src="' . $data->source . '" width="' . $data->width . '" height="' . $data->height . '" title="' . $data->caption . '">';
+        if ($data['service'] == 'youtube') {
+            return '<iframe src="' .
+                $data['embed'] .
+                '" width="' .
+                $data['width'] .
+                '" height="' .
+                $data['height'] .
+                '" title="' .
+                $data['caption'] .
+                '" frameborder="0" allowfullscreen></iframe>';
+        } else {
+            return '<embed type="' .
+                $data['type'] .
+                '" src="' .
+                $data['source'] .
+                '" width="' .
+                $data['width'] .
+                '" height="' .
+                $data['height'] .
+                '" title="' .
+                $data['caption'] .
+                '">';
+        }
     }
 
     private static function processContent($type, $data)
@@ -116,30 +147,25 @@ class EditorJSConverter
         return is_null($data) ? '' : self::$method($data);
     }
 
-
-
-    private static function getCodeHighLighted ($code, $language = null)
+    private static function getCodeHighLighted($code, $language = null)
     {
         $highlighter = new Highlighter();
 
         try {
-
-            if ($language != null)
-            {
+            if ($language != null) {
                 $highlighted = $highlighter->highlight($language, $code);
-            }
-            else
-            {
+            } else {
                 $highlighter->setAutodetectLanguages(self::$langSearchSpace);
 
                 $highlighted = $highlighter->highlightAuto($code);
             }
 
-            return '<pre><code class="hljs ' . $highlighted->language . '">' . $highlighted->value . '</code></pre>';
-
-        }
-        catch (Exception $e) {
-
+            return '<pre><code class="hljs ' .
+                $highlighted->language .
+                '">' .
+                $highlighted->value .
+                '</code></pre>';
+        } catch (Exception $e) {
             return '<pre><code class="hljs">' . $code . '</code></pre>';
         }
     }

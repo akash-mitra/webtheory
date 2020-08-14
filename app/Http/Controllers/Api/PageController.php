@@ -120,14 +120,16 @@ class PageController extends Controller
             ]);
 
             $page->save();
-            
-            $content = $request->content;
-            foreach($content as $pagecontent) {
-                PageContent::addOrModify($page, $pagecontent);
+
+            $displayOrder = 1;
+            foreach ($request->contents as $content) {
+                $content['display_order'] = $displayOrder;
+                PageContent::addOrModify($page, $content);
+                $displayOrder++;
             }
         });
 
-        $page->load('content');
+        // $page->load('contents');
 
         return response()->json($page);
     }
@@ -140,7 +142,7 @@ class PageController extends Controller
      */
     public function show(Page $page)
     {
-        $page->load('content', 'category', 'author', 'media');
+        $page->load('contents', 'category', 'author', 'media');
 
         return response()->json($page);
     }
@@ -173,13 +175,15 @@ class PageController extends Controller
                 )
                 ->save();
 
-            $content = $request->content;
-            foreach($content as $pagecontent) {
-                PageContent::addOrModify($page, $pagecontent);
+            $displayOrder = 1;
+            foreach ($request->contents as $content) {
+                $content['display_order'] = $displayOrder;
+                PageContent::addOrModify($page, $content);
+                $displayOrder++;
             }
         });
 
-        $page->load('content');
+        // $page->load('contents');
 
         return response()->json($page);
     }
@@ -241,11 +245,11 @@ class PageController extends Controller
      * @param  Page  $page
      * @return \Illuminate\Http\Response
      */
-    public function destroyContent(PageContent $pagecontent)
+    public function destroyContent(PageContent $pageContent)
     {
         Page::invalidateCache();
 
-        $pagecontent->delete();
+        $pageContent->delete();
 
         return response()->json('success', 204);
     }

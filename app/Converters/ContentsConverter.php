@@ -4,25 +4,21 @@ namespace App\Converters;
 
 class ContentsConverter
 {
-
-    private $markdown, $markup, $markdownMap = [
-        'editorjs' => 'EditorJSConverter'
+    private $markup;
+    private $markdownMap = [
+        'editorjs' => 'EditorJSConverter',
+        'editor' => 'EditorJSConverter',
     ];
 
-
-
-    public function __construct(String $markdown, String $editor = 'editorjs')
+    public function __construct($markdown, string $editor = 'editorjs')
     {
-        $this->markdown = $markdown;
+        // $this->markdown = $markdown;
 
         $this->markup = call_user_func_array(
-            array(__NAMESPACE__ . '\\' . $this->markdownMap[$editor],'getHtml'),
-            array($this->markdown)
+            [__NAMESPACE__ . '\\' . $this->markdownMap[$editor], 'getHtml'],
+            [$markdown]
         );
-
     }
-
-
 
     public function getHtml()
     {

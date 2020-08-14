@@ -33,10 +33,10 @@ class PageRequest extends FormRequest
             'media_id' => ['nullable', 'integer', 'exists:media,id'],
             'status' => ['required', Rule::in(['Draft', 'Live'])],
             'access_plan' => ['nullable', 'string', 'max:255'],
-            'content' => ['nullable', 'array'],
-            'content.*.body_json' => ['required', 'json'],
-            'content.*.type' => ['required', 'string', 'max:255'],
-            'content.*.display_order' => ['required', 'integer'],
+            'contents' => ['nullable', 'array'],
+            'contents.*.body_json' => ['required', 'array'],
+            'contents.*.type' => ['required', 'string', 'max:255'],
+            'contents.*.display_order' => ['required', 'integer'],
         ];
     }
 

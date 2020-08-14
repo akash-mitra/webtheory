@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "js/chunks/" + chunkId + ".chunk." + {"vendors~PageEditor":"cac3e9abc9db3fed745a","PageEditor":"428df116128ebad80823","vendors~TemplateFileEditor":"b2e6b921d827c3d4d96f","TemplateFileEditor":"3db367023342ed36d4fc"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "js/chunks/" + chunkId + ".chunk." + {"vendors~PageEditor":"cac3e9abc9db3fed745a","PageEditor":"8774c85820a881907670","vendors~TemplateFileEditor":"b2e6b921d827c3d4d96f","TemplateFileEditor":"3db367023342ed36d4fc"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -10013,8 +10013,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['show', 'cover'],
+  props: {
+    show: {
+      type: Boolean,
+      "default": false
+    },
+    cover: {
+      type: String,
+      "default": '3/4'
+    },
+    showFooter: {
+      type: Boolean,
+      "default": true
+    }
+  },
   computed: {
     widthClass: function widthClass() {
       return 'w-5/6 lg:w-' + this.cover;
@@ -10023,7 +10055,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    document.addEventListener("keydown", function (e) {
+    document.addEventListener('keydown', function (e) {
       if (_this.show && e.keyCode == 27) {
         _this.closeModal();
       }
@@ -24894,7 +24926,7 @@ var render = function() {
         "div",
         {
           staticClass: "fixed inset-0 z-50",
-          staticStyle: { "background-color": "rgba(0,0,0,0.5)" },
+          staticStyle: { "background-color": "rgba(0, 0, 0, 0.5)" },
           on: { click: _vm.closeModal }
         },
         [
@@ -24958,61 +24990,63 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "w-full" }, [_vm._t("default")], 2),
                   _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "w-full flex justify-between items-center p-6 bg-gray-100 border-t mt-6"
-                    },
-                    [
-                      _c(
-                        "button",
+                  _vm.showFooter
+                    ? _c(
+                        "div",
                         {
-                          attrs: { type: "button" },
-                          on: { click: _vm.closeModal }
+                          staticClass:
+                            "w-full flex justify-between items-center p-6 bg-gray-100 border-t mt-6"
                         },
                         [
-                          _vm._t("close-btn-content", [
-                            _c(
-                              "span",
-                              { staticClass: "text-blue-600 text-sm" },
-                              [
-                                _vm._v(
-                                  "\n                                                Cancel\n                                                "
+                          _c(
+                            "button",
+                            {
+                              attrs: { type: "button" },
+                              on: { click: _vm.closeModal }
+                            },
+                            [
+                              _vm._t("close-btn-content", [
+                                _c(
+                                  "span",
+                                  { staticClass: "text-blue-600 text-sm" },
+                                  [
+                                    _vm._v(
+                                      "\n                            Cancel\n                        "
+                                    )
+                                  ]
                                 )
-                              ]
-                            )
-                          ])
-                        ],
-                        2
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          attrs: { type: "button" },
-                          on: { click: _vm.startProcess }
-                        },
-                        [
-                          _vm._t("action-btn-content", [
-                            _c(
-                              "span",
-                              {
-                                staticClass:
-                                  "px-6 py-2 text-white bg-blue-600 rounded"
-                              },
-                              [
-                                _vm._v(
-                                  "\n                                                OK\n                                                "
+                              ])
+                            ],
+                            2
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              attrs: { type: "button" },
+                              on: { click: _vm.startProcess }
+                            },
+                            [
+                              _vm._t("action-btn-content", [
+                                _c(
+                                  "span",
+                                  {
+                                    staticClass:
+                                      "px-6 py-2 text-white bg-blue-600 rounded"
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                            OK\n                        "
+                                    )
+                                  ]
                                 )
-                              ]
-                            )
-                          ])
-                        ],
-                        2
+                              ])
+                            ],
+                            2
+                          )
+                        ]
                       )
-                    ]
-                  )
+                    : _vm._e()
                 ]
               )
             ]

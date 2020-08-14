@@ -244,7 +244,7 @@ class TestDataSetup extends TestCase
         ]);
 
         $this->page_attributes_show = array_merge($this->page_attributes, [
-            'content' => [ 
+            'contents' => [
                 '*' => $this->pagecontent_attributes
             ],
             'category' => $this->category_attributes,
@@ -253,7 +253,7 @@ class TestDataSetup extends TestCase
         ]);
 
         $this->page_attributes_show_media = array_merge($this->page_attributes, [
-            'content' => [ 
+            'contents' => [
                 '*' => $this->pagecontent_attributes
             ],
             'category' => $this->category_attributes,
@@ -277,7 +277,7 @@ class TestDataSetup extends TestCase
             'permalink',
             'created_ago',
             'updated_ago',
-            'content' => [
+            'contents' => [
                 '*' => $this->pagecontent_attributes
             ]
         ];
@@ -325,7 +325,7 @@ class TestDataSetup extends TestCase
             'created_at',
             'updated_at',
             'created_ago',
-            'updated_ago', 
+            'updated_ago',
         ];
 
         $this->formresponse_attributes = [
@@ -334,7 +334,7 @@ class TestDataSetup extends TestCase
             'ip',
             'responses',
             'created_at',
-            'updated_at', 
+            'updated_at',
         ];
     }
 }

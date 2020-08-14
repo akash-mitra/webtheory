@@ -7,12 +7,10 @@ use App\Converters\ContentsConverter;
 
 class PageContent extends Model
 {
-    protected $fillable = [
-        'page_id', 
-        'body_json', 
-        'body_html', 
-        'type', 
-        'display_order'
+    protected $fillable = ['page_id', 'body_json', 'body_html', 'type', 'display_order'];
+
+    protected $casts = [
+        'body_json' => 'object', // beauty of Laravel :)
     ];
 
     public function page()
@@ -20,32 +18,34 @@ class PageContent extends Model
         return $this->belongsTo('App\Page', 'page_id');
     }
 
-    public static function addOrModify(Page $page, $pagecontent)
+    public static function addOrModify(Page $page, $content)
     {
-        if (! isset($pagecontent['id'])) {
-            $converter = new ContentsConverter($pagecontent['body_json'], $pagecontent['type']);
+        if (!isset($content['id'])) {
+            $converter = new ContentsConverter($content['body_json'], $content['type']);
 
-            $content = new PageContent([
-                'page_id' =>$page->id,
-                'body_json' => $pagecontent['body_json'],
+            $pageContent = new PageContent([
+                'page_id' => $page->id,
+                'body_json' => $content['body_json'],
                 'body_html' => $converter->getHtml(),
-                'type' => $pagecontent['type'],
-                'display_order' => $pagecontent['display_order']
+                'type' => $content['type'],
+                'display_order' => $content['display_order'],
             ]);
-    
-            $content->save();
-        } else {
-            $content = PageContent::findOrFail($pagecontent['id']);
-            
-            if (! (isset($pagecontent['changed']) && $pagecontent['changed'] === false)) {
-                $converter = new ContentsConverter($pagecontent['body_json'], $pagecontent['type']);
 
-                $content->fill([
-                    'body_json' => $pagecontent['body_json'],
-                    'body_html' => $converter->getHtml(),
-                    'type' => $pagecontent['type'],
-                    'display_order' => $pagecontent['display_order']
-                ])->save();
+            $pageContent->save();
+        } else {
+            if (isset($content['changed']) && $content['changed'] === true) {
+                $converter = new ContentsConverter($content['body_json'], $content['type']);
+
+                $pageContent = PageContent::findOrFail($content['id']);
+
+                $pageContent
+                    ->fill([
+                        'body_json' => $content['body_json'],
+                        'body_html' => $converter->getHtml(),
+                        'type' => $content['type'],
+                        'display_order' => $content['display_order'],
+                    ])
+                    ->save();
             }
         }
     }

@@ -1,7 +1,5 @@
 <template>
-    <div id="vue-editorjs">
-        <div :id="holderId"></div>
-    </div>
+    <div :id="holderId"></div>
 </template>
 
 <script>
@@ -12,40 +10,28 @@ import CodeTool from '@editorjs/code'
 import InlineCode from '@editorjs/inline-code'
 import Marker from '@editorjs/marker'
 import Table from '@saurav.mitra/editor-table'
-
 import ImageTool from '@editorjs/image'
 import Embed from '@editorjs/embed'
 
 export default {
-    name: 'Editor',
     props: {
         holderId: {
             type: String,
-            default: () => 'codex-editor',
+            default: () => Math.random().toString().substr(2),
             required: false,
         },
-        contentId: {
-            type: Number,
-        },
-        autofocus: {
-            type: Boolean,
-            default: () => true,
-            required: false,
-        },
-        placeholder: {
-            type: String,
-            default: () => 'Let`s write an awesome story!',
-            required: false,
-        },
-        data: {
+        content: {
             type: Object,
-            default: () => {},
+            default: () => {
+                return { blocks: [] }
+            },
             required: false,
         },
     },
     data() {
         return {
             editor: null,
+
             tools: {
                 // allows you to insert a header block
                 header: {
@@ -109,6 +95,7 @@ export default {
                     },
                 },
             }, // end of tools
+            i18n: null,
         }
     },
     mounted() {
@@ -118,43 +105,31 @@ export default {
         if (this.editor) {
             this.editor.destroy()
         }
+
+        //console.log('dying', this.holderId, this.content.id)
     },
-    watch: {
-        data: function () {
-            this.initEditor()
-        },
-    },
+
     methods: {
         initEditor() {
-            if (this.editor) {
-                this.editor.isReady
-                    .then(() => {
-                        this.editor.render(this.data)
-                    })
-                    .catch((e) => console.log(e))
-            } else {
+            // console.log('initialising editor for content ', this.holderId, this.content.id)
+            if (!this.editor) {
                 this.editor = new EditorJS({
                     holder: this.holderId,
-                    autofocus: this.autofocus,
-                    placeholder: this.placeholder,
-                    onReady: () => {
-                        this.$emit('ready')
-                    },
-                    onChange: async () => {
-                        const response = await this.editor.save()
-                        this.$emit('change', {
-                            content: response,
-                            content_id: this.contentId,
-                        })
-                    },
-                    data: this.data,
+                    autofocus: false,
+                    placeholder: 'write something',
+                    minHeight: 20,
+                    data: this.content.body_json,
                     tools: this.tools,
+
+                    onChange: async () => {
+                        const contents = await this.editor.save()
+                        // console.log(contents)
+                        this.$emit('change', contents)
+                    },
                 })
+
+                //this.$emit('init', { content: this.content, instance: this.editor })
             }
-        },
-        async save() {
-            const response = await this.editor.save()
-            this.$emit('save', response)
         },
     },
 }

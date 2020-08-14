@@ -41,7 +41,7 @@ class Page extends Model
         return $query->where('status', 'Live');
     }
 
-    public function content()
+    public function contents()
     {
         return $this->hasMany('App\PageContent');
     }

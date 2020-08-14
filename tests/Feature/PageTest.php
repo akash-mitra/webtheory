@@ -93,7 +93,7 @@ class PageTest extends TestDataSetup
             'metadesc' => 'Test Meta Description',
             'status' => 'Live',
             'access_plan' => null,
-            'content' => [
+            'contents' => [
                 0 => [
                     'body_json' =>
                         '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading."}},{"type":"paragraph","data":{"text":"Test Paragraph"}}]}',
@@ -102,7 +102,7 @@ class PageTest extends TestDataSetup
                 ]
             ]
         ];
-        
+
         // Unauthenticated user cannot save page
         $response = $this->post('/api/pages', $page, ['Accept' => 'application/json']);
         $response->assertStatus(401)->assertJson(['message' => 'Unauthenticated.']);
@@ -150,7 +150,7 @@ class PageTest extends TestDataSetup
                 'display_order' => 1
             ]
         ];
-            
+
         // Unauthenticated user cannot update page
         $response = $this->put('/api/pages/' . $page->id, $page->toArray());
         $response->assertStatus(302);
@@ -183,7 +183,7 @@ class PageTest extends TestDataSetup
                 'permalink',
                 'created_ago',
                 'updated_ago',
-                'content' => [
+                'contents' => [
                     '*' => [
                         'id',
                         'page_id',

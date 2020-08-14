@@ -25,10 +25,10 @@ class DataProvider
     public static function single($id)
     {
         $page = Page::with([
-            'content' => function ($q) {
+            'contents' => function ($q) {
                 $q->orderBy('display_order');
-            }, 
-            'author', 
+            },
+            'author',
             'category'
         ])
         ->published()

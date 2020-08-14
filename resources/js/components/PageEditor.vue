@@ -1,10 +1,10 @@
 <template>
-    <div class="w-full bg-white">
-        <PageEditorMenu v-model="tab"></PageEditorMenu>
+    <div class="w-full bg-gray-200">
+        <PageEditorMenu v-model="tab" @save="initiateSave"></PageEditorMenu>
 
-        <div v-show="tab === 'content'" id="page-contents" class="w-full">
-            <div class="pt-10 w-full">
-                <div class="w-full mx-auto max-w-5xl">
+        <div v-show="tab === 'content'" id="page-contents" class="w-full px-6">
+            <div class="py-10 w-full max-w-5xl bg-white mx-auto border-b">
+                <div class="w-full mx-auto max-w-2xl">
                     <label class="px-6 uppercase text-xs tracking-wider text-gray-700 block pb-2">
                         Title
                         <span
@@ -28,7 +28,7 @@
                     <t-error-message :errors="errors" field="title"></t-error-message>
                 </div>
 
-                <div class="mt-12 mx-auto max-w-5xl">
+                <div class="mt-12 mx-auto max-w-2xl">
                     <label class="px-6 uppercase text-xs tracking-wider text-gray-700 block pb-2">
                         Intro
                         <span
@@ -44,7 +44,7 @@
                         name="intro"
                         v-model="intro"
                         ref="intro"
-                        class="border autoheight h-auto px-6 bg-transparent outline-none text-gray-700 text-lg tracking-wide w-full placeholder-gray-700"
+                        class="autoheight h-auto px-6 bg-transparent outline-none text-gray-700 text-lg tracking-wide w-full placeholder-gray-700"
                         placeholder="Provide a 3/4 lines of introduction to your story..."
                         @input="resizeInput($event)"
                         @focus="resizeInput($event)"
@@ -53,45 +53,14 @@
                     <t-error-message :errors="errors" field="summary"></t-error-message>
                 </div>
             </div>
-            <div class="max-w-5xl mx-auto mt-12 border">
-                <div v-for="content in contents" class="w-full mt-12">
-                    <PageEditorRaw v-if="content.type === 'raw'" :content="content"></PageEditorRaw>
-                    <PageEditorJs
-                        v-if="content.type === 'editorjs'"
-                        :data="JSON.parse(content.body_json)"
-                        :content-id="content.id"
-                        @change="contentChange"
-                    ></PageEditorJs>
-                </div>
-            </div>
-            <div class="max-w-5xl mx-auto mt-12 border flex items-center justify-between">
-                <span class="px-4 py-2 bg-blue-500 text-white rounded" @click="addEditor"
-                    >Add Content</span
-                >
-                <div class="inline-block relative w-64">
-                    <select
-                        class="block appearance-none w-full bg-gray-100 hover:border-gray-500 px-4 py-2 pr-8 rounded-lg leading-tight focus:outline-none focus:shadow-outline border"
-                        v-model="currentEditorType"
-                    >
-                        <option v-for="option in editorTypes" :value="option.value">{{
-                            option.text
-                        }}</option>
-                    </select>
-                    <div
-                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
-                    >
-                        <svg
-                            class="fill-current h-4 w-4"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                        >
-                            <path
-                                d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                            />
-                        </svg>
-                    </div>
-                </div>
-            </div>
+
+            <PageEditorContentBlocks
+                :contents="contents"
+                @add="addContentBlock"
+                @delete="removeContentBlock"
+                @down="downContentBlock"
+                @up="upContentBlock"
+            ></PageEditorContentBlocks>
         </div>
 
         <div
@@ -114,8 +83,7 @@ import PageEditorSeo from './PageEditorSeo.vue'
 import PageEditorSetting from './PageEditorSetting.vue'
 import PageEditorGallery from './PageEditorGallery.vue'
 import PageEditorMenu from './PageEditorMenu.vue'
-import PageEditorRaw from './PageEditorRaw.vue'
-import PageEditorJs from './PageEditorJs.vue'
+import PageEditorContentBlocks from './PageEditorContentBlocks.vue'
 
 export default {
     components: {
@@ -124,11 +92,10 @@ export default {
         PageEditorSetting,
         PageEditorGallery,
         PageEditorMenu,
-        PageEditorRaw,
-        PageEditorJs,
+        PageEditorContentBlocks,
     },
 
-    data: function () {
+    data() {
         return {
             id: 0,
             title: null,
@@ -138,9 +105,7 @@ export default {
             category_id: 1,
             media: null,
             status: 'Draft',
-
-            contents: [{ type: 'raw', body_json: '', body_html: '', display_order: 1 }],
-            editors: [],
+            contents: [],
 
             tab: 'content',
 
@@ -151,19 +116,11 @@ export default {
                 metadesc: [],
                 metakey: [],
             },
-
-            EDITOR_IDENTITY: 'editorjs',
-            editorTypes: [{ value: 'raw', text: 'Raw HTML editor' }],
-            currentEditorType: 'raw',
-            currentDisplayOrder: 1,
-            showGallery: false,
-
-            timer: null,
-            autoSaveFreqSeconds: 60,
+            maxDisplayOrder: 1,
         }
     },
 
-    created: function () {
+    created() {
         util.ajax('get', '/api/pages/' + this.$route.params.id, {}, (data) => {
             this.id = data.id
             this.title = data.title
@@ -173,8 +130,15 @@ export default {
             this.category_id = data.category_id
             this.status = data.status
             this.media = data.media
-            this.contents = data.content
-            // p.editor = p.loadEditorTool()
+            this.contents = data.contents
+
+            this.maxDisplayOrder = 0
+            for (let i = 0; i < this.contents.length; i++) {
+                let m = this.contents[i].display_order
+                if (m > this.maxDisplayOrder) {
+                    this.maxDisplayOrder = m
+                }
+            }
         })
 
         // this.timer = window.setInterval(this.autoSave, this.autoSaveFreqSeconds * 1000)
@@ -185,19 +149,157 @@ export default {
             return typeof this.$route.params.id === 'undefined'
         },
 
-        contentChange(content) {
-            console.log(content)
-            // this.data
+        isJustCreated() {
+            return this.id === 0
         },
 
-        addEditor() {
+        addContentBlock(type) {
             this.contents.push({
-                type: this.currentEditorType,
-                body_json: '',
+                type: type,
                 body_html: '',
-                display_order: this.currentDisplayOrder + 1,
+                body_json: { blocks: [] },
+                display_order: this.maxDisplayOrder + 1,
+                changed: true,
             })
-            this.currentDisplayOrder++
+            this.maxDisplayOrder++
+        },
+
+        removeContentBlock(index) {
+            this.contents.splice(index, 1)
+        },
+
+        downContentBlock(index) {
+            this.contents.splice(index + 1, 0, this.contents.splice(index, 1)[0])
+        },
+
+        upContentBlock(index) {
+            this.contents.splice(index - 1, 0, this.contents.splice(index, 1)[0])
+        },
+
+        isValid(showError) {
+            if (typeof showError === 'undefined') showError = false
+
+            if (!this.title) {
+                showError &&
+                    util.notifyError('Page has no title', 'Provide a title to save this page')
+                return false
+            }
+
+            if (this.title.length >= 100) {
+                showError &&
+                    util.notifyError(
+                        'Page title too long!',
+                        'Keep page title within maximum 100 characters.'
+                    )
+                return false
+            }
+
+            if (!this.intro) {
+                showError &&
+                    util.notifyError(
+                        'Provide an Introduction',
+                        'Write a few lines of intro for this page before saving.'
+                    )
+                return false
+            }
+
+            if (this.intro.length >= 1048) {
+                showError &&
+                    util.notifyError(
+                        'Intro too long',
+                        'Keep page intro within about 1000 characters'
+                    )
+                return false
+            }
+
+            return true
+        },
+
+        getSaveUrl() {
+            if (this.id > 0) return '/api/pages/' + this.id
+            else return '/api/pages'
+        },
+
+        getSaveMethod() {
+            if (this.id > 0) return 'put'
+            else return 'post'
+        },
+
+        autoSave() {
+            //this.isValid(false) && this.initiateSave()
+        },
+
+        initiateSave() {
+            if (this.isValid(true)) {
+                this.errors = {}
+
+                this.isSaving = true
+
+                util.ajax(
+                    this.getSaveMethod(),
+                    this.getSaveUrl(),
+                    {
+                        id: this.id,
+                        title: this.title,
+                        summary: this.intro,
+                        contents: this.contents,
+                        metakey: this.metakey,
+                        metadesc: this.metadesc,
+                        category_id: this.category_id,
+                        media_id: !!this.media ? this.media.id : null,
+                        status: this.status,
+                        editor: this.EDITOR_IDENTITY,
+                    },
+                    this.onPostSuccess,
+                    this.on4xxError,
+                    this.on5xxError
+                )
+            }
+        },
+
+        onPostSuccess(successResponse) {
+            if (this.isJustCreated()) {
+                // assign new Id
+                let id = parseInt(successResponse.id)
+                this.id = id
+
+                // change the address bar URL to en edit page url
+                this.$router.replace({ path: '/app/pages/' + id })
+            }
+
+            this.contents.map((content) => {
+                content.changed = false
+            })
+
+            this.isSaving = false
+
+            util.toast({
+                icon: 'success',
+                titleText: 'Page Contents are Saved.',
+            })
+        }, // end of onPostSuccess
+
+        on4xxError(status, data) {
+            this.isSaving = false
+
+            util.notifyError("Ouch! Couldn't save that...", data.message)
+
+            if (status === 422) {
+                this.errors = data.errors
+            }
+        },
+
+        on5xxError(status, data) {
+            this.isSaving = false
+
+            util.notifyError('Failed to save the page to server.', data.message)
+
+            console.log(data)
+        },
+
+        resizeInput(e) {
+            e.target.style.height = 'auto'
+            e.target.style.height = e.target.scrollHeight + 'px'
         },
     }, // end of methods
 }
