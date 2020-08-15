@@ -23,8 +23,8 @@ class CreateViewsTable extends Migration
             $table->string('content_type', 255)->index();
             $table->unsignedBigInteger('content_id')->index();
             $table->string('platform', 255)->nullable();
-            $table->string('browser', 255);
-            $table->string('version', 255);
+            $table->string('browser', 255)->nullable();
+            $table->string('version', 255)->nullable();
             $table->string('referrer', 500)->nullable();
             $table->string('referrer_domain', 255)->nullable();
             $table->string('session_id');

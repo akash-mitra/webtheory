@@ -117,13 +117,15 @@ class ViewAnalytics extends Command
                 $this->aggregateIncrementalViewContent();
                 
 
-                $this->aggregateIncrementalViewDimension('view_referrers', 'referrer');
+                $this->aggregateIncrementalViewDimension('view_referrers', 'referrer_domain');
                 
                 $this->aggregateIncrementalViewDimension('view_platforms', 'platform');
 
                 $this->aggregateIncrementalViewDimension('view_browsers', 'browser');
 
                 $this->aggregateIncrementalViewDimension('view_countries', 'country');
+
+                $this->aggregateIncrementalViewDimension('view_cities', 'city');
 
 
                 $this->loadUniqueMonthly();

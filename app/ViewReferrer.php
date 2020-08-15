@@ -21,7 +21,7 @@ class ViewReferrer extends Model
      */
     protected $fillable = [
         'month_key',
-        'referrer',
+        'referrer_domain',
         'total_views',
         'created_at',
     ];
@@ -34,11 +34,11 @@ class ViewReferrer extends Model
 
         return DB::table('view_referrers')
             ->selectRaw('
-                referrer,  
+                referrer_domain as referrer,  
                 sum(total_views) as total_views
             ')
             ->whereBetween('month_key', [$start_month_key, $end_month_key])
-            ->groupBy('referrer')
+            ->groupBy('referrer_domain')
             ->orderByRaw('sum(total_views) desc')
             ->take(10)
             ->get();

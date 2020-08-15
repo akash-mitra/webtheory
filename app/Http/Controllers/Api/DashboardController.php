@@ -131,7 +131,7 @@ class DashboardController extends Controller
         // return Cache::rememberForever('dashboard.city', function () {
             // return ViewCity::monthly();
         // });
-        return [];
+        return ViewCity::monthly();
     }
 
 }
