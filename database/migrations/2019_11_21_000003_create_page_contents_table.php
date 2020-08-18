@@ -21,7 +21,7 @@ class CreatePageContentsTable extends Migration
             $table->string('type')->nullable();
             $table->integer('display_order');
             $table->timestamps();
-            $table->unique(['page_id', 'display_order']);
+            // $table->unique(['page_id', 'display_order']);
         });
     }
 
