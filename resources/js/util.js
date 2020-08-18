@@ -132,32 +132,43 @@
         callback(answer)
     }
 
-    util.notify = function (params) {
-        return Swal.fire(params)
-    }
-
-    util.notifySuccess = function (title, text) {
-        return this.notify({
-            icon: 'success',
-            title: title,
-            text: text,
+    util.notify = function (params, callback) {
+        return Swal.fire(params).then((result) => {
+            if (callback) callback(result)
         })
     }
 
-    util.notifyError = function (title, text) {
-        return this.notify({
-            icon: 'error',
-            title: title,
-            text: text,
-        })
+    util.notifySuccess = function (title, text, callback) {
+        return this.notify(
+            {
+                icon: 'success',
+                title: title,
+                text: text,
+            },
+            callback
+        )
     }
 
-    util.notifyInfo = function (title, text) {
-        return this.notify({
-            icon: 'info',
-            title: title,
-            text: text,
-        })
+    util.notifyError = function (title, text, callback) {
+        return this.notify(
+            {
+                icon: 'error',
+                title: title,
+                text: text,
+            },
+            callback
+        )
+    }
+
+    util.notifyInfo = function (title, text, callback) {
+        return this.notify(
+            {
+                icon: 'info',
+                title: title,
+                text: text,
+            },
+            callback
+        )
     }
 
     util.debounce = function (milliseconds, fn) {

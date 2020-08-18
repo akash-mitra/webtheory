@@ -43,7 +43,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "js/chunks/" + chunkId + ".chunk." + {"vendors~PageEditor":"cac3e9abc9db3fed745a","PageEditor":"8774c85820a881907670","vendors~TemplateFileEditor":"b2e6b921d827c3d4d96f","TemplateFileEditor":"3db367023342ed36d4fc"}[chunkId] + ".js"
+/******/ 		return __webpack_require__.p + "js/chunks/" + chunkId + ".chunk." + {"vendors~PageEditor":"cac3e9abc9db3fed745a","PageEditor":"8b0e34a374913b30393b","vendors~TemplateFileEditor":"b2e6b921d827c3d4d96f","TemplateFileEditor":"3db367023342ed36d4fc"}[chunkId] + ".js"
 /******/ 	}
 /******/
 /******/ 	// The require function
@@ -3512,22 +3512,22 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    var _this = this;
+    var chart = this.renderChart(); // util.ajax('get', '/api/dashboard/daily', {}, (response) => {
+    //     let views_series = response.map((d) => {
+    //         return parseInt(d.total_views)
+    //     })
+    //     this.data.labels = response.map((d) => {
+    //         return this.parseDay(d.date_key.toString())
+    //     })
+    //     this.data.datasets = [{ name: 'Views', values: views_series }]
+    //     chart.update(this.data)
+    // })
 
-    var chart = this.renderChart();
-    util.ajax('get', '/api/dashboard/daily', {}, function (response) {
-      var views_series = response.map(function (d) {
-        return parseInt(d.total_views);
-      });
-      _this.data.labels = response.map(function (d) {
-        return _this.parseDay(d.date_key.toString());
-      });
-      _this.data.datasets = [{
-        name: 'Views',
-        values: views_series
-      }];
-      chart.update(_this.data);
-    });
+    this.data.labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    this.data.datasets = [{
+      name: 'Views',
+      values: [10, 53, 75, 43, 74, 35, 20]
+    }];
   },
   methods: {
     parseDay: function parseDay(str) {
@@ -4609,16 +4609,17 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       visitors: '...',
-      pageviews: '...'
+      pageviews: '.A.'
     };
   },
   created: function created() {
-    var _this = this;
+    // util.ajax('get', '/api/dashboard/views', {}, (response) => {
+    //     this.visitors = response[0].unique_vistors
+    //     this.pageviews = response[0].total_views
+    // })
+    this.visitors = '97K'; //response[0].unique_vistors
 
-    util.ajax('get', '/api/dashboard/views', {}, function (response) {
-      _this.visitors = response[0].unique_vistors;
-      _this.pageviews = response[0].total_views;
-    });
+    this.pageviews = '120K'; //response[0].total_views
   },
   components: {
     BoardTilePages: _BoardTilePages_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
@@ -7189,15 +7190,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      referrers: []
+      referrers: [{
+        referrer_domain: 'google.com',
+        total_views: 1290
+      }, {
+        referrer_domain: 'facebook.com',
+        total_views: 780
+      }, {
+        referrer_domain: 'instagram.com',
+        total_views: 24
+      }, {
+        referrer_domain: 'wikipedia.com',
+        total_views: 5
+      }, {
+        referrer_domain: 'bing.com',
+        total_views: 904
+      }, {
+        referrer_domain: 'live.com',
+        total_views: 38
+      }]
     };
   },
-  created: function created() {
-    var _this = this;
-
-    util.ajax('get', '/api/dashboard/referrer', {}, function (response) {
-      _this.referrers = response;
-    });
+  created: function created() {// util.ajax('get', '/api/dashboard/referrer', {}, (response) => {
+    //     this.referrers = response
+    // })
   }
 });
 
@@ -10043,6 +10059,10 @@ __webpack_require__.r(__webpack_exports__);
       "default": '3/4'
     },
     showFooter: {
+      type: Boolean,
+      "default": true
+    },
+    showHeader: {
       type: Boolean,
       "default": true
     }
@@ -24950,43 +24970,48 @@ var render = function() {
                   }
                 },
                 [
-                  _c(
-                    "div",
-                    { staticClass: "w-full flex items-center justify-between" },
-                    [
-                      _vm._t("header"),
-                      _vm._v(" "),
-                      _c(
-                        "span",
+                  _vm.showHeader
+                    ? _c(
+                        "div",
                         {
                           staticClass:
-                            "hover:text-gray-800 cursor-pointer p-4 -ml-12",
-                          on: { click: _vm.closeModal }
+                            "w-full flex items-center justify-between"
                         },
                         [
+                          _vm._t("header"),
+                          _vm._v(" "),
                           _c(
-                            "svg",
+                            "span",
                             {
-                              staticClass: "fill-current h-4 w-4",
-                              attrs: {
-                                xmlns: "http://www.w3.org/2000/svg",
-                                viewBox: "0 0 20 20"
-                              }
+                              staticClass:
+                                "hover:text-gray-800 cursor-pointer p-4 -ml-12",
+                              on: { click: _vm.closeModal }
                             },
                             [
-                              _c("path", {
-                                attrs: {
-                                  d:
-                                    "M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"
-                                }
-                              })
+                              _c(
+                                "svg",
+                                {
+                                  staticClass: "fill-current h-4 w-4",
+                                  attrs: {
+                                    xmlns: "http://www.w3.org/2000/svg",
+                                    viewBox: "0 0 20 20"
+                                  }
+                                },
+                                [
+                                  _c("path", {
+                                    attrs: {
+                                      d:
+                                        "M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"
+                                    }
+                                  })
+                                ]
+                              )
                             ]
                           )
-                        ]
+                        ],
+                        2
                       )
-                    ],
-                    2
-                  ),
+                    : _vm._e(),
                   _vm._v(" "),
                   _c("div", { staticClass: "w-full" }, [_vm._t("default")], 2),
                   _vm._v(" "),
@@ -44120,32 +44145,34 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   }();
 
-  util.notify = function (params) {
-    return Swal.fire(params);
+  util.notify = function (params, callback) {
+    return Swal.fire(params).then(function (result) {
+      if (callback) callback(result);
+    });
   };
 
-  util.notifySuccess = function (title, text) {
+  util.notifySuccess = function (title, text, callback) {
     return this.notify({
       icon: 'success',
       title: title,
       text: text
-    });
+    }, callback);
   };
 
-  util.notifyError = function (title, text) {
+  util.notifyError = function (title, text, callback) {
     return this.notify({
       icon: 'error',
       title: title,
       text: text
-    });
+    }, callback);
   };
 
-  util.notifyInfo = function (title, text) {
+  util.notifyInfo = function (title, text, callback) {
     return this.notify({
       icon: 'info',
       title: title,
       text: text
-    });
+    }, callback);
   };
 
   util.debounce = function (milliseconds, fn) {

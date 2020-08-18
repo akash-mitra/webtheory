@@ -26,13 +26,13 @@ class DataProvider
     {
         $page = Page::with([
             'contents' => function ($q) {
-                $q->orderBy('display_order');
+                $q->orderBy('display_order')->select(['body_html', 'page_id', 'display_order']);
             },
             'author',
-            'category'
+            'category',
         ])
-        ->published()
-        ->findOrFail($id);
+            ->published()
+            ->findOrFail($id);
 
         return (object) [
             'ref' => self::ref('single'),

@@ -60,9 +60,12 @@
                         @sharepost
                     </div>
                 </header>
+
+                @foreach($data->page->contents as $content)
                 <div class="mt-2 text-base wt-body">
-                    {!! $data->page->content->body_html !!}
+                    {!! $content->body_html !!}
                 </div>
+                @endforeach
             </article>
 
             @comments

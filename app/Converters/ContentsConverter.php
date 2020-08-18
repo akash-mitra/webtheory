@@ -8,11 +8,13 @@ class ContentsConverter
     private $markdownMap = [
         'editorjs' => 'EditorJSConverter',
         'editor' => 'EditorJSConverter',
+        'html' => 'EditorHTMLConverter',
     ];
 
     public function __construct($markdown, string $editor = 'editorjs')
     {
-        // $this->markdown = $markdown;
+        // calculate the markup for a given markdown b
+        // by invoking related converter.
 
         $this->markup = call_user_func_array(
             [__NAMESPACE__ . '\\' . $this->markdownMap[$editor], 'getHtml'],

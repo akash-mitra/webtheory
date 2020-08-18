@@ -14,9 +14,6 @@ class EditorJSConverter
     {
         self::$body_json = $body_json;
 
-        dump($body_json);
-        dump(gettype(self::$body_json));
-
         $body_html = '';
         foreach (self::$body_json['blocks'] as $block) {
             $body_html .= self::processContent($block['type'], $block['data']);
@@ -27,34 +24,42 @@ class EditorJSConverter
 
     private static function processHeader($data)
     {
-        return '<h' . $data['level'] . '>' . $data['text'] . '</h' . $data['level'] . '>';
+        $level = isset($data['level']) ? $data['level'] : '3';
+        return '<h' .
+            $level .
+            '>' .
+            (isset($data['text']) ? $data['text'] : '') .
+            '</h' .
+            $level .
+            '>';
     }
 
     private static function processParagraph($data)
     {
-        return '<p>' . $data['text'] . '</p>';
+        return '<p>' . (isset($data['text']) ? $data['text'] : '') . '</p>';
     }
 
     private static function processList($data)
     {
-        $list = $data['style'] == 'ordered' ? '<ol>' : '<ul>';
-        $items = $data['items'];
+        $tag = isset($data['style']) && $data['style'] === 'ordered' ? 'ol' : 'ul';
+        $list = '<' . $tag . '>';
+        $items = isset($data['items']) ? $data['items'] : [];
         foreach ($items as $item) {
             $list .= '<li>' . $item . '</li>';
         }
-        $list .= $data['style'] == 'ordered' ? '</ol>' : '</ul>';
+        $list .= '</' . $tag . '>';
         return $list;
     }
 
     private static function processTable($data)
     {
-        $table = '<table class="border border-collapse wt-table"><tbody>';
-        $content = $data['content'];
+        $table = '<table class="border border-collapse table-auto wt-table"><tbody>';
+        $content = isset($data['content']) ? $data['content'] : [];
         foreach ($content as $rows) {
             $table .= '<tr class="wt-table-tr">';
             foreach ($rows as $row) {
                 $value = strip_tags($row);
-                $table .= '<td class="border px-2 wt-table-td">' . $value . '</td>';
+                $table .= '<td class="border py-1 px-2 wt-table-td">' . $value . '</td>';
             }
             $table .= '</tr>';
         }
@@ -90,7 +95,7 @@ class EditorJSConverter
             '">' .
             '<figure class="img-fig">' .
             '<img src="' .
-            $data['file']->url .
+            $data['file']['url'] .
             '" alt="' .
             $data['caption'] .
             '" class="' .

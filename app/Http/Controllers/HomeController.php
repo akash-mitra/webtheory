@@ -7,7 +7,6 @@ use App\User;
 use App\Parameter;
 use App\DataProvider;
 use App\Jobs\CaptureViewEvent;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
@@ -45,9 +44,7 @@ class HomeController extends Controller
     {
         $data = DataProvider::single($page);
 
-        CaptureViewEvent::dispatchAfterResponse(
-            $this->capture_analytics('App\Page', $page)
-        );
+        CaptureViewEvent::dispatchAfterResponse($this->capture_analytics('App\Page', $page));
 
         return view('active.single', compact('data'));
     }
@@ -88,9 +85,7 @@ class HomeController extends Controller
                 ])
         );
 
-        CaptureViewEvent::dispatchAfterResponse(
-            $this->capture_analytics('App\User', $user->id)
-        );
+        CaptureViewEvent::dispatchAfterResponse($this->capture_analytics('App\User', $user->id));
 
         return view('active.profile', compact('data'));
     }
@@ -223,7 +218,9 @@ class HomeController extends Controller
             'content_id' => $content_id,
             'agent' => $_SERVER['HTTP_USER_AGENT'],
             'referrer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null,
-            'referrer_domain' => isset($_SERVER['HTTP_REFERER']) ? str_ireplace('www.', '', parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST)) : null,
+            'referrer_domain' => isset($_SERVER['HTTP_REFERER'])
+                ? str_ireplace('www.', '', parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST))
+                : null,
             'session_id' => session()->getId(),
         ];
     }

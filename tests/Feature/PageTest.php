@@ -95,12 +95,19 @@ class PageTest extends TestDataSetup
             'access_plan' => null,
             'contents' => [
                 0 => [
-                    'body_json' =>
-                        '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading."}},{"type":"paragraph","data":{"text":"Test Paragraph"}}]}',
+                    'body_json' => [
+                        'blocks' => [
+                            [
+                                'type' => 'header',
+                                'data' => ['level' => 1, 'text' => 'Test Heading.'],
+                            ],
+                            ['type' => 'paragraph', 'data' => ['text' => 'Test Paragraph']],
+                        ],
+                    ],
                     'type' => 'editorjs',
-                    'display_order' => 1
-                ]
-            ]
+                    'display_order' => 1,
+                ],
+            ],
         ];
 
         // Unauthenticated user cannot save page
@@ -133,22 +140,33 @@ class PageTest extends TestDataSetup
 
         $pagecontent = factory(PageContent::class)->create([
             'page_id' => $page->id,
-            'body_json' =>
-                '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading"}},{"type":"paragraph","data":{"text":"Test Paragraph."}}]}',
+            'body_json' => [
+                'blocks' => [
+                    ['type' => 'header', 'data' => ['level' => 1, 'text' => 'Test Heading']],
+                    ['type' => 'paragraph', 'data' => ['text' => 'Test Paragraph.']],
+                ],
+            ],
             'body_html' => '<h1>Test Heading</h1><p>Test Paragraph.</p>',
             'type' => 'editorjs',
-            'display_order' => 1
+            'display_order' => 1,
         ]);
 
         $page->title = 'Test Title Updated';
-        $page->content = [
-            0 => [
+        $page->contents = [
+            [
                 'id' => $pagecontent->id,
-                'body_json' =>
-                    '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading Updated"}},{"type":"paragraph","data":{"text":"Test Paragraph Updated."}}]}',
+                'body_json' => [
+                    'blocks' => [
+                        [
+                            'type' => 'header',
+                            'data' => ['level' => 1, 'text' => 'Test Heading Updated'],
+                        ],
+                        ['type' => 'paragraph', 'data' => ['text' => 'Test Paragraph Updated.']],
+                    ],
+                ],
                 'type' => 'editorjs',
-                'display_order' => 1
-            ]
+                'display_order' => 1,
+            ],
         ];
 
         // Unauthenticated user cannot update page
@@ -193,11 +211,48 @@ class PageTest extends TestDataSetup
                         'display_order',
                         'created_at',
                         'updated_at',
-                    ]
+                    ],
                 ],
             ]);
         $this->assertDatabaseHas('pages', ['title' => 'Test Title Updated']);
         $this->assertDatabaseMissing('pages', ['title' => 'Test Title']);
+
+        // check that the request did not update the contents as "changed" flag was not sent
+        $this->assertDatabaseHas('page_contents', [
+            'id' => $pagecontent->id,
+            'body_html' => '<h1>Test Heading</h1><p>Test Paragraph.</p>',
+        ]);
+
+        // now add "changed" flag in the request
+        $page->contents = [
+            [
+                'id' => $pagecontent->id,
+                'body_json' => [
+                    'blocks' => [
+                        [
+                            'type' => 'header',
+                            'data' => ['level' => 1, 'text' => 'Test Heading Updated'],
+                        ],
+                        ['type' => 'paragraph', 'data' => ['text' => 'Test Paragraph Updated.']],
+                    ],
+                ],
+                'type' => 'editorjs',
+                'display_order' => 1,
+                'changed' => true,
+            ],
+        ];
+
+        // and resend the request
+        $response = $this->actingAs($this->adminUser)->put(
+            '/api/pages/' . $page->id,
+            $page->toArray()
+        );
+
+        // make sure the contents are also updated
+        $this->assertDatabaseHas('page_contents', [
+            'id' => $pagecontent->id,
+            'body_html' => '<h1>Test Heading Updated</h1><p>Test Paragraph Updated.</p>',
+        ]);
     }
 
     /* Page Status Update */
@@ -307,16 +362,25 @@ class PageTest extends TestDataSetup
                 '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading"}},{"type":"paragraph","data":{"text":"Test Paragraph."}}]}',
             'body_html' => '<h1>Test Heading</h1><p>Test Paragraph.</p>',
             'type' => 'editorjs',
-            'display_order' => 1
+            'display_order' => 1,
         ]);
 
         // Unauthenticated user cannot delete page content
-        $response = $this->delete('/api/pagecontent/' . $pagecontent->id, [], ['Accept' => 'application/json']);
+        $response = $this->delete(
+            '/api/pagecontent/' . $pagecontent->id,
+            [],
+            ['Accept' => 'application/json']
+        );
         $response->assertStatus(401)->assertJson(['message' => 'Unauthenticated.']);
 
         // Authenticated user can delete page content
-        $response = $this->actingAs($this->adminUser)->delete('/api/pagecontent/' . $pagecontent->id);
+        $response = $this->actingAs($this->adminUser)->delete(
+            '/api/pagecontent/' . $pagecontent->id
+        );
         $response->assertStatus(204);
-        $this->assertDatabaseMissing('page_contents', ['page_id' => $pagecontent->page_id, 'display_order' => $pagecontent->display_order]);
+        $this->assertDatabaseMissing('page_contents', [
+            'page_id' => $pagecontent->page_id,
+            'display_order' => $pagecontent->display_order,
+        ]);
     }
 }

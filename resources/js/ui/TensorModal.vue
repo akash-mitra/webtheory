@@ -11,7 +11,7 @@
                 @click.stop
                 class="max-h-screen overflow-y-scroll bg-white shadow-lg border border-gray-600"
             >
-                <div class="w-full flex items-center justify-between">
+                <div class="w-full flex items-center justify-between" v-if="showHeader">
                     <slot name="header"></slot>
                     <span @click="closeModal" class="hover:text-gray-800 cursor-pointer p-4 -ml-12">
                         <svg
@@ -67,6 +67,10 @@ export default {
             default: '3/4',
         },
         showFooter: {
+            type: Boolean,
+            default: true,
+        },
+        showHeader: {
             type: Boolean,
             default: true,
         },

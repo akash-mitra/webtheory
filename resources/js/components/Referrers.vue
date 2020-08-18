@@ -30,13 +30,20 @@
 export default {
     data() {
         return {
-            referrers: [],
+            referrers: [
+                { referrer_domain: 'google.com', total_views: 1290 },
+                { referrer_domain: 'facebook.com', total_views: 780 },
+                { referrer_domain: 'instagram.com', total_views: 24 },
+                { referrer_domain: 'wikipedia.com', total_views: 5 },
+                { referrer_domain: 'bing.com', total_views: 904 },
+                { referrer_domain: 'live.com', total_views: 38 },
+            ],
         }
     },
     created() {
-        util.ajax('get', '/api/dashboard/referrer', {}, (response) => {
-            this.referrers = response
-        })
+        // util.ajax('get', '/api/dashboard/referrer', {}, (response) => {
+        //     this.referrers = response
+        // })
     },
 }
 </script>

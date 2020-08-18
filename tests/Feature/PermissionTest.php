@@ -139,9 +139,16 @@ class PermissionTest extends TestDataSetup
                 'status' => 'Live',
                 'access_plan' => null,
                 'contents' => [
-                    0 => [
-                        'body_json' =>
-                            '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading."}},{"type":"paragraph","data":{"text":"Test Paragraph"}}]}',
+                    [
+                        'body_json' => [
+                            'blocks' => [
+                                [
+                                    'type' => 'header',
+                                    'data' => ['level' => 1, 'text' => 'Test Heading.'],
+                                ],
+                                ['type' => 'paragraph', 'data' => ['text' => 'Test Paragraph']],
+                            ],
+                        ],
                         'type' => 'editorjs',
                         'display_order' => 1,
                     ],
@@ -170,19 +177,33 @@ class PermissionTest extends TestDataSetup
 
             $pagecontent = factory(PageContent::class)->create([
                 'page_id' => $page->id,
-                'body_json' =>
-                    '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading"}},{"type":"paragraph","data":{"text":"Test Paragraph."}}]}',
+                'body_json' => [
+                    'blocks' => [
+                        ['type' => 'header', 'data' => ['level' => 1, 'text' => 'Test Heading']],
+                        ['type' => 'paragraph', 'data' => ['text' => 'Test Paragraph.']],
+                    ],
+                ],
                 'body_html' => '<h1>Test Heading</h1><p>Test Paragraph.</p>',
                 'type' => 'editorjs',
                 'display_order' => 1,
             ]);
 
             $page->title = 'Test Title Updated';
-            $page->content = [
-                0 => [
+            $page->contents = [
+                [
                     'id' => $pagecontent->id,
-                    'body_json' =>
-                        '{"blocks":[{"type":"header","data":{"level":1,"text":"Test Heading Updated"}},{"type":"paragraph","data":{"text":"Test Paragraph Updated."}}]}',
+                    'body_json' => [
+                        'blocks' => [
+                            [
+                                'type' => 'header',
+                                'data' => ['level' => 1, 'text' => 'Test Heading Updated'],
+                            ],
+                            [
+                                'type' => 'paragraph',
+                                'data' => ['text' => 'Test Paragraph Updated.'],
+                            ],
+                        ],
+                    ],
                     'type' => 'editorjs',
                     'display_order' => 1,
                 ],

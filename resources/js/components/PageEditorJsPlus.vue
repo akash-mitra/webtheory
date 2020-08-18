@@ -116,7 +116,7 @@ export default {
                 this.editor = new EditorJS({
                     holder: this.holderId,
                     autofocus: false,
-                    placeholder: 'write something',
+                    placeholder: 'Click here and start writing...',
                     minHeight: 20,
                     data: this.content.body_json,
                     tools: this.tools,
@@ -279,45 +279,5 @@ li.cdx-list__item {
 .ce-code__textarea {
     height: 100px;
     min-height: 60px;
-}
-
-/*
-     * Google SERP styles for Search preview
-     */
-.google-header {
-    font-family: arial, sans-serif;
-    font-size: 20px;
-    line-height: 1.3;
-    cursor: pointer;
-    color: #1a0dab;
-}
-
-.google-url {
-    font-family: arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
-    padding-top: 1px;
-    color: #006621;
-}
-
-.google-desc {
-    line-height: 1.57;
-    word-wrap: break-word;
-    color: #545454;
-    font-family: arial, sans-serif;
-    font-size: 14px;
-}
-
-/* for autosizing the textareas */
-.autoheight {
-    resize: none;
-    overflow: hidden;
-    min-height: 2em;
-    max-height: 10em;
-}
-
-.bg-pattern {
-    background-color: #cbd5e0;
-    background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23a0aec0' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
 }
 </style>

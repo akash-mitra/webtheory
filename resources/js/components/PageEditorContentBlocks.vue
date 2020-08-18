@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div v-for="(content, index) in contents" class="w-full" :key="content.display_order">
+        <div v-for="(content, index) in contents" class="w-full" :key="content.frontend_id">
             <div class="max-w-5xl bg-white mx-auto border-b relative">
                 <div
-                    class="absolute top-0 right-0 text-gray-600 text-xs px-4 py-1 flex justify-between"
+                    class="absolute inline-flex top-0 right-0 text-gray-600 text-xs p-4 justify-between z-20"
                 >
                     <svg
                         v-show="index > 0"
@@ -51,7 +51,11 @@
                     </svg>
                 </div>
 
-                <PageEditorRaw v-if="content.type === 'raw'" :content="content"></PageEditorRaw>
+                <PageEditorHtml
+                    v-if="content.type === 'html'"
+                    v-model="content.body_json"
+                    @input="content.changed = true"
+                ></PageEditorHtml>
 
                 <PageEditorJsPlus
                     v-if="content.type === 'editorjs'"
@@ -60,28 +64,30 @@
                         content.body_json = $event
                         content.changed = true
                     "
-                    class="pt-4 border-l border-white hover-left-border"
+                    class="pt-4 border-l border-white"
                 ></PageEditorJsPlus>
             </div>
         </div>
 
-        <div class="w-full max-w-5xl mx-auto -mt-1c flex justify-end mb-10">
+        <div class="w-full max-w-5xl mx-auto -mt-1c flex justify-end bg-gray-100">
             <div
-                class="px-3 py-2 bg-white rounded-lg rounded-t-none inline-block cursor-pointer text-blue-500 font-bold hover:text-blue-600"
+                class="px-3 py-2 rounded-lg rounded-t-none inline-block cursor-pointer text-blue-500 font-bold hover:text-blue-600"
                 @click="showBlocks = !showBlocks"
             >
                 + BLOCK
             </div>
         </div>
 
-        <t-modal :show="showBlocks" @close="showBlocks = false" :show-footer="false">
-            <template v-slot:header>
-                <p class="text-xl text-gray-600 px-6 py-4">Select Content Block</p>
-            </template>
-
+        <t-modal
+            :show="showBlocks"
+            @close="showBlocks = false"
+            cover="3/4 rounded-lg"
+            :show-footer="false"
+            :show-header="false"
+        >
             <div
-                style="max-height: 300px;"
-                class="p-4 overflow-y-auto border-t flex flex-wrap bg-gray-100"
+                style="max-height: 450px;"
+                class="p-4 overflow-y-auto border-t flex flex-wrap bg-gray-100 rounded-lg"
             >
                 <div v-for="bt in blockTypes" class="w-full md:w-1/2 xl:w-1/3 p-3">
                     <div
@@ -109,7 +115,7 @@
 </template>
 
 <script>
-import PageEditorRaw from './PageEditorRaw.vue'
+import PageEditorHtml from './PageEditorHtml.vue'
 import PageEditorJsPlus from './PageEditorJsPlus.vue'
 export default {
     props: {
@@ -176,16 +182,8 @@ export default {
     },
 
     components: {
-        PageEditorRaw,
+        PageEditorHtml,
         PageEditorJsPlus,
     },
 }
 </script>
-<style scoped>
-.hover-left-border:hover {
-    border-left: 1px solid lightblue;
-}
-.hover-left-border {
-    box-sizing: border-box;
-}
-</style>

@@ -34,7 +34,7 @@ class PageRequest extends FormRequest
             'status' => ['required', Rule::in(['Draft', 'Live'])],
             'access_plan' => ['nullable', 'string', 'max:255'],
             'contents' => ['nullable', 'array'],
-            'contents.*.body_json' => ['required', 'array'],
+            // 'contents.*.body_json' => ['required', 'array'],
             'contents.*.type' => ['required', 'string', 'max:255'],
             'contents.*.display_order' => ['required', 'integer'],
         ];

@@ -43,7 +43,7 @@ class Page extends Model
 
     public function contents()
     {
-        return $this->hasMany('App\PageContent');
+        return $this->hasMany('App\PageContent')->orderBy('display_order');
     }
 
     public function author()
