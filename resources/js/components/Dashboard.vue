@@ -80,15 +80,18 @@ export default {
     data() {
         return {
             visitors: '...',
-            pageviews: '...',
+            pageviews: '.A.',
         }
     },
 
     created() {
-        util.ajax('get', '/api/dashboard/views', {}, (response) => {
-            this.visitors = response[0].unique_vistors
-            this.pageviews = response[0].total_views
-        })
+        // util.ajax('get', '/api/dashboard/views', {}, (response) => {
+        //     this.visitors = response[0].unique_vistors
+        //     this.pageviews = response[0].total_views
+        // })
+
+        this.visitors = '97K' //response[0].unique_vistors
+        this.pageviews = '120K' //response[0].total_views
     },
 
     components: {

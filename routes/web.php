@@ -138,7 +138,7 @@ Route::prefix('api')
             'pages.updateowner'
         );
         Route::delete('pages/{page}', 'Api\PageController@destroy')->name('pages.destroy');
-        Route::delete('pagecontent/{pagecontent}', 'Api\PageController@destroyContent')->name(
+        Route::delete('pagecontent/{pageContent}', 'Api\PageController@destroyContent')->name(
             'pages.destroycontent'
         );
 

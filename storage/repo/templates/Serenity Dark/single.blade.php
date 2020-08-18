@@ -60,9 +60,13 @@
                         @sharepost
                     </div>
                 </header>
+
+                @foreach($data->page->contents as $content)
                 <div class="mt-2 text-base wt-body text-{{$data->ref->template->primaryColor}}-100">
-                    {!! $data->page->content->body_html !!}
+                    {!! $content->body_html !!}
                 </div>
+                @endforeach
+
             </article>
 
             @comments([

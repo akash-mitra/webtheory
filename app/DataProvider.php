@@ -25,14 +25,14 @@ class DataProvider
     public static function single($id)
     {
         $page = Page::with([
-            'content' => function ($q) {
-                $q->orderBy('display_order');
-            }, 
-            'author', 
-            'category'
+            'contents' => function ($q) {
+                $q->orderBy('display_order')->select(['body_html', 'page_id', 'display_order']);
+            },
+            'author',
+            'category',
         ])
-        ->published()
-        ->findOrFail($id);
+            ->published()
+            ->findOrFail($id);
 
         return (object) [
             'ref' => self::ref('single'),

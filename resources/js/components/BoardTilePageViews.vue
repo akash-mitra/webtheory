@@ -20,19 +20,23 @@ export default {
     mounted() {
         let chart = this.renderChart()
 
-        util.ajax('get', '/api/dashboard/daily', {}, (response) => {
-            let views_series = response.map((d) => {
-                return parseInt(d.total_views)
-            })
+        // util.ajax('get', '/api/dashboard/daily', {}, (response) => {
+        //     let views_series = response.map((d) => {
+        //         return parseInt(d.total_views)
+        //     })
 
-            this.data.labels = response.map((d) => {
-                return this.parseDay(d.date_key.toString())
-            })
+        //     this.data.labels = response.map((d) => {
+        //         return this.parseDay(d.date_key.toString())
+        //     })
 
-            this.data.datasets = [{ name: 'Views', values: views_series }]
+        //     this.data.datasets = [{ name: 'Views', values: views_series }]
 
-            chart.update(this.data)
-        })
+        //     chart.update(this.data)
+        // })
+
+        this.data.labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
+        this.data.datasets = [{ name: 'Views', values: [10, 53, 75, 43, 74, 35, 20] }]
     },
 
     methods: {
