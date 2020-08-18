@@ -50,8 +50,8 @@ Route::get('social/login/{provider}/callback', 'Auth\SocialLoginController@callb
 */
 Route::get('/', 'HomeController@root')->name('home');
 Route::get('blog', 'HomeController@blog')->name('blog');
-Route::get('pages/{page}/{slug?}', 'HomeController@single')->name('pages.show');
-Route::get('categories/{category}/{slug?}', 'HomeController@category')->name('categories.show');
+Route::get('pages/{page}/{slug?}', 'HomeController@single')->name('pages');
+Route::get('categories/{category}/{slug?}', 'HomeController@category')->name('categories');
 Route::get('profiles/{public_id}', 'HomeController@profile')->name('profile.show');
 
 /*
