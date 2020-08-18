@@ -15,11 +15,11 @@ class CreatePageContentsTable extends Migration
     {
         Schema::create('page_contents', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('page_id')->nullable()->index();
+            $table->unsignedBigInteger('page_id')->index();
             $table->longText('body_json')->nullable();
             $table->longText('body_html');
             $table->string('type')->nullable();
-            $table->integer('display_order')->nullable();
+            $table->integer('display_order');
             $table->timestamps();
             $table->unique(['page_id', 'display_order']);
         });

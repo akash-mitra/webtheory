@@ -15,7 +15,7 @@ class CreateViewCountriesTable extends Migration
     {
         Schema::create('view_countries', function (Blueprint $table) {
             $table->integer('month_key')->index();
-            $table->string('country', 255)->index();
+            $table->string('country', 255)->nullable()->index();
             $table->integer('total_views');
             $table->timestamp('created_at')->useCurrent();
             $table->unique(['month_key', 'country']);

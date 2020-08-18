@@ -25,6 +25,7 @@
         "laravel/socialite": "^4.4",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
+        "league/flysystem-aws-s3-v3": "^1.0",
         "predis/predis": "^1.1",
         "scrivo/highlight.php": "^9.18",
         "wildbit/swiftmailer-postmark": "^3.1"

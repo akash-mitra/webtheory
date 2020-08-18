@@ -6,9 +6,11 @@ use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 
-class ViewReferrer extends Model
+class ViewUniqueMonthly extends Model
 {
-    protected $table = 'view_referrers';
+    protected $table = 'views_unique_monthly';
+
+    protected $primaryKey = 'month_key';
 
     public $incrementing = false;
 
@@ -21,27 +23,19 @@ class ViewReferrer extends Model
      */
     protected $fillable = [
         'month_key',
-        'referrer_domain',
-        'total_views',
+        'unique_visitors',
         'created_at',
     ];
 
-    
     public static function monthly()
     {
         $start_month_key = request()->input('start_month_key', Carbon::yesterday()->format('Ym'));
         $end_month_key = request()->input('end_month_key', $start_month_key);
 
-        return DB::table('view_referrers')
-            ->selectRaw('
-                referrer_domain as referrer,  
-                sum(total_views) as total_views
-            ')
-            ->whereBetween('month_key', [$start_month_key, $end_month_key])
-            ->groupBy('referrer_domain')
-            ->orderByRaw('sum(total_views) desc')
-            ->take(10)
+        return ViewUniqueMonthly::whereBetween('month_key', [$start_month_key, $end_month_key])
+            ->select('month_key', 'unique_visitors')
+            ->orderBy('month_key')
             ->get();
     }
-
+    
 }

@@ -26,7 +26,7 @@ class LocalTableSeeder extends Seeder
         $faker = Faker\Factory::create();
 
         $vistors = [];
-        for($i = 0; $i < 100; $i++) {
+        for($i = 0; $i < 150; $i++) {
             array_push($vistors, factory(View::class)->make([
                 'country' => $faker->randomElement([
                     'Russia', 'Canada', 'China', 'United States', 'Brazil', 'France', 'Germany', 'United Kingdom',
@@ -376,10 +376,12 @@ class LocalTableSeeder extends Seeder
 
                 // Pages Loop
                 foreach ($pages as $page) {
+                    $viewed_at = $view_date->addSeconds(mt_rand(0, 120));
                     $pageView = factory(View::class)->create([
                         'ip' => $view->ip,
-                        'at' => $view_date->addSeconds(mt_rand(0, 120))->format('U'),
-                        'url' => url('pages/' . $page),
+                        'at' => $viewed_at,
+                        'date_key' => $viewed_at->format('Ymd'),
+                        'url' => '/pages/' . $page,
                         'content_type' => 'App\Page',
                         'content_id' => $page,
                         'platform' => $view->platform,

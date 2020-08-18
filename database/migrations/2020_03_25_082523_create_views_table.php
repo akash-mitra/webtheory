@@ -17,13 +17,14 @@ class CreateViewsTable extends Migration
             $table->bigIncrements('id');
             $table->ipAddress('ip');
             $table->unsignedBigInteger('user_id')->nullable()->index();
-            $table->decimal('at', 15, 4);
+            $table->dateTime('at');
+            $table->integer('date_key');
             $table->string('url', 500);
             $table->string('content_type', 255)->index();
             $table->unsignedBigInteger('content_id')->index();
             $table->string('platform', 255)->nullable();
-            $table->string('browser', 255);
-            $table->string('version', 255);
+            $table->string('browser', 255)->nullable();
+            $table->string('version', 255)->nullable();
             $table->string('referrer', 500)->nullable();
             $table->string('referrer_domain', 255)->nullable();
             $table->string('session_id');

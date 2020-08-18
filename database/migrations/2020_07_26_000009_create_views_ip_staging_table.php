@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateViewPlatformsTable extends Migration
+class CreateViewsIpStagingTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateViewPlatformsTable extends Migration
      */
     public function up()
     {
-        Schema::create('view_platforms', function (Blueprint $table) {
+        Schema::create('views_ip_staging', function (Blueprint $table) {
             $table->integer('month_key')->index();
-            $table->string('platform', 255)->nullable()->index();
-            $table->integer('total_views');
+            $table->ipAddress('ip');
+            $table->bigInteger('batch_id');
             $table->timestamp('created_at')->useCurrent();
-            $table->unique(['month_key', 'platform']);
+            $table->unique(['month_key', 'ip']);
         });
     }
 
@@ -29,6 +29,6 @@ class CreateViewPlatformsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('view_platforms');
+        Schema::dropIfExists('views_ip_staging');
     }
 }

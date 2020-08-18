@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateViewPlatformsTable extends Migration
+class CreateViewsUniqueMonthlyTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateViewPlatformsTable extends Migration
      */
     public function up()
     {
-        Schema::create('view_platforms', function (Blueprint $table) {
-            $table->integer('month_key')->index();
-            $table->string('platform', 255)->nullable()->index();
-            $table->integer('total_views');
+        Schema::create('views_unique_monthly', function (Blueprint $table) {
+            $table->integer('month_key')->unique()->index();
+            $table->integer('unique_visitors');
             $table->timestamp('created_at')->useCurrent();
-            $table->unique(['month_key', 'platform']);
         });
     }
 
@@ -29,6 +27,6 @@ class CreateViewPlatformsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('view_platforms');
+        Schema::dropIfExists('views_unique_monthly');
     }
 }

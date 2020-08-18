@@ -65,6 +65,9 @@ class Media extends Model
             if ($subDirectory === null) {
                 $subDirectory = self::$subDirectoryPath;
             }
+            
+            if (env('MEDIA') == 'spaces')
+                $subDirectory = env('DOMAIN') . '/' . $subDirectory;
 
             $path = Storage::disk($diskStorageType)->putFile(
                 $subDirectory,
@@ -222,6 +225,8 @@ class Media extends Model
         //     );
         //     return 's3';
         // }
+        if (env('MEDIA') == 'spaces')
+            return 'spaces';
 
         return 'public';
     }

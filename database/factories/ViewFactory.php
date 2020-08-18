@@ -20,11 +20,13 @@ $factory->define(View::class, function (Faker $faker) {
 
     $fakeEmail = $faker->unique()->safeEmail;
     $url = $faker->randomElement(['https://google.com', 'https://facebook.com', 'https://instagram.com', 'https://wikipedia.com', null]);
+    $viewed_at = $faker->dateTimeBetween($startDate = "-75 days", $endDate = "now");
 
     return [
         'ip' => $faker->ipv4,
         'user_id' => null,
-        'at' => $faker->dateTimeBetween($startDate = "-75 days", $endDate = "now")->format('U'),
+        'at' => $viewed_at,
+        'date_key' => $viewed_at->format('Ymd'),
         // 'url' => env('APP_URL'),
         'content_type' => $faker->randomElement(['App\Page', 'App\Category']),
         // 'content_id' => 1,

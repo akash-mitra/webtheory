@@ -15,7 +15,6 @@ class CreateViewsDailyTable extends Migration
     {
         Schema::create('views_daily', function (Blueprint $table) {
             $table->integer('date_key')->unique()->index();
-            $table->date('viewed_at');
             $table->integer('total_views');
             $table->integer('unique_visitors');
             $table->integer('bounce_rate');
