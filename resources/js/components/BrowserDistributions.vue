@@ -35,12 +35,14 @@ export default {
                 this.noData = true
             } else {
                 this.colors = ['light-blue', 'blue', 'violet', 'green', 'yellow', 'light-grey']
+
                 this.browsers.labels = response.map((item) => item.browser)
+
                 let total_views = response.map((item) => parseInt(item.total_views))
-                console.log(total_views)
+
                 this.browsers.datasets = [{ name: 'browsers', values: total_views }]
             }
-            // chart.update(this.browsers)
+
             let chart = this.renderChart()
         })
     },

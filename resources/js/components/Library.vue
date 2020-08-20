@@ -18,20 +18,22 @@
             Asset Library
         </h2>
 
-        <VueImageBrowser
-            :images="photos"
-            :image-properties="imageFields"
-            allow-photo-pane
-            allow-delete
-            allow-upload
-            save-url="/api/media"
-            enable-lazy-load
-            :save-request-headers="headers"
-            @saved="onSave"
-            @deleted="onDelete"
-            @searched="onSearch"
-        >
-        </VueImageBrowser>
+        <div class="overflow-auto">
+            <VueImageBrowser
+                :images="photos"
+                :image-properties="imageFields"
+                allow-photo-pane
+                allow-delete
+                allow-upload
+                save-url="/api/media"
+                enable-lazy-load
+                :save-request-headers="headers"
+                @saved="onSave"
+                @deleted="onDelete"
+                @searched="onSearch"
+            >
+            </VueImageBrowser>
+        </div>
     </div>
 </template>
 

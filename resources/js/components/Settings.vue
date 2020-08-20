@@ -96,7 +96,11 @@
                     <div
                         class="w-full pr-8 py-4 cursor-pointer"
                         @click="subtab = 'search'"
-                        :class="subtab === 'search' ? 'text-indigo-500 font-bold' : ''"
+                        :class="
+                            subtab === 'search'
+                                ? 'text-indigo-500 whitespace-no-wrap'
+                                : 'whitespace-no-wrap'
+                        "
                     >
                         Full-text Search
                     </div>
@@ -104,7 +108,11 @@
                     <div
                         class="w-full pr-8 py-4 cursor-pointer"
                         @click="subtab = 'share'"
-                        :class="subtab === 'share' ? 'text-indigo-500 font-bold' : ''"
+                        :class="
+                            subtab === 'share'
+                                ? 'text-indigo-500 whitespace-no-wrap'
+                                : 'whitespace-no-wrap'
+                        "
                     >
                         Social Share
                     </div>
@@ -112,16 +120,24 @@
                     <div
                         class="w-full pr-8 py-4 cursor-pointer"
                         @click="subtab = 'security'"
-                        :class="subtab === 'security' ? 'text-indigo-500 font-bold' : ''"
+                        :class="
+                            subtab === 'security'
+                                ? 'text-indigo-500 whitespace-no-wrap'
+                                : 'whitespace-no-wrap'
+                        "
                     >
                         Security
                     </div>
                     <div
                         class="w-full pr-8 py-4 cursor-pointer"
                         @click="subtab = 'ads'"
-                        :class="subtab === 'ads' ? 'text-indigo-500 font-bold' : ''"
+                        :class="
+                            subtab === 'ads'
+                                ? 'text-indigo-500 whitespace-no-wrap'
+                                : 'whitespace-no-wrap'
+                        "
                     >
-                        Ads
+                        Ad Services
                     </div>
                 </div>
                 <div class="flex-grow">

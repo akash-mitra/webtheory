@@ -12,12 +12,9 @@
             </div>
 
             <div>
-                <div class="w-full bg-gray-100 py-4 px-6 shadow-inner border-b border-t">
-                    <div class="w-full sm:flex mt-2">
-                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1"
-                            >Facebook Share Button</label
-                        >
-                        <div class="w-full sm:w-4/5">
+                <div class="w-full bg-gray-100 shadow-inner border-b border-t">
+                    <div class="w-full flex py-3 px-6 border-b">
+                        <div class="">
                             <t-toggle
                                 v-model="share.facebook_share"
                                 true-value="On"
@@ -29,13 +26,11 @@
                             >
                             </t-toggle>
                         </div>
+                        <label class="block ml-6 text-sm py-1">Facebook Share Button</label>
                     </div>
 
-                    <div class="w-full sm:flex mt-2">
-                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1"
-                            >Twitter Post Button</label
-                        >
-                        <div class="w-full sm:w-4/5">
+                    <div class="w-full flex py-3 px-6 border-b">
+                        <div class="">
                             <t-toggle
                                 v-model="share.twitter_post"
                                 true-value="On"
@@ -47,11 +42,11 @@
                             >
                             </t-toggle>
                         </div>
+                        <label class="block ml-6 text-sm py-1">Twitter Post Button</label>
                     </div>
 
-                    <div class="w-full sm:flex mt-2">
-                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1">Pinterest Pin</label>
-                        <div class="w-full sm:w-4/5">
+                    <div class="w-full flex py-3 px-6 border-b">
+                        <div class="">
                             <t-toggle
                                 v-model="share.pinterest_pin"
                                 true-value="On"
@@ -63,11 +58,11 @@
                             >
                             </t-toggle>
                         </div>
+                        <label class="block ml-6 text-sm py-1">Pinterest Pin</label>
                     </div>
 
-                    <div class="w-full sm:flex mt-2">
-                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1">LinkedIn Post</label>
-                        <div class="w-full sm:w-4/5">
+                    <div class="w-full flex py-3 px-6 border-b">
+                        <div class="">
                             <t-toggle
                                 v-model="share.linkedin_post"
                                 true-value="On"
@@ -79,11 +74,11 @@
                             >
                             </t-toggle>
                         </div>
+                        <label class="block ml-6 text-sm py-1">LinkedIn Post</label>
                     </div>
 
-                    <div class="w-full sm:flex mt-2">
-                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1">WhatsApp Send</label>
-                        <div class="w-full sm:w-4/5">
+                    <div class="w-full flex py-3 px-6 border-b">
+                        <div class="">
                             <t-toggle
                                 v-model="share.whatsapp_send"
                                 true-value="On"
@@ -95,13 +90,11 @@
                             >
                             </t-toggle>
                         </div>
+                        <label class="block ml-6 text-sm py-1">WhatsApp Send</label>
                     </div>
 
-                    <div class="w-full sm:flex mt-2">
-                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1"
-                            >Reddit Share Button</label
-                        >
-                        <div class="w-full sm:w-4/5">
+                    <div class="w-full flex py-3 px-6 border-b">
+                        <div class="">
                             <t-toggle
                                 v-model="share.reddit_share"
                                 true-value="On"
@@ -113,13 +106,11 @@
                             >
                             </t-toggle>
                         </div>
+                        <label class="block ml-6 text-sm py-1">Reddit Share Button</label>
                     </div>
 
-                    <div class="w-full sm:flex mt-2">
-                        <label class="block w-full sm:w-1/5 mr-4 text-sm py-1"
-                            >Tumblr Share Button</label
-                        >
-                        <div class="w-full sm:w-4/5">
+                    <div class="w-full flex py-3 px-6 border-b">
+                        <div class="">
                             <t-toggle
                                 v-model="share.tumblr_share"
                                 true-value="On"
@@ -131,6 +122,7 @@
                             >
                             </t-toggle>
                         </div>
+                        <label class="block ml-6 text-sm py-1">Tumblr Share Button</label>
                     </div>
                 </div>
 

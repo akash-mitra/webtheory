@@ -18,13 +18,13 @@
                 <tbody>
                     <tr
                         class="border-b"
-                        v-for="referrer in referrers"
-                        v-if="referrer.referrer.length > 0"
+                        v-for="item in referrers"
+                        v-if="item.referrer != null && item.referrer.length > 0"
                     >
                         <td class="px-3 py-1">
-                            {{ referrer.referrer }}
+                            {{ item.referrer }}
                         </td>
-                        <td class="px-3 py-1">{{ referrer.total_views }}</td>
+                        <td class="px-3 py-1">{{ item.total_views }}</td>
                     </tr>
                 </tbody>
             </table>

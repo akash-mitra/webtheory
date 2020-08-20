@@ -236,7 +236,8 @@ export default {
                 // page_id: Page Id is only assigned after content is saved.
                 type: type,
                 body_html: '',
-                body_json: { blocks: [] },
+                // body_json: { blocks: [] },
+                body_json: null,
                 display_order: this.maxDisplayOrder + 1,
                 changed: true,
                 frontend_id: new Date().getTime(),
