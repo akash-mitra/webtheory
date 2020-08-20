@@ -191,6 +191,7 @@
 
                     browseToRoute(name) {
                         if (this.$route.name != name) {
+
                             this.$router.push({name: name})
                         }
                     },

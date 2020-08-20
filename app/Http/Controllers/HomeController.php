@@ -70,7 +70,7 @@ class HomeController extends Controller
         $user = User::findByPublicId($public_id);
 
         $data = DataProvider::profile(
-            auth()->user()->public_id === $public_id
+            optional(auth()->user())->public_id === $public_id
                 ? $user
                 : $user->only([
                     'id',

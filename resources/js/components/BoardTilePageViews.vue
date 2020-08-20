@@ -69,12 +69,13 @@ export default {
 
     methods: {
         parseDay(str) {
-            let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+            // let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
             let y = str.substr(0, 4),
                 m = str.substr(4, 2) - 1,
                 d = str.substr(6, 2)
             let D = new Date(y, m, d)
-            return days[D.getDay()]
+            // return days[D.getDay()]
+            return d + ' ' + D.toLocaleString('default', { month: 'short' })
         },
 
         renderChart() {
