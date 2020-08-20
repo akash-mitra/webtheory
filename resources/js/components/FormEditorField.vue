@@ -1,12 +1,10 @@
 <template>
     <div>
-        <div
-            class="w-full bg-indigo-600 text-indigo-100 p-4 mb-4 flex justify-between items-center"
-        >
+        <div class="w-full bg-blue-500 text-blue-100 p-4 mb-4 flex justify-between items-center">
             <div class="text-lg uppercase">{{ field.name }}</div>
             <div class="text-lg cursor-pointer" @click="$emit('delete')">
                 <svg
-                    class="h-6 w-6 mx-auto block text-indigo-100 hover:text-white"
+                    class="h-6 w-6 mx-auto block text-blue-100 hover:text-white"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="none"

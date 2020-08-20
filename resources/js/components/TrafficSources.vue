@@ -1,30 +1,30 @@
 <template>
     <div>
-        <div class="text-sm uppercase text-gray-500 my-4">Most Popular Pages</div>
+        <div class="text-sm uppercase text-gray-500 my-4">Top Traffic Sources</div>
         <div class="bg-white rounded text-xs text-gray-700 h-64 overflow-auto">
             <div v-if="noData" class="w-full flex justify-center items-center relative">
                 <SVGCreateContent class="max-h-full"></SVGCreateContent>
                 <div class="absolute bottom-0 mb-12 left-0 px-6">
-                    Not sufficient page data yet.
+                    Not sufficient traffic source data yet.
                 </div>
             </div>
             <table v-else class="table-auto w-full">
                 <thead>
                     <tr class="border-b bg-gray-100">
-                        <th class="px-3 py-1 text-left">#</th>
-                        <th class="px-3 py-1 text-left">Pages</th>
-                        <th class="px-3 py-1 text-left">Views</th>
+                        <th class="px-3 py-1 text-left">From</th>
+                        <th class="px-3 py-1 text-left">Referred</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="border-b" v-for="(page, index) in pages">
-                        <td class="px-3 py-1">{{ index + 1 }}</td>
+                    <tr
+                        class="border-b"
+                        v-for="referrer in referrers"
+                        v-if="referrer.referrer.length > 0"
+                    >
                         <td class="px-3 py-1">
-                            <a :href="'/app/pages/' + page.content_id" class="text-blue-600">{{
-                                page.title
-                            }}</a>
+                            {{ referrer.referrer }}
                         </td>
-                        <td class="px-3 py-1">{{ page.total_views }}</td>
+                        <td class="px-3 py-1">{{ referrer.total_views }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -39,17 +39,17 @@ export default {
     },
     data() {
         return {
-            pages: [],
+            referrers: [],
             noData: false,
         }
     },
     created() {
-        util.ajax('get', '/api/dashboard/content', {}, (response) => {
+        util.ajax('get', '/api/dashboard/referrer', {}, (response) => {
             // response = []
             if (response.length < 1) {
                 this.noData = true
             } else {
-                this.pages = response
+                this.referrers = response
             }
         })
     },

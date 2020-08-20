@@ -1,8 +1,8 @@
 <template>
     <BoardTile
-        tile-class="bg-blue-500"
-        text-class="text-blue-100"
-        cta-class="text-blue-200"
+        tile-class="bg-teal-500"
+        text-class="text-teal-100"
+        cta-class="text-teal-200"
         :loading="isLoading"
     >
         <template v-slot:metric>{{ metric }}</template>

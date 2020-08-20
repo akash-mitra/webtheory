@@ -5,13 +5,10 @@
 
             <div class="w-full xl:flex">
                 <div class="flex w-full xl:w-1/3 flex-wrap">
+                    <BoardTileVisitors></BoardTileVisitors>
+                    <BoardTileViews></BoardTileViews>
                     <BoardTilePages></BoardTilePages>
-
                     <BoardTileUsers></BoardTileUsers>
-
-                    <BoardTileVisitors :metric="visitors"></BoardTileVisitors>
-
-                    <BoardTileViews :metric="pageviews"></BoardTileViews>
                 </div>
                 <div class="flex w-full xl:w-2/3 px-2 py-3">
                     <BoardTilePageViews></BoardTilePageViews>
@@ -28,7 +25,7 @@
                 </div>
 
                 <div class="w-full lg:w-1/3 p-2">
-                    <Referrers></Referrers>
+                    <TrafficSources></TrafficSources>
                 </div>
             </div>
 
@@ -40,12 +37,6 @@
                     <div class="overflow-auto p-2" style="max-height: 30rem;">
                         <BoardComments></BoardComments>
                     </div>
-                    <router-link
-                        :to="{ name: 'users.index' }"
-                        class="block text-blue-400 my-3 text-sm"
-                    >
-                        Read Comments
-                    </router-link>
                 </div>
 
                 <div class="w-full lg:w-1/3 p-2">
@@ -75,25 +66,8 @@ import BoardUsers from './BoardUsers.vue'
 import BoardComments from './BoardComments.vue'
 import PopularPages from './PopularPages.vue'
 import BrowserDistributions from './BrowserDistributions.vue'
-import Referrers from './Referrers.vue'
+import TrafficSources from './TrafficSources.vue'
 export default {
-    data() {
-        return {
-            visitors: '...',
-            pageviews: '.A.',
-        }
-    },
-
-    created() {
-        // util.ajax('get', '/api/dashboard/views', {}, (response) => {
-        //     this.visitors = response[0].unique_vistors
-        //     this.pageviews = response[0].total_views
-        // })
-
-        this.visitors = '97K' //response[0].unique_vistors
-        this.pageviews = '120K' //response[0].total_views
-    },
-
     components: {
         BoardTilePages,
         BoardTileUsers,
@@ -104,7 +78,7 @@ export default {
         BoardUsers,
         PopularPages,
         BrowserDistributions,
-        Referrers,
+        TrafficSources,
     },
 }
 </script>

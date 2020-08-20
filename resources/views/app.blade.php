@@ -83,6 +83,10 @@
                             Settings
                         </router-link>
 
+                        <a class="block tracking-wide outline-none border-t md:border-none text-sm py-3 px-6 md:px-0"  id="nav-menu-8" href="https://webtheory01.sgp1.digitaloceanspaces.com/webtheory.co/documentation.pdf" target="_blank">
+                            Help
+                        </a>
+
                     </nav>
 
                 </div>

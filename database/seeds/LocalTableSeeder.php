@@ -26,13 +26,29 @@ class LocalTableSeeder extends Seeder
         $faker = Faker\Factory::create();
 
         $vistors = [];
-        for($i = 0; $i < 150; $i++) {
-            array_push($vistors, factory(View::class)->make([
-                'country' => $faker->randomElement([
-                    'Russia', 'Canada', 'China', 'United States', 'Brazil', 'France', 'Germany', 'United Kingdom',
-                    'Australia', 'India', 'Argentina', 'Singapore', 'Malaysia', 'Japan', 'United Arab Emirates'
+        for ($i = 0; $i < 150; $i++) {
+            array_push(
+                $vistors,
+                factory(View::class)->make([
+                    'country' => $faker->randomElement([
+                        'Russia',
+                        'Canada',
+                        'China',
+                        'United States',
+                        'Brazil',
+                        'France',
+                        'Germany',
+                        'United Kingdom',
+                        'Australia',
+                        'India',
+                        'Argentina',
+                        'Singapore',
+                        'Malaysia',
+                        'Japan',
+                        'United Arab Emirates',
+                    ]),
                 ])
-            ]));
+            );
         }
 
         // Admin user
@@ -66,18 +82,16 @@ class LocalTableSeeder extends Seeder
             ->all();
 
         // Unverified users
-        factory(User::class, mt_rand(2, 5))
-            ->create([
-                'role' => 'registered',
-                'email_verified_at' => null,
-            ]);
+        factory(User::class, mt_rand(2, 5))->create([
+            'role' => 'registered',
+            'email_verified_at' => null,
+        ]);
 
         // Banned users
-        factory(User::class, mt_rand(2, 5))
-            ->create([
-                'role' => 'registered',
-                'deleted_at' => now(),
-            ]);
+        factory(User::class, mt_rand(2, 5))->create([
+            'role' => 'registered',
+            'deleted_at' => now(),
+        ]);
 
         // Media
         $files = Storage::allFiles('public/media');
@@ -327,7 +341,6 @@ class LocalTableSeeder extends Seeder
                     'body_json' => $body_json,
                     'body_html' => $body_html,
                 ]);
-
             }
         }
         // End of Pages
@@ -361,14 +374,18 @@ class LocalTableSeeder extends Seeder
         }
 
         // Page Views
-        
+
         // Days Loop
-        for($view_date = now()->subDays(70)->startOfDay(); $view_date <= now(); $view_date->addDay()) {
-            
+        for (
+            $view_date = now()
+                ->subDays(70)
+                ->startOfDay();
+            $view_date <= now();
+            $view_date->addDay()
+        ) {
             // User Loop
             for ($i = 0; $i < mt_rand(10, 20); $i++) {
                 $view = $faker->randomElement($vistors);
-
 
                 // Skip some Pages
                 shuffle($pageIds);
@@ -388,7 +405,11 @@ class LocalTableSeeder extends Seeder
                         'browser' => $view->browser,
                         'version' => $view->version,
                         'referrer' => $view->referrer,
-                        'referrer_domain' => str_ireplace('www.', '', parse_url($view->referrer, PHP_URL_HOST)),
+                        'referrer_domain' => str_ireplace(
+                            'www.',
+                            '',
+                            parse_url($view->referrer, PHP_URL_HOST)
+                        ),
                         'session_id' => mt_rand(0, 5),
                         'country' => $view->country,
                         'city' => $view->city,
@@ -398,8 +419,6 @@ class LocalTableSeeder extends Seeder
                 }
             }
         }
-        
-
 
         // Form
         $form = factory(Form::class)->create([
@@ -413,6 +432,5 @@ class LocalTableSeeder extends Seeder
         factory(FormResponse::class, mt_rand(10, 30))->create([
             'form_id' => $form->id,
         ]);
-
     }
 }

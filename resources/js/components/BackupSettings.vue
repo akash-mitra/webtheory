@@ -10,8 +10,8 @@
                 </div>
 
                 <a
-                    href="/api/settings/backup/download"
-                    class="inline-block py-2 px-6 outline-none text-white bg-blue-500 hover:bg-blue-600 rounded shadow focus:outline-none"
+                    href="#"
+                    class="cursor-not-allowed inline-block py-2 px-6 outline-none text-white bg-blue-500 hover:bg-blue-600 rounded shadow focus:outline-none"
                     >Download</a
                 >
             </div>

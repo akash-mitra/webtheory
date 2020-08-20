@@ -8,8 +8,63 @@
     //Public Methods
 
     /**
-     * Generic DOM Selector
+     * ---------------------------------------------------------------
+     * Handy utility functions
+     * ---------------------------------------------------------------
      */
+    util.getMonthName = function (yyyymm) {
+        let month_name = 'Unknown'
+        try {
+            let year_part = parseInt(yyyymm.slice(0, 4))
+            let month_part = parseInt(yyyymm.slice(4, 6))
+            let d = new Date(year_part, month_part - 1)
+            month_name = d.toLocaleString('default', { month: 'long' })
+        } catch (e) {
+            console.log(e)
+        }
+        return month_name
+    }
+
+    util.formatDate = function (date_val, format) {
+        /*
+         * Supported Formats are:
+         * d - 2 digit date
+         * m - 2 digit month number
+         * M - Full Month name
+         * MMM - 3 char short Month name
+         * Y - 4 digit year
+         */
+        let d = date_val.getDate()
+        d = (d > 9 ? '' : '0') + d
+
+        let m = date_val.getMonth()
+        let M = [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
+        ][m]
+        m = (m + 1 > 9 ? '' : '0') + (m + 1)
+
+        let Y = date_val.getFullYear()
+
+        return format
+            .replace('Y', Y)
+            .replace('m', m)
+            .replace('MMM', M.substr(0, 3))
+            .replace('M', M)
+            .replace('d', d)
+    }
+
+    // Generic DOM Selector
     util.get = function (selector) {
         return document.querySelector(selector)
     }
@@ -23,11 +78,8 @@
         }
     }
 
-    /**
-     * ---------------------------------------------------------------
-     * Creates a form with the given data and submits the form to the
-     * provided URL. If no data is provided, empty form is submitted.
-     * ---------------------------------------------------------------*/
+    //  Creates a form with the given data and submits the form to the
+    //  provided URL. If no data is provided, empty form is submitted.
     util.submit = function (url, data, method) {
         if (typeof url === 'undefined') {
             return
@@ -74,10 +126,11 @@
 
     /**
      * ---------------------------------------------------------------
-     * Creates an alert as a toast notification
-     * Example use: util.toast({icon: 'error', title: "Try again."})
-     * ---------------------------------------------------------------
-     **/
+     * Various Sweetalert based notification functions
+     * ---------------------------------------------------------------*/
+
+    // Creates an alert as a toast notification
+    // Example use: util.toast({icon: 'error', title: "Try again."})
     util.toast = function (param) {
         let toastConfig = Swal.mixin({
             toast: true,
@@ -180,6 +233,7 @@
     }
 
     /**
+     * AJAX Related Utility functions
      * ---------------------------------------------------------------
      * Makes ajax request to the URL with or without the given data
      * ---------------------------------------------------------------*/

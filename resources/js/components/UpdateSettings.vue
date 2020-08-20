@@ -27,19 +27,20 @@ export default {
 
     methods: {
         updateSite(commitId) {
-            let p = this
-            p.isUpdating = true
+            alert('This feature is not available in beta release')
+            // let p = this
+            // p.isUpdating = true
 
-            window.axios
-                .post('/api/settings/update/', { commit_id: commitId })
-                .then((response) => {
-                    util.notifySuccess('Success', response.data)
-                    p.isUpdating = false
-                })
-                .catch((error) => {
-                    util.notifyError('Error', error)
-                    p.isUpdating = false
-                })
+            // window.axios
+            //     .post('/api/settings/update/', { commit_id: commitId })
+            //     .then((response) => {
+            //         util.notifySuccess('Success', response.data)
+            //         p.isUpdating = false
+            //     })
+            //     .catch((error) => {
+            //         util.notifyError('Error', error)
+            //         p.isUpdating = false
+            //     })
         },
     },
 }

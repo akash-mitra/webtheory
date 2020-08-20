@@ -46,7 +46,11 @@
                         <img src="{{ $data->page->author->avatar }}" class="h-12 w-12 rounded-full" />
                         </a>
                         <div class="ml-4">
-                            <div class="w-full">{{ $data->page->author->name }}</div>
+                            <div class="w-full">
+                                <a href="{{ $data->page->author->url }}" class="hover:text-{{$data->ref->template->primaryColor}}-600">
+                                    {{ $data->page->author->name }}
+                                </a>
+                            </div>
                             <div class="w-full flex items-center">
                                 <span>Updated on {{ $data->page->updated_at->format('M d, Y') }}</span>
                                 <span class="ml-3 px-2 text-gray-400 bg-gray-800">@readtime</span>
