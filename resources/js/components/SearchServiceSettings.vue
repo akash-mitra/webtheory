@@ -92,7 +92,7 @@
                     </div>
                 </div>
 
-                <div class="p-6">
+                <div class="p-6 cursor-not-allowed">
                     <t-button
                         :loadingWheel="isUpdating"
                         textSize="normal"
@@ -141,7 +141,8 @@ export default {
                 SEARCHABLE: this.enabled === 'On' ? '1' : '0',
             }
 
-            this.postToServer(data)
+            alert('This feature is not available in the beta-release yet')
+            // this.postToServer(data)
         },
 
         postToServer(data) {
