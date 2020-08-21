@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Exception;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class UpdateSite extends Command
 {
@@ -13,7 +15,7 @@ class UpdateSite extends Command
      *
      * @var string
      */
-    protected $signature = 'update:site {commit=Latest : Update to the Commit ID}';
+    protected $signature = 'update:site';
 
     /**
      * The console command description.
@@ -42,37 +44,36 @@ class UpdateSite extends Command
         $this->info('Site update started');
 
         try {
-            $commitId = $this->argument('commit');
-            $this->info('Commit Id: ' . $commitId);
             
-            
-            $this->call('down');
-            
-            exec("cd " . base_path() . " && git stash");
-            exec("cd " . base_path() . " && git pull");
-            // exec("cd " . base_path() . " && git checkout " . $commitId);
+            $this->call('down');   
+
+            $this->executeCmd("cd " . base_path() . " && git stash");
+            $this->executeCmd("cd " . base_path() . " && git pull origin master");
             $this->info('Git command success.');
             
-            exec("composer install -d " . base_path());
-            
-            // Temporary Use - Remove below 2 lines
-            // exec("cp -rf /var/www/app/webtheory/storage/repo/templates/Serenity/* /var/www/app/webtheory/resources/views/active/");
-            // exec("cp -rf /var/www/app/webtheory/storage/repo/templates/Serenity /var/www/app/webtheory/resources/views/templates/");
-
+            $this->executeCmd("composer install --prefer-dist --optimize-autoloader --no-interaction -d " . base_path());
             $this->info('Composer command success.');
+
+            $this->call('migrate', ['--force' => true]);
+            $this->call('db:seed', ['--class' => 'IncrementalSeeder', '--force' => true]);
+            $this->info('Migration success.');
+
+            $this->executeCmd("composer dump-autoload -d " . base_path());
+            $this->info('Composer optimize success.');
 
             $this->call('config:clear');
             $this->call('cache:clear');
             $this->call('event:clear');
             $this->call('view:clear');
             $this->call('route:clear');
-            $this->info('Artisan clear success.');
+            $this->call('queue:restart');
+            $this->call('route:cache');
+            $this->info('Artisan commands success.');
 
-            $this->call('migrate', ['--force' => true]);
-            $this->call('db:seed', ['--class' => 'PermissionsTableSeeder', '--force' => true]);
-            $this->info('Migration success.');
+            // $this->executeCmd("cd " . base_path() . " chown -R appuser:appuser * ");
 
-            exec("composer dump-autoload -d " . base_path());
+            $this->executeCmd("supervisorctl restart laravel-worker:*");
+
             $this->call('up');
 
             $this->info('Site updated successfully');
@@ -82,5 +83,18 @@ class UpdateSite extends Command
             $this->error('Something went wrong!');
             return 1;
         }
+    }
+
+    public function executeCmd($shell)
+    {
+        $process = Process::fromShellCommandline($shell);
+        $process->run();
+
+        // executes after the command finishes
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+
+        $this->info($process->getOutput());
     }
 }
