@@ -149,18 +149,22 @@ class SettingController extends Controller
         */
     }
 
-    public function update(Request $request)
+    public function update()
     {
-        $commitId = $request->commit_id;
-
-        UpdateSite::dispatchAfterResponse($commitId);
+        UpdateSite::dispatchAfterResponse();
 
         return response()->json('Site update is in progress', 200);
     }
 
     public function getSearch()
     {
-        $keys = ['SEARCHABLE', 'ALGOLIA_COMMUNITY_PLAN', 'ALGOLIA_APP_ID', 'ALGOLIA_SECRET', 'ALGOLIA_SEARCH_KEY'];
+        $keys = [
+            'SEARCHABLE',
+            'ALGOLIA_COMMUNITY_PLAN',
+            'ALGOLIA_APP_ID',
+            'ALGOLIA_SECRET',
+            'ALGOLIA_SEARCH_KEY',
+        ];
 
         $search = [];
         foreach ($keys as $key) {
@@ -185,18 +189,20 @@ class SettingController extends Controller
 
             Page::where('id', '>', 0)->searchable();
         }
-        
+
         return response()->json('Saved', 200);
     }
 
     public function backupDownload()
     {
         $status = Artisan::call('backup:site --db --assets --templates');
-        
+
         if ($status == 0) {
-            return response()
-                ->download(storage_path('/backup/wt_backup_' . \Carbon\Carbon::parse(now())->format('Ymd')) . '.zip');
-                // ->deleteFileAfterSend();
+            return response()->download(
+                storage_path('/backup/wt_backup_' . \Carbon\Carbon::parse(now())->format('Ymd')) .
+                    '.zip'
+            );
+            // ->deleteFileAfterSend();
         } else {
             return response()->json('There was an error', 401);
         }

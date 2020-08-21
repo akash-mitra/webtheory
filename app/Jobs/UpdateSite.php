@@ -13,16 +13,13 @@ class UpdateSite implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $commitId;
-
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($commitId)
+    public function __construct()
     {
-        $this->commitId = $commitId;
     }
 
     /**
@@ -32,11 +29,8 @@ class UpdateSite implements ShouldQueue
      */
     public function handle()
     {
-        $exitCode = Artisan::call('update:site', [
-            'commit' => $this->commitId,
-        ]);
+        Artisan::call('update:site');
 
-        // \Log::info($exitCode);
         return true;
     }
 }
