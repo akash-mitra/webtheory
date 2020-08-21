@@ -44,21 +44,23 @@ class UpdateSite extends Command
         $this->info('Site update started');
 
         try {
-            
-            $this->call('down');   
+            $this->call('down');
 
-            $this->executeCmd("cd " . base_path() . " && git stash");
-            $this->executeCmd("cd " . base_path() . " && git pull origin master");
+            $this->executeCmd('cd ' . base_path() . ' && git stash');
+            $this->executeCmd('cd ' . base_path() . ' && git pull origin master');
             $this->info('Git command success.');
-            
-            $this->executeCmd("composer install --prefer-dist --optimize-autoloader --no-interaction -d " . base_path());
+
+            $this->executeCmd(
+                'composer install --prefer-dist --optimize-autoloader --no-interaction -d ' .
+                    base_path()
+            );
             $this->info('Composer command success.');
 
             $this->call('migrate', ['--force' => true]);
             $this->call('db:seed', ['--class' => 'IncrementalSeeder', '--force' => true]);
             $this->info('Migration success.');
 
-            $this->executeCmd("composer dump-autoload -d " . base_path());
+            $this->executeCmd('composer dump-autoload -d ' . base_path());
             $this->info('Composer optimize success.');
 
             $this->call('config:clear');
@@ -72,13 +74,13 @@ class UpdateSite extends Command
 
             // $this->executeCmd("cd " . base_path() . " chown -R appuser:appuser * ");
 
-            $this->executeCmd("supervisorctl restart laravel-worker:*");
+            // $this->executeCmd("supervisorctl restart laravel-worker:*");
 
             $this->call('up');
 
             $this->info('Site updated successfully');
             return 0;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->call('up');
             $this->error('Something went wrong!');
             return 1;
