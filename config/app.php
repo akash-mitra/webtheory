@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -125,6 +124,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Default Admin for the initial Setup
+    |--------------------------------------------------------------------------
+    |
+    | Admin account details
+    |
+    */
+
+    'admin_user' => env('ADMIN_USER_NAME', 'Administrator'),
+
+    'admin_email' => env('ADMIN_USER_EMAIL', 'admin@example.com'),
+
+    'admin_password' => env('ADMIN_USER_PASSWORD', 'Passw0rd'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
     |
@@ -135,7 +149,6 @@ return [
     */
 
     'providers' => [
-
         /*
          * Laravel Framework Service Providers...
          */
@@ -176,8 +189,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\DynamicMailServiceProvider::class,
         App\Providers\BladeExtensionServiceProvider::class,
-
-
     ],
 
     /*
@@ -192,7 +203,6 @@ return [
     */
 
     'aliases' => [
-
         'App' => Illuminate\Support\Facades\App::class,
         'Arr' => Illuminate\Support\Arr::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
@@ -228,7 +238,5 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
     ],
-
 ];

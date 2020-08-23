@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Filesystem Disk
@@ -30,6 +29,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Media Object Storage related variables
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'media' => env('MEDIA'),
+
+    'media_domain' => env('DOMAIN'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Filesystem Disks
     |--------------------------------------------------------------------------
     |
@@ -42,7 +52,6 @@ return [
     */
 
     'disks' => [
-
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
@@ -51,7 +60,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
         ],
 
@@ -112,5 +121,4 @@ return [
             'root' => resource_path('views/active'),
         ],
     ],
-
 ];

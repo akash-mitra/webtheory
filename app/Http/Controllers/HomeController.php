@@ -99,7 +99,7 @@ class HomeController extends Controller
     {
         $content = '<?xml version="1.0" encoding="UTF-8"?>';
         $content .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-        $content .= '<url><loc>' . env('APP_URL') . '</loc></url>';
+        $content .= '<url><loc>' . config('app.url') . '</loc></url>';
         $pages = Page::published()
             ->latest()
             ->get();
@@ -138,7 +138,7 @@ class HomeController extends Controller
         $content .= '<rss version="2.0">';
         $content .= '<channel>';
         $content .= '<title>' . $siteinfo['title'] . '</title>';
-        $content .= '<link>' . env('APP_URL') . '</link>';
+        $content .= '<link>' . config('app.url') . '</link>';
         $content .= '<description>' . $siteinfo['desc'] . '</description>';
 
         $pages = Page::with('author', 'category')

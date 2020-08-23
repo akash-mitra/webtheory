@@ -14,12 +14,15 @@ echo "Backup File: {{ $backupFile }}.zip"
 
 # DATABASE BACKUP
 @if ($db)
-    rm -rf {{ base_path() . '/storage/backup/' . env('DB_DATABASE') . '_' . \Carbon\Carbon::parse(now())->format('Ymd') . '.sql' }}
-    @if (env('DB_CONNECTION') == 'mysql')
-        mysqldump -u {{ env('DB_USERNAME') }} -p{{ env('DB_PASSWORD') }} {{ env('DB_DATABASE') }} > {{ base_path() . '/storage/backup/' . env('DB_DATABASE') . '_' . \Carbon\Carbon::parse(now())->format('Ymd') . '.sql' }}
-    @elseif (env('DB_CONNECTION') == 'pgsql')
-        PGPASSWORD={{ env('DB_PASSWORD') }} pg_dump -h {{ env('DB_HOST') }} -p {{ env('DB_PORT') }} -U {{ env('DB_USERNAME') }} {{ env('DB_DATABASE') }} > {{ base_path() . '/storage/backup/' . env('DB_DATABASE') . '_' . \Carbon\Carbon::parse(now())->format('Ymd') . '.sql' }}
+
+    @if (config('database.default') == 'pgsql')
+        rm -rf {{ base_path() . '/storage/backup/' . config('database.connections.pgsql.database') . '_' . \Carbon\Carbon::parse(now())->format('Ymd') . '.sql' }}
+        PGPASSWORD={{ config('database.connections.pgsql.password') }} pg_dump -h {{ config('database.connections.pgsql.host') }} -p {{ config('database.connections.pgsql.port') }} -U {{ config('database.connections.pgsql.username') }} {{ config('database.connections.pgsql.database') }} > {{ base_path() . '/storage/backup/' . config('database.connections.pgsql.database') . '_' . \Carbon\Carbon::parse(now())->format('Ymd') . '.sql' }}
+    @else
+        rm -rf {{ base_path() . '/storage/backup/' . config('database.connections.mysql.database') . '_' . \Carbon\Carbon::parse(now())->format('Ymd') . '.sql' }}
+        mysqldump -u {{ config('database.connections.mysql.username') }} -p{{ config('database.connections.mysql.password') }} {{ config('database.connections.mysql.database') }} > {{ base_path() . '/storage/backup/' . config('database.connections.mysql.database') . '_' . \Carbon\Carbon::parse(now())->format('Ymd') . '.sql' }}
     @endif
+
 @endif
 
 # BACKUP CHOICE
@@ -31,7 +34,7 @@ echo "Backup File: {{ $backupFile }}.zip"
     {{ $directories .= ' resources/views/active resources/views/templates ' }}
 @endif
 @if($db)
-    {{ $directories .= ' storage/backup/' . env('DB_DATABASE') . '_' . \Carbon\Carbon::parse(now())->format('Ymd') . '.sql ' }}
+    {{ $directories .= ' storage/backup/' . config('database.connections.mysql.database') . '_' . \Carbon\Carbon::parse(now())->format('Ymd') . '.sql ' }}
 @endif
 
 

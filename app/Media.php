@@ -66,8 +66,8 @@ class Media extends Model
                 $subDirectory = self::$subDirectoryPath;
             }
 
-            if (env('MEDIA') == 'spaces') {
-                $subDirectory = env('DOMAIN') . '/' . $subDirectory;
+            if (config('filesystems.media') == 'spaces') {
+                $subDirectory = config('filesystems.media_domain') . '/' . $subDirectory;
             }
 
             $path = Storage::disk($diskStorageType)->putFile(
@@ -84,7 +84,11 @@ class Media extends Model
                 'url' =>
                     $diskStorageType === 'public'
                         ? '/storage/' . $path
-                        : Storage::disk($diskStorageType)->url($path),
+                        : str_replace(
+                            'digitaloceanspaces',
+                            'cdn.digitaloceanspaces',
+                            Storage::disk($diskStorageType)->url($path)
+                        ),
                 'storage' => $diskStorageType,
                 'user_id' => Auth::id(),
             ]);
@@ -139,8 +143,8 @@ class Media extends Model
                 $subDirectory = self::$subDirectoryPath;
             }
 
-            if (env('MEDIA') == 'spaces') {
-                $subDirectory = env('DOMAIN') . '/' . $subDirectory;
+            if (config('filesystems.media') == 'spaces') {
+                $subDirectory = config('filesystems.media_domain') . '/' . $subDirectory;
             }
 
             $path = $subDirectory . '/' . $name . '.' . $fileType;
@@ -155,7 +159,11 @@ class Media extends Model
                 'url' =>
                     $diskStorageType === 'public'
                         ? '/storage/' . $path
-                        : Storage::disk($diskStorageType)->url($path),
+                        : str_replace(
+                            'digitaloceanspaces',
+                            'cdn.digitaloceanspaces',
+                            Storage::disk($diskStorageType)->url($path)
+                        ),
                 'storage' => $diskStorageType,
                 'user_id' => Auth::id(),
             ]);
@@ -230,7 +238,8 @@ class Media extends Model
         //     );
         //     return 's3';
         // }
-        if (env('MEDIA') == 'spaces') {
+
+        if (config('filesystems.media') == 'spaces') {
             return 'spaces';
         }
 

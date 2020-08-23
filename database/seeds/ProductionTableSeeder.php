@@ -282,7 +282,7 @@ class ProductionTableSeeder extends Seeder
 
     private function getUrl($provider)
     {
-        return env('APP_URL') . '/social/login/' . $provider . '/callback';
+        return config('app.url') . '/social/login/' . $provider . '/callback';
     }
 
     private function addDefaultTemplates()

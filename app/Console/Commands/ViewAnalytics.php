@@ -48,35 +48,35 @@ class ViewAnalytics extends Command
      */
     public function handle()
     {
-        $this->now = is_null($this->argument('processDate')) 
-            ? \Carbon\Carbon::now() 
+        $this->now = is_null($this->argument('processDate'))
+            ? \Carbon\Carbon::now()
             : \Carbon\Carbon::createFromFormat('Y-m-d', $this->argument('processDate'));
         $this->now = $this->now->toImmutable();
 
-        $this->asOfDate = is_null($this->argument('asOfDate')) 
-            ? \Carbon\Carbon::yesterday() 
+        $this->asOfDate = is_null($this->argument('asOfDate'))
+            ? \Carbon\Carbon::yesterday()
             : \Carbon\Carbon::createFromFormat('Y-m-d', $this->argument('asOfDate'))->startOfDay();
         $this->asOfDate = $this->asOfDate->toImmutable();
-        
+
         try {
 
             // STAGE 1
             $this->info($this->now . ' Stage1: Create Temporary table to process Views dataset');
-            
+
             // Get Last Successful Batch Record
             $batch = DB::select(DB::raw('
-                select end_view_id, batch_date from batch_jobs 
-                where id in ( 
-                    select max(id) from batch_jobs 
+                select end_view_id, batch_date from batch_jobs
+                where id in (
+                    select max(id) from batch_jobs
                     where batch_name = \'process_views_analytics_table\'
                     and status = \'success\'
                     and end_view_id is not null
                 )'
             ))[0];
-            
+
             $start_view_id = $batch->end_view_id;
             $batch_date = $batch->batch_date;
-            
+
             // Mark Batch Job Start Entry
             $batchjob = new BatchJob([
                 'batch_date' => $this->now,
@@ -98,7 +98,7 @@ class ViewAnalytics extends Command
 
             // STAGE 2
             $this->info($this->now . ' Stage2: Load View Analytics Tables');
-            
+
             // Get the maximum view id number as in staging table
             $batch = DB::select(DB::raw('
                 select max(id) as end_view_id from views_staging'
@@ -108,17 +108,17 @@ class ViewAnalytics extends Command
 
             // Process All or no transaction batch
             DB::transaction(function () use ($batchjob, $batch_date ) {
-                
+
                 $this->loadViewsDaily();
-                
+
                 $this->purgeViewsDaily();
 
-            
+
                 $this->aggregateIncrementalViewContent();
-                
+
 
                 $this->aggregateIncrementalViewDimension('view_referrers', 'referrer_domain');
-                
+
                 $this->aggregateIncrementalViewDimension('view_platforms', 'platform');
 
                 $this->aggregateIncrementalViewDimension('view_browsers', 'browser');
@@ -133,7 +133,7 @@ class ViewAnalytics extends Command
                 $this->loadIpStaging($batchjob->id);
 
                 $this->purgeIpStaging();
-                
+
 
             });
 
@@ -171,12 +171,12 @@ class ViewAnalytics extends Command
         if (Schema::hasTable('views_staging')) {
             DB::statement('drop table views_staging');
         }
-        
-        $ctAs = env('DB_CONNECTION') == 'pgsql' ? ' as ': ' ' ;
+
+        $ctAs = config('database.default') == 'pgsql' ? ' as ': ' ' ;
         DB::statement(
-            'create table views_staging' . $ctAs . 
-            'select * from views 
-            where id > ' . $start_view_id . 
+            'create table views_staging' . $ctAs .
+            'select * from views
+            where id > ' . $start_view_id .
             ' and at < \'' . $this->now->startOfDay() . '\''
         );
     }
@@ -184,37 +184,37 @@ class ViewAnalytics extends Command
     private function loadViewsDaily()
     {
         //max(at) - min(at) as duration
-        $duration = env('DB_CONNECTION') == 'pgsql' ? ' EXTRACT(EPOCH FROM (max(at) - min(at))) ': ' TIME_TO_SEC(TIMEDIFF(max(at), min(at))) ';
-                
+        $duration = config('database.default') == 'pgsql' ? ' EXTRACT(EPOCH FROM (max(at) - min(at))) ': ' TIME_TO_SEC(TIMEDIFF(max(at), min(at))) ';
+
         // Load table views_daily aggregated at date_key level from views_staging
         DB::statement('
-            insert into views_daily ( 
-                date_key, 
-                total_views, 
-                unique_visitors, 
-                bounce_rate, 
+            insert into views_daily (
+                date_key,
+                total_views,
+                unique_visitors,
+                bounce_rate,
                 avg_visit_duration
-            ) select 
+            ) select
                 x.date_key,
                 sum(x.views) as total_views,
                 count(distinct x.ip) as unique_visitors,
                 sum(case when x.views = 1 then 1 else 0 end) * 100 / count(1) as bounce_rate,
-                round( sum(case when x.views > 1 then duration / (x.views - 1) else 0 end) / 
+                round( sum(case when x.views > 1 then duration / (x.views - 1) else 0 end) /
                     sum(case when x.views > 1 then 1 else null end) ) as avg_visit_duration
             from (
-                select 
+                select
                     date_key,
                     count(1) as views,
                     ip,
                     session_id,
                     ' . $duration . ' as duration
                 from views_staging
-                group by 
+                group by
                     date_key,
                     ip,
                     session_id
             ) x
-            group by 
+            group by
                 x.date_key
         ');
     }
@@ -231,17 +231,17 @@ class ViewAnalytics extends Command
     private function aggregateIncrementalViewContent()
     {
         // Content Monthly Update
-        if (env('DB_CONNECTION') == 'mysql') {
+        if (config('database.default') == 'mysql') {
             DB::statement('
-                update view_contents, 
+                update view_contents,
                 (
-                    select  
+                    select
                         floor(date_key/100)  as month_key,
                         content_type,
                         content_id,
-                        count(1) as total_views             
+                        count(1) as total_views
                     from views_staging
-                    group by 
+                    group by
                         floor(date_key/100),
                         content_type,
                         content_id
@@ -252,19 +252,19 @@ class ViewAnalytics extends Command
                 and view_contents.content_type = x.content_type
                 and view_contents.content_id = x.content_id
             ');
-        } else if (env('DB_CONNECTION') == 'pgsql') {
+        } else if (config('database.default') == 'pgsql') {
             DB::statement('
                 update view_contents
                 set
                 total_views = view_contents.total_views + x.total_views
                 from (
-                    select  
+                    select
                         floor(date_key/100) as month_key,
                         content_type,
                         content_id,
-                        count(1) as total_views             
+                        count(1) as total_views
                     from views_staging
-                    group by 
+                    group by
                         floor(date_key/100),
                         content_type,
                         content_id
@@ -277,23 +277,23 @@ class ViewAnalytics extends Command
 
         // Content Monthly Insert
         DB::statement('
-            insert into view_contents ( 
-                month_key, 
-                content_type, 
+            insert into view_contents (
+                month_key,
+                content_type,
                 content_id,
                 total_views
-            ) select  
+            ) select
                 floor(date_key/100) as month_key,
                 content_type,
                 content_id,
-                count(1) as total_views             
+                count(1) as total_views
             from views_staging
             where not exists ( select 1 from view_contents x
-                where x.month_key = floor(views_staging.date_key/100) 
-                and x.content_type = views_staging.content_type 
+                where x.month_key = floor(views_staging.date_key/100)
+                and x.content_type = views_staging.content_type
                 and x.content_id = views_staging.content_id
             )
-            group by 
+            group by
                 floor(date_key/100),
                 content_type,
                 content_id
@@ -304,16 +304,16 @@ class ViewAnalytics extends Command
     private function aggregateIncrementalViewDimension($table_name, $column_name)
     {
         // Dimension Monthly Update
-        if (env('DB_CONNECTION') == 'mysql') {
+        if (config('database.default') == 'mysql') {
             DB::statement('
-                update ' . $table_name . ', 
+                update ' . $table_name . ',
                 (
-                    select  
+                    select
                         count(1) as total_views,
                         floor(date_key/100) as month_key,
                         ' . $column_name . '
                     from views_staging
-                    group by 
+                    group by
                         floor(date_key/100),
                         ' . $column_name . '
                 ) x
@@ -322,18 +322,18 @@ class ViewAnalytics extends Command
                 where ' . $table_name . '.month_key = x.month_key
                 and ' . $table_name . '.' . $column_name . ' = x.' . $column_name
             );
-        } else if (env('DB_CONNECTION') == 'pgsql') {
+        } else if (config('database.default') == 'pgsql') {
             DB::statement('
                 update ' . $table_name . '
                 set
                 total_views = ' . $table_name . '.total_views + x.total_views
                 from (
-                    select  
+                    select
                         count(1) as total_views,
                         floor(date_key/100) as month_key,
-                        ' . $column_name . '            
+                        ' . $column_name . '
                     from views_staging
-                    group by 
+                    group by
                         floor(date_key/100),
                         ' . $column_name . '
                 ) x
@@ -344,20 +344,20 @@ class ViewAnalytics extends Command
 
         // Dimension Monthly Insert
         DB::statement('
-            insert into ' . $table_name . ' ( 
+            insert into ' . $table_name . ' (
                 total_views,
                 month_key,
                 ' . $column_name . '
-            ) select  
+            ) select
                 count(1) as total_views,
                 floor(date_key/100) as month_key,
-                ' . $column_name . '            
+                ' . $column_name . '
             from views_staging
             where not exists ( select 1 from ' . $table_name . ' x
-                where x.month_key = floor(views_staging.date_key/100) 
-                and x.' . $column_name . ' = views_staging.' . $column_name . ' 
+                where x.month_key = floor(views_staging.date_key/100)
+                and x.' . $column_name . ' = views_staging.' . $column_name . '
             )
-            group by 
+            group by
                 floor(date_key/100),
                 ' . $column_name
         );
@@ -366,87 +366,87 @@ class ViewAnalytics extends Command
 
     private function loadUniqueMonthly()
     {
-        if (env('DB_CONNECTION') == 'mysql') {
+        if (config('database.default') == 'mysql') {
             DB::statement('
-                update views_unique_monthly, 
+                update views_unique_monthly,
                 (
-                    select  
+                    select
                         month_key,
-                        count(distinct ip) as unique_visitors 
+                        count(distinct ip) as unique_visitors
                     from (
                         select distinct
                             floor(date_key/100) as month_key,
                             ip
                         from views_staging
                         where not exists ( select 1 from views_ip_staging x
-                            where x.month_key = floor(views_staging.date_key/100) 
+                            where x.month_key = floor(views_staging.date_key/100)
                             and x.ip = views_staging.ip
-                        ) 
+                        )
                     ) unique_views_staging
-                    group by 
+                    group by
                         month_key
                 ) x
                 set
                 views_unique_monthly.unique_visitors = views_unique_monthly.unique_visitors + x.unique_visitors
                 where views_unique_monthly.month_key = x.month_key
             ');
-        } else if (env('DB_CONNECTION') == 'pgsql') {
+        } else if (config('database.default') == 'pgsql') {
             DB::statement('
                 update views_unique_monthly
                 set
                 unique_visitors = views_unique_monthly.unique_visitors + x.unique_visitors
                 from (
-                    select  
+                    select
                         month_key,
-                        count(distinct ip) as unique_visitors 
+                        count(distinct ip) as unique_visitors
                     from (
                         select distinct
                             floor(date_key/100) as month_key,
                             ip
                         from views_staging
                         where not exists ( select 1 from views_ip_staging x
-                            where x.month_key = floor(views_staging.date_key/100) 
+                            where x.month_key = floor(views_staging.date_key/100)
                             and x.ip = views_staging.ip
-                        ) 
+                        )
                     ) unique_views_staging
-                    group by 
+                    group by
                         month_key
                 ) x
                 where views_unique_monthly.month_key = x.month_key
             ');
         }
-        
+
         DB::statement('
-            insert into views_unique_monthly ( 
+            insert into views_unique_monthly (
                 month_key,
                 unique_visitors
-            ) select  
+            ) select
                 floor(date_key/100) as month_key,
-                count(distinct ip) as unique_visitors 
+                count(distinct ip) as unique_visitors
             from views_staging
             where not exists ( select 1 from views_ip_staging x
-                where x.month_key = floor(views_staging.date_key/100) 
+                where x.month_key = floor(views_staging.date_key/100)
             )
-            group by 
+            group by
                 floor(date_key/100)
         ');
     }
-    
+
     private function loadIpStaging($batch_id)
     {
         DB::statement('
-            insert into views_ip_staging ( 
+            insert into views_ip_staging (
                 month_key,
                 ip,
                 batch_id
-            ) select distinct 
+            ) select distinct
                 floor(date_key/100) as month_key,
                 ip,
                 ' . $batch_id . '
             from views_staging
             where not exists ( select 1 from views_ip_staging x
                 where x.month_key = floor(views_staging.date_key/100)
-                and x.ip = views_staging.ip 
+                and x.ip = views_staging.ip
             )
         ');
     }
@@ -459,5 +459,5 @@ class ViewAnalytics extends Command
         DB::table('views_ip_staging')->where('month_key', '<', $purgeCutoffDate)->delete();
     }
 
-    
+
 }

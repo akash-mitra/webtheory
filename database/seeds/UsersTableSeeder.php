@@ -13,12 +13,13 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'name' => env('ADMIN_USER_NAME', 'Administrator'),
-            'email' => env('ADMIN_USER_EMAIL', 'admin@example.com'),
+            'name' => config('app.admin_user'),
+            'email' => config('app.admin_email'),
             'email_verified_at' => now(),
-            'password' => Hash::make(env('ADMIN_USER_PASSWORD', 'Passw0rd')),
+            'password' => Hash::make(config('app.admin_password')),
             'role' => 'admin',
-            'avatar' => 'https://i.pravatar.cc/100?u=admin@example.com',
+            'avatar' =>
+                'https://webtheory01.sgp1.cdn.digitaloceanspaces.com/webtheory.co/assets/avatar.jpeg',
             'preferences' => '["broadcast", "database", "mail"]',
             'public_id' => Str::random(30),
             'created_at' => now(),
