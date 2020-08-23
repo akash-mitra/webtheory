@@ -44,7 +44,7 @@ class UpdateSite extends Command
         $this->info('Site update started');
 
         try {
-            $this->call('down');
+            $this->call('down', ['--message' => 'Update is in Progress. Be Right Back.']);
 
             $this->executeCmd('cd ' . base_path() . ' && git stash');
             $this->executeCmd('cd ' . base_path() . ' && git pull origin master');
