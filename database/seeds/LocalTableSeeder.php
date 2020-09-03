@@ -58,7 +58,8 @@ class LocalTableSeeder extends Seeder
             'password' => Hash::make(env('ADMIN_USER_PASSWORD', 'Passw0rd')),
             'role' => 'admin',
             'email_verified_at' => now(),
-            'avatar' => 'https://i.pravatar.cc/100?u=admin@example.com',
+            // 'avatar' => 'https://i.pravatar.cc/100?u=admin@example.com',
+            'avatar' => 'https://source.unsplash.com/100x100?profile',
         ]);
 
         // Authors
@@ -102,8 +103,8 @@ class LocalTableSeeder extends Seeder
         for ($i = 0; $i < mt_rand(10, 30); $i++) {
             $fileExtension = 'png';
             $filename = $faker->domainWord . '.' . $fileExtension;
-            // Storage::disk('local')->put('media/file.txt', 'Contents');
-            $url = 'https://i.pravatar.cc/1000?u=' . $faker->unique()->safeEmail;
+            // $url = 'https://i.pravatar.cc/1000?u=' . $faker->unique()->safeEmail;
+            $url = 'https://source.unsplash.com/1000x1000?travel';
             $contents = file_get_contents($url);
             Storage::put('public/media/' . $filename, $contents);
 
@@ -166,7 +167,7 @@ class LocalTableSeeder extends Seeder
 
                 // Content Generation
                 $body_html = '';
-                $body_json = '{"blocks":[';
+                $body_json = '{"time":' . $faker->unixTime($max = 'now') . ',"blocks":[';
 
                 for ($j = 0; $j < mt_rand(3, 7); $j++) {
                     // Heading1
@@ -333,12 +334,12 @@ class LocalTableSeeder extends Seeder
                     }
                 }
 
-                $body_json = rtrim($body_json, ',') . ']}';
+                $body_json = rtrim($body_json, ',') . '],"version":"2.18.0"}';
 
                 // Page Contents
                 $pageContent = factory(PageContent::class)->create([
                     'page_id' => $page->id,
-                    'body_json' => $body_json,
+                    'body_json' => json_decode($body_json),
                     'body_html' => $body_html,
                 ]);
             }

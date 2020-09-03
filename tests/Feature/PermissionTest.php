@@ -303,7 +303,8 @@ class PermissionTest extends TestDataSetup
         $users = [$this->adminUser, $this->authorUser1];
         foreach ($users as $user) {
             $data = [
-                'url' => 'https://i.pravatar.cc/100?u=test@example.com',
+                // 'url' => 'https://i.pravatar.cc/100?u=test@example.com',
+                'url' => 'https://source.unsplash.com/100x100?profile',
             ];
             $this->actingAs($user);
             $this->post('/api/media/fetchUrl', $data, [

@@ -150,12 +150,13 @@ class PageTest extends DuskTestDataSetup
                 ->assertSee('Provide an Introduction')
                 ->press('OK')
                 ->type('intro', 'My Test Page Introduction')
-                // ->keys('intro', ['{tab}'])
+                ->type('div.ce-paragraph.cdx-block', 'My Test Page Content')
+                ->pause(1000)
                 ->press('Save')
                 ->pause(1000)
-                ->assertSee('Page Contents are Saved')
+                // ->assertDialogOpened('Page Contents are Saved.')
                 ->visit('/app/pages')
-                ->pause(1000)
+                ->pause(5000)
                 ->assertSee('My Test Page');
             $this->assertDatabaseHas('pages', ['title' => 'My Test Page']);
         });

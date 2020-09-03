@@ -21,11 +21,18 @@ class BackendTest extends DuskTestDataSetup
                 ->assertSee('WebTheory')
                 ->assertSee('Pages')
                 ->assertSee('Categories')
-                ->assertSee('Gallery')
+                ->assertSee('Library')
                 ->assertSee('Users')
                 ->assertSee('Templates')
+                ->assertSee('Forms')
                 ->assertSee('Settings')
-                ->assertSee('Dashboard');
+                ->assertSee('METRICS')
+                ->assertSee('MOST POPULAR PAGES')
+                ->assertSee('TOP BROWSERS')
+                ->assertSee('TOP TRAFFIC SOURCES')
+                ->assertSee('RECENT COMMENTS')
+                ->assertSee('NEW MEMBERS')
+                ;
         });
     }
 }
