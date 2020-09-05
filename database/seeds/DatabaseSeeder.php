@@ -13,14 +13,14 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(ProductionTableSeeder::class);
+        $this->call(IncrementalSeeder::class);
 
         if (App::Environment() === 'local') {
             $this->call(LocalTableSeeder::class);
-            $this->call(PermissionsTableSeeder::class);
         }
 
         if (App::Environment() === 'testing') {
-            $this->call(PermissionsTableSeeder::class);
+            // 
         }
     }
 }

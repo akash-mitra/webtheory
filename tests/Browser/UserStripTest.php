@@ -45,16 +45,16 @@ class UserStripTest extends DuskTestDataSetup
 
             $response->driver->switchTo()->window(collect($browser->driver->getWindowHandles())->last());
             $browser
-                ->pause(1000)
+                // ->pause(1000)
                 ->assertPathIs('/app')
                 ->assertSee('WebTheory')
                 ->assertSee('Pages')
                 ->assertSee('Categories')
-                ->assertSee('Gallery')
+                ->assertSee('Library')
                 ->assertSee('Users')
                 ->assertSee('Templates')
-                ->assertSee('Settings')
-                ->assertSee('Dashboard');
+                ->assertSee('Forms')
+                ->assertSee('Settings');
         });
     }
 

@@ -119,7 +119,8 @@ class MediaTest extends TestDataSetup
     public function test_media_url_store()
     {
         $data = [
-            'url' => 'https://i.pravatar.cc/100?u=test@example.com',
+            // 'url' => 'https://i.pravatar.cc/100?u=test@example.com',
+            'url' => 'https://source.unsplash.com/100x100?profile',
         ];
 
         // Unauthenticated user cannot save media url

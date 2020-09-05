@@ -30,7 +30,8 @@ class FrontendTest extends DuskTestDataSetup
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/pages/' . $this->page->id)
-                ->assertSee($this->page->title);
+                ->assertSee($this->page->title)
+                ->pause(1000);
         });
         $this->assertDatabaseHas('views', ['content_type' => 'App\Page', 'content_id' => $this->page->id, 'browser' => 'HeadlessChrome']);
     }
@@ -44,7 +45,8 @@ class FrontendTest extends DuskTestDataSetup
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/categories/' . $this->category->id)
-                ->assertSee($this->category->name);
+                ->assertSee($this->category->name)
+                ->pause(1000);
         });
         $this->assertDatabaseHas('views', ['content_type' => 'App\Category', 'content_id' => $this->category->id, 'browser' => 'HeadlessChrome']);
     }
