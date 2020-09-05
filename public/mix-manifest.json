@@ -4,8 +4,8 @@
     "/js/comments.js": "/js/comments.js",
     "/js/frontend.js": "/js/frontend.js",
     "/js/profile.js": "/js/profile.js",
-    "/js/chunks/5.chunk.52cb60bfd0d1ce19b4e5.js": "/js/chunks/5.chunk.52cb60bfd0d1ce19b4e5.js",
-    "/js/chunks/6.chunk.66ee5158440f4bc5885d.js": "/js/chunks/6.chunk.66ee5158440f4bc5885d.js",
-    "/js/chunks/7.chunk.0a9c434c80781a4039ee.js": "/js/chunks/7.chunk.0a9c434c80781a4039ee.js",
-    "/js/chunks/8.chunk.b1fb6d1df3f4ed792fa4.js": "/js/chunks/8.chunk.b1fb6d1df3f4ed792fa4.js"
+    "/js/chunks/PageEditor.chunk.914b2a60efdaec7d3702.js": "/js/chunks/PageEditor.chunk.914b2a60efdaec7d3702.js",
+    "/js/chunks/TemplateFileEditor.chunk.3db367023342ed36d4fc.js": "/js/chunks/TemplateFileEditor.chunk.3db367023342ed36d4fc.js",
+    "/js/chunks/vendors~PageEditor.chunk.39d35d05c74cddc88740.js": "/js/chunks/vendors~PageEditor.chunk.39d35d05c74cddc88740.js",
+    "/js/chunks/vendors~TemplateFileEditor.chunk.b2e6b921d827c3d4d96f.js": "/js/chunks/vendors~TemplateFileEditor.chunk.b2e6b921d827c3d4d96f.js"
 }
