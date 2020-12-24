@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Validator;
+use App\Parameter;
+use App\Traits\BotScanner;
 
 class RegisterController extends Controller
 {
@@ -23,6 +25,7 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
+    use BotScanner;
 
     /**
      * Where to redirect users after registration.
@@ -65,6 +68,12 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         User::invalidateCache();
+
+        $service = json_decode(Parameter::getKey('captcha_service'));
+        if (! empty(optional($service)->secret_key)) {
+            $score = $this->preventBotSubmission();
+            // \Log::info($score);
+        }
 
         return User::create([
             'name' => $data['name'],
