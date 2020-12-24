@@ -1,45 +1,21 @@
 @push('styles')
 <style>
-    .kiwi {
-        background-color: #ffffff;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='44' viewBox='0 0 34 44'%3E%3Cg fill='%23ebf4ff' fill-opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M1 6.2C.72 5.55.38 4.94 0 4.36v13.28c.38-.58.72-1.2 1-1.84A12.04 12.04 0 0 0 7.2 22 12.04 12.04 0 0 0 1 28.2c-.28-.65-.62-1.26-1-1.84v13.28c.38-.58.72-1.2 1-1.84A12.04 12.04 0 0 0 7.2 44h21.6a12.05 12.05 0 0 0 5.2-4.36V26.36A12.05 12.05 0 0 0 28.8 22a12.05 12.05 0 0 0 5.2-4.36V4.36A12.05 12.05 0 0 0 28.8 0H7.2A12.04 12.04 0 0 0 1 6.2zM17.36 23H12a10 10 0 1 0 0 20h5.36a11.99 11.99 0 0 1 0-20zm1.28-2H24a10 10 0 1 0 0-20h-5.36a11.99 11.99 0 0 1 0 20zM12 1a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 14a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-3.46-2a2 2 0 1 0-3.47 2 2 2 0 0 0 3.47-2zm0-4a2 2 0 1 0-3.47-2 2 2 0 0 0 3.47 2zM12 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3.46 2a2 2 0 1 0 3.47-2 2 2 0 0 0-3.47 2zm0 4a2 2 0 1 0 3.47 2 2 2 0 0 0-3.47-2zM24 43a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-14a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3.46 2a2 2 0 1 0 3.47-2 2 2 0 0 0-3.47 2zm0 4a2 2 0 1 0 3.47 2 2 2 0 0 0-3.47-2zM24 37a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-3.46-2a2 2 0 1 0-3.47 2 2 2 0 0 0 3.47-2zm0-4a2 2 0 1 0-3.47-2 2 2 0 0 0 3.47 2z'/%3E%3C/g%3E%3C/svg%3E");
-    }
 
-    input:-webkit-autofill {
-    -webkit-box-shadow: inset 0 0 0px 9999px white;
-    }
+.kiwi {
+    background-color: #ffffff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='44' viewBox='0 0 34 44'%3E%3Cg fill='%23ebf4ff' fill-opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M1 6.2C.72 5.55.38 4.94 0 4.36v13.28c.38-.58.72-1.2 1-1.84A12.04 12.04 0 0 0 7.2 22 12.04 12.04 0 0 0 1 28.2c-.28-.65-.62-1.26-1-1.84v13.28c.38-.58.72-1.2 1-1.84A12.04 12.04 0 0 0 7.2 44h21.6a12.05 12.05 0 0 0 5.2-4.36V26.36A12.05 12.05 0 0 0 28.8 22a12.05 12.05 0 0 0 5.2-4.36V4.36A12.05 12.05 0 0 0 28.8 0H7.2A12.04 12.04 0 0 0 1 6.2zM17.36 23H12a10 10 0 1 0 0 20h5.36a11.99 11.99 0 0 1 0-20zm1.28-2H24a10 10 0 1 0 0-20h-5.36a11.99 11.99 0 0 1 0 20zM12 1a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 14a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-3.46-2a2 2 0 1 0-3.47 2 2 2 0 0 0 3.47-2zm0-4a2 2 0 1 0-3.47-2 2 2 0 0 0 3.47 2zM12 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3.46 2a2 2 0 1 0 3.47-2 2 2 0 0 0-3.47 2zm0 4a2 2 0 1 0 3.47 2 2 2 0 0 0-3.47-2zM24 43a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-14a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3.46 2a2 2 0 1 0 3.47-2 2 2 0 0 0-3.47 2zm0 4a2 2 0 1 0 3.47 2 2 2 0 0 0-3.47-2zM24 37a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-3.46-2a2 2 0 1 0-3.47 2 2 2 0 0 0 3.47-2zm0-4a2 2 0 1 0-3.47-2 2 2 0 0 0 3.47 2z'/%3E%3C/g%3E%3C/svg%3E");
+}
 
-    input:-webkit-autofill::first-line {
-        font-size: 0.875rem !important;
-    }
 
-    .grecaptcha-badge { visibility: hidden; }
+input:-webkit-autofill {
+  -webkit-box-shadow: inset 0 0 0px 9999px white;
+}
+
+input:-webkit-autofill::first-line {
+    font-size: 0.875rem !important;
+}
 </style>
 @endpush
-
-@php
-    $captcha_key = json_decode(\App\Parameter::getKey('captcha_service'));
-    $captcha_site_key = $captcha_key ? $captcha_key->site_key : "";
-@endphp
-
-@if($captcha_site_key != "")
-    @push('post-scripts')
-        <script src="https://www.google.com/recaptcha/api.js?render={{$captcha_site_key}}"></script>
-        <script>
-            function submit_register_form(e)
-            {
-                e.preventDefault();
-                grecaptcha.ready(function() {
-                    grecaptcha.execute("{{$captcha_site_key}}", {action: 'submit'}).then(function(token) {
-                        document.getElementById('wt_recaptcha_token').value = token
-                        document.getElementById('registerForm').submit()
-                    });
-                });
-
-            }
-        </script>
-    @endpush
-@endif
 
 <div class="overflow-auto"
     style="background-color: rgba(10,20,30, 0.8)"
@@ -66,7 +42,7 @@
 
             <div class="px-6 pt-6 pb-12 shadow-inner">
 
-                <form id="registerForm" action="/register" method="POST">
+                <form action="/register" method="POST">
                     @csrf
 
                     <input type="hidden" name="loginFormType" value="registration">
@@ -117,23 +93,10 @@
                         @endif
                     </div>
 
-                    <input type="hidden" name="wt_recaptcha_token" value="" id="wt_recaptcha_token">
-
-                    <div class="mt-4">
-                        @if($captcha_site_key != "")
-                            <div class="text-xs pb-4 text-gray-400">
-                                This site is protected by reCAPTCHA and the Google
-                                <a class="text-blue-600 underline" href="https://policies.google.com/privacy">Privacy Policy</a> and
-                                <a class="text-blue-600 underline" href="https://policies.google.com/terms">Terms of Service</a> apply.
-                            </div>
-                            <button onclick="submit_register_form(event)" type="button" class="w-full py-2 px-3 rounded border border-transparent rounded-md text-white font-semibold bg-{{$data->ref->template->primaryColor}}-600 hover:bg-{{$data->ref->template->primaryColor}}-700 focus:bg-{{$data->ref->template->primaryColor}}-900 focus:outline-none focus:shadow-outline sm:text-sm sm:leading-5">
-                                Sign Up
-                            </button>
-                        @else
-                            <button type="submit" class="w-full py-2 px-3 rounded border border-transparent rounded-md text-white font-semibold bg-{{$data->ref->template->primaryColor}}-600 hover:bg-{{$data->ref->template->primaryColor}}-700 focus:bg-{{$data->ref->template->primaryColor}}-900 focus:outline-none focus:shadow-outline sm:text-sm sm:leading-5">
-                                Sign Up
-                            </button>
-                        @endif
+                    <div class="mt-6">
+                        <button type="submit" class="w-full py-2 px-3 rounded border border-transparent rounded-md text-white font-semibold bg-{{$data->ref->template->primaryColor}}-600 hover:bg-{{$data->ref->template->primaryColor}}-700 focus:bg-{{$data->ref->template->primaryColor}}-900 focus:outline-none focus:shadow-outline sm:text-sm sm:leading-5">
+                        Sign Up
+                        </button>
                     </div>
                 </form>
             </div>
@@ -199,7 +162,8 @@
 
                     <div class="mt-6">
                         <button type="submit" class="w-full rounded py-2 px-3 border border-transparent rounded-md text-white font-semibold bg-{{$data->ref->template->primaryColor}}-600 hover:bg-{{$data->ref->template->primaryColor}}-700 focus:bg-{{$data->ref->template->primaryColor}}-900 focus:outline-none focus:shadow-outline sm:text-sm sm:leading-5">
-                            Log in
+                        Log in
+
                         </button>
                     </div>
                 </form>
