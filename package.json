@@ -22,7 +22,7 @@
         "@fullhuman/postcss-purgecss": "^2.3.0",
         "@saurav.mitra/editor-table": "1.0.5",
         "@vue/test-utils": "^1.0.4",
-        "axios": "^0.19.2",
+        "axios": "^0.21.1",
         "cross-env": "^7.0.2",
         "css-loader": "^3.6.0",
         "frappe-charts": "^1.5.2",
