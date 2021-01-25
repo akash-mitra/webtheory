@@ -71,6 +71,11 @@ class Page extends Model
         return $this->comments()->whereNull('parent_id');
     }
 
+    public function menu()
+    {
+        return $this->belongsTo('App\Menu', 'menuable');
+    }
+    
     public function getUrlAttribute()
     {
         return url('pages/' . $this->id . '/' . Str::slug($this->title));
