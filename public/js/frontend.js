@@ -13424,7 +13424,7 @@ window.Vue = vue__WEBPACK_IMPORTED_MODULE_0___default.a;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/akash/code/webtheory/resources/js/frontend.js */"./resources/js/frontend.js");
+module.exports = __webpack_require__(/*! /Users/akashmitra/code/webtheory/resources/js/frontend.js */"./resources/js/frontend.js");
 
 
 /***/ })

@@ -16,7 +16,7 @@
                     <line x1="3" y1="9" x2="21" y2="9"></line>
                     <line x1="9" y1="21" x2="9" y2="9"></line>
                 </svg>
-                Templates
+                Design
             </h2>
             <div class="flex items-center">
                 <FileUploader></FileUploader>
@@ -31,23 +31,38 @@
         </div>
 
         <div class="px-6 w-full flex justify-between items-center my-8 border-b">
-            <div class="flex justify-start">
-                <div
-                    id="template-installed-tab"
-                    @click="tab = 'installed'"
-                    class="-ml-4 px-4 text-sm tracking-wide uppercase cursor-pointer"
-                    :class="
-                        tab === 'installed'
-                            ? 'text-gray-700 py-2 border-b-4 border-blue-500'
-                            : 'text-gray-500 py-2'
-                    "
-                >
-                    Installed
-                    <span class="ml-3 rounded-lg py-1 px-2 shadow-inner text-xs bg-gray-300">{{
-                        templates.installed.length
-                    }}</span>
-                </div>
+            <div class="w-full flex justify-between">
+                <div class="flex justify-start">
+                    <div
+                        id="menu-builder-tab"
+                        @click="tab = 'menu'"
+                        class="-ml-4 px-4 text-sm tracking-wide uppercase cursor-pointer"
+                        :class="
+                            tab === 'menu'
+                                ? 'text-gray-700 py-2 border-b-4 border-blue-500'
+                                : 'text-gray-500 py-2'
+                        "
+                    >
+                        Menu
+                    </div>
 
+                    <div
+                        id="template-installed-tab"
+                        @click="tab = 'installed'"
+                        class="px-4 text-sm tracking-wide uppercase cursor-pointer"
+                        :class="
+                            tab === 'installed'
+                                ? 'text-gray-700 py-2 border-b-4 border-blue-500'
+                                : 'text-gray-500 py-2'
+                        "
+                    >
+                        Templates
+                        <span
+                            class="ml-3 rounded-lg py-1 px-2 shadow-inner text-xs bg-gray-300"
+                            >{{ templates.installed.length }}</span
+                        >
+                    </div>
+                </div>
                 <div
                     id="template-available-tab"
                     @click="tab = 'available'"
@@ -58,10 +73,11 @@
                             : 'text-gray-500 py-2'
                     "
                 >
-                    Available
-                    <span class="ml-3 rounded-lg py-1 px-2 shadow-inner text-xs bg-gray-300">{{
-                        templates.available.length
-                    }}</span>
+                    Gallery
+                    <span
+                        class="ml-3 rounded-lg py-1 px-2 shadow-inner text-xs bg-gray-300"
+                        >{{ templates.available.length }}</span
+                    >
                 </div>
             </div>
         </div>

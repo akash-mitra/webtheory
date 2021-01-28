@@ -101,6 +101,7 @@
                         id="mailHost"
                         v-model="mailHost"
                         ref="mailHost"
+                        placeholder="smtp.gmail.com"
                         class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none"
                     />
                 </div>
@@ -113,6 +114,7 @@
                         id="mailPort"
                         v-model="mailPort"
                         ref="mailPort"
+                        placeholder="465"
                         class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none"
                     />
                 </div>
@@ -369,7 +371,7 @@ export default {
             this.sesSecret = response['AWS_SECRET_ACCESS_KEY']
             this.sesRegion = response['AWS_DEFAULT_REGION']
 
-            if (response['MAIL_DRIVER'] != '') {
+            if (response['MAIL_DRIVER'] !== '') {
                 this.mailSaved = true
             }
 
