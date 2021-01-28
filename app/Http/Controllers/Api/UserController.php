@@ -193,6 +193,27 @@ class UserController extends Controller
     }
 
     /**
+     * Remove Ban from user.
+     *
+     * @param  User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($id, Request $request)
+    {
+        $user = User::withTrashed()->findOrFail($id);
+        
+        $user->restore();
+        
+        return response()->json(
+            [
+                'status' => 'success',
+                'operation' => 'Unban',
+                'user' => $user,
+            ]
+        );
+    }
+
+    /**
      * Change the password of Auth user.
      *
      * @param  \Illuminate\Http\Request  $request

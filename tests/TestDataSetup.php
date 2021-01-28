@@ -289,6 +289,19 @@ class TestDataSetup extends TestCase
             'updated_at',
         ];
 
+        $this->menu_attributes = [
+            'id',
+            'title',
+            'alias',
+            'parent_id',
+            'sequence_num',
+            'menuable_id',
+            'menuable_type',
+            'home',
+            'created_at',
+            'updated_at',
+        ];
+
         $this->category_attributes_list = array_merge($this->category_attributes, [
             'media',
             'author' => $this->user_attributes,
@@ -401,5 +414,9 @@ class TestDataSetup extends TestCase
             'created_at',
             'updated_at',
         ];
+
+        $this->menu_attributes_list = array_merge($this->menu_attributes, [
+            'menuable' => $this->category_attributes,
+        ]);
     }
 }

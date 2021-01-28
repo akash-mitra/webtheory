@@ -177,6 +177,7 @@ Route::prefix('api')
         Route::post('users', 'Api\UserController@store')->name('users.store');
         Route::put('users/{user}', 'Api\UserController@update')->name('users.update');
         Route::delete('users/{id}', 'Api\UserController@destroy')->name('users.destroy');
+        Route::put('users/{id}/restore', 'Api\UserController@restore')->name('users.restore');
         Route::patch('users/password', 'Api\UserController@changePassword')->name(
             'users.changepassword'
         );
@@ -311,6 +312,15 @@ Route::prefix('api')
             'dashboard.country'
         );
         Route::get('dashboard/city', 'Api\DashboardController@city')->name('dashboard.city');
+
+        // --------------------------------------------------------------------------------------------------------------------------
+        // Menus API
+        // --------------------------------------------------------------------------------------------------------------------------
+        Route::get('menus', 'Api\MenuController@index')->name('menus.index');
+        Route::get('menus/{menu}', 'Api\MenuController@show')->name('menus.show');
+        Route::post('menus', 'Api\MenuController@store')->name('menus.store');
+        Route::put('menus/{menu}', 'Api\MenuController@update')->name('menus.update');
+        Route::delete('menus/{menu}', 'Api\MenuController@destroy')->name('menus.destroy');
     });
 
 // This is a catchall route.
