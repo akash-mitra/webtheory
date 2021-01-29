@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Menu;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MenuRequest;
+use Illuminate\Http\JsonResponse;
 
 class MenuController extends Controller
 {
@@ -21,9 +22,9 @@ class MenuController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         return response()->json(Menu::with('menuable')->get());
     }
@@ -31,21 +32,21 @@ class MenuController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param MenuRequest $request
+     * @return JsonResponse
      */
-    public function store(MenuRequest $request)
+    public function store(MenuRequest $request): JsonResponse
     {
         Menu::invalidateCache();
 
         $menu = new Menu([
-            'title' => $request->title,
-            'alias' => $request->alias,
-            'parent_id' => $request->parent_id,
-            'sequence_num' => $request->sequence_num,
-            'menuable_id' => $request->menuable_id,
-            'menuable_type' => $request->menuable_type == 'pages' ? 'App\Page' : 'App\Category',
-            'home' => $request->home,
+            'title' => $request->input('title'),
+            'alias' => $request->input('alias'),
+            'parent_id' => $request->input('parent_id'),
+            'sequence_num' => $request->input('sequence_num'),
+            'menuable_id' => $request->input('menuable_id'),
+            'menuable_type' => $request->input('menuable_type'),
+            'home' => $request->input('home'),
         ]);
         $menu->save();
 
@@ -55,10 +56,10 @@ class MenuController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Menu  $menu
-     * @return \Illuminate\Http\Response
+     * @param Menu $menu
+     * @return JsonResponse
      */
-    public function show(Menu $menu)
+    public function show(Menu $menu): JsonResponse
     {
         $menu->load('menuable');
         return response()->json($menu);
@@ -67,16 +68,16 @@ class MenuController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Menu  $menu
-     * @return \Illuminate\Http\Response
+     * @param MenuRequest $request
+     * @param Menu $menu
+     * @return JsonResponse
      */
-    public function update(MenuRequest $request, Menu $menu)
+    public function update(MenuRequest $request, Menu $menu): JsonResponse
     {
         Menu::invalidateCache();
 
         $menu
-            ->fill(request(['title', 'alias', 'parent_id', 'sequence_num', 'home']))
+            ->fill($request->only(['title', 'alias', 'parent_id', 'sequence_num', 'menuable_id', 'menuable_type', 'home']))
             ->save();
 
         return response()->json($menu);
@@ -85,10 +86,11 @@ class MenuController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Menu  $menu
-     * @return \Illuminate\Http\Response
+     * @param Menu $menu
+     * @return JsonResponse
+     * @throws \Exception
      */
-    public function destroy(Menu $menu)
+    public function destroy(Menu $menu): JsonResponse
     {
         if ($menu->hasContent()) {
             return response()->json(

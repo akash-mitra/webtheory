@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use Tests\TestDataSetup;
 use App\Menu;
-use App\Category;
-use App\Page;
 
 class MenuTest extends TestDataSetup
 {

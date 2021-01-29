@@ -14,6 +14,9 @@
 /*
 | AUTHENTICATION RELATED ROUTES
 */
+
+use App\Http\Controllers\Api\MenuController;
+
 Route::post('register', 'Auth\RegisterController@register')->name('register');
 Route::get('email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->name(
     'verification.verify'
@@ -316,11 +319,11 @@ Route::prefix('api')
         // --------------------------------------------------------------------------------------------------------------------------
         // Menus API
         // --------------------------------------------------------------------------------------------------------------------------
-        Route::get('menus', 'Api\MenuController@index')->name('menus.index');
-        Route::get('menus/{menu}', 'Api\MenuController@show')->name('menus.show');
-        Route::post('menus', 'Api\MenuController@store')->name('menus.store');
-        Route::put('menus/{menu}', 'Api\MenuController@update')->name('menus.update');
-        Route::delete('menus/{menu}', 'Api\MenuController@destroy')->name('menus.destroy');
+        Route::get('menus', [MenuController::class, 'index'])->name('menus.index');
+        Route::get('menus/{menu}', [MenuController::class, 'show'])->name('menus.show');
+        Route::post('menus', [MenuController::class, 'store'])->name('menus.store');
+        Route::put('menus/{menu}', [MenuController::class, 'update'])->name('menus.update');
+        Route::delete('menus/{menu}', [MenuController::class, 'destroy'])->name('menus.destroy');
     });
 
 // This is a catchall route.

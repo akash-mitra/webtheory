@@ -25,10 +25,10 @@ class LocalTableSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
 
-        $vistors = [];
+        $visitors = [];
         for ($i = 0; $i < 150; $i++) {
             array_push(
-                $vistors,
+                $visitors,
                 factory(View::class)->make([
                     'country' => $faker->randomElement([
                         'Russia',
@@ -216,9 +216,9 @@ class LocalTableSeeder extends Seeder
                         }
 
                         for ($l = 0; $l < mt_rand(2, 7); $l++) {
-                            $listitem = $faker->catchPhrase();
-                            $body_json .= '"' . str_replace('"', '\"', $listitem) . '",';
-                            $body_html .= '<li>' . $listitem . '</li>';
+                            $listItem = $faker->catchPhrase();
+                            $body_json .= '"' . str_replace('"', '\"', $listItem) . '",';
+                            $body_html .= '<li>' . $listItem . '</li>';
                         }
 
                         $body_json = rtrim($body_json, ',') . ']}},';
@@ -326,7 +326,7 @@ class LocalTableSeeder extends Seeder
                             $media->url .
                             '" alt="' .
                             $caption .
-                            '"></img><figcaption class="text-sm mt-3 img-fig-caption' .
+                            '"/><figcaption class="text-sm mt-3 img-fig-caption' .
                             ($stretched || $withBackground ? ' text-center' : '') .
                             '">' .
                             $caption .
@@ -337,7 +337,7 @@ class LocalTableSeeder extends Seeder
                 $body_json = rtrim($body_json, ',') . '],"version":"2.18.0"}';
 
                 // Page Contents
-                $pageContent = factory(PageContent::class)->create([
+                factory(PageContent::class)->create([
                     'page_id' => $page->id,
                     'body_json' => json_decode($body_json),
                     'body_html' => $body_html,
@@ -353,7 +353,7 @@ class LocalTableSeeder extends Seeder
         $tempUserIds = array_slice($tempUserIds, 3);
         foreach ($categoryIds as $categoryId) {
             foreach ($tempUserIds as $userId) {
-                $categoryComments = factory(CategoryComment::class, mt_rand(0, 1))->create([
+                factory(CategoryComment::class, mt_rand(0, 1))->create([
                     'reference_id' => $categoryId,
                     'user_id' => $userId,
                 ]);
@@ -367,7 +367,7 @@ class LocalTableSeeder extends Seeder
         $tempUserIds = array_slice($tempUserIds, 3);
         foreach ($pageIds as $pageId) {
             foreach ($tempUserIds as $userId) {
-                $pageComments = factory(PageComment::class, mt_rand(0, 1))->create([
+                factory(PageComment::class, mt_rand(0, 1))->create([
                     'reference_id' => $pageId,
                     'user_id' => $userId,
                 ]);
@@ -386,7 +386,7 @@ class LocalTableSeeder extends Seeder
         ) {
             // User Loop
             for ($i = 0; $i < mt_rand(10, 20); $i++) {
-                $view = $faker->randomElement($vistors);
+                $view = $faker->randomElement($visitors);
 
                 // Skip some Pages
                 shuffle($pageIds);
@@ -395,7 +395,7 @@ class LocalTableSeeder extends Seeder
                 // Pages Loop
                 foreach ($pages as $page) {
                     $viewed_at = $view_date->addSeconds(mt_rand(0, 120));
-                    $pageView = factory(View::class)->create([
+                    factory(View::class)->create([
                         'ip' => $view->ip,
                         'at' => $viewed_at,
                         'date_key' => $viewed_at->format('Ymd'),

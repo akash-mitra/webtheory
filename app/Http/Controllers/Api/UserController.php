@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Traits\SearchQueryFilter;
 use App\User;
 use App\Category;
 use App\Page;
+use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    use SearchQueryFilter;
     /**
      * Create a new controller instance.
      *
@@ -28,9 +32,10 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return LengthAwarePaginator
      */
-    public function index(Request $request)
+    public function index(Request $request): LengthAwarePaginator
     {
         $usersQuery = User::query();
 
@@ -39,8 +44,10 @@ class UserController extends Controller
 
     /**
      * Get list of users who are banned (soft deleted).
+     * @param Request $request
+     * @return LengthAwarePaginator
      */
-    public function banned(Request $request)
+    public function banned(Request $request): LengthAwarePaginator
     {
         $usersQuery = User::query();
 
@@ -51,8 +58,10 @@ class UserController extends Controller
 
     /**
      * Get list of users with unverified email addresses.
+     * @param Request $request
+     * @return LengthAwarePaginator
      */
-    public function unverified(Request $request)
+    public function unverified(Request $request): LengthAwarePaginator
     {
         $usersQuery = User::query();
 
@@ -62,12 +71,16 @@ class UserController extends Controller
     }
 
     /**
+     *
      * Perform query to the User model with additional
      * conditions for LIKE matches with query string.
+     * @param $queryBuilder
+     * @param $request
+     * @return LengthAwarePaginator
      */
-    private function queryUsers($queryBuilder, $request)
+    private function queryUsers($queryBuilder, $request): LengthAwarePaginator
     {
-        $queryBuilder = $this->filterByQueryString(
+        $queryBuilder = $this->applyQueryFilter(
             $queryBuilder,
             ['name', 'email', 'role'],
             $request->input('query')
@@ -81,51 +94,19 @@ class UserController extends Controller
     }
 
     /**
-     * Enhances a query builder with additional conditions for
-     * matching the query string with the list of columns.
-     */
-    private function filterByQueryString(Builder $queryBuilder, array $cols, $queryString)
-    {
-        if (!empty($queryString)) {
-            $keywords = explode(' ', $queryString);
-
-            $queryBuilder->where(function ($builder) use ($keywords, $cols) {
-                foreach ($keywords as $keyword) {
-                    if (!empty($keyword)) {
-                        foreach ($cols as $col) {
-                            if (Str::contains($col, '.')) {
-                                $relation = explode('.', $col);
-                                $builder->orWhereHas($relation[0], function (Builder $query) use (
-                                    $relation,
-                                    $keyword
-                                ) {
-                                    $query->where($relation[1], 'like', '%' . $keyword . '%');
-                                });
-                            } else {
-                                $builder->orWhere($col, 'like', '%' . $keyword . '%');
-                            }
-                        }
-                    }
-                }
-            });
-        }
-        return $queryBuilder;
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param UserRequest $request
+     * @return JsonResponse
      */
-    public function store(UserRequest $request)
+    public function store(UserRequest $request): JsonResponse
     {
         User::invalidateCache();
 
         $user = new User([
-            'name' => $request->name,
-            'email' => $request->email,
-            'role' => $request->role,
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'role' => $request->input('role'),
             'preferences' => ['broadcast', 'database', 'mail'],
             'public_id' => Str::random(30),
         ]);
@@ -139,9 +120,9 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param  User  $user
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function show(User $user)
+    public function show(User $user): JsonResponse
     {
         return response()->json($user);
     }
@@ -149,13 +130,13 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  User  $user
-     * @return \Illuminate\Http\Response
+     * @param UserRequest $request
+     * @param User $user
+     * @return JsonResponse
      */
-    public function update(UserRequest $request, User $user)
+    public function update(UserRequest $request, User $user): JsonResponse
     {
-        $user->fill(request(['name', 'email', 'role', 'about_me']))->save();
+        $user->fill($request->only(['name', 'email', 'role', 'about_me']))->save();
 
         return response()->json($user);
     }
@@ -163,10 +144,12 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  User  $user
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
      */
-    public function destroy($id, Request $request)
+    public function destroy($id, Request $request): JsonResponse
     {
         $user = User::withTrashed()->findOrFail($id);
 
@@ -174,7 +157,7 @@ class UserController extends Controller
             'forceDelete' => 'sometimes|boolean',
         ]);
 
-        if ($request->has('forceDelete') && $request->forceDelete === true) {
+        if ($request->has('forceDelete') && $request->input('forceDelete') === true) {
             $user->forceDelete();
 
             //todo - should we change the ownership of user's resources?
@@ -195,15 +178,15 @@ class UserController extends Controller
     /**
      * Remove Ban from user.
      *
-     * @param  User  $user
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return JsonResponse
      */
-    public function restore($id, Request $request)
+    public function restore($id): JsonResponse
     {
         $user = User::withTrashed()->findOrFail($id);
-        
+
         $user->restore();
-        
+
         return response()->json(
             [
                 'status' => 'success',
@@ -216,10 +199,10 @@ class UserController extends Controller
     /**
      * Change the password of Auth user.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
-    public function changePassword(Request $request)
+    public function changePassword(Request $request): Response
     {
         $request->validate([
             'current_password' => ['required', 'min:8', 'max:255'],
@@ -229,7 +212,7 @@ class UserController extends Controller
         $user = auth()->user();
 
         // make sure user current password is correct
-        if (!Hash::check($request->current_password, $user->password)) {
+        if (!Hash::check($request->input('current_password'), $user->password)) {
             return response(
                 [
                     'status' => 'failure',
@@ -239,7 +222,7 @@ class UserController extends Controller
             );
         }
 
-        $user->password = Hash::make($request->new_password);
+        $user->password = Hash::make($request->input('new_password'));
 
         $user->save();
 
@@ -249,7 +232,11 @@ class UserController extends Controller
         ]);
     }
 
-    public function pages(User $user)
+    /**
+     * @param User $user
+     * @return LengthAwarePaginator
+     */
+    public function pages(User $user): LengthAwarePaginator
     {
         return $user
             ->pages()
@@ -258,20 +245,24 @@ class UserController extends Controller
             ->paginate(10);
     }
 
-    public function comments(User $user)
+    /**
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function comments(User $user): JsonResponse
     {
-        $categorycomments = Category::with('comments')
+        $categoryComments = Category::with('comments')
             ->whereHas('comments', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             })
             ->paginate(10);
 
-        $pagecomments = Page::with('comments')
+        $pageComments = Page::with('comments')
             ->whereHas('comments', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             })
             ->paginate(10);
 
-        return response()->json(['categories' => $categorycomments, 'pages' => $pagecomments]);
+        return response()->json(['categories' => $categoryComments, 'pages' => $pageComments]);
     }
 }
