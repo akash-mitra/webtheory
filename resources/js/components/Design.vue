@@ -16,9 +16,9 @@
                     <line x1="3" y1="9" x2="21" y2="9"></line>
                     <line x1="9" y1="21" x2="9" y2="9"></line>
                 </svg>
-                Design
+                Site Design
             </h2>
-            <div class="flex items-center">
+            <div class="flex items-center" v-show="tab === 'installed'">
                 <FileUploader></FileUploader>
 
                 <a
@@ -80,6 +80,11 @@
                     >
                 </div>
             </div>
+        </div>
+
+        <div class="sm:flex sm:flex-wrap" v-show="tab === 'menu'">
+
+            <MenuBuilder></MenuBuilder>
         </div>
 
         <div class="sm:flex sm:flex-wrap" v-show="tab === 'installed'">
@@ -238,6 +243,7 @@
 
 <script>
 import FileUploader from './FileUploader.vue'
+import MenuBuilder from './MenuBuilder.vue'
 
 export default {
     data() {
@@ -249,7 +255,7 @@ export default {
             isSaving: false,
 
             selected: null,
-            tab: 'installed',
+            tab: 'menu',
             searchPhrase: '',
             isLoading: true,
             templateUploadModal: true,
@@ -258,6 +264,7 @@ export default {
 
     components: {
         FileUploader,
+        MenuBuilder
     },
 
     created() {
