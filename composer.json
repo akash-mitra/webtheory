@@ -27,7 +27,8 @@
         "league/flysystem-aws-s3-v3": "^1.0",
         "predis/predis": "^1.1",
         "scrivo/highlight.php": "^9.18",
-        "wildbit/swiftmailer-postmark": "^3.1"
+        "wildbit/swiftmailer-postmark": "^3.1",
+        "ext-json": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.7",

@@ -189,6 +189,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\DynamicMailServiceProvider::class,
         App\Providers\BladeExtensionServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
     ],
 
     /*

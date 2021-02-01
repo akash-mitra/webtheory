@@ -2,22 +2,25 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Traits\SearchQueryFilter;
 use DB;
 use App\Page;
 use App\PageContent;
 use App\Parameter;
-use Illuminate\Support\Str;
+use Exception;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\PageRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Converters\ContentsConverter;
 use App\Http\Requests\PageStatusRequest;
-use Illuminate\Database\Eloquent\Builder;
-use stdClass;
+use Throwable;
 
 class PageController extends Controller
 {
+    use SearchQueryFilter;
+
     /**
      * Create a new controller instance.
      *
@@ -34,41 +37,46 @@ class PageController extends Controller
         }
     }
 
-    public function index(Request $request)
+    /**
+     * Display a listing of the pages, filtered by the given search query.
+     *
+     * @param Request $request
+     * @return LengthAwarePaginator
+     */
+    public function index(Request $request): LengthAwarePaginator
     {
-        $pagesQuery = Page::query()->with('category', 'author', 'media');
+        $queryBuilder = Page::query()->with('category', 'author', 'media');
 
         if ($request->input('type') === 'draft') {
-            $pagesQuery->where('status', 'Draft');
+            $queryBuilder->where('status', 'Draft');
         }
-
-        return $this->queryPages($pagesQuery, $request);
-    }
-
-    private function queryPages($queryBuilder, $request)
-    {
-        $queryBuilder = $this->filterByQueryString(
-            $queryBuilder,
-            ['title', 'summary', 'category.name', 'author.name'],
-            $request->input('query')
-        );
 
         if ($request->user()->isAdmin()) {
             $queryBuilder->withTrashed();
         }
 
-        return $queryBuilder->latest()->paginate(10);
+        return $this->filterByKeywords($queryBuilder, $request->input('query'));
+    }
+
+    private function filterByKeywords($queryBuilder, $keywords): LengthAwarePaginator
+    {
+        return $this->applyQueryFilter(
+            $queryBuilder,
+            ['title', 'summary', 'category.name', 'author.name'],
+            $keywords
+        )->latest()->paginate(10);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param PageRequest $request
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function store(PageRequest $request)
+    public function store(PageRequest $request): JsonResponse
     {
-        $page = (object) [];
+        $page = (object)[];
 
         Page::invalidateCache();
 
@@ -95,18 +103,16 @@ class PageController extends Controller
 
         $page->load('contents');
 
-        //dump($page);
-
         return response()->json($page);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Page  $page
-     * @return \Illuminate\Http\Response
+     * @param Page $page
+     * @return JsonResponse
      */
-    public function show(Page $page)
+    public function show(Page $page): JsonResponse
     {
         $page->load('contents', 'category', 'author', 'media');
 
@@ -116,11 +122,12 @@ class PageController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Page  $page
-     * @return \Illuminate\Http\Response
+     * @param PageRequest $request
+     * @param Page $page
+     * @return JsonResponse
+     * @throws Throwable
      */
-    public function update(PageRequest $request, Page $page)
+    public function update(PageRequest $request, Page $page): JsonResponse
     {
         Page::invalidateCache();
 
@@ -154,11 +161,11 @@ class PageController extends Controller
     /**
      * Update the page status.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Page  $page
-     * @return \Illuminate\Http\Response
+     * @param PageStatusRequest $request
+     * @param Page $page
+     * @return JsonResponse
      */
-    public function updateStatus(PageStatusRequest $request, Page $page)
+    public function updateStatus(PageStatusRequest $request, Page $page): JsonResponse
     {
         Page::invalidateCache();
 
@@ -174,15 +181,15 @@ class PageController extends Controller
     /**
      * Update the page owner.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Page  $page
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Page $page
+     * @return JsonResponse
      */
-    public function updateOwner(Request $request, Page $page)
+    public function updateOwner(Request $request, Page $page): JsonResponse
     {
         Page::invalidateCache();
 
-        $page->fill(request(['user_id']))->save();
+        $page->fill($request->only(['user_id']))->save();
 
         return response()->json($page->load('author'));
     }
@@ -190,10 +197,11 @@ class PageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Page  $page
-     * @return \Illuminate\Http\Response
+     * @param Page $page
+     * @return JsonResponse
+     * @throws Exception
      */
-    public function destroy(Page $page)
+    public function destroy(Page $page): JsonResponse
     {
         Page::invalidateCache();
 
@@ -205,10 +213,11 @@ class PageController extends Controller
     /**
      * Remove the specified page content from storage.
      *
-     * @param  Page  $page
-     * @return \Illuminate\Http\Response
+     * @param PageContent $pageContent
+     * @return JsonResponse
+     * @throws Exception
      */
-    public function destroyContent(PageContent $pageContent)
+    public function destroyContent(PageContent $pageContent): JsonResponse
     {
         Page::invalidateCache();
 
@@ -217,39 +226,14 @@ class PageController extends Controller
         return response()->json('success', 204);
     }
 
+
     /**
-     * Enhances a query builder with additional conditions for
-     * matching the query string with the list of columns.
+     * Laravel Scout search.
+     *
+     * @param Request $request
+     * @return LengthAwarePaginator
      */
-    private function filterByQueryString(Builder $queryBuilder, array $cols, $queryString)
-    {
-        if (!empty($queryString)) {
-            $keywords = explode(' ', $queryString);
-
-            $queryBuilder->where(function ($builder) use ($keywords, $cols) {
-                foreach ($keywords as $keyword) {
-                    if (!empty($keyword)) {
-                        foreach ($cols as $col) {
-                            if (Str::contains($col, '.')) {
-                                $relation = explode('.', $col);
-                                $builder->orWhereHas($relation[0], function (Builder $query) use (
-                                    $relation,
-                                    $keyword
-                                ) {
-                                    $query->where($relation[1], 'like', '%' . $keyword . '%');
-                                });
-                            } else {
-                                $builder->orWhere($col, 'like', '%' . $keyword . '%');
-                            }
-                        }
-                    }
-                }
-            });
-        }
-        return $queryBuilder;
-    }
-
-    public function search(Request $request)
+    public function search(Request $request): LengthAwarePaginator
     {
         return Page::search($request->get('query'))->paginate(10);
     }

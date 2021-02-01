@@ -70,8 +70,8 @@
                         </router-link>
 
 
-                        <router-link v-if="authUser.role == 'admin'" class="block tracking-wide outline-none border-t md:border-none text-sm py-3 px-6 md:px-0" active-class="font-bold text-blue-700" id="nav-menu-5" to="/app/templates">
-                            Templates
+                        <router-link v-if="authUser.role == 'admin'" class="block tracking-wide outline-none border-t md:border-none text-sm py-3 px-6 md:px-0" active-class="font-bold text-blue-700" id="nav-menu-5" to="/app/design">
+                            Design
                         </router-link>
 
                         <router-link v-if="authUser.role == 'admin'" class="block tracking-wide outline-none border-t md:border-none text-sm py-3 px-6 md:px-0" active-class="font-bold text-blue-700" id="nav-menu-6" to="/app/forms">
