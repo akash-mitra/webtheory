@@ -7,6 +7,8 @@ use App\User;
 use App\Media;
 use App\Category;
 use App\PageContent;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Notification;
@@ -17,6 +19,31 @@ use Illuminate\Support\Facades\Event;
 class DuskTestDataSetup extends DuskTestCase
 {
     use DatabaseMigrations;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $adminUser;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $authorUser1;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $authorUser2;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $registeredUser;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $user;
 
     public function setUp(): void
     {

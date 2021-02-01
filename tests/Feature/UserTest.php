@@ -192,6 +192,26 @@ class UserTest extends TestDataSetup
         $this->assertSoftDeleted('users', ['name' => $user->name]);
     }
 
+    /* User Restore */
+    public function test_user_restore()
+    {
+        $user = factory(User::class)->create(['role' => 'author']);
+        $user->delete();
+
+        // Unauthenticated user cannot restore user
+        $response = $this->put('/api/users/' . $user->id . '/restore', [], ['Accept' => 'application/json']);
+        $response->assertStatus(401)->assertJson(['message' => 'Unauthenticated.']);
+
+        /* Authenticated user can restore user */
+        $response = $this->actingAs($this->adminUser)->put(
+            '/api/users/' . $user->id . '/restore',
+            [],
+            ['Accept' => 'application/json']
+        );
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('users', ['name' => $user->name, 'deleted_at' => null]);
+    }
+
     /* Auth User can change password */
     public function test_user_can_change_password()
     {

@@ -84,7 +84,7 @@ export default {
 
     created: function () {
         document.addEventListener('keydown', (e) => {
-            if (this.show && e.keyCode == 27) {
+            if (this.show && (e.key === 'Escape' || e.key === 'Esc')) {
                 this.closeModal()
             }
         })

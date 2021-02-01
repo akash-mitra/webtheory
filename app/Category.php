@@ -68,6 +68,11 @@ class Category extends Model
         return $this->comments()->whereNull('parent_id');
     }
 
+    public function menus()
+    {
+        return $this->morphMany(Menu::class, 'menuable');
+    }
+
     public function getUrlAttribute()
     {
         return url('categories/' . $this->id . '/' . Str::slug($this->name));
