@@ -3,7 +3,7 @@
         <div class="cursor-pointer text-blue-500 underline" @click="itemBrowserVisible=true">
             {{ contentTitle || 'change' }}
         </div>
-        <tensor-modal :show="itemBrowserVisible" @close="itemBrowserVisible=false" :show-footer="false">
+        <t-modal :show="itemBrowserVisible" @close="itemBrowserVisible=false" :show-footer="false">
             <template v-slot:header>
                 <div class="w-full px-6 py-4 text-2xl border-b1">Search {{contentType}}</div>
             </template>
@@ -46,15 +46,11 @@
 
             </div>
 
-        </tensor-modal>
+        </t-modal>
     </div>
 </template>
 <script>
-import TensorModal from "../ui/TensorModal"
 export default {
-    components: {
-        TensorModal
-    },
     props: {
         contentType: {
             type: String

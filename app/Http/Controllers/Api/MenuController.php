@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Menu;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MenuRequest;
+use Exception;
 use Illuminate\Http\JsonResponse;
 
 class MenuController extends Controller
@@ -26,7 +27,7 @@ class MenuController extends Controller
      */
     public function index(): JsonResponse
     {
-        return response()->json(Menu::with('menuable')->get());
+        return response()->json(Menu::with('menuable')->orderBy('sequence_num')->get());
     }
 
     /**
@@ -88,7 +89,7 @@ class MenuController extends Controller
      *
      * @param Menu $menu
      * @return JsonResponse
-     * @throws \Exception
+     * @throws Exception
      */
     public function destroy(Menu $menu): JsonResponse
     {

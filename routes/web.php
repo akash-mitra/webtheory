@@ -16,6 +16,7 @@
 */
 
 use App\Http\Controllers\Api\MenuController;
+use App\Http\Controllers\HomeController;
 
 Route::post('register', 'Auth\RegisterController@register')->name('register');
 Route::get('email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->name(
@@ -51,11 +52,11 @@ Route::get('social/login/{provider}/callback', 'Auth\SocialLoginController@callb
 /*
 | FRONT-END RELATED ROUTES
 */
-Route::get('/', 'HomeController@root')->name('home');
-Route::get('blog', 'HomeController@blog')->name('blog');
-Route::get('pages/{page}/{slug?}', 'HomeController@single')->name('pages');
-Route::get('categories/{category}/{slug?}', 'HomeController@category')->name('categories');
-Route::get('profiles/{public_id}', 'HomeController@profile')->name('profile.show');
+Route::get('/', [HomeController::class, 'root'])->name('home');
+Route::get('blog', [HomeController::class, 'blog'])->name('blog');
+Route::get('pages/{page}/{slug?}', [HomeController::class, 'single'])->name('pages');
+Route::get('categories/{category}/{slug?}', [HomeController::class, 'category'])->name('categories');
+Route::get('profiles/{public_id}', [HomeController::class, 'profile'])->name('profile.show');
 
 /*
 | FRONT-END RELATED FIXED ROUTES

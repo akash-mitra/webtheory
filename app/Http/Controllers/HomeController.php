@@ -2,49 +2,68 @@
 
 namespace App\Http\Controllers;
 
+use App\Menu;
 use App\Page;
 use App\User;
 use App\Parameter;
 use App\DataProvider;
 use App\Jobs\CaptureViewEvent;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class HomeController extends Controller
 {
     /**
      * Display a landing page.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|Response|View
      */
     public function root()
     {
-        $data = DataProvider::home();
+        $homeMenuContent = $this->homeMenuContent();
 
-        return view('active.home', compact('data'));
+        if ($homeMenuContent === null) {
+            $data = DataProvider::home();
+            return view('active.home', compact('data'));
+        }
+
+        switch ($homeMenuContent->menuable_type) {
+            case 'App\\Page':
+                return $this->single($homeMenuContent->menuable_id);
+            case 'App\\Category':
+                return $this->category($homeMenuContent->menuable_id);
+            default:
+                abort(404, "Invalid Home Menu Content");
+        }
     }
 
-    /**
-     * Display a blog page.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function blog()
-    {
-        $data = DataProvider::home();
-
-        return view('active.blog', compact('data'));
-    }
+//    /**
+//     * Display a blog page.
+//     *
+//     * @return Application|Factory|Response|View
+//     */
+//    public function blog()
+//    {
+//        $data = DataProvider::home();
+//
+//        return view('active.blog', compact('data'));
+//    }
 
     /**
      * Display the single page view.
      *
-     * @return \Illuminate\Http\Response
+     * @param $pageId
+     * @return Application|Factory|Response|View
      */
-    public function single($page)
+    public function single($pageId)
     {
-        $data = DataProvider::single($page);
+        $data = DataProvider::single($pageId);
 
-        CaptureViewEvent::dispatchAfterResponse($this->capture_analytics('App\Page', $page));
+        CaptureViewEvent::dispatchAfterResponse($this->capture_analytics('App\Page', $pageId));
 
         return view('active.single', compact('data'));
     }
@@ -52,37 +71,38 @@ class HomeController extends Controller
     /**
      * Display the single page view.
      *
-     * @return \Illuminate\Http\Response
+     * @param $categoryId
+     * @return Application|Factory|Response|View
      */
-    public function category($category)
+    public function category($categoryId)
     {
-        $data = DataProvider::category($category);
+        $data = DataProvider::category($categoryId);
 
         CaptureViewEvent::dispatchAfterResponse(
-            $this->capture_analytics('App\Category', $category)
+            $this->capture_analytics('App\Category', $categoryId)
         );
 
         return view('active.category', compact('data'));
     }
 
-    public function profile($public_id)
+    public function profile($publicProfileId)
     {
-        $user = User::findByPublicId($public_id);
+        $user = User::findByPublicId($publicProfileId);
 
         $data = DataProvider::profile(
-            optional(auth()->user())->public_id === $public_id
+            optional(auth()->user())->public_id === $publicProfileId
                 ? $user
                 : $user->only([
-                    'id',
-                    'name',
-                    'about_me',
-                    'url',
-                    'avatar',
-                    'public_id',
-                    'created_ago',
-                    'role',
-                    'email_verified_at',
-                ])
+                'id',
+                'name',
+                'about_me',
+                'url',
+                'avatar',
+                'public_id',
+                'created_ago',
+                'role',
+                'email_verified_at',
+            ])
         );
 
         CaptureViewEvent::dispatchAfterResponse($this->capture_analytics('App\User', $user->id));
@@ -93,9 +113,9 @@ class HomeController extends Controller
     /**
      * Display the sitemap.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function sitemap()
+    public function sitemap(): Response
     {
         $content = '<?xml version="1.0" encoding="UTF-8"?>';
         $content .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
@@ -129,9 +149,9 @@ class HomeController extends Controller
     /**
      * Display the rss.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function rss()
+    public function rss(): Response
     {
         $siteinfo = json_decode(Parameter::getKey('siteinfo'), true);
         $content = '<?xml version="1.0" encoding="UTF-8"?>';
@@ -190,6 +210,13 @@ class HomeController extends Controller
         return view('terms', compact('data'));
     }
 
+    /**
+     * Attempt to load a blade file directly from the active template.
+     * If the file is not present, throw 404 error.
+     *
+     * @param $any
+     * @return Application|Factory|View
+     */
     public function catchAll($any)
     {
         $bladeFileName = 'active.' . str_replace('/', '.', htmlentities($any));
@@ -200,10 +227,17 @@ class HomeController extends Controller
             return view($bladeFileName, compact('data'));
         }
 
-        return abort(404, 'This page does not exist');
+        abort(404, 'This page does not exist');
     }
 
-    private function capture_analytics($content_type, $content_id)
+    private function homeMenuContent()
+    {
+        return Cache::rememberForever('home-menu', function () {
+            return Menu::home()->first();
+        });
+    }
+
+    private function capture_analytics($content_type, $content_id): array
     {
         $id = optional(request()->user())->id;
         $viewed_at = new \DateTime("@$_SERVER[REQUEST_TIME]");
@@ -227,7 +261,7 @@ class HomeController extends Controller
         ];
     }
 
-    private function custom_pages()
+    private function custom_pages(): array
     {
         $preloadedTemplateFiles = [
             'master.blade.php',

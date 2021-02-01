@@ -2,7 +2,8 @@
 
 namespace App;
 
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,24 +31,29 @@ class Menu extends Model
     /**
      * Get the model that the menu belongs to.
      */
-    public function menuable()
+    public function menuable(): MorphTo
     {
         return $this->morphTo();
-        // return $this->morphTo(__FUNCTION__, 'menuable_type', 'menuable_id');
     }
 
-    public function submenus()
+    public function submenus(): HasMany
     {
         return $this->hasMany('App\Menu', 'parent_id');
     }
 
-    public function hasContent()
+    public function hasContent(): int
     {
         return $this->submenus()->count();
+    }
+
+    public function scopeHome($query)
+    {
+        return $query->where('home', '=', 1);
     }
 
     public static function invalidateCache()
     {
         Cache::forget('menus');
+        Cache::forget('home-menu');
     }
 }

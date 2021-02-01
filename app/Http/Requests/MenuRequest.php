@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class MenuRequest extends FormRequest
 {
@@ -29,7 +28,6 @@ class MenuRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('menus', 'title')->ignore($this->menu),
             ], // 'alpha_dash',
             'alias' => ['nullable', 'string', 'max:255'],
             'parent_id' => ['nullable', 'integer'],
