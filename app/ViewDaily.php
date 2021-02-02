@@ -5,6 +5,7 @@ namespace App;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class ViewDaily extends Model
 {
@@ -35,7 +36,7 @@ class ViewDaily extends Model
     {
         $start_date_key = request()->input('start_date_key', Carbon::yesterday()->format('Ymd'));
         $end_date_key = request()->input('end_date_key', $start_date_key);
-        
+
         return ViewDaily::whereBetween('date_key', [$start_date_key, $end_date_key])
             ->select('date_key', 'total_views', 'unique_visitors', 'bounce_rate', 'avg_visit_duration')
             ->orderBy('date_key')
@@ -43,11 +44,14 @@ class ViewDaily extends Model
     }
 
 
-    public static function monthly()
+    /**
+     * @return Collection
+     */
+    public static function monthly(): Collection
     {
         $start_month_key = request()->input('start_month_key', Carbon::yesterday()->format('Ym')) . '01';
         $end_month_key = request()->input('end_month_key', Carbon::yesterday()->format('Ym')) . '31';
-        
+
         return DB::table('views_daily')
             ->selectRaw('
                 round(date_key/100) as month_key,

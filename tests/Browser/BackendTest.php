@@ -23,7 +23,7 @@ class BackendTest extends DuskTestDataSetup
                 ->assertSee('Categories')
                 ->assertSee('Library')
                 ->assertSee('Users')
-                ->assertSee('Templates')
+                ->assertSee('Design')
                 ->assertSee('Forms')
                 ->assertSee('Settings')
                 ->assertSee('METRICS')

@@ -5,7 +5,7 @@ namespace App\Traits;
 use App\Parameter;
 use ReCaptcha;
 
-trait BotScanner
+trait SpamProtection
 {
     public function preventBotSubmission($scoreThreshold = 0.5)
     {
@@ -18,7 +18,7 @@ trait BotScanner
         return $score;
     }
 
-    private function getCaptchaResponse()
+    private function getCaptchaResponse(): ReCaptcha\Response
     {
         $request = request();
 
@@ -33,7 +33,7 @@ trait BotScanner
         return $captchaResponse;
     }
 
-    private function verifyRecaptcha($service, $request, $token)
+    private function verifyRecaptcha($service, $request, $token): ReCaptcha\Response
     {
         $captcha = new ReCaptcha\ReCaptcha($service->secret_key);
 

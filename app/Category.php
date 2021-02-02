@@ -2,14 +2,25 @@
 
 namespace App;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Cache;
+use App\Traits\RelativeTime;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
+/**
+ * Class Category.
+ * A category is used to organise pages or other categories.
+ *
+ * @package App
+ */
 class Category extends Model
 {
     use SoftDeletes;
+    use RelativeTime;
 
     protected $fillable = [
         'name',
@@ -23,52 +34,52 @@ class Category extends Model
 
     protected $appends = ['url', 'permalink', 'created_ago', 'updated_ago'];
 
-    public function parent()
+    public function parent(): BelongsTo
     {
-        return $this->belongsTo('App\Category', 'parent_id');
+        return $this->belongsTo(Category::class, 'parent_id');
     }
 
-    public function subcategories()
+    public function subcategories(): HasMany
     {
-        return $this->hasMany('App\Category', 'parent_id');
+        return $this->hasMany(Category::class, 'parent_id');
     }
 
-    public function media()
+    public function media(): BelongsTo
     {
-        return $this->belongsTo('App\Media', 'media_id');
+        return $this->belongsTo(Media::class, 'media_id');
     }
 
-    public function author()
+    public function author(): BelongsTo
     {
-        return $this->belongsTo('App\User', 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function pages()
     {
-        return $this->hasMany('App\Page')->published();
+        return $this->hasMany(Page::class)->published();
     }
 
-    public function pagesWithDrafts()
+    public function pagesWithDrafts(): HasMany
     {
-        return $this->hasMany('App\Page');
+        return $this->hasMany(Page::class);
     }
 
-    public function hasContent()
+    public function hasContent(): bool
     {
         return $this->pagesWithDrafts()->count() || $this->subcategories()->count();
     }
 
-    public function comments()
+    public function comments(): HasMany
     {
-        return $this->hasMany('App\CategoryComment', 'reference_id');
+        return $this->hasMany(CategoryComment::class, 'reference_id');
     }
 
-    public function directComments()
+    public function directComments(): HasMany
     {
         return $this->comments()->whereNull('parent_id');
     }
 
-    public function menus()
+    public function menus(): MorphMany
     {
         return $this->morphMany(Menu::class, 'menuable');
     }
@@ -81,16 +92,6 @@ class Category extends Model
     public function getPermalinkAttribute()
     {
         return url('categories/' . $this->id);
-    }
-
-    public function getCreatedAgoAttribute()
-    {
-        return empty($this->created_at) ? null : $this->created_at->diffForHumans();
-    }
-
-    public function getUpdatedAgoAttribute()
-    {
-        return empty($this->updated_at) ? null : $this->updated_at->diffForHumans();
     }
 
     public static function invalidateCache()

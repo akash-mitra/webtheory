@@ -6,7 +6,7 @@ use Laravel\Dusk\Browser;
 use Tests\DuskTestDataSetup;
 
 class UserStripTest extends DuskTestDataSetup
-{   
+{
     /**
      * Test User Profile.
      *
@@ -52,7 +52,7 @@ class UserStripTest extends DuskTestDataSetup
                 ->assertSee('Categories')
                 ->assertSee('Library')
                 ->assertSee('Users')
-                ->assertSee('Templates')
+                ->assertSee('Design')
                 ->assertSee('Forms')
                 ->assertSee('Settings');
         });

@@ -2,17 +2,20 @@
 
 namespace App;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Laravel\Scout\Searchable;
-use App\Parameter;
+use App\Traits\RelativeTime;
 use App\Traits\Shareable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
 
 class Page extends Model
 {
-    use SoftDeletes, Searchable, Shareable;
+    use SoftDeletes, Searchable, Shareable, RelativeTime;
 
     protected $fillable = [
         'category_id',
@@ -29,7 +32,7 @@ class Page extends Model
 
     protected $appends = ['url', 'permalink', 'created_ago', 'updated_ago'];
 
-    protected $shareOptions = [
+    protected array $shareOptions = [
         'columns' => [
             'title' => 'title',
         ],
@@ -41,7 +44,7 @@ class Page extends Model
         return $query->where('status', 'Live');
     }
 
-    public function contents()
+    public function contents(): HasMany
     {
         return $this->hasMany('App\PageContent')->orderBy('display_order');
     }
@@ -51,27 +54,27 @@ class Page extends Model
         return $this->belongsTo('App\User', 'user_id')->withTrashed();
     }
 
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo('App\Category', 'category_id');
     }
 
-    public function media()
+    public function media(): BelongsTo
     {
         return $this->belongsTo('App\Media', 'media_id');
     }
 
-    public function comments()
+    public function comments(): HasMany
     {
         return $this->hasMany('App\PageComment', 'reference_id');
     }
 
-    public function directComments()
+    public function directComments(): HasMany
     {
         return $this->comments()->whereNull('parent_id');
     }
 
-    public function menus()
+    public function menus(): MorphMany
     {
         return $this->morphMany(Menu::class, 'menuable');
     }
@@ -86,40 +89,27 @@ class Page extends Model
         return url('pages/' . $this->id);
     }
 
-    public function getCreatedAgoAttribute()
-    {
-        return empty($this->created_at) ? null : $this->created_at->diffForHumans();
-    }
-
-    public function getUpdatedAgoAttribute()
-    {
-        return empty($this->updated_at) ? null : $this->updated_at->diffForHumans();
-    }
-
     public static function invalidateCache()
     {
         Cache::forget('pages');
         Cache::forget('pages.count');
     }
 
-    public function shouldBeSearchable()
+    public function shouldBeSearchable(): bool
     {
         return Parameter::getKey('SEARCHABLE') && $this->status == 'Live';
     }
 
     /**
-     * Get the indexable data array for the model.
+     * Returns an array containing the data that can be indexed for this model.
      *
      * @return array
      */
-    public function toSearchableArray()
+    public function toSearchableArray(): array
     {
         $page = $this->toArray();
-        $array = array_merge($page, [
+        return array_merge($page, [
             'category_name' => $this->category()->value('name'),
-            // 'content' => strip_tags($this->content()->value('body_html')),
         ]);
-
-        return $array;
     }
 }

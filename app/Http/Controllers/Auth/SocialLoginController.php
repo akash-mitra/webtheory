@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
-use Socialite;
-use Exception;
-use App\Parameter;
-// use App\Jobs\SendEmail;
-use App\Traits\SetMailConfig;
-use App\Mail\WelcomeNewSocialUser;
 use App\Http\Controllers\Controller;
+use App\Mail\WelcomeNewSocialUser;
+use App\Parameter;
+use App\Traits\CustomEmailSetup;
+use App\User;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Socialite;
+
+// use App\Jobs\SendEmail;
 
 class SocialLoginController extends Controller
 {
-    use SetMailConfig;
+    use CustomEmailSetup;
 
     protected $providers = ['facebook', 'twitter', 'linkedin', 'google'];
 
@@ -28,7 +29,6 @@ class SocialLoginController extends Controller
     }
 
 
-
     public function callback($provider)
     {
         $this->loadProviderConfig($provider);
@@ -39,14 +39,11 @@ class SocialLoginController extends Controller
 
         $existingUser = $this->userExisting($socialUser);
 
-        if ($existingUser)
-        {
+        if ($existingUser) {
             $existingUser->createOrUpdateProvider($provider, $socialUser);
 
             Auth::login($existingUser, true);
-        }
-        else
-        {
+        } else {
             $user = $this->createUserWithProvider($provider, $socialUser);
 
             Auth::login($user, true);
@@ -54,7 +51,6 @@ class SocialLoginController extends Controller
 
         return redirect()->route('home', '#');
     }
-
 
 
     private function createUserWithProvider($provider, $socialUser)
@@ -78,12 +74,11 @@ class SocialLoginController extends Controller
         ]);
 
         // SendEmail::dispatch($user->email, new WelcomeNewSocialUser($user));
-        
+
         $this->sendEmail($user->email, new WelcomeNewSocialUser($user));
 
         return $user;
     }
-
 
 
     private function getSocialUser($provider)
@@ -98,22 +93,18 @@ class SocialLoginController extends Controller
     }
 
 
-
     private function userExisting($socialUser)
     {
         return User::where('email', $socialUser->getEmail())->first();
     }
 
 
-
     private function validateUserInfo($socialUser)
     {
-        if (empty($socialUser->getEmail()) || empty($socialUser->getName()) || empty($socialUser->getAvatar()))
-        {
-                abort(406, "Must provide name, email and profile picture");
+        if (empty($socialUser->getEmail()) || empty($socialUser->getName()) || empty($socialUser->getAvatar())) {
+            abort(406, "Must provide name, email and profile picture");
         }
     }
-
 
 
     private function loadProviderConfig($provider)

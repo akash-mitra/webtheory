@@ -8,19 +8,13 @@ class AdminController extends Controller
 {
     public function __construct()
     {
-        if (Auth::check()) {
-            $this->middleware(['check.permission']);
-        }
+        $this->middleware(['auth', 'check.permission']);
     }
 
     public function app()
     {
-        if (Auth::check()) {
-            return view('app', [
-                'authUser' => Auth::user()->only(['id', 'name', 'email', 'avatar', 'role']),
-            ]);
-        } else {
-            return redirect('/');
-        }
+        return view('app', [
+            'authUser' => Auth::user()->only(['id', 'name', 'email', 'avatar', 'role']),
+        ]);
     }
 }

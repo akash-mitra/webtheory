@@ -1,5 +1,16 @@
 <?php
 
+use App\DataProvider;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\LovController;
+use App\Http\Controllers\Api\MenuController;
+use App\Http\Controllers\Api\PageController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\HomeController;
+use App\Template;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -15,41 +26,53 @@ return [
 
     'template.parameters' => [
         'description' => 'All template parameters pertaining to the active template',
-        'invocations' => ['App\DataProvider'],
-        'invalidations' => ['App\Template'],
+        'invocations' => [DataProvider::class],
+        'invalidations' => [Template::class],
     ],
 
     'pages' => [
         'description' =>
             'List of pages returned to the frontend when no pagination parameter is set.',
         'invocations' => ['App\DataProvider'],
-        'invalidations' => ['App\Http\Controllers\Api\PageController'],
+        'invalidations' => [PageController::class],
     ],
 
     'pages.count' => [
         'description' => 'Count of all the pages.',
-        'invocations' => ['App\Http\Controllers\Api\DashboardController.php'],
-        'invalidations' => ['App\Http\Controllers\Api\PageController'],
+        'invocations' => [DashboardController::class],
+        'invalidations' => [PageController::class],
     ],
 
     'users.count' => [
         'description' => 'Count of all the users.',
-        'invocations' => ['App\Http\Controllers\Api\DashboardController.php'],
+        'invocations' => [DashboardController::class],
         'invalidations' => [
-            'App\Http\Controllers\Api\UserController',
-            'App\Http\Controllers\Auth\RegisterController',
+            [UserController::class],
+            [RegisterController::class],
         ],
     ],
 
     'categories' => [
         'description' => 'List of all categories with author.',
-        'invocations' => ['App\DataProvider'],
-        'invalidations' => ['App\Http\Controllers\Api\CategoryController'],
+        'invocations' => [DataProvider::class],
+        'invalidations' => [CategoryController::class],
     ],
 
     'categories.lov' => [
         'description' => 'A simple list of values for all the categories.',
-        'invocations' => ['App\Http\Controllers\Api\LovController'],
-        'invalidations' => ['App\Http\Controllers\Api\CategoryController'],
+        'invocations' => [LovController::class],
+        'invalidations' => [CategoryController::class],
+    ],
+
+    'menus' => [
+        'description' => 'List of all menu items order by sequence number.',
+        'invocations' => [DataProvider::class],
+        'invalidations' => [MenuController::class],
+    ],
+
+    'home-menu' => [
+        'description' => 'Home menu item.',
+        'invocations' => [HomeController::class],
+        'invalidations' => [MenuController::class],
     ],
 ];

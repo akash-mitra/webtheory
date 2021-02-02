@@ -16,9 +16,9 @@ class TemplateTest extends DuskTestDataSetup
     {
         $this->browse(function (Browser $browser) {
             $browser->loginAs($this->adminUser)
-                ->visit('/app/templates')
+                ->visit('/app/design')
                 ->pause(1000)
-                ->assertSee('Templates')
+                ->assertSee('Design')
                 ->click('#template-installed-tab')
                 ->pause(1000)
                 ->assertSee('Serenity')

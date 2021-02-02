@@ -2,9 +2,9 @@
 
 namespace App;
 
-use App\Template;
-// use App\Jobs\SendEmail;
-use App\Traits\SetMailConfig;
+use App\Traits\RelativeTime;
+use App\Traits\CustomEmailSetup;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Cashier\Billable;
 use Illuminate\Support\Carbon;
 use App\Mail\ResetPasswordLink;
@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Cache;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable, SoftDeletes, Billable, EnableDummyAvatar, SetMailConfig;
+    use Notifiable, SoftDeletes, Billable, EnableDummyAvatar, CustomEmailSetup, RelativeTime;
 
     /**
      * The attributes that are mass assignable.
@@ -67,68 +67,57 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        // 'gender' => 'boolean',
         'preferences' => 'array',
     ];
 
     protected $appends = ['created_ago', 'updated_ago', 'url'];
 
-    public function categories()
+    public function categories(): HasMany
     {
         return $this->hasMany('App\Category');
     }
 
-    public function pages()
+    public function pages(): HasMany
     {
         return $this->hasMany('App\Page');
     }
 
-    public function media()
+    public function media(): HasMany
     {
         return $this->hasMany('App\Media');
     }
 
-    public function categorycomments()
+    public function categoryComments(): HasMany
     {
         return $this->hasMany('App\CategoryComment');
     }
 
-    public function pagecomments()
+    public function pageComments(): HasMany
     {
         return $this->hasMany('App\PageComment');
     }
 
-    public function templates()
+    public function templates(): HasMany
     {
         return $this->hasMany(Template::class);
     }
 
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->role == 'admin';
     }
 
-    public function isAuthor()
+    public function isAuthor(): bool
     {
         return $this->role == 'author';
     }
 
-    public function receiveMail()
+    public function receiveMail(): bool
     {
         if (in_array('mail', $this->preferences)) {
             return true;
         }
         return false;
-    }
-
-    public function getCreatedAgoAttribute()
-    {
-        return optional($this->created_at)->diffForHumans();
-    }
-
-    public function getUpdatedAgoAttribute()
-    {
-        return optional($this->updated_at)->diffForHumans();
     }
 
     public function getUrlAttribute()
@@ -145,7 +134,7 @@ class User extends Authenticatable implements MustVerifyEmail
         }
     }
 
-    public function createOrUpdateProvider(string $provider, $providerUser)
+    public function createOrUpdateProvider(string $provider, $providerUser): bool
     {
         $authProvider = $this->providers($provider)->first();
 
@@ -182,36 +171,28 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * This method is a override of the originl method present in the
+     * This method is a override of the original method present in the
      * Illuminate\Auth\MustVerifyEmail trait. This override has been
      * done to make sure that verify user email is sent via our own
-     * emailing Job, instead of laravel's default email job.
+     * emailing Job, instead of Laravel's default email job.
      */
     public function sendEmailVerificationNotification()
     {
-        // $this->notify(new VerifyEmail);
-
-        // SendEmail::dispatch($this->email, new VerifyEmailAddress($this));
-
         $this->sendEmail($this->email, new VerifyEmailAddress($this));
     }
 
     /**
-     * This method is a override of the originl method present in the
+     * This method is a override of the original method present in the
      * Illuminate\Auth\Passwords\CanResetPassword trait. This over-
      * ride has been done to make sure that verify user email is
-     * sent via our own emailing Job, instead of laravel's.
+     * sent via our own emailing Job, instead of Laravel's.
      */
     public function sendPasswordResetNotification($token)
     {
-        // $this->notify(new ResetPasswordNotification($token));
-
-        // SendEmail::dispatch($this->email, new ResetPasswordLink($this, $token));
-
         $this->sendEmail($this->email, new ResetPasswordLink($this, $token));
     }
 
-    public function verificationUrl()
+    public function verificationUrl(): string
     {
         return URL::temporarySignedRoute(
             'verification.verify',

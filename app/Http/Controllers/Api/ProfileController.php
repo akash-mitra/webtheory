@@ -2,34 +2,27 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Support\Str;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use App\User;
-use Illuminate\Http\Request;
 use App\Category;
+use App\Http\Controllers\Controller;
 use App\Media;
 use App\Page;
+use App\User;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ProfileController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        // $this->middleware(['auth']);
-    }
-
-    /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
      */
-    public function update(Request $request)
+    public function update(Request $request): JsonResponse
     {
         $request->validate([
             'name' => 'required',
@@ -49,7 +42,7 @@ class ProfileController extends Controller
 
         if ($request->has('avatar_base64')) {
             $media = Media::storeFromBase64(
-                $request->avatar_base64,
+                $request->input('avatar_base64'),
                 Str::slug($user->id),
                 'media/profiles',
                 false
@@ -71,24 +64,30 @@ class ProfileController extends Controller
             ->pages()
             ->where('status', 'Live')
             ->with(['media', 'category'])
-            ->paginate(4);
+            ->paginate(10);
     }
 
-    // Comments made by the Auth User under categories or pages
-    public function comments()
+    /**
+     * Comments made by the Auth User under categories or pages.
+     *
+     * @return JsonResponse
+     */
+    public function comments(): JsonResponse
     {
-        $categorycomments = Category::with('comments')
-            ->whereHas('comments', function ($query) {
-                $query->where('user_id', Auth::id());
+        $id = Auth::id();
+
+        $categoryComments = Category::with('comments')
+            ->whereHas('comments', function ($query) use ($id) {
+                $query->where('user_id', $id);
             })
             ->get();
 
-        $pagecomments = Page::with('comments')
-            ->whereHas('comments', function ($query) {
-                $query->where('user_id', Auth::id());
+        $pageComments = Page::with('comments')
+            ->whereHas('comments', function ($query) use ($id) {
+                $query->where('user_id', $id);
             })
             ->get();
 
-        return response()->json(['categories' => $categorycomments, 'pages' => $pagecomments]);
+        return response()->json(['categories' => $categoryComments, 'pages' => $pageComments]);
     }
 }

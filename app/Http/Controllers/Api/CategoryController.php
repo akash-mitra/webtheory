@@ -80,7 +80,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified category in storage.
      *
      * @param CategoryRequest $request
      * @param Category $category
@@ -98,7 +98,7 @@ class CategoryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified category from storage.
      *
      * @param Category $category
      * @return JsonResponse

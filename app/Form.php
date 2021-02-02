@@ -2,10 +2,14 @@
 
 namespace App;
 
+use App\Traits\RelativeTime;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Form extends Model
 {
+    use RelativeTime;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -24,34 +28,43 @@ class Form extends Model
         'captcha' => 'boolean',
     ];
 
-    public function getCreatedAgoAttribute()
-    {
-        return empty($this->created_at) ? null : $this->created_at->diffForHumans();
-    }
-
-    public function getUpdatedAgoAttribute()
-    {
-        return empty($this->updated_at) ? null : $this->updated_at->diffForHumans();
-    }
-
-    public function formResponses()
+    /**
+     * Returns a list of form responses.
+     * @return HasMany
+     */
+    public function formResponses(): HasMany
     {
         return $this->hasMany('App\FormResponse');
     }
 
-    public function hasFormResponses()
+    /**
+     * Returns true if the form contains any response.
+     * @return bool
+     */
+    public function hasResponses(): bool
     {
-        return $this->formResponses()->count();
+        return $this->formResponses()->count() > 0;
     }
 
-    public function currentFields()
+    /**
+     * Returns an array containing all the user defined form fields.
+     *
+     * @return array
+     */
+    public function currentFields(): array
     {
         return array_map(function ($field) {
             return $field->name;
         }, json_decode($this->fields));
     }
 
-    public function fieldValidationRules()
+    /**
+     * Returns an array containing all the user
+     * defined validation rules for all the fields.
+     *
+     * @return array
+     */
+    public function fieldValidationRules(): array
     {
         $validations = array_map(function ($field) {
             return optional($field)->validation ?? '';

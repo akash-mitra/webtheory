@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Exception;
-use App\Parameter;
-use App\Page;
-use App\Mail\TestMail;
-// use App\Jobs\SendEmail;
-use App\Traits\SetMailConfig;
 use App\Jobs\UpdateSite;
+use App\Mail\TestMail;
+use App\Page;
+use App\Parameter;
+use App\Traits\CustomEmailSetup;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
+
+// use App\Jobs\SendEmail;
 
 class SettingController extends Controller
 {
-    use SetMailConfig;
+    use CustomEmailSetup;
 
     /**
      * Create a new controller instance.
@@ -199,8 +199,8 @@ class SettingController extends Controller
 
         if ($status == 0) {
             return response()->download(
-                storage_path('/backup/wt_backup_' . \Carbon\Carbon::parse(now())->format('Ymd')) .
-                    '.zip'
+                storage_path('/backup/wt_backup_' . Carbon::parse(now())->format('Ymd')) .
+                '.zip'
             );
             // ->deleteFileAfterSend();
         } else {

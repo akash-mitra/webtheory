@@ -305,6 +305,18 @@
                             )
                             break
 
+                        // unauthorised
+                        case 403:
+                            util.notifyInfo(
+                                'You do not have access to this resource.',
+                                'Contact site admin.'
+                            ).then(
+                                function () {
+                                    location.href = '/'
+                                }
+                            )
+                            break
+
                         // login expired
                         case 419:
                             util.notifyInfo(

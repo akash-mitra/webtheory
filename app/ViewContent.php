@@ -5,7 +5,7 @@ namespace App;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Eloquent\Model;
-use App\Page;
+use Illuminate\Support\Collection;
 
 class ViewContent extends Model
 {
@@ -28,15 +28,15 @@ class ViewContent extends Model
         'created_at',
     ];
 
-    
-    public static function monthly()
+
+    public static function monthly(): Collection
     {
         $start_month_key = request()->input('start_month_key', Carbon::yesterday()->format('Ym'));
         $end_month_key = request()->input('end_month_key', $start_month_key);
 
         return DB::table('view_contents')
             ->selectRaw('
-                content_id,  
+                content_id,
                 pages.title,
                 sum(total_views) as total_views
             ')

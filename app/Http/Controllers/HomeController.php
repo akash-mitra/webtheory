@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Menu;
-use App\Page;
-use App\User;
-use App\Parameter;
 use App\DataProvider;
 use App\Jobs\CaptureViewEvent;
+use App\Menu;
+use App\Page;
+use App\Parameter;
+use App\User;
+use DateTime;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
@@ -24,7 +25,7 @@ class HomeController extends Controller
      */
     public function root()
     {
-        $homeMenuContent = $this->homeMenuContent();
+        $homeMenuContent = $this->homeMenuItem();
 
         if ($homeMenuContent === null) {
             $data = DataProvider::home();
@@ -34,36 +35,22 @@ class HomeController extends Controller
         switch ($homeMenuContent->menuable_type) {
             case 'App\\Page':
                 return $this->single($homeMenuContent->menuable_id);
-            case 'App\\Category':
-                return $this->category($homeMenuContent->menuable_id);
             default:
-                abort(404, "Invalid Home Menu Content");
+                return $this->category($homeMenuContent->menuable_id);
         }
     }
-
-//    /**
-//     * Display a blog page.
-//     *
-//     * @return Application|Factory|Response|View
-//     */
-//    public function blog()
-//    {
-//        $data = DataProvider::home();
-//
-//        return view('active.blog', compact('data'));
-//    }
 
     /**
      * Display the single page view.
      *
-     * @param $pageId
+     * @param string $pageId
      * @return Application|Factory|Response|View
      */
-    public function single($pageId)
+    public function single(string $pageId)
     {
         $data = DataProvider::single($pageId);
 
-        CaptureViewEvent::dispatchAfterResponse($this->capture_analytics('App\Page', $pageId));
+        CaptureViewEvent::dispatchAfterResponse($this->getAnalyticsData('App\Page', $pageId));
 
         return view('active.single', compact('data'));
     }
@@ -71,21 +58,27 @@ class HomeController extends Controller
     /**
      * Display the single page view.
      *
-     * @param $categoryId
+     * @param string $categoryId
      * @return Application|Factory|Response|View
      */
-    public function category($categoryId)
+    public function category(string $categoryId)
     {
         $data = DataProvider::category($categoryId);
 
         CaptureViewEvent::dispatchAfterResponse(
-            $this->capture_analytics('App\Category', $categoryId)
+            $this->getAnalyticsData('App\Category', $categoryId)
         );
 
         return view('active.category', compact('data'));
     }
 
-    public function profile($publicProfileId)
+    /**
+     * Display the user's profile view.
+     *
+     * @param string $publicProfileId
+     * @return Application|Factory|View
+     */
+    public function profile(string $publicProfileId)
     {
         $user = User::findByPublicId($publicProfileId);
 
@@ -105,7 +98,7 @@ class HomeController extends Controller
             ])
         );
 
-        CaptureViewEvent::dispatchAfterResponse($this->capture_analytics('App\User', $user->id));
+        CaptureViewEvent::dispatchAfterResponse($this->getAnalyticsData('App\User', $user->id));
 
         return view('active.profile', compact('data'));
     }
@@ -147,7 +140,7 @@ class HomeController extends Controller
     }
 
     /**
-     * Display the rss.
+     * Generates response containing the rss feed.
      *
      * @return Response
      */
@@ -165,6 +158,7 @@ class HomeController extends Controller
             ->published()
             ->latest()
             ->get();
+
         foreach ($pages as $page) {
             $content .=
                 '<item><title>' .
@@ -230,17 +224,17 @@ class HomeController extends Controller
         abort(404, 'This page does not exist');
     }
 
-    private function homeMenuContent()
+    private function homeMenuItem()
     {
         return Cache::rememberForever('home-menu', function () {
             return Menu::home()->first();
         });
     }
 
-    private function capture_analytics($content_type, $content_id): array
+    private function getAnalyticsData($content_type, $content_id): array
     {
         $id = optional(request()->user())->id;
-        $viewed_at = new \DateTime("@$_SERVER[REQUEST_TIME]");
+        $viewed_at = new DateTime("@$_SERVER[REQUEST_TIME]");
 
         return [
             // Public IP address of localhost for testing
@@ -313,7 +307,7 @@ class HomeController extends Controller
                 strpos($content, '@extends') !== false
             ) {
                 $lastModifiedUnix = Storage::disk('active')->lastModified($file);
-                $lastModified = new \DateTime("@$lastModifiedUnix");
+                $lastModified = new DateTime("@$lastModifiedUnix");
                 array_push($customPages, [
                     'url' => url('/') . '/' . str_replace('.blade.php', '', $file),
                     'updated_at' => $lastModified,

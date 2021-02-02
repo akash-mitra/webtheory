@@ -2,12 +2,15 @@
 
 namespace App;
 
+use App\Traits\RelativeTime;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PageComment extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, RelativeTime;
 
     protected $fillable = ['parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes'];
 
@@ -15,38 +18,28 @@ class PageComment extends Model
 
     protected $touches = ['parent'];
 
-    public function parent()
+    public function parent(): BelongsTo
     {
-        return $this->belongsTo('App\PageComment', 'parent_id');
+        return $this->belongsTo(PageComment::class, 'parent_id');
     }
 
-    public function replies()
+    public function replies(): HasMany
     {
-        return $this->hasMany('App\PageComment', 'parent_id')->latest('updated_at');
+        return $this->hasMany(PageComment::class, 'parent_id')->latest('updated_at');
     }
 
-    public function page()
+    public function page(): BelongsTo
     {
-        return $this->belongsTo('App\Page', 'reference_id');
+        return $this->belongsTo(Page::class, 'reference_id');
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo('App\User', 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function isReply()
+    public function isReply(): bool
     {
         return $this->parent_id != null;
-    }
-
-    public function getCreatedAgoAttribute()
-    {
-        return empty($this->created_at) ? null : $this->created_at->diffForHumans();
-    }
-
-    public function getUpdatedAgoAttribute()
-    {
-        return empty($this->updated_at) ? null : $this->updated_at->diffForHumans();
     }
 }

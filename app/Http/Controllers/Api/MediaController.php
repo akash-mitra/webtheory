@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Media;
 use App\Http\Requests\MediaRequest;
+use App\Media;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 
 class MediaController extends Controller
@@ -23,7 +26,7 @@ class MediaController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index(Request $request)
     {
@@ -56,8 +59,8 @@ class MediaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function upload(MediaRequest $request)
     {
@@ -115,8 +118,8 @@ class MediaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Media  $media
-     * @return \Illuminate\Http\Response
+     * @param Media $media
+     * @return Response
      */
     public function show(Media $media)
     {
@@ -127,12 +130,13 @@ class MediaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Media  $media
-     * @return \Illuminate\Http\Response
+     * @param Media $media
+     * @return JsonResponse
+     * @throws Exception
      */
-    public function remove(Media $media)
+    public function remove(Media $media): JsonResponse
     {
-        Media::_destroy($media);
+        $media->delete();
 
         return response()->json($media, 204);
     }

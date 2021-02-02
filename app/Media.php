@@ -2,65 +2,68 @@
 
 namespace App;
 
-use Illuminate\Support\Facades\DB;
+use App\Traits\RelativeTime;
+use Exception;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
-use Exception;
 
+/**
+ * Class Media
+ * @package App
+ */
 class Media extends Model
 {
-    protected $fillable = ['name', 'type', 'size', 'path', 'url', 'storage', 'user_id'];
+    use RelativeTime;
 
+    protected $fillable = ['name', 'type', 'size', 'path', 'url', 'storage', 'user_id'];
     protected $appends = ['created_ago', 'updated_ago'];
 
-    public function author()
+    // Static Global Variables
+    protected static array $allowedExtensions = ['jpeg', 'jpg', 'png', 'bmp', 'gif', 'svg'];
+    protected static int $maxSize = 10; //megabytes
+    protected static string $visibility = 'public';
+    protected static string $subDirectoryPath = 'media';
+
+    public function author(): BelongsTo
     {
         return $this->belongsTo('App\User', 'user_id');
     }
 
-    public function categories()
+    public function categories(): HasMany
     {
         return $this->hasMany('App\Category', 'media_id');
     }
 
-    public function pages()
+    public function pages(): HasMany
     {
         return $this->hasMany('App\Page', 'media_id');
     }
-
-    public function getCreatedAgoAttribute()
-    {
-        return empty($this->created_at) ? null : $this->created_at->diffForHumans();
-    }
-
-    public function getUpdatedAgoAttribute()
-    {
-        return empty($this->updated_at) ? null : $this->updated_at->diffForHumans();
-    }
-
-    // Static Global Variables
-    protected static $allowedExtensions = ['jpeg', 'jpg', 'png', 'bmp', 'gif', 'svg'];
-    protected static $maxSize = 10; //megabytes
-    protected static $visibility = 'public';
-
-    protected static $subDirectoryPath = 'media';
 
     /**
      * Stores the given file with given name.
      * If the parameter "register" is set to true (by default), the media
      * file information will also be written in the media table in database.
      * If this flag is set to false, the file will be stored in the disk only.
+     *
+     * @param $file
+     * @param string $name
+     * @param string $subDirectory
+     * @param bool $register
+     * @return Media
+     * @throws Exception
      */
-    public static function store($file, $name = null, $subDirectory = null, $register = true)
+    public static function store($file, $name = null, $subDirectory = null, $register = true): Media
     {
+        $diskStorageType = self::configureAndGetDiskStorageType();
+
         try {
             $sizeInBytes = $file->getSize(); // bytes
 
             self::_checkFileError($file, $sizeInBytes);
-
-            $diskStorageType = self::configureAndGetDiskStorageType();
 
             if ($subDirectory === null) {
                 $subDirectory = self::$subDirectoryPath;
@@ -79,16 +82,16 @@ class Media extends Model
             $media = new Media([
                 'name' => empty($name) ? $file->getClientOriginalName() : $name,
                 'type' => $file->guessExtension(),
-                'size' => round($sizeInBytes / 1024, 2), // killobytes
+                'size' => round($sizeInBytes / 1024, 2), // kilobytes
                 'path' => $path,
                 'url' =>
                     $diskStorageType === 'public'
                         ? '/storage/' . $path
                         : str_replace(
-                            'digitaloceanspaces',
-                            'cdn.digitaloceanspaces',
-                            Storage::disk($diskStorageType)->url($path)
-                        ),
+                        'digitaloceanspaces',
+                        'cdn.digitaloceanspaces',
+                        Storage::disk($diskStorageType)->url($path)
+                    ),
                 'storage' => $diskStorageType,
                 'user_id' => Auth::id(),
             ]);
@@ -98,6 +101,7 @@ class Media extends Model
             }
 
             return $media;
+
         } catch (Exception $e) {
             if (!empty($path)) {
                 if (Storage::disk($diskStorageType)->exists($path)) {
@@ -120,8 +124,15 @@ class Media extends Model
      * If the parameter "register" is set to true (by default), the media
      * file information will also be written in the media table in database.
      * If this flag is set to false, the file will be stored in the disk only.
+     *
+     * @param $encoded
+     * @param string $name
+     * @param string $subDirectory
+     * @param bool $register
+     * @return Media
+     * @throws Exception
      */
-    public static function storeFromBase64($encoded, $name, $subDirectory = null, $register = true)
+    public static function storeFromBase64($encoded, string $name, $subDirectory = null, $register = true): Media
     {
         if (preg_match('/^data:image\/(\w+);base64,/', $encoded, $fileType)) {
             $encoded = substr($encoded, strpos($encoded, ',') + 1);
@@ -136,9 +147,9 @@ class Media extends Model
             throw new Exception('did not match data URI with image data');
         }
 
-        try {
-            $diskStorageType = self::configureAndGetDiskStorageType();
+        $diskStorageType = self::configureAndGetDiskStorageType();
 
+        try {
             if ($subDirectory === null) {
                 $subDirectory = self::$subDirectoryPath;
             }
@@ -154,16 +165,16 @@ class Media extends Model
             $media = new Media([
                 'name' => $name . '.' . $fileType,
                 'type' => $fileType,
-                'size' => round(strlen($decodedImage) / 1024, 2), // killobytes
+                'size' => round(strlen($decodedImage) / 1024, 2), // kilobytes
                 'path' => $path,
                 'url' =>
                     $diskStorageType === 'public'
                         ? '/storage/' . $path
                         : str_replace(
-                            'digitaloceanspaces',
-                            'cdn.digitaloceanspaces',
-                            Storage::disk($diskStorageType)->url($path)
-                        ),
+                        'digitaloceanspaces',
+                        'cdn.digitaloceanspaces',
+                        Storage::disk($diskStorageType)->url($path)
+                    ),
                 'storage' => $diskStorageType,
                 'user_id' => Auth::id(),
             ]);
@@ -173,6 +184,7 @@ class Media extends Model
             }
 
             return $media;
+
         } catch (Exception $e) {
             if (!empty($path)) {
                 if (Storage::disk($diskStorageType)->exists($path)) {
@@ -187,58 +199,21 @@ class Media extends Model
         }
     }
 
-    public static function destroy($media)
+    /**
+     * Delete the media and removes the file from storage.
+     *
+     * @return bool|null
+     * @throws Exception
+     */
+    public function delete(): ?bool
     {
-        return self::_destroy($media);
+        Storage::disk($this->storage)->delete($this->path);
+
+        return parent::delete();
     }
 
-    public static function destroyByFileName($filename)
+    private static function configureAndGetDiskStorageType(): string
     {
-        $media = Media::where('path', 'like', '%' . $filename)->first();
-
-        return self::_destroy($media);
-    }
-
-    public static function _destroy($media)
-    {
-        // if ($media->storage === 'public') {
-        //     Storage::disk('public')->delete($media->path);
-        // }
-
-        // if ($media->storage === 's3') {
-        //     $path_array = explode('/', $media->path);
-        //     $bucket = array_shift($path_array); // gets the bucket name
-        //     $path = implode('/', $path_array);
-
-        //     self::setS3StorageParameters(
-        //         param('storage_s3_key'),
-        //         param('storage_s3_secret'),
-        //         param('storage_s3_region'),
-        //         $bucket
-        //     );
-
-        //     Storage::disk('s3')->delete($path);
-        // }
-
-        Storage::disk($media->storage)->delete($media->path);
-
-        $media->delete();
-
-        return $media;
-    }
-
-    public static function configureAndGetDiskStorageType()
-    {
-        // if (param('storage_s3_active') === 'yes') {
-        //     self::setS3StorageParameters(
-        //         param('storage_s3_key'),
-        //         param('storage_s3_secret'),
-        //         param('storage_s3_region'),
-        //         param('storage_s3_bucket')
-        //     );
-        //     return 's3';
-        // }
-
         if (config('filesystems.media') == 'spaces') {
             return 'spaces';
         }
@@ -254,14 +229,14 @@ class Media extends Model
         Config::set('filesystems.disks.s3.bucket', $bucket);
     }
 
-    public static function _checkFileError($file, $sizeInBytes)
+    private static function _checkFileError($file, $sizeInBytes)
     {
         if (!isset($file)) {
             abort(400, 'File not uploaded');
         }
 
         if (!in_array($file->guessExtension(), self::$allowedExtensions)) {
-            abort(400, 'Unallowed file type error');
+            abort(400, 'File type not allowed.');
         }
 
         if ($sizeInBytes > self::$maxSize * 1024 * 1024 || $sizeInBytes <= 0) {

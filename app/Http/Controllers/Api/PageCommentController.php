@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Page;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PageCommentRequest;
+use App\Page;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class PageCommentController extends Controller
 {
-    public function index(Page $page)
+    public function index(Page $page): JsonResponse
     {
         $comments = $page
             ->directComments()
@@ -20,7 +21,7 @@ class PageCommentController extends Controller
         return response()->json($comments);
     }
 
-    public function store(Page $page, PageCommentRequest $request)
+    public function store(Page $page, PageCommentRequest $request): JsonResponse
     {
         $comment = $page->comments()->create([
             'body' => $request->body,

@@ -3,14 +3,16 @@
 namespace App;
 
 use App\Mail\FormResponseNotification;
+use App\Traits\CustomEmailSetup;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 // use App\Jobs\SendEmail;
-use App\Traits\SetMailConfig;
 
 class FormResponse extends Model
 {
-    use SetMailConfig;
-    
+    use CustomEmailSetup;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -18,11 +20,17 @@ class FormResponse extends Model
      */
     protected $fillable = ['form_id', 'ip', 'responses'];
 
-    public function form()
+    /**
+     * @return BelongsTo
+     */
+    public function form(): BelongsTo
     {
-        return $this->belongsTo('App\Form', 'form_id');
+        return $this->belongsTo(Form::class, 'form_id');
     }
 
+    /**
+     * Send email to all the site admins with the form response.
+     */
     public function email()
     {
         $users = User::where('role', 'admin')->get();

@@ -28,7 +28,8 @@
         "predis/predis": "^1.1",
         "scrivo/highlight.php": "^9.18",
         "wildbit/swiftmailer-postmark": "^3.1",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-zip": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.7",

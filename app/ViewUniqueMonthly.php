@@ -5,6 +5,7 @@ namespace App;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class ViewUniqueMonthly extends Model
 {
@@ -23,7 +24,10 @@ class ViewUniqueMonthly extends Model
      */
     protected $fillable = ['month_key', 'unique_visitors', 'created_at'];
 
-    public static function monthly()
+    /**
+     * @return Collection
+     */
+    public static function monthly(): Collection
     {
         $start_month_key = request()->input('start_month_key', Carbon::yesterday()->format('Ym'));
         $end_month_key = request()->input('end_month_key', $start_month_key);

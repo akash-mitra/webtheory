@@ -3,13 +3,13 @@
 namespace App\Listeners;
 
 // use App\Jobs\SendEmail;
-use App\Traits\SetMailConfig;
 use App\Mail\WelcomeNewUser;
+use App\Traits\CustomEmailSetup;
 use Illuminate\Auth\Events\Verified;
 
 class UserEmailVerified
 {
-    use SetMailConfig;
+    use CustomEmailSetup;
 
     /**
      * Handle the Email Verified event.
