@@ -17,3 +17,6 @@ coverage.zip
 coverage.html
 __pycache__
 _ide_helper.php
+
+# ignore PhpStorm IDE files
+.idea
