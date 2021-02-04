@@ -46,14 +46,14 @@ jobs:
     # perform following steps to install application and configure it.
     steps:
       - name: Setup PHP, with composer and extensions
-      - uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@v2
         with:
           php-version: '7.4'
           extensions: mbstring, dom, fileinfo, mysql
           coverage: xdebug
 
       - name: Checkout
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
       - name: Start mysql service
         run: sudo /etc/init.d/mysql start
