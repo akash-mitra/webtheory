@@ -73,16 +73,16 @@ jobs:
       - name: Clear Config
         run: php artisan config:clear
 
-      - name: Run Migration
-        run: php artisan migrate -v
-        env:
-          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
-
       - name: Create Test Database
         run: |
           mkdir -p database
           touch database/database.sqlite
+
+      - name: Run Migration
+        run: php artisan migrate --no-interaction --force -v --env=testing
+        env:
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
