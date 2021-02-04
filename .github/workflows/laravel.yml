@@ -75,12 +75,9 @@ jobs:
           cp -rf storage/repo/templates/Serenity/* resources/views/active/
           cp -rf storage/repo/templates/Serenity resources/views/templates/
           php artisan cache:clear --no-interaction --verbose
-          php artisan config:clear --no-interaction --verbose
           php artisan route:clear --no-interaction --verbose
           php artisan view:clear --no-interaction --verbose
           php artisan event:clear --no-interaction --verbose
-          php artisan config:cache --no-interaction --verbose
-          php artisan route:cache --no-interaction --verbose
           chmod -R 777 storage bootstrap/cache
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
