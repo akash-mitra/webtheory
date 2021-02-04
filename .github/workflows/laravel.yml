@@ -25,8 +25,6 @@ jobs:
       #CACHE_DRIVER: redis
       #QUEUE_CONNECTION: redis
       #SESSION_DRIVER: redis
-      #DB_PORT: 3306
-      #REDIS_PORT: 6379
 
     # install MySQL and Redis.
     services:
@@ -84,12 +82,15 @@ jobs:
           php artisan config:cache --no-interaction --verbose
           php artisan route:cache --no-interaction --verbose
           chmod -R 777 storage bootstrap/cache
-       
+        env:
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
           DB_CONNECTION: mysql
           DB_DATABASE: appdb
           APP_ENV: production
-          # DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          # REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
         run: vendor/bin/phpunit
