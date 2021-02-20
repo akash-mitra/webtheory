@@ -61,7 +61,7 @@ class Page extends Model
 
     public function media(): BelongsTo
     {
-        return $this->belongsTo('App\Media', 'media_id');
+        return $this->belongsTo('App\Asset', 'media_id');
     }
 
     public function comments(): HasMany

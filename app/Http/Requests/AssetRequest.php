@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class MediaRequest extends FormRequest
+class AssetRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,7 @@ class MediaRequest extends FormRequest
     public function rules()
     {
         return [
-            'image' => ['required', 'file', 'image', 'max:10240'],
+            'file' => ['required', 'file', 'max:25600'],
         ];
     }
 

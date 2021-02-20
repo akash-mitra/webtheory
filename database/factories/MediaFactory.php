@@ -1,14 +1,15 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+/** @var Factory $factory */
 
-use App\Media;
+use App\Asset;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 
-$factory->define(Media::class, function (Faker $faker) {
+$factory->define(Asset::class, function (Faker $faker) {
     $fileExtension = $faker->randomElement(['jpeg', 'png', 'bmp', 'gif', 'svg', 'webp']);
     $filename = $faker->domainWord . '.' . $fileExtension;
-    
+
     return [
         'name' => $filename,
         'type' => $fileExtension,

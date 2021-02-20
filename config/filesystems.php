@@ -29,13 +29,12 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Media Object Storage related variables
+    | Asset Object Storage related variables
     |--------------------------------------------------------------------------
     |
     */
 
     'media' => env('MEDIA'),
-
     'media_domain' => env('DOMAIN'),
 
     /*

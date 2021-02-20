@@ -1,8 +1,9 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+/** @var Factory $factory */
 use App\User;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Str;
 
 /*
@@ -27,13 +28,13 @@ $factory->define(User::class, function (Faker $faker) {
         'password' => Hash::make('password'),
         'remember_token' => Str::random(10),
         'role' => 'guest',
-        // 'avatar' => 'https://i.pravatar.cc/100?u=' . $fakeEmail,
-        'avatar' => 'https://source.unsplash.com/100x100?profile',
+        'avatar' => 'https://i.pravatar.cc/100?u=' . $fakeEmail,
+//        'avatar' => 'https://source.unsplash.com/100x100?profile',
         'about_me' => $faker->paragraph(),
         'gender' => $faker->randomElement(['Male', 'Female']),
         'dob' => $faker->date($format = 'Y-m-d', $max = 'now'),
         'profile' => null,
-        'preferences' => ["broadcast","database","mail"],
+        'preferences' => ["broadcast", "database", "mail"],
         'stripe_id' => $faker->uuid,
         'card_brand' => $faker->creditCardType,
         'card_last_four' => $faker->numberBetween($min = 1000, $max = 9000),

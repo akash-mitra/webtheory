@@ -32,7 +32,7 @@
 
                 <div
                     v-if="showFooter"
-                    class="w-full flex justify-between items-center p-6 bg-gray-100 border-t mt-6"
+                    class="w-full flex justify-between items-center p-6 bg-gray-100 border-t"
                 >
                     <button type="button" @click="closeModal">
                         <slot name="close-btn-content">
@@ -45,7 +45,7 @@
                     <button type="button" @click="startProcess">
                         <slot name="action-btn-content">
                             <span class="px-6 py-2 text-white bg-blue-600 rounded">
-                                OK
+                                {{ goAheadButtonText }}
                             </span>
                         </slot>
                     </button>
@@ -74,6 +74,10 @@ export default {
             type: Boolean,
             default: true,
         },
+        goAheadButtonText: {
+            type: String,
+            default: "OK"
+        }
     },
 
     computed: {

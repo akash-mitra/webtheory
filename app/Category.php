@@ -46,7 +46,7 @@ class Category extends Model
 
     public function media(): BelongsTo
     {
-        return $this->belongsTo(Media::class, 'media_id');
+        return $this->belongsTo(Asset::class, 'media_id');
     }
 
     public function author(): BelongsTo

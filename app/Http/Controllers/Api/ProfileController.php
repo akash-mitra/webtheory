@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Category;
 use App\Http\Controllers\Controller;
-use App\Media;
+use App\Asset;
 use App\Page;
 use App\User;
 use Exception;
@@ -35,13 +35,13 @@ class ProfileController extends Controller
         if ($request->has('avatarfile')) {
             $uploadedFile = $request->file('avatarfile');
 
-            $media = Media::store($uploadedFile, Str::slug($user->id), 'media/profiles', false);
+            $media = Asset::store($uploadedFile, Str::slug($user->id), 'media/profiles', false);
 
             $user->avatar = $media->url;
         }
 
         if ($request->has('avatar_base64')) {
-            $media = Media::storeFromBase64(
+            $media = Asset::storeFromBase64(
                 $request->input('avatar_base64'),
                 Str::slug($user->id),
                 'media/profiles',

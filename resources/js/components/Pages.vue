@@ -20,8 +20,7 @@
             <a
                 href="/app/pages/create"
                 class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow"
-                >Create</a
-            >
+            >Create</a>
         </div>
 
         <div class="px-6 relative">

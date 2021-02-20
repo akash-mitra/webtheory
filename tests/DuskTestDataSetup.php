@@ -4,7 +4,7 @@ namespace Tests;
 
 use App\Page;
 use App\User;
-use App\Media;
+use App\Asset;
 use App\Category;
 use App\PageContent;
 use Illuminate\Database\Eloquent\Collection;
@@ -74,7 +74,7 @@ class DuskTestDataSetup extends DuskTestCase
         $this->registeredUser = factory(User::class)->create(['email' => 'registereduser@example.com', 'role' => 'registered']);
         $this->user = factory(User::class)->create(['email' => 'testuser@example.com']);
 
-        $this->media = factory(Media::class)->create([
+        $this->media = factory(Asset::class)->create([
             'user_id' => $this->adminUser->id,
         ]);
 

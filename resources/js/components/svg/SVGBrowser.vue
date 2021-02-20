@@ -283,8 +283,3 @@
         />
     </svg>
 </template>
-<script>
-export default {
-    // props: ['containerClass'],
-}
-</script>

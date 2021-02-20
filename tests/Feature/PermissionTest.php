@@ -6,7 +6,7 @@ use Tests\TestDataSetup;
 use App\Category;
 use App\Page;
 use App\PageContent;
-use App\Media;
+use App\Asset;
 use Illuminate\Http\UploadedFile;
 use App\User;
 use App\Parameter;
@@ -270,27 +270,27 @@ class PermissionTest extends TestDataSetup
             ->assertStatus(403);
     }
 
-    // Media
+    // Asset
     public function test_media_permission()
     {
         $users = [$this->adminUser, $this->authorUser1];
         foreach ($users as $user) {
             $this->actingAs($user);
             $this->get('/api/media')->assertStatus(200);
-            $this->get('/api/media/' . $this->media->id)->assertStatus(200);
+            $this->get('/api/media/' . $this->asset->id)->assertStatus(200);
         }
         $this->actingAs($this->registeredUser)
             ->get('/api/media')
             ->assertStatus(403);
         $this->actingAs($this->registeredUser)
-            ->get('/api/media/' . $this->media->id)
+            ->get('/api/media/' . $this->asset->id)
             ->assertStatus(403);
 
         $users = [$this->adminUser, $this->authorUser1];
         foreach ($users as $user) {
             $image = UploadedFile::fake()->image('testimage.png');
             $media = [
-                'image' => $image,
+                'file' => $image,
             ];
             $this->actingAs($user);
             $this->post('/api/media', $media, ['Accept' => 'application/json'])->assertStatus(200);
@@ -314,15 +314,15 @@ class PermissionTest extends TestDataSetup
             ->post('/api/media/fetchUrl', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
 
-        $media = factory(Media::class)->create(['user_id' => $this->user->id]);
+        $media = factory(Asset::class)->create(['user_id' => $this->user->id]);
         $this->actingAs($this->adminUser)
             ->delete('/api/media/' . $media->id)
-            ->assertStatus(204);
+            ->assertStatus(200);
         $this->actingAs($this->authorUser1)
-            ->delete('/api/media/' . $this->media->id)
+            ->delete('/api/media/' . $this->asset->id)
             ->assertStatus(403);
         $this->actingAs($this->registeredUser)
-            ->delete('/api/media/' . $this->media->id)
+            ->delete('/api/media/' . $this->asset->id)
             ->assertStatus(403);
     }
 
