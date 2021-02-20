@@ -104,7 +104,7 @@ class TemplateController extends Controller
     public function duplicate(Template $template, Request $request)
     {
         $request->validate([
-            'save_as' => ['required', 'max:100', 'regex:/^[\pL0-9\s\-_]+$/u', 'unique:templates'],
+            'save_as' => ['required', 'max:100', 'regex:/^[\pL0-9\s\-_]+$/u', 'unique:templates,name'],
         ]);
 
         $template->duplicate($request->input('save_as'));
