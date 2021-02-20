@@ -88,3 +88,10 @@ jobs:
           DB_PASSWORD: password
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
         run: vendor/bin/phpunit
+
+      - name: Collect logs
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          path: /home/runner/work/webtheory/webtheory/storage/logs/*.log
+          retention-days: 5
