@@ -36,6 +36,7 @@
                     allow-upload
                     enable-lazy-load
                     save-url="/api/media"
+                    post-key="file"
                     :save-request-headers="headers"
                     @selected="onSelect"
                     @saved="onSave"
