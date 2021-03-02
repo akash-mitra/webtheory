@@ -163,7 +163,7 @@ class AssetTest extends TestDataSetup
     public function test_base64_image_upload()
     {
         // create encoded media uri
-        $imageContent = file_get_contents('https://i.pravatar.cc/150?img=1');
+        $imageContent = file_get_contents('https://s3-ap-southeast-1.amazonaws.com/pravatar.cc/1.jpg');
         $dataUri = 'data:image/' . 'jpeg' . ';base64,' . base64_encode($imageContent);
 
         $this->actingAs($this->adminUser);
