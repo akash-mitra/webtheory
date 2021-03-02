@@ -11,7 +11,7 @@ trait SearchQueryFilter {
      * Enhances a query builder with additional conditions for
      * matching the query string with the list of columns.
      * @param Builder $queryBuilder Original \Illuminate\Database\Eloquent\Builder .
-     * @param array $cols An array containing the column names. Relationships can be accessed with table.column name.
+     * @param array $cols An array containing the column names. To filter based on the column names of a relate3d model, use relation.column notation.
      * @param $queryString String|null Search keywords separated by space.
      * @return Builder
      */

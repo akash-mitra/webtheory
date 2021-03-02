@@ -182,7 +182,7 @@ export default {
             window.axios
                 .post('/api/parameters/share', { value: JSON.stringify(this.share) })
                 .then((response) => {
-                    util.notifySuccess('Saved', 'Successfully saved Social Media Sharing Settings.')
+                    util.notifySuccess('Saved', 'Successfully saved Social Asset Sharing Settings.')
                     p.isUpdating = false
                 })
                 .catch((error) => {

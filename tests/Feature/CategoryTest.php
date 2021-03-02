@@ -47,9 +47,9 @@ class CategoryTest extends TestDataSetup
             ->assertJsonStructureExact($this->category_attributes_list);
         $this->assertDatabaseHas('categories', ['name' => $category->name]);
 
-        // Category with Media
+        // Category with Asset
         $category = factory(Category::class)->create([
-            'media_id' => $this->media->id,
+            'media_id' => $this->asset->id,
             'user_id' => $this->adminUser->id,
         ]);
 

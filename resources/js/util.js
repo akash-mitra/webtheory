@@ -64,6 +64,10 @@
             .replace('d', d)
     }
 
+    util.initCap = function (val) {
+        return val.charAt(0).toUpperCase() + val.slice(1);
+    }
+
     // Generic DOM Selector
     util.get = function (selector) {
         return document.querySelector(selector)

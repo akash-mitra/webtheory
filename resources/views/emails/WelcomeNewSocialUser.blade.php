@@ -13,8 +13,7 @@
     </p>
 
     <p>
-        You now have unrestricted access to our website.
-        Please don't forget to keep your account profile updated.
+        You can now login to this website using your social media account.
     </p>
 
     <p>

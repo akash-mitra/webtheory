@@ -168,7 +168,7 @@ class UserController extends Controller
         return response()->json(
             [
                 'status' => 'success',
-                'operation' => $request->has('forceDelete') ? 'Delete' : 'Deactivate',
+                'operation' => $request->has('forceDelete') && $request->input('forceDelete') === true ? 'Delete' : 'Deactivate',
                 'user' => $user,
             ],
             204

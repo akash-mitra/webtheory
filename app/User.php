@@ -82,9 +82,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany('App\Page');
     }
 
-    public function media(): HasMany
+    public function assets(): HasMany
     {
-        return $this->hasMany('App\Media');
+        return $this->hasMany('App\Asset');
     }
 
     public function categoryComments(): HasMany
