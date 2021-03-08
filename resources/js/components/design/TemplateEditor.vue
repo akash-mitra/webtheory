@@ -308,7 +308,7 @@
 </template>
 
 <script>
-import PhotoPicker from './PhotoPicker.vue'
+import PhotoPicker from '../PhotoPicker.vue'
 
 export default {
     data: function () {
@@ -508,7 +508,8 @@ export default {
                 util.ajax('delete', '/api/templates/' + p.id, {}, (response) => {
                     util.notifySuccess('Deleted', 'The template has been successfully deleted')
 
-                    p.$router.push('/app/templates')
+                    p.$router.push('/app/design')
+
                 })
             })
         },
