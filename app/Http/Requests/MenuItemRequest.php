@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MenuRequest extends FormRequest
+class MenuItemRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +24,14 @@ class MenuRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['required', 'string', 'max:255'], // ,'alpha_dash',
-            'alias' => ['nullable', 'string', 'max:255'],
-            'parent_id' => ['nullable', 'integer'],
-            'sequence_num' => ['required', 'integer'],
-            'menuable_id' => ['required', 'integer'],
-            'menuable_type' => ['required', 'string', 'max:255'],
-            'home' => ['required'], // , 'boolean'
+            'menus' => ['nullable', 'array'],
+            'menus.*.title' => ['required', 'string', 'max:255'], // ,'alpha_dash'
+            'menus.*.alias' => ['nullable', 'string', 'max:255'],
+            'menus.*.parent_id' => ['nullable', 'integer'],
+            'menus.*.sequence_num' => ['required', 'integer'],
+            'menus.*.menuable_id' => ['required', 'integer'],
+            'menus.*.menuable_type' => ['required', 'string', 'max:255'],
+            'menus.*.home' => ['required'], // , 'boolean'
         ];
     }
 
