@@ -95,77 +95,77 @@
                 <div class="text-right text-gray-700 text-sm max-w-xs bg-gray-1001">
                     <div
                         class="w-full pr-8 py-4 cursor-pointer"
-                        @click="subtab = 'search'"
                         :class="
-                            subtab === 'search'
+                            sideTab === 'search'
                                 ? 'text-indigo-500 whitespace-no-wrap'
                                 : 'whitespace-no-wrap'
                         "
+                        @click="sideTab = 'search'"
                     >
                         Full-text Search
                     </div>
 
                     <div
                         class="w-full pr-8 py-4 cursor-pointer"
-                        @click="subtab = 'share'"
                         :class="
-                            subtab === 'share'
+                            sideTab === 'share'
                                 ? 'text-indigo-500 whitespace-no-wrap'
                                 : 'whitespace-no-wrap'
                         "
+                        @click="sideTab = 'share'"
                     >
                         Social Share
                     </div>
 
                     <div
                         class="w-full pr-8 py-4 cursor-pointer"
-                        @click="subtab = 'security'"
                         :class="
-                            subtab === 'security'
+                            sideTab === 'security'
                                 ? 'text-indigo-500 whitespace-no-wrap'
                                 : 'whitespace-no-wrap'
                         "
+                        @click="sideTab = 'security'"
                     >
                         Security
                     </div>
                     <div
                         class="w-full pr-8 py-4 cursor-pointer"
-                        @click="subtab = 'ads'"
                         :class="
-                            subtab === 'ads'
+                            sideTab === 'ads'
                                 ? 'text-indigo-500 whitespace-no-wrap'
                                 : 'whitespace-no-wrap'
                         "
+                        @click="sideTab = 'ads'"
                     >
                         Ad Services
                     </div>
                 </div>
                 <div class="flex-grow">
                     <div class="w-full">
-                        <SearchServiceSettings v-if="subtab === 'search'"></SearchServiceSettings>
-                        <SocialShareSettings v-if="subtab === 'share'"></SocialShareSettings>
+                        <SearchServiceSettings v-if="sideTab === 'search'"></SearchServiceSettings>
+                        <SocialShareSettings v-if="sideTab === 'share'"></SocialShareSettings>
                         <SecurityServicesSettings
-                            v-if="subtab === 'security'"
+                            v-if="sideTab === 'security'"
                         ></SecurityServicesSettings>
-                        <AdServicesSettings v-if="subtab === 'ads'"></AdServicesSettings>
+                        <AdServicesSettings v-if="sideTab === 'ads'"></AdServicesSettings>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div v-if="tab == 'login'">
+        <div v-if="tab === 'login'">
             <LoginSettings></LoginSettings>
         </div>
 
-        <div v-if="tab == 'notification'">
+        <div v-if="tab === 'notification'">
             <MailSettings></MailSettings>
         </div>
 
-        <div v-if="tab == 'site'">
+        <div v-if="tab === 'site'">
             <SiteSettings></SiteSettings>
         </div>
 
-        <div v-if="tab == 'maintainance'" class="flex flex-wrap">
+        <div v-if="tab === 'maintainance'" class="flex flex-wrap">
             <UpdateSettings class="px-6 mb-4 w-full md:w-1/2 max-w-lg"></UpdateSettings>
             <BackupSettings class="px-6 mb-4 w-full md:w-1/2 max-w-lg"></BackupSettings>
         </div>
@@ -199,7 +199,7 @@ export default {
     data() {
         return {
             tab: 'services',
-            subtab: 'search',
+            sideTab: 'search',
         }
     },
 }

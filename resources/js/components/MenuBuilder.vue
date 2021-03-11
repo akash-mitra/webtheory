@@ -133,34 +133,74 @@ export default {
                id: -1 * Math.random(),
                title: "",
                menuable_id: 0,
-               menuable: { title: null },
+               menuable: {title: null},
                menuable_type: 'App\\Page',
                sequence_num: max_sequence + 1,
                home: false
            })
         },
 
+        isValidMenu(menu) {
+            if (menu.title.trim() === "" || menu.title === null) {
+                util.notifyError("Menu name missing", "Provide a name for the menu.")
+                return false
+            }
+
+            if (menu.menuable_id === 0) {
+                util.notifyError("No Item Selected", "Select an item you want to assign to menu [" + menu.title + "].")
+                return false
+            }
+
+            return true
+        },
+
+
         /**
          * Save all the menu items individually by looping through "menus".
          */
         save() {
-            this.menus.forEach((menu, index) => {
-                // Recalculate the sequence number based on the positions of the menu item while saving.
+            let l = this.menus.length;
+
+            // validate
+            for (let index = 0; index < l; index++) {
+                let menu = this.menus[index]
+                if (!this.isValidMenu(menu)) return
+            }
+
+            for (let index = 0; index < l; index++) {
+                let menu = this.menus[index]
+
+                // Recalculate the sequence number based
+                // on the positions of the menu item while saving.
                 menu.sequence_num = index + 1
 
                 if (menu.hasOwnProperty('id') && menu.id > 0) {
-                    // update
-                    util.ajax('put', '/api/menus/' + menu.id, menu, (response) => {
-                        console.log(response)
-                    })
+                    this.update(menu)
                 } else {
-                    // create
-                    util.ajax('post', '/api/menus', menu, (response) => {
-                        console.log(response)
-                    })
+                    this.insert(menu)
                 }
-            })
+            }
 
+            util.notifySuccess("Menu saved");
+        },
+
+        update(menu) {
+            util.ajax('put', '/api/menus/' + menu.id, menu, (response) => {
+                console.log(response)
+            }, (response) => {
+                util.notifyError("Could not save", "Error occurred while updating menu [" + menu.title + "]")
+                console.log(response)
+            })
+        },
+
+
+        insert(menu) {
+            util.ajax('post', '/api/menus', menu, (response) => {
+                console.log(response)
+            }, (response) => {
+                util.notifyError("Could not save", "Error occurred while creating menu [" + menu.title + "]")
+                console.log(response)
+            })
         },
 
         /**
