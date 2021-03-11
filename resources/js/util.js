@@ -1,7 +1,6 @@
 ;(function (util, undefined) {
     //Private Property
-    var isHot = true
-    var timer = null
+    let timer = null
 
     // Public properties
 

@@ -1,13 +1,12 @@
 <template>
-    <div class="max-w-5xl mx-auto">
-        <div class="px-2 my-6 w-full flex justify-between items-baseline">
+    <div class="max-w-5xl mx-auto px-6">
+        <div class="mt-6 pb-4 w-full flex justify-between items-center flex-no-wrap">
             <div>
-                <h2 class="text-gray-600 text-2xl flex items-center">{{ name }}</h2>
-                <p class="text-gray-700 text-sm py-2">{{ description }}</p>
+                <h2 class="text-gray-600 text-2xl capitalize">{{ name }}</h2>
             </div>
 
-            <div>
-                <t-button color="gray" @click.native="$router.go(-1)">
+            <div class="flex-no-wrap flex">
+                <t-button color="white" @click.native="$router.go(-1)">
                     Close
                 </t-button>
 
@@ -19,7 +18,9 @@
             </div>
         </div>
 
-        <div class="px-2 w-full flex justify-start items-center mt-8">
+        <p class="text-gray-700 text-sm py-4 border-b">{{ description }}</p>
+
+        <div class="w-full flex justify-start items-center mt-2">
             <div
                 id="template-files-tab"
                 @click="tab = 'files'"
@@ -60,7 +61,7 @@
 
         <div
             v-show="tab === 'files'"
-            class="w-full bg-white px-6 py-6 border-t border-blue-400 rounded overflow-auto mb-12"
+            class="w-full bg-white px-6 py-6 border-t border-blue-400 overflow-auto mb-12"
         >
             <div class="text-lg text-gray-800 pb-2">Template Files</div>
 
@@ -118,13 +119,7 @@
                 </tbody>
             </table>
 
-            <div
-                id="addTemplateFile"
-                class="py-2 px-4 inline-block mt-4 border rounded cursor-pointer text-sm shado1w border-blue-400 text-blue-500"
-                @click="addTemplateFile"
-            >
-                Add File
-            </div>
+            <t-button id="addTemplateFile" class="mt-4" color="blue" @click.native="addTemplateFile">Add File</t-button>
         </div>
 
         <div

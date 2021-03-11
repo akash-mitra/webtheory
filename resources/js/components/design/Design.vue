@@ -48,13 +48,13 @@
 
                     <div
                         id="template-installed-tab"
-                        @click="tab = 'installed'"
-                        class="px-4 text-sm tracking-wide uppercase cursor-pointer"
                         :class="
-                            tab === 'installed'
+                            tab === 'template'
                                 ? 'text-gray-700 py-2 border-b-4 border-blue-500'
                                 : 'text-gray-500 py-2'
                         "
+                        class="px-4 text-sm tracking-wide uppercase cursor-pointer"
+                        @click="tab = 'template'"
                     >
                         Templates
                         <span
@@ -72,17 +72,17 @@
         </div>
 
 
-        <div v-show="tab === 'installed'">
+        <div v-show="tab === 'template'" class="-mt-4">
 
-            <div class="w-full flex px-6">
+            <div class="w-full flex">
                 <div class="text-right text-gray-700 text-sm max-w-xs">
                     <div
                         :class="
                             sideTab === 'installed'
-                                ? 'text-indigo-500 whitespace-no-wrap'
-                                : 'whitespace-no-wrap'
+                                ? 'text-indigo-500 border-indigo-600'
+                                : ''
                         "
-                        class="w-full pr-8 py-4 cursor-pointer"
+                        class="w-full pr-8 py-4 cursor-pointer whitespace-no-wrap border-r"
                         @click="sideTab = 'installed'"
                     >
                         Installed
@@ -91,16 +91,16 @@
                     <div
                         :class="
                             sideTab === 'gallery'
-                                ? 'text-indigo-500 whitespace-no-wrap'
+                                ? 'text-indigo-500 border-indigo-600'
                                 : 'whitespace-no-wrap'
                         "
-                        class="w-full pr-8 py-4 cursor-pointer"
+                        class="w-full pr-8 py-4 cursor-pointer whitespace-no-wrap border-r"
                         @click="sideTab = 'gallery'"
                     >
                         Gallery
                     </div>
                 </div>
-                <div class="flex-grow border-l">
+                <div class="flex-grow border-l border-indigo">
                     <div class="w-full">
                         <div v-if="sideTab === 'installed'">
                             <div class="sm:flex sm:flex-wrap">
