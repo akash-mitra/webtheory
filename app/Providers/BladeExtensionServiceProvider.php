@@ -30,5 +30,7 @@ class BladeExtensionServiceProvider extends ServiceProvider
         Blade::include('modules.sharepost', 'sharepost');
 
         Blade::include('modules.form', 'form');
+
+        Blade::include('modules.ads', 'ads');
     }
 }

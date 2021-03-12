@@ -98,6 +98,8 @@
                 'commentInviteClass' => 'w-full flex p-4 bg-gray-800 rounded-lg mb-4 justify-between items-center',
             ])
 
+            @ads
+
         </main>
 
     </div>
