@@ -100,6 +100,8 @@
                     </div>
                 @endforeach
             </section>
+
+            @comments
         </main>
 
 
