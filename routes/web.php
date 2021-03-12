@@ -52,6 +52,19 @@ Route::get('social/login/{provider}/callback', 'Auth\SocialLoginController@callb
 );
 
 /*
+| GOOGLE 2FA RELATED ROUTES
+*/
+Route::post('google2fa/enable', 'Auth\Google2FAController@enable')->name('google2fa.enable');
+Route::get('google2fa/validate', 'Auth\LoginController@getToken')->name('google2fa.token');
+
+Route::post('google2fa/validate', [
+    'middleware' => 'throttle:5',
+    'uses' => 'Auth\LoginController@validateToken',
+])->name('google2fa.validate');
+
+Route::post('google2fa/disable', 'Auth\Google2FAController@disable')->name('google2fa.disable');
+
+/*
 | FRONT-END RELATED ROUTES
 */
 Route::get('/', [HomeController::class, 'root'])->name('home');

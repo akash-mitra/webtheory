@@ -28,6 +28,7 @@ class CreateUsersTable extends Migration
             $table->longText('profile')->nullable();
             $table->text('preferences')->nullable();
             $table->string('public_id', 30);
+            $table->string('google2fa_secret')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

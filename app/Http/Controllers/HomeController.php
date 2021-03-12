@@ -81,6 +81,7 @@ class HomeController extends Controller
     public function profile(string $publicProfileId)
     {
         $user = User::findByPublicId($publicProfileId);
+        $user->google2fa = isset($user->google2fa_secret) ? true : false;
 
         $data = DataProvider::profile(
             optional(auth()->user())->public_id === $publicProfileId

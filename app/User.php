@@ -40,6 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'profile',
         'preferences',
         'public_id',
+        'google2fa_secret',
         'stripe_id',
         'card_brand',
         'card_last_four',
@@ -54,6 +55,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $hidden = [
         'password',
         'remember_token',
+        'google2fa_secret',
         'stripe_id',
         'card_brand',
         'card_last_four',

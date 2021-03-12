@@ -60,6 +60,21 @@
                         >Change Current Password</span
                     >
                 </div>
+                
+                <div class="mb-2" v-if="user.google2fa">
+                    <span
+                        @click="disable2fa"
+                        class="text-red-600 cursor-pointer inline-block"
+                        >Disable Google 2FA</span
+                    >
+                </div>
+                <div class="mb-2" v-else>
+                    <span
+                        @click="enable2fa"
+                        class="text-blue-600 cursor-pointer inline-block"
+                        >Enable Google 2FA</span
+                    >
+                </div>
             </div>
 
             <TensorFormError
@@ -147,6 +162,33 @@
                 {{ message }}
             </div>
         </div>
+
+        <div class="py-4 w-full" v-if="tab === 'enable-google2fa'">
+            <div class="text-2xl px-12 py-4 border-b mb-6">Two Factor Authentication</div>
+            <div class="mb-4 px-12">
+                <p class="text-md">Open up your 2FA mobile app and scan the following QR barcode:</p>
+                <img class="my-4" alt="Image of QR barcode" :src="image"/>
+                <p class="text-md">If your 2FA mobile app does not support scanning of QR barcodes, enter in the following number:</p>
+                <p class="text-xl mt-4" v-text="secret"></p>
+            </div>
+            <div class="px-8 w-full mt-8 flex items-center">
+                <span @click="cancel" class="ml-4 text-blue-600 cursor-pointer inline-block"
+                    >Back</span
+                >
+            </div>
+        </div>
+
+        <div class="py-4 w-full" v-if="tab === 'disable-google2fa'">
+            <div class="text-2xl px-12 py-4 border-b mb-6">Two Factor Authentication</div>
+            <div class="mb-4 px-12">
+                <p class="text-red-600 text-md">Google Two Factor Authentication has been disabled !!</p>
+            </div>
+            <div class="px-8 w-full mt-8 flex items-center">
+                <span @click="cancel" class="ml-4 text-blue-600 cursor-pointer inline-block"
+                    >Back</span
+                >
+            </div>
+        </div>
     </div>
 </template>
 
@@ -204,6 +246,9 @@ export default {
             tab: 'info',
             message: '',
             errors: null,
+
+            image: null,
+            secret: '',
         }
     },
 
@@ -256,6 +301,35 @@ export default {
                 data,
                 function (response) {
                     p.message = 'Password Changed Successfully'
+                },
+                (error) => (this.errors = error)
+            )
+        },
+
+        enable2fa() {
+            let p = this
+
+            Tensor.xpost(
+                '/google2fa/enable',
+                {},
+                function (response) {
+                    p.image = response.image
+                    p.secret = response.secret
+                    p.tab = 'enable-google2fa'
+                },
+                (error) => (this.errors = error)
+            )
+        },
+
+        disable2fa() {
+            let p = this
+
+            Tensor.xpost(
+                '/google2fa/disable',
+                {},
+                function (response) {
+                    p.secret = response.status
+                    p.tab = 'disable-google2fa'
                 },
                 (error) => (this.errors = error)
             )
