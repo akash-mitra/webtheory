@@ -215,6 +215,7 @@ class PermissionsTableSeeder extends Seeder
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'menus', 'action' => 'show', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'menus', 'action' => 'store', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'menus', 'action' => 'update', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'menus', 'action' => 'upsert', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'menus', 'action' => 'destroy', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
 
 

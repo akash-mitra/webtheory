@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Menu;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MenuRequest;
+use App\Http\Requests\MenuItemRequest;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use DB;
 
 class MenuController extends Controller
 {
@@ -82,6 +84,53 @@ class MenuController extends Controller
             ->save();
 
         return response()->json($menu);
+    }
+
+    /**
+     * Upsert a resource in storage.
+     *
+     * @param MenuRequest $request
+     * @return JsonResponse
+     */
+    public function upsert(MenuItemRequest $request): JsonResponse
+    {
+        Menu::invalidateCache();
+        
+        DB::transaction(function () use ($request) {
+            foreach ($request->menus as $menuitem) {
+                if (!isset($menuitem['id'])) {
+                    // add new menu item
+                    $menu = new Menu([
+                        'title' => $menuitem['title'],
+                        'alias' => $menuitem['alias'],
+                        'parent_id' => $menuitem['parent_id'],
+                        'sequence_num' => $menuitem['sequence_num'],
+                        'menuable_id' => $menuitem['menuable_id'],
+                        'menuable_type' => $menuitem['menuable_type'],
+                        'home' => $menuitem['home'],
+                    ]);
+                    $menu->save();
+                } else {
+                    // update existing menu item
+                    $menu = Menu::findOrFail($menuitem['id']);
+                    $menu
+                        ->fill([
+                            'title' => $menuitem['title'],
+                            'alias' => $menuitem['alias'],
+                            'parent_id' => $menuitem['parent_id'],
+                            'sequence_num' => $menuitem['sequence_num'],
+                            'menuable_id' => $menuitem['menuable_id'],
+                            'menuable_type' => $menuitem['menuable_type'],
+                            'home' => $menuitem['home'],
+                        ])
+                        ->save();
+                }
+            }
+        });
+        
+        $menuitems = Menu::orderBy('sequence_num')->get();
+        $menus = ['menus' => $menuitems];
+        return response()->json($menus);
     }
 
     /**

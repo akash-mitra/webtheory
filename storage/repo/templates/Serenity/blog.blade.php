@@ -6,12 +6,24 @@
 
 @push('headers')
 
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="blog" />
+    <meta property="og:site_name" content="{{ $data->ref->site->name }}">
     <meta property="og:title" content="{{ $data->ref->site->title }}">
     <meta property="og:description" content="{{ $data->ref->site->desc }}">
-    <meta property="og:image" content="{{ url('/') . optional($data->ref->site)->url }}">
+    @isset($data->ref->site->logo)
+        <meta property="og:image" content="{{ $data->ref->site->logo }}">
+    @endisset
     <meta property="og:url" content="{{ url('/') }}">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta property="og:site_name" content="{{ $data->ref->site->name }}">
+    <!--meta property="fb:app_id" content=""-->
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ $data->ref->site->title }}" />
+    <meta name="twitter:description" content="{{ $data->ref->site->desc  }}" />
+    @isset($data->ref->site->logo)
+        <meta name="twitter:image" content="{{ $data->ref->site->logo }}" />
+    @endisset
+    <meta name="twitter:domain" content="{{ env('DOMAIN') }}">
 
 @endpush
 

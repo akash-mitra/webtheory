@@ -147,6 +147,119 @@ class MenuTest extends TestDataSetup
         $this->assertDatabaseMissing('menus', ['title' => 'Test Menu']);
     }
 
+    /* Menu Upsert */
+    public function test_menu_upsert1()
+    {
+        $menus = [];
+        $menu1 = factory(Menu::class)->make([
+            'menuable_id' => $this->category->id,
+            'menuable_type' => 'App\Category',
+            'sequence_num' => 1,
+        ]);
+        array_push($menus, $menu1->toArray());
+
+        $menu2 = factory(Menu::class)->make([
+            'menuable_id' => $this->page->id,
+            'menuable_type' => 'App\Page',
+            'sequence_num' => 2,
+        ]);
+        array_push($menus, $menu2->toArray());
+        
+        $menu = ['menus' => $menus];
+        
+        // Unauthenticated user cannot save menu
+        $response = $this->post('/api/menuitems', $menu, [
+            'Accept' => 'application/json',
+        ]);
+        $response->assertStatus(401)->assertJson(['message' => 'Unauthenticated.']);
+
+        // Registered user cannot save menu
+        $response = $this->actingAs($this->registeredUser)->post(
+            '/api/menuitems',
+            $menu,
+            ['Accept' => 'application/json']
+        );
+        $response->assertStatus(403)->assertJson(['message' => 'Restricted Access']);
+
+        // Authenticated user can save menu
+        $response = $this->actingAs($this->adminUser)->post(
+            '/api/menuitems',
+            $menu,
+            ['Accept' => 'application/json']
+        );
+
+        $response
+            ->assertStatus(200)
+            ->assertJsonStructureExact([
+                'menus' => [
+                    '*' => [
+                        'id',
+                        'title',
+                        'alias',
+                        'parent_id',
+                        'sequence_num',
+                        'menuable_id',
+                        'menuable_type',
+                        'home',
+                        'created_at',
+                        'updated_at',
+                    ]
+                ]
+            ]);
+        $this->assertDatabaseHas('menus', ['title' => $menu1->title]);
+    }
+
+    public function test_menu_upsert2()
+    {
+        $menus = [];
+        $menu1 = factory(Menu::class)->create([
+            'title' => 'Test Menu',
+            'menuable_id' => $this->category->id,
+            'menuable_type' => 'App\Category',
+            'sequence_num' => 1,
+        ]);
+        $menu1->title = 'Test Menu Updated';
+        array_push($menus, $menu1->toArray());
+
+        $menu2 = factory(Menu::class)->make([
+            'menuable_id' => $this->page->id,
+            'menuable_type' => 'App\Page',
+            'sequence_num' => 2,
+        ]);
+        array_push($menus, $menu2->toArray());
+        
+        $menu = ['menus' => $menus];
+        
+        $response = $this->actingAs($this->adminUser)->post(
+            '/api/menuitems',
+            $menu,
+            ['Accept' => 'application/json']
+        );
+
+        $response
+            ->assertStatus(200)
+            ->assertJsonStructureExact([
+                'menus' => [
+                    '*' => [
+                        'id',
+                        'title',
+                        'alias',
+                        'parent_id',
+                        'sequence_num',
+                        'menuable_id',
+                        'menuable_type',
+                        'home',
+                        'created_at',
+                        'updated_at',
+                    ]
+                ]
+            ]);
+
+        $this->assertDatabaseHas('menus', ['title' => 'Test Menu Updated']);
+        $this->assertDatabaseMissing('menus', ['title' => 'Test Menu']);
+        $this->assertDatabaseHas('menus', ['title' => $menu2->title]);
+    }
+
     /* Menu Destroy */
     public function test_menu_destroy()
     {
