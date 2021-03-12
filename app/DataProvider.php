@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
+use App\ViewContent;
+use App\Page;
 
 class DataProvider
 {
@@ -45,6 +47,9 @@ class DataProvider
             'categories' => self::categories(),
             'menus' => self::menus(),
             'user' => auth()->user(),
+            'top_pages' => ViewContent::monthly(),
+            'recent_pages' => Page::where('status', 'Live')->latest()->paginate(5),
+            'author_pages' => Page::where([['user_id', $page->user_id], ['status', 'Live']])->latest()->paginate(5),
         ];
     }
 
