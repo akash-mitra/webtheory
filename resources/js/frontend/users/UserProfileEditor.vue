@@ -60,19 +60,19 @@
                         >Change Current Password</span
                     >
                 </div>
-                
+
                 <div class="mb-2" v-if="user.google2fa">
                     <span
                         @click="disable2fa"
                         class="text-red-600 cursor-pointer inline-block"
-                        >Disable Google 2FA</span
+                    >Disable Two-Factor Authentication</span
                     >
                 </div>
                 <div class="mb-2" v-else>
                     <span
                         @click="enable2fa"
                         class="text-blue-600 cursor-pointer inline-block"
-                        >Enable Google 2FA</span
+                    >Enable Two-Factor Authentication</span
                     >
                 </div>
             </div>
@@ -164,29 +164,35 @@
         </div>
 
         <div class="py-4 w-full" v-if="tab === 'enable-google2fa'">
-            <div class="text-2xl px-12 py-4 border-b mb-6">Two Factor Authentication</div>
+            <div class="text-2xl px-12 py-4 border-b mb-6">Two Factor Authentication (2FA) is Enabled</div>
             <div class="mb-4 px-12">
                 <p class="text-md">Open up your 2FA mobile app and scan the following QR barcode:</p>
-                <img class="my-4" alt="Image of QR barcode" :src="image"/>
-                <p class="text-md">If your 2FA mobile app does not support scanning of QR barcodes, enter in the following number:</p>
+                <div v-html="image"></div>
+                <p class="text-md">If your 2FA mobile app does not support scanning of QR barcodes, enter in the
+                    following number:</p>
                 <p class="text-xl mt-4" v-text="secret"></p>
             </div>
-            <div class="px-8 w-full mt-8 flex items-center">
-                <span @click="cancel" class="ml-4 text-blue-600 cursor-pointer inline-block"
-                    >Back</span
+            <div class="px-8 w-full m-8 py-4 flex items-center border-t justify-between">
+
+                <button class="px-6 py-3 bg-green-500 text-lg text-white hover:bg-green-700 rounded" @click="reload">
+                    Done
+                </button>
+
+                <span class="ml-4 text-red-600 cursor-pointer inline-block" @click="disable2fa"
+                >Do Not Enable</span
                 >
             </div>
         </div>
 
         <div class="py-4 w-full" v-if="tab === 'disable-google2fa'">
-            <div class="text-2xl px-12 py-4 border-b mb-6">Two Factor Authentication</div>
+            <div class="text-2xl px-12 py-4 border-b mb-6">Two Factor Authentication (2FA) is Disabled</div>
             <div class="mb-4 px-12">
-                <p class="text-red-600 text-md">Google Two Factor Authentication has been disabled !!</p>
+                <p class="text-red-600 text-md">Two-Factor Authentication has been Disabled!!</p>
             </div>
-            <div class="px-8 w-full mt-8 flex items-center">
-                <span @click="cancel" class="ml-4 text-blue-600 cursor-pointer inline-block"
-                    >Back</span
-                >
+            <div class="px-8 w-full mt-8 py-4 flex items-center border-t">
+                <button class="px-6 py-3 bg-green-500 text-lg text-white hover:bg-green-700 rounded" @click="reload">
+                    Done
+                </button>
             </div>
         </div>
     </div>
@@ -267,7 +273,6 @@ export default {
                 about_me: this.aboutMe,
                 gender: this.gender,
                 preferences: preferences,
-                // 'dob': this.user.dob,
             }
 
             if (this.avatarBase64Data) {
@@ -286,6 +291,10 @@ export default {
 
         cancel() {
             this.$emit('cancelled')
+        },
+
+        reload() {
+            window.location.reload()
         },
 
         resetPassword() {
@@ -309,23 +318,25 @@ export default {
         enable2fa() {
             let p = this
 
-            Tensor.xpost(
-                '/google2fa/enable',
-                {},
-                function (response) {
-                    p.image = response.image
-                    p.secret = response.secret
-                    p.tab = 'enable-google2fa'
-                },
-                (error) => (this.errors = error)
-            )
+            if (window.confirm("Enable Two-Factor Authentication?")) {
+                Tensor.xpost(
+                    '/2fa/enable',
+                    {},
+                    function (response) {
+                        p.image = response.image
+                        p.secret = response.secret
+                        p.tab = 'enable-google2fa'
+                    },
+                    (error) => (this.errors = error)
+                )
+            }
         },
 
         disable2fa() {
             let p = this
 
             Tensor.xpost(
-                '/google2fa/disable',
+                '/2fa/disable',
                 {},
                 function (response) {
                     p.secret = response.status
