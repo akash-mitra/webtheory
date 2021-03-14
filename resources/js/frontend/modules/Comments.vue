@@ -22,6 +22,7 @@
                             :class="textBoxClass"
                             onclick="this.classList.remove('h-12')"
                         ></textarea>
+                        <div ref="recaptcha"></div>
 
                         <div
                             v-show="comment.length > 0"
@@ -32,7 +33,7 @@
                             </div>
 
                             <button
-                                @click="postComment"
+                                @click="postComment1"
                                 :class="buttonClass"
                                 :disabled="networkActionInProgress"
                             >
@@ -122,6 +123,7 @@
                                     :class="textBoxClass"
                                     onclick="this.classList.remove('h-12')"
                                 ></textarea>
+                                <div ref="recaptcha"></div>
 
                                 <div
                                     v-show="replyText.length > 0"
@@ -133,7 +135,7 @@
                                         >
                                     </div>
                                     <button
-                                        @click="postReply(reply)"
+                                        @click="postReply1(reply)"
                                         :class="buttonClass"
                                         :disabled="networkActionInProgress"
                                     >
@@ -160,6 +162,7 @@ export default {
     props: {
         content_type: { required: true, type: String },
         refid: { required: true, type: String },
+        captcha_site_key: { required: true, type: String },
 
         boxClass: {
             type: String,
@@ -188,12 +191,16 @@ export default {
             unsavedComment: {},
             authUser: false,
             networkActionInProgress: false,
+            reply: null,
+            commentOrReply: '',
+            wt_recaptcha_token: '',
         }
     },
 
     created() {
         this.authUser = this.$root.$data.authuser
         this.loadInitialComments()
+        setTimeout(this.grecaptchaRender, 1000)
     },
 
     methods: {
@@ -213,6 +220,11 @@ export default {
                 }
                 p.comments.next_page_url = response.next_page_url
             })
+        },
+
+        postComment1() {
+            this.commentOrReply = 'comment'
+            this.grecaptchaExecute()
         },
 
         postComment() {
@@ -245,6 +257,12 @@ export default {
                     p.networkActionInProgress = false
                 }
             )
+        },
+
+        postReply1(reply) {
+            this.reply = reply
+            this.commentOrReply = 'reply'
+            this.grecaptchaExecute()
         },
 
         postReply(reply) {
@@ -288,6 +306,35 @@ export default {
             xhttp.send()
         },
 
+        grecaptchaRender: function() {
+			// Display reCAPTCHA badge
+            grecaptcha.render(this.$refs.recaptcha, {
+                'sitekey'  : this.captcha_site_key,
+                'callback' : this.grecaptchaCallback,
+                'size': 'invisible'
+            });
+        },
+
+        grecaptchaExecute: function() {
+			// Trigger reCAPTCHA validation
+            grecaptcha.execute();
+        },
+
+        grecaptchaCallback() {
+            var $this = this;
+            return new Promise(function (resolve, reject) {
+                if (grecaptcha.getResponse() !== "") {
+					$this.wt_recaptcha_token = grecaptcha.getResponse();
+                    if ($this.commentOrReply == 'comment') {
+                        $this.postComment()
+                    } else {
+                        $this.postReply($this.reply)
+                    }
+                }
+                grecaptcha.reset();
+            });
+        },
+
         ajaxPost(url, data, handler) {
             let xhttp = new XMLHttpRequest()
 
@@ -302,7 +349,7 @@ export default {
             xhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
 
             data['_token'] = window.csrf_token
-
+            data['wt_recaptcha_token'] = this.wt_recaptcha_token
             xhttp.send(JSON.stringify(data))
         },
 

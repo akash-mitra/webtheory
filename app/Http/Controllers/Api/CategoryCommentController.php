@@ -9,9 +9,13 @@ use App\Http\Requests\CategoryCommentRequest;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Parameter;
+use App\Traits\SpamProtection;
 
 class CategoryCommentController extends Controller
 {
+    use SpamProtection;
+
     public function index(Category $category): JsonResponse
     {
         $comments = $category
@@ -25,6 +29,12 @@ class CategoryCommentController extends Controller
 
     public function store(Category $category, CategoryCommentRequest $request): JsonResponse
     {
+        $service = json_decode(Parameter::getKey('captcha_service'));
+        if (! empty(optional($service)->secret_key)) {
+            $score = $this->preventBotSubmission();
+            // \Log::info($score);
+        }
+        
         $comment = $category->comments()->create([
             'body' => $request->body,
             'parent_id' => $request->parent_id,

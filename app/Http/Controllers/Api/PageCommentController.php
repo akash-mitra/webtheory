@@ -7,9 +7,13 @@ use App\Http\Requests\PageCommentRequest;
 use App\Page;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Parameter;
+use App\Traits\SpamProtection;
 
 class PageCommentController extends Controller
 {
+    use SpamProtection;
+
     public function index(Page $page): JsonResponse
     {
         $comments = $page
@@ -23,6 +27,12 @@ class PageCommentController extends Controller
 
     public function store(Page $page, PageCommentRequest $request): JsonResponse
     {
+        $service = json_decode(Parameter::getKey('captcha_service'));
+        if (! empty(optional($service)->secret_key)) {
+            $score = $this->preventBotSubmission();
+            // \Log::info($score);
+        }
+        
         $comment = $page->comments()->create([
             'body' => $request->body,
             'parent_id' => $request->parent_id,
