@@ -1,5 +1,6 @@
 <template>
     <div>
+        <div ref="recaptcha"></div>
         <div class="w-full mb-3 py-4">
             <h4 class="text-xl">{{ comments.total }} Comments</h4>
         </div>
@@ -22,7 +23,6 @@
                             :class="textBoxClass"
                             onclick="this.classList.remove('h-12')"
                         ></textarea>
-                        <div ref="recaptcha"></div>
 
                         <div
                             v-show="comment.length > 0"
@@ -33,7 +33,7 @@
                             </div>
 
                             <button
-                                @click="postComment1"
+                                @click="postComment"
                                 :class="buttonClass"
                                 :disabled="networkActionInProgress"
                             >
@@ -123,7 +123,6 @@
                                     :class="textBoxClass"
                                     onclick="this.classList.remove('h-12')"
                                 ></textarea>
-                                <div ref="recaptcha"></div>
 
                                 <div
                                     v-show="replyText.length > 0"
@@ -135,7 +134,7 @@
                                         >
                                     </div>
                                     <button
-                                        @click="postReply1(reply)"
+                                        @click="postReply(reply)"
                                         :class="buttonClass"
                                         :disabled="networkActionInProgress"
                                     >
@@ -158,6 +157,8 @@
 </template>
 
 <script>
+import * as Tensor from '../helpers/tensor.js'
+
 export default {
     props: {
         content_type: { required: true, type: String },
@@ -196,24 +197,32 @@ export default {
             wt_recaptcha_token: '',
         }
     },
+    mounted() {
+        
+    },
 
     created() {
         this.authUser = this.$root.$data.authuser
         this.loadInitialComments()
-        setTimeout(this.grecaptchaRender, 1000)
+        grecaptcha.ready(() => {
+            grecaptcha.render(this.$refs.recaptcha, {
+                'sitekey'  : this.captcha_site_key,
+                'size': 'invisible'
+            })
+        })
     },
 
     methods: {
         loadInitialComments() {
             let p = this
-            this.ajaxGet(this.getUrl(), function (response) {
+            Tensor.xget(this.getUrl(), (response) => {
                 p.comments = response
             })
         },
 
         loadMoreComments() {
             let p = this
-            this.ajaxGet(this.getUrl(), function (response) {
+            Tensor.xget(this.getUrl(), (response) => {
                 let l = response.data.length
                 for (var i = 0; i < l; i++) {
                     p.comments.data.push(response.data[i])
@@ -222,65 +231,69 @@ export default {
             })
         },
 
-        postComment1() {
-            this.commentOrReply = 'comment'
-            this.grecaptchaExecute()
-        },
-
         postComment() {
-            this.networkActionInProgress = true
+            let $this = this
+            
+            grecaptcha.ready(function() {
+                grecaptcha.execute(this.captcha_site_key, {action: 'postComment'}).then(function(token) {
+                    $this.networkActionInProgress = true
 
-            let c = {
-                    body: this.comment,
-                    created_ago: 'just now',
-                    replies: [],
-                    user: this.authUser,
-                },
-                p = this
+                    let c = {
+                        body: $this.comment,
+                        created_ago: 'just now',
+                        replies: [],
+                        user: $this.authUser,
+                        wt_recaptcha_token: token,
+                    },
+                    p = $this
 
-            this.ajaxPost(
-                this.postUrl(),
-                c,
-                function (response) {
-                    // the response contains the comment data
-                    // however, we must also add the "user"
-                    // and replies with this.
-                    response['user'] = c.user
-                    response['replies'] = c.replies
+                    Tensor.xpost(
+                        $this.postUrl(),
+                        c,
+                        (response) => {
+                            // the response contains the comment data
+                            // however, we must also add the "user"
+                            // and replies with this.
+                            response['user'] = c.user
+                            response['replies'] = c.replies
 
-                    p.comments.data.unshift(response)
+                            p.comments.data.unshift(response)
 
-                    p.networkActionInProgress = false
-                },
-                function (error) {
-                    console.log(error)
-                    p.networkActionInProgress = false
-                }
-            )
-        },
-
-        postReply1(reply) {
-            this.reply = reply
-            this.commentOrReply = 'reply'
-            this.grecaptchaExecute()
+                            p.networkActionInProgress = false
+                        },
+                        (error) => {
+                            console.log(error)
+                            p.networkActionInProgress = false
+                        }
+                    )
+                });
+            }); 
         },
 
         postReply(reply) {
-            let p = this
-            this.networkActionInProgress = true
+            let $this = this
 
-            this.ajaxPost(
-                this.postUrl(),
-                {
-                    body: this.replyText,
-                    parent_id: reply.parent_id,
-                },
-                function (response) {
-                    reply.body = p.replyText
-                    p.replyText = ''
-                    p.networkActionInProgress = false
-                }
-            )
+            grecaptcha.ready(function() {
+                grecaptcha.execute(this.captcha_site_key, {action: 'postReply'}).then(function(token) {
+                    $this.networkActionInProgress = true
+
+                    let p = $this
+                    
+                    Tensor.xpost(
+                        $this.postUrl(),
+                        {
+                            body: $this.replyText,
+                            parent_id: reply.parent_id,
+                            wt_recaptcha_token: token,
+                        },
+                        () => {
+                            reply.body = p.replyText
+                            p.replyText = ''
+                            p.networkActionInProgress = false
+                        }
+                    )
+                });
+            });
         },
 
         openReplyBox(id) {
@@ -293,65 +306,6 @@ export default {
             })
         },
 
-        ajaxGet(url, handler) {
-            let xhttp = new XMLHttpRequest()
-
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-                    handler(JSON.parse(xhttp.responseText))
-                }
-            }
-
-            xhttp.open('GET', url, true)
-            xhttp.send()
-        },
-
-        grecaptchaRender: function() {
-			// Display reCAPTCHA badge
-            grecaptcha.render(this.$refs.recaptcha, {
-                'sitekey'  : this.captcha_site_key,
-                'callback' : this.grecaptchaCallback,
-                'size': 'invisible'
-            });
-        },
-
-        grecaptchaExecute: function() {
-			// Trigger reCAPTCHA validation
-            grecaptcha.execute();
-        },
-
-        grecaptchaCallback() {
-            var $this = this;
-            return new Promise(function (resolve, reject) {
-                if (grecaptcha.getResponse() !== "") {
-					$this.wt_recaptcha_token = grecaptcha.getResponse();
-                    if ($this.commentOrReply == 'comment') {
-                        $this.postComment()
-                    } else {
-                        $this.postReply($this.reply)
-                    }
-                }
-                grecaptcha.reset();
-            });
-        },
-
-        ajaxPost(url, data, handler) {
-            let xhttp = new XMLHttpRequest()
-
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-                    handler(JSON.parse(xhttp.responseText))
-                }
-            }
-
-            xhttp.open('POST', url, true)
-
-            xhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
-
-            data['_token'] = window.csrf_token
-            data['wt_recaptcha_token'] = this.wt_recaptcha_token
-            xhttp.send(JSON.stringify(data))
-        },
 
         getUrl() {
             let type = this.content_type === 'single' ? 'pages' : 'categories'
