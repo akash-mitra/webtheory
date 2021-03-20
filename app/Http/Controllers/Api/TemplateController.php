@@ -3,10 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Template;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
-use App\Template;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class TemplateController extends Controller
 {
@@ -15,7 +21,11 @@ class TemplateController extends Controller
         $this->middleware(['check.permission']);
     }
 
-    public function index()
+    /**
+     * @return JsonResponse
+     * @throws FileNotFoundException
+     */
+    public function index(): JsonResponse
     {
         return response()->json([
             'available' => Template::getFromRepo(),
@@ -25,6 +35,9 @@ class TemplateController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -36,6 +49,10 @@ class TemplateController extends Controller
         );
     }
 
+    /**
+     * @param Template $template
+     * @param Request $request
+     */
     public function update(Template $template, Request $request)
     {
         $request->validate([
@@ -56,7 +73,7 @@ class TemplateController extends Controller
         $template->activate();
     }
 
-    public function show(Template $template)
+    public function show(Template $template): Template
     {
         return $template;
     }
@@ -80,15 +97,23 @@ class TemplateController extends Controller
         return response()->json('success', 204);
     }
 
+    /**
+     * @param Template $template
+     * @param Request $request
+     */
     public function duplicate(Template $template, Request $request)
     {
         $request->validate([
-            'save_as' => ['required', 'max:100', 'regex:/^[\pL0-9\s\-_]+$/u', 'unique:templates'],
+            'save_as' => ['required', 'max:100', 'regex:/^[\pL0-9\s\-_]+$/u', 'unique:templates,name'],
         ]);
 
-        return $template->duplicate($request->save_as);
+        $template->duplicate($request->input('save_as'));
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function import(Request $request)
     {
         $request->validate([
@@ -96,14 +121,24 @@ class TemplateController extends Controller
             'name' => ['required', 'max:100', 'regex:/^[\pL0-9\s\-_]+$/u', 'unique:templates'],
         ]);
 
-        return Template::import($request->from, $request->name);
+        return Template::import($request->input('from'), $request->input('name'));
     }
 
+    /**
+     * @param Template $template
+     * @param Request $request
+     * @throws FileNotFoundException
+     */
     public function add(Template $template, Request $request)
     {
-        $template->addFile($request->name, $request->code);
+        $template->addFile($request->input('name'), $request->input('code'));
     }
 
+    /**
+     * @param Template $template
+     * @param Request $request
+     * @throws FileNotFoundException
+     */
     public function remove(Template $template, Request $request)
     {
         $name = base64_decode($request->input('name'));
@@ -111,6 +146,12 @@ class TemplateController extends Controller
         $template->deleteFile($name);
     }
 
+    /**
+     * @param Template $template
+     * @param string $file
+     * @return Application|ResponseFactory|Response
+     * @throws FileNotFoundException
+     */
     public function get(Template $template, string $file)
     {
         $path = $template->name . '/' . base64_decode($file);
@@ -129,11 +170,20 @@ class TemplateController extends Controller
         return response($contents, 200)->header('Content-Type', 'text/plain');
     }
 
-    public function download(Template $template)
+    /**
+     * @param Template $template
+     * @return BinaryFileResponse
+     */
+    public function download(Template $template): BinaryFileResponse
     {
         return $template->download();
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     * @throws FileNotFoundException
+     */
     public function upload(Request $request)
     {
         $request->validate([

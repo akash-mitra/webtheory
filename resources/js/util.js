@@ -1,7 +1,6 @@
 ;(function (util, undefined) {
     //Private Property
-    var isHot = true
-    var timer = null
+    let timer = null
 
     // Public properties
 
@@ -62,6 +61,10 @@
             .replace('MMM', M.substr(0, 3))
             .replace('M', M)
             .replace('d', d)
+    }
+
+    util.initCap = function (val) {
+        return val.charAt(0).toUpperCase() + val.slice(1);
     }
 
     // Generic DOM Selector
@@ -299,6 +302,18 @@
                         // unauthenticated
                         case 401:
                             util.notifyInfo('You are not logged in.', 'Please login again').then(
+                                function () {
+                                    location.href = '/'
+                                }
+                            )
+                            break
+
+                        // unauthorised
+                        case 403:
+                            util.notifyInfo(
+                                'You do not have access to this resource.',
+                                'Contact site admin.'
+                            ).then(
                                 function () {
                                     location.href = '/'
                                 }

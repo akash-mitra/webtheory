@@ -77,7 +77,7 @@ export default {
     },
     methods: {
         submitFileToServer() {
-            if (this.$refs.inputfile.files.length != 1) {
+            if (this.$refs.inputfile.files.length !== 1) {
                 this.message = 'Please select a single .zip file for uploading.'
             } else {
                 let file = this.$refs.inputfile.files[0],
@@ -93,6 +93,7 @@ export default {
                         'New Template Created',
                         'Template ' + p.name + ' has been created from the uploaded zip'
                     )
+                    window.location.reload()
                 })
             }
         },

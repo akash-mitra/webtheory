@@ -4,9 +4,11 @@ namespace Tests;
 
 use App\Page;
 use App\User;
-use App\Media;
+use App\Asset;
 use App\Category;
 use App\PageContent;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Notification;
@@ -17,6 +19,31 @@ use Illuminate\Support\Facades\Event;
 class DuskTestDataSetup extends DuskTestCase
 {
     use DatabaseMigrations;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $adminUser;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $authorUser1;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $authorUser2;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $registeredUser;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $user;
 
     public function setUp(): void
     {
@@ -47,7 +74,7 @@ class DuskTestDataSetup extends DuskTestCase
         $this->registeredUser = factory(User::class)->create(['email' => 'registereduser@example.com', 'role' => 'registered']);
         $this->user = factory(User::class)->create(['email' => 'testuser@example.com']);
 
-        $this->media = factory(Media::class)->create([
+        $this->media = factory(Asset::class)->create([
             'user_id' => $this->adminUser->id,
         ]);
 

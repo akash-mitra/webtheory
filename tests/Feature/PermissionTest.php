@@ -6,7 +6,7 @@ use Tests\TestDataSetup;
 use App\Category;
 use App\Page;
 use App\PageContent;
-use App\Media;
+use App\Asset;
 use Illuminate\Http\UploadedFile;
 use App\User;
 use App\Parameter;
@@ -15,7 +15,7 @@ use App\FormResponse;
 
 class PermissionTest extends TestDataSetup
 {
-    private $data = []; // ['dummy' => 'dummy'];
+    private array $data = []; // ['dummy' => 'dummy'];
 
     // App Access
     public function test_app_permission()
@@ -175,7 +175,7 @@ class PermissionTest extends TestDataSetup
                 'status' => 'Live',
             ]);
 
-            $pagecontent = factory(PageContent::class)->create([
+            $pageContent = factory(PageContent::class)->create([
                 'page_id' => $page->id,
                 'body_json' => [
                     'blocks' => [
@@ -191,7 +191,7 @@ class PermissionTest extends TestDataSetup
             $page->title = 'Test Title Updated';
             $page->contents = [
                 [
-                    'id' => $pagecontent->id,
+                    'id' => $pageContent->id,
                     'body_json' => [
                         'blocks' => [
                             [
@@ -251,47 +251,46 @@ class PermissionTest extends TestDataSetup
         $users = [$this->adminUser, $this->authorUser1];
         foreach ($users as $user) {
             $page = factory(Page::class)->create(['category_id' => $this->category->id]);
-            $pagecontent = factory(PageContent::class)->create(['page_id' => $page->id]);
+            $pageContent = factory(PageContent::class)->create(['page_id' => $page->id]);
             $this->actingAs($user)
                 ->delete(
-                    '/api/pagecontent/' . $pagecontent->id,
+                    '/api/pagecontent/' . $pageContent->id,
                     [],
                     ['Accept' => 'application/json']
                 )
                 ->assertStatus(204);
         }
-        $page = factory(Page::class)->create(['category_id' => $this->category->id]);
-        $pagecontent = factory(PageContent::class)->create(['page_id' => $page->id]);
+
         $this->actingAs($this->registeredUser)
             ->delete(
-                '/api/pagecontent/' . $this->pagecontent->id,
+                '/api/pagecontent/' . $this->pageContent->id,
                 [],
                 ['Accept' => 'application/json']
             )
             ->assertStatus(403);
     }
 
-    // Media
+    // Asset
     public function test_media_permission()
     {
         $users = [$this->adminUser, $this->authorUser1];
         foreach ($users as $user) {
             $this->actingAs($user);
             $this->get('/api/media')->assertStatus(200);
-            $this->get('/api/media/' . $this->media->id)->assertStatus(200);
+            $this->get('/api/media/' . $this->asset->id)->assertStatus(200);
         }
         $this->actingAs($this->registeredUser)
             ->get('/api/media')
             ->assertStatus(403);
         $this->actingAs($this->registeredUser)
-            ->get('/api/media/' . $this->media->id)
+            ->get('/api/media/' . $this->asset->id)
             ->assertStatus(403);
 
         $users = [$this->adminUser, $this->authorUser1];
         foreach ($users as $user) {
             $image = UploadedFile::fake()->image('testimage.png');
             $media = [
-                'image' => $image,
+                'file' => $image,
             ];
             $this->actingAs($user);
             $this->post('/api/media', $media, ['Accept' => 'application/json'])->assertStatus(200);
@@ -315,15 +314,15 @@ class PermissionTest extends TestDataSetup
             ->post('/api/media/fetchUrl', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
 
-        $media = factory(Media::class)->create(['user_id' => $this->user->id]);
+        $media = factory(Asset::class)->create(['user_id' => $this->user->id]);
         $this->actingAs($this->adminUser)
             ->delete('/api/media/' . $media->id)
-            ->assertStatus(204);
+            ->assertStatus(200);
         $this->actingAs($this->authorUser1)
-            ->delete('/api/media/' . $this->media->id)
+            ->delete('/api/media/' . $this->asset->id)
             ->assertStatus(403);
         $this->actingAs($this->registeredUser)
-            ->delete('/api/media/' . $this->media->id)
+            ->delete('/api/media/' . $this->asset->id)
             ->assertStatus(403);
     }
 
@@ -352,24 +351,24 @@ class PermissionTest extends TestDataSetup
             ->assertStatus(403);
 
         $user = factory(User::class)->make(['role' => 'author']);
-        $response = $this->actingAs($this->adminUser)
+        $this->actingAs($this->adminUser)
             ->post('/api/users', $user->toArray(), ['Accept' => 'application/json'])
             ->assertStatus(200);
-        $response = $this->actingAs($this->authorUser1)
+        $this->actingAs($this->authorUser1)
             ->post('/api/users', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
-        $response = $this->actingAs($this->registeredUser)
+        $this->actingAs($this->registeredUser)
             ->post('/api/users', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
 
         $user = factory(User::class)->create(['role' => 'author']);
-        $response = $this->actingAs($this->adminUser)
+        $this->actingAs($this->adminUser)
             ->put('/api/users/' . $user->id, $user->toArray(), ['Accept' => 'application/json'])
             ->assertStatus(200);
-        $response = $this->actingAs($this->authorUser1)
+        $this->actingAs($this->authorUser1)
             ->put('/api/users/' . $this->user->id, $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
-        $response = $this->actingAs($this->registeredUser)
+        $this->actingAs($this->registeredUser)
             ->put('/api/users/' . $this->user->id, $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
 
@@ -457,14 +456,14 @@ class PermissionTest extends TestDataSetup
             ->post('/api/settings/loginprovider', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
 
-        $mailprovider = [
+        $mailProvider = [
             'data' => [
                 ['key' => 'MAIL_DRIVER', 'value' => 'smtp'],
                 ['key' => 'MAIL_FROM_ADDRESS', 'value' => 'test@test.com'],
             ],
         ];
         $this->actingAs($this->adminUser)
-            ->post('/api/settings/mailprovider', $mailprovider, ['Accept' => 'application/json'])
+            ->post('/api/settings/mailprovider', $mailProvider, ['Accept' => 'application/json'])
             ->assertStatus(200);
         $this->actingAs($this->authorUser1)
             ->post('/api/settings/mailprovider', $this->data, ['Accept' => 'application/json'])
@@ -543,6 +542,7 @@ class PermissionTest extends TestDataSetup
         $this->actingAs($this->authorUser1)
             ->get('/api/templates')
             ->assertStatus(403);
+
         $this->actingAs($this->registeredUser)
             ->get('/api/templates')
             ->assertStatus(403);
@@ -550,6 +550,7 @@ class PermissionTest extends TestDataSetup
         $this->actingAs($this->authorUser1)
             ->get('/api/templates/1')
             ->assertStatus(403);
+
         $this->actingAs($this->registeredUser)
             ->get('/api/templates/1')
             ->assertStatus(403);
@@ -557,6 +558,7 @@ class PermissionTest extends TestDataSetup
         $this->actingAs($this->authorUser1)
             ->post('/api/templates', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
+
         $this->actingAs($this->registeredUser)
             ->post('/api/templates', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
@@ -564,6 +566,7 @@ class PermissionTest extends TestDataSetup
         $this->actingAs($this->authorUser1)
             ->post('/api/templates/1/add', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
+
         $this->actingAs($this->registeredUser)
             ->post('/api/templates/1/add', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
@@ -571,6 +574,7 @@ class PermissionTest extends TestDataSetup
         $this->actingAs($this->authorUser1)
             ->get('/api/templates/1/get/test.test')
             ->assertStatus(403);
+
         $this->actingAs($this->registeredUser)
             ->get('/api/templates/1/get/test.test')
             ->assertStatus(403);
@@ -578,6 +582,7 @@ class PermissionTest extends TestDataSetup
         $this->actingAs($this->authorUser1)
             ->post('/api/templates/1/activate', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
+
         $this->actingAs($this->registeredUser)
             ->post('/api/templates/1/activate', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
@@ -585,6 +590,7 @@ class PermissionTest extends TestDataSetup
         $this->actingAs($this->authorUser1)
             ->patch('/api/templates/1', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
+
         $this->actingAs($this->registeredUser)
             ->patch('/api/templates/1', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
@@ -592,6 +598,7 @@ class PermissionTest extends TestDataSetup
         $this->actingAs($this->authorUser1)
             ->delete('/api/templates/1', [], ['Accept' => 'application/json'])
             ->assertStatus(403);
+
         $this->actingAs($this->registeredUser)
             ->delete('/api/templates/1', [], ['Accept' => 'application/json'])
             ->assertStatus(403);
@@ -599,6 +606,7 @@ class PermissionTest extends TestDataSetup
         $this->actingAs($this->authorUser1)
             ->post('/api/templates/1/duplicate', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
+
         $this->actingAs($this->registeredUser)
             ->post('/api/templates/1/duplicate', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
@@ -606,6 +614,7 @@ class PermissionTest extends TestDataSetup
         $this->actingAs($this->authorUser1)
             ->post('/api/templates/import', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
+
         $this->actingAs($this->registeredUser)
             ->post('/api/templates/import', $this->data, ['Accept' => 'application/json'])
             ->assertStatus(403);
@@ -671,8 +680,8 @@ class PermissionTest extends TestDataSetup
         foreach ($users as $user) {
             $this->actingAs($user);
             $form = factory(Form::class)->create(['captcha' => false]);
-            $formresponse = factory(FormResponse::class)->create(['form_id' => $form->id]);
-            $this->post('/api/forms/' . $form->id . '/response', $formresponse->toArray(), [
+            $formResponse = factory(FormResponse::class)->create(['form_id' => $form->id]);
+            $this->post('/api/forms/' . $form->id . '/response', $formResponse->toArray(), [
                 'Accept' => 'application/json',
             ])->assertSessionHas('success');
         }

@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Media;
+use App\Asset;
 
-class MediaTableSeeder extends Seeder
+class AssetTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,7 +12,7 @@ class MediaTableSeeder extends Seeder
      */
     public function run()
     {
-        $media = factory(Media::class, 10)->create([
+        factory(Asset::class, 10)->create([
             'user_id' => 1,
         ]);
     }

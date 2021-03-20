@@ -3,107 +3,97 @@
 namespace App\Traits;
 
 use App\Parameter;
+use InvalidArgumentException;
 
 trait Shareable
 {
-    public function getShareUrl($type = 'facebook')
+    /**
+     * Returns the social share url for the given platform.
+     *
+     * @param string $platform
+     * @return string
+     * @throws InvalidArgumentException
+     */
+    public function getShareUrl(string $platform = 'facebook'): string
     {
         $url = $this->{array_get($this->shareOptions, 'url')}
             ? $this->{array_get($this->shareOptions, 'url')}
             : url()->current();
 
-        if ($type == 'facebook') {
-            $query = urldecode(
-                http_build_query([
-                    'app_id' => Parameter::getKey('FACEBOOK_CLIENT_ID'),
-                    'href' => $url,
-                    'display' => 'page',
-                    'title' => urlencode($this->{array_get($this->shareOptions, 'columns.title')}),
-                ])
-            );
+        switch ($platform) {
+            case "facebook":
+                $queryString = urldecode(
+                    http_build_query([
+                        'app_id' => Parameter::getKey('FACEBOOK_CLIENT_ID'),
+                        'href' => $url,
+                        'display' => 'page',
+                        'title' => urlencode($this->{array_get($this->shareOptions, 'columns.title')}),
+                    ])
+                );
+                return 'https://www.facebook.com/dialog/share?' . $queryString;
 
-            return 'https://www.facebook.com/dialog/share?' . $query;
+            case "twitter":
+                $queryString = urldecode(
+                    http_build_query([
+                        'url' => $url,
+                        'text' => urlencode(
+                            str_limit($this->{array_get($this->shareOptions, 'columns.title')}, 120)
+                        ),
+                    ])
+                );
+                return 'https://twitter.com/intent/tweet?' . $queryString;
+
+            case "linkedin":
+                $queryString = urldecode(
+                    http_build_query([
+                        'url' => $url,
+                        'title' => urlencode($this->{array_get($this->shareOptions, 'columns.title')}),
+                    ])
+                );
+                return 'https://www.linkedin.com/shareArticle/?mini=true&' . $queryString;
+
+            case "pinterest":
+                $queryString = urldecode(
+                    http_build_query([
+                        'url' => $url,
+                        'description' => urlencode(
+                            $this->{array_get($this->shareOptions, 'columns.title')}
+                        ),
+                    ])
+                );
+                return 'https://pinterest.com/pin/create/button/?media=&' . $queryString;
+
+            case "whatsapp":
+                $queryString = urldecode(
+                    http_build_query([
+                        'text' => urlencode(
+                            $this->{array_get($this->shareOptions, 'columns.title')} . ' ' . $url
+                        ),
+                    ])
+                );
+                return 'https://wa.me/?' . $queryString;
+
+            case "reddit":
+                $queryString = urldecode(
+                    http_build_query([
+                        'url' => $url,
+                        'title' => urlencode($this->{array_get($this->shareOptions, 'columns.title')}),
+                    ])
+                );
+                return 'https://www.reddit.com/submit?' . $queryString;
+
+            case "tumblr":
+                $queryString = urldecode(
+                    http_build_query([
+                        'url' => $url,
+                        'title' => urlencode($this->{array_get($this->shareOptions, 'columns.title')}),
+                    ])
+                );
+
+                return 'https://www.tumblr.com/widgets/share/tool/preview?shareSource=legacy&canonicalUrl=&' . $queryString;
+
+            default:
+                throw new InvalidArgumentException("Platform " . $platform . " is not supported.");
         }
-
-        if ($type == 'twitter') {
-            $query = urldecode(
-                http_build_query([
-                    'url' => $url,
-                    'text' => urlencode(
-                        str_limit($this->{array_get($this->shareOptions, 'columns.title')}, 120)
-                    ),
-                ])
-            );
-
-            return 'https://twitter.com/intent/tweet?' . $query;
-        }
-
-        if ($type == 'linkedin') {
-            $query = urldecode(
-                http_build_query([
-                    'url' => $url,
-                    'title' => urlencode($this->{array_get($this->shareOptions, 'columns.title')}),
-                ])
-            );
-
-            return 'https://www.linkedin.com/shareArticle/?mini=true&' . $query;
-        }
-
-        if ($type == 'pinterest') {
-            $query = urldecode(
-                http_build_query([
-                    'url' => $url,
-                    'description' => urlencode(
-                        $this->{array_get($this->shareOptions, 'columns.title')}
-                    ),
-                ])
-            );
-
-            return 'https://pinterest.com/pin/create/button/?media=&' . $query;
-        }
-
-        if ($type == 'whatsapp') {
-            $query = urldecode(
-                http_build_query([
-                    'text' => urlencode(
-                        $this->{array_get($this->shareOptions, 'columns.title')} . ' ' . $url
-                    ),
-                ])
-            );
-
-            return 'https://wa.me/?' . $query;
-        }
-        
-        if ($type == 'reddit') {
-            $query = urldecode(
-                http_build_query([
-                    'url' => $url,
-                    'title' => urlencode($this->{array_get($this->shareOptions, 'columns.title')}),
-                ])
-            );
-
-            return 'https://www.reddit.com/submit?' . $query;
-        }
-
-        if ($type == 'tumblr') {
-            $query = urldecode(
-                http_build_query([
-                    'url' => $url,
-                    'title' => urlencode($this->{array_get($this->shareOptions, 'columns.title')}),
-                ])
-            );
-
-            return 'https://www.tumblr.com/widgets/share/tool/preview?shareSource=legacy&canonicalUrl=&' . $query;
-        }
-
-        // if ($type == 'google') {
-        //     $query = urldecode(
-        //         http_build_query([
-        //             'url' => $url,
-        //         ])
-        //     );
-
-        //     return 'https://plus.google.com/share?' . $query;
-        // }
     }
 }

@@ -5,6 +5,7 @@ namespace App;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class ViewCountry extends Model
 {
@@ -26,15 +27,15 @@ class ViewCountry extends Model
         'created_at',
     ];
 
-    
-    public static function monthly()
+
+    public static function monthly(): Collection
     {
         $start_month_key = request()->input('start_month_key', Carbon::yesterday()->format('Ym'));
         $end_month_key = request()->input('end_month_key', $start_month_key);
 
         return DB::table('view_countries')
             ->selectRaw('
-                country,  
+                country,
                 sum(total_views) as total_views
             ')
             ->whereBetween('month_key', [$start_month_key, $end_month_key])

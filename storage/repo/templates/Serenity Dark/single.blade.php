@@ -7,14 +7,24 @@
 @section('metakeys'){{ $data->page->metakey }}@endsection
 
 @push('headers')
-<link rel="canonical" href="{{ $data->page->permalink }}">
 
-<meta property="og:site_name" content="{{ $data->ref->site->name }}">
-<meta property="og:title" content="{{ $data->page->title }}">
-<meta property="og:description" content="{{ $data->page->summary }}">
-<meta property="og:image" content="{{ url('/') . optional($data->page->media)->url }}">
-<meta property="og:url" content="{{ url()->current() }}">
-<meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="{{ $data->page->permalink }}">
+
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="{{ $data->ref->site->name }}">
+    <meta property="og:title" content="{{ $data->page->title }}">
+    <meta property="og:description" content="{{ $data->page->summary }}">
+    <meta property="og:image" content="{{ optional($data->page->media)->url }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <!--meta property="fb:app_id" content=""-->
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $data->page->title }}" />
+    <meta name="twitter:description" content="{{ $data->page->summary  }}" />
+    <meta name="twitter:image" content="{{ optional($data->page->media)->url }}" />
+    <meta name="twitter:domain" content="{{ env('DOMAIN') }}">
+
 @endpush
 
 @section('contents')
@@ -87,6 +97,8 @@
                 'replyTextClass' => 'hover:text-blue-500',
                 'commentInviteClass' => 'w-full flex p-4 bg-gray-800 rounded-lg mb-4 justify-between items-center',
             ])
+
+            @ads
 
         </main>
 

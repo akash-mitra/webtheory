@@ -2,7 +2,11 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Exception;
+use Illuminate\Contracts\Filesystem\FileExistsException;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use ZipArchive;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
@@ -26,8 +30,9 @@ class Template extends Model
     /**
      * Returns a list of templates from repository that can be imported
      * or installed.
+     * @throws FileNotFoundException
      */
-    public static function getFromRepo()
+    public static function getFromRepo(): array
     {
         $templateFiles = Storage::disk('repo')->allDirectories('templates');
 
@@ -39,16 +44,21 @@ class Template extends Model
     }
 
     /**
-     * Reads template info file if present and returns the data in an array
+     * Reads template info file if present and returns the data in an array.
+     *
+     * @param $name
+     * @param string $disk
+     * @return object
+     * @throws FileNotFoundException
      */
-    private static function getTemplateInfoFromFile($name, $disk = 'repo')
+    private static function getTemplateInfoFromFile($name, $disk = 'repo'): object
     {
         $info = [
             'name' => $name,
             'description' => 'No description is available for this template.',
             'version' => 0,
             'media_url' => 'https://source.unsplash.com/random',
-            'parameters' => (object) [],
+            'parameters' => (object)[],
         ];
 
         $path = '';
@@ -67,9 +77,13 @@ class Template extends Model
             $info = array_replace_recursive($info, $fileData);
         }
 
-        return (object) $info;
+        return (object)$info;
     }
 
+    /**
+     * @param array $attributes
+     * @return mixed
+     */
     public static function createNewTemplate(array $attributes = [])
     {
         $template = auth()
@@ -82,6 +96,11 @@ class Template extends Model
         return $template;
     }
 
+    /**
+     * @param $name
+     * @param $code
+     * @throws FileNotFoundException
+     */
     public function addFile($name, $code)
     {
         // if the file already exists, delete the file!
@@ -101,11 +120,18 @@ class Template extends Model
         }
     }
 
-    public function deleteFile($name)
+    /**
+     * @param $name
+     * @return bool
+     * @throws FileNotFoundException
+     */
+    public function deleteFile($name): bool
     {
         if (Storage::disk('templates')->exists($this->name . '/' . $name)) {
             return Storage::disk('templates')->delete($this->name . '/' . $name);
         }
+
+        throw new FileNotFoundException("File " . $name . " not found.");
     }
 
     public function updateTemplate(array $attributes = [])
@@ -121,6 +147,10 @@ class Template extends Model
         $this->clearTemplateParametersCache();
     }
 
+    /**
+     * @throws FileExistsException
+     * @throws FileNotFoundException
+     */
     public function activate()
     {
         //clean the contents from active directory
@@ -136,10 +166,14 @@ class Template extends Model
 
         $this->save();
 
-        // delete cache for template paramters
+        // delete cache for template parameters
         $this->clearTemplateParametersCache();
     }
 
+    /**
+     * @throws FileNotFoundException
+     * @throws FileExistsException
+     */
     public function copyToActive()
     {
         $files = Storage::disk('templates')->files($this->name);
@@ -162,7 +196,7 @@ class Template extends Model
         }
     }
 
-    public static function cleanActive()
+    public static function cleanActive(): bool
     {
         $files = array_filter(Storage::disk('active')->files(), function ($file) {
             if (basename($file) === '.gitignore') {
@@ -178,7 +212,7 @@ class Template extends Model
         return Storage::disk('active')->delete($files);
     }
 
-    public function getFilesAttribute()
+    public function getFilesAttribute(): array
     {
         $files = Storage::disk('templates')->files($this->name);
 
@@ -187,7 +221,7 @@ class Template extends Model
 
             return [
                 'name' => $fileName,
-                'updated' => \Carbon\Carbon::createFromTimestamp(
+                'updated' => Carbon::createFromTimestamp(
                     Storage::disk('templates')->lastModified($file)
                 )->format('d M, Y. H:m'),
                 'size' => round(Storage::disk('templates')->size($file) / 1024, 1),
@@ -196,6 +230,9 @@ class Template extends Model
         }, $files);
     }
 
+    /**
+     * @throws Exception
+     */
     public function deleteTemplate()
     {
         Storage::disk('templates')->deleteDirectory($this->name);
@@ -220,7 +257,11 @@ class Template extends Model
 
     public static function import($from, $name)
     {
-        $fromTemplate = self::getTemplateInfoFromFile($from);
+        try {
+            $fromTemplate = self::getTemplateInfoFromFile($from);
+        } catch (FileNotFoundException $e) {
+            abort(404, "Template file not found");
+        }
 
         $template = self::createNewTemplate([
             'name' => $name,
@@ -237,6 +278,12 @@ class Template extends Model
         return $template;
     }
 
+    /**
+     * @param $from
+     * @param $name
+     * @throws FileExistsException
+     * @throws FileNotFoundException
+     */
     public static function copyFromRepoToTemplate($from, $name)
     {
         $files = Storage::disk('repo')->allFiles('templates/' . $from);
@@ -244,12 +291,12 @@ class Template extends Model
         foreach ($files as $file) {
             // copy only .php, .info and assets files to template folder
             if (
-                !in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), [
-                    'info',
-                    'php',
-                    'js',
-                    'css',
-                ])
+            !in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), [
+                'info',
+                'php',
+                'js',
+                'css',
+            ])
             ) {
                 continue;
             }
@@ -266,7 +313,10 @@ class Template extends Model
         }
     }
 
-    public function download()
+    /**
+     * @return BinaryFileResponse
+     */
+    public function download(): BinaryFileResponse
     {
         $zipFile = Str::slug($this->name) . '.zip';
 
@@ -284,6 +334,12 @@ class Template extends Model
             ->deleteFileAfterSend();
     }
 
+    /**
+     * @param $name
+     * @param $file
+     * @return mixed
+     * @throws FileNotFoundException
+     */
     public static function createFromUpload($name, $file)
     {
         $template = null;
@@ -330,7 +386,7 @@ class Template extends Model
         }
     }
 
-    private static function unzipTemplateBundle($templateName)
+    private static function unzipTemplateBundle($templateName): array
     {
         $path = Storage::disk('templates')->path($templateName);
         $zip = new ZipArchive();
@@ -349,24 +405,24 @@ class Template extends Model
                 }
 
                 if (
-                    !in_array(strtolower(pathinfo($filename, PATHINFO_EXTENSION)), [
-                        'bmp',
-                        'css',
-                        'gif',
-                        'htm',
-                        'html',
-                        'ico',
-                        'info',
-                        'jpeg',
-                        'jpg',
-                        'js',
-                        'pdf',
-                        'php',
-                        'png',
-                        'ts',
-                        'txt',
-                        'vue',
-                    ])
+                !in_array(strtolower(pathinfo($filename, PATHINFO_EXTENSION)), [
+                    'bmp',
+                    'css',
+                    'gif',
+                    'htm',
+                    'html',
+                    'ico',
+                    'info',
+                    'jpeg',
+                    'jpg',
+                    'js',
+                    'pdf',
+                    'php',
+                    'png',
+                    'ts',
+                    'txt',
+                    'vue',
+                ])
                 ) {
                     continue;
                 }

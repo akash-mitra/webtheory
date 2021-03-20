@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Category;
 use App\Http\Controllers\Controller;
 use App\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 
 class LovController extends Controller
@@ -22,7 +23,7 @@ class LovController extends Controller
     /**
      * Display a listing of the categories.
      */
-    public function categories()
+    public function categories(): JsonResponse
     {
         $categories = Cache::rememberForever('categories.lov', function () {
             return Category::withTrashed()
@@ -44,7 +45,7 @@ class LovController extends Controller
     /**
      * Display a listing of the authors.
      */
-    public function authors()
+    public function authors(): JsonResponse
     {
         $authors = User::where('role', 'admin')
             ->orWhere('role', 'author')

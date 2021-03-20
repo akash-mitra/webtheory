@@ -1,9 +1,9 @@
 import Dashboard from './components/Dashboard.vue'
 import Pages from './components/Pages.vue'
 import Categories from './components/Categories.vue'
-import Templates from './components/Templates.vue'
+import Design from './components/design/Design.vue'
 import CategoryEditor from './components/CategoryEditor.vue'
-import TemplateEditor from './components/TemplateEditor.vue'
+import TemplateEditor from './components/design/TemplateEditor.vue'
 import Users from './components/Users.vue'
 import UserForm from './components/UserForm.vue'
 import Settings from './components/Settings.vue'
@@ -97,16 +97,20 @@ export default {
         },
 
         /*
-         * Templates related routes
+         * Design related routes
          */
         {
-            path: '/app/templates',
-            component: Templates,
-            name: 'templates.index',
+            path: '/app/design',
+            component: Design,
+            name: 'design',
             meta: {
-                title: 'Templates',
+                title: 'Design',
             },
         },
+
+        /*
+         * Templates related routes
+         */
 
         {
             path: '/app/templates/create',

@@ -2,53 +2,76 @@
 
 namespace App\Http\Middleware;
 
-use DB;
 use Closure;
-use App\Permission;
+use DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Route;
 
 class CheckPermission
 {
-    private $role;
-    private $resource;
-    private $action;
-
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string|null  $guard
+     * @param Request $request
+     * @param Closure $next
+     * @param string|null $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle(Request $request, Closure $next, $guard = null)
     {
-        $method = explode('.', Route::currentRouteName());
+        $role = Auth::guest() ? 'guest' : Auth::user()->role;
 
-        $this->resource = $method[0];
-        $this->action = $method[1];
-        $this->role = Auth::guest() ? 'guest' : Auth::user()->role;
+        $routeName = explode('.', Route::currentRouteName());
 
-        if ($this->checkAcl()) {
+        if ($this->checkAcl($routeName[0], $routeName[1], $role)) {
             return $next($request);
         }
 
-        return abort(403, "Restricted Access");
+//        if ($request->expectsJson()) {
+//            return response([
+//                "message" => "Restricted Access"
+//            ], 403);
+//        } else {
+//            return redirect("/");
+//        }
+
+        abort(403, "Restricted Access");
     }
 
     /**
-     * Check allow in AccessControlList.
+     * Check if access is allowed for a given resource and user role.
+     *
+     * @param $resource
+     * @param $action
+     * @param $role
+     * @return mixed
      */
-    private function checkAcl()
+    private function checkAcl($resource, $action, $role)
     {
-        // return Permission::where('role', $this->role)->where('resource', $this->resource)->where('action', $this->action)->pluck('permission')->first();
+        $permissionArray = Cache::rememberForever('permissions', function () {
 
-        $acl = Cache::rememberForever('permissions', function () {
-            return DB::table('permissions')->get();
+            /*
+             * Convert the permission table to an array containing only the
+             * relevant columns so that the cache size is reduced and
+             * array lookup is faster.
+             */
+            return DB::table('permissions')
+                ->select('resource', 'action', 'role')
+                ->where('permission', "=", 1)
+                ->get()
+                ->map(function ($item) {
+                    return $this->keyFormat($item->resource, $item->action, $item->role);
+                })
+                ->toArray();
         });
 
-        return $acl->where('role', $this->role)->where('resource', $this->resource)->where('action', $this->action)->pluck('permission')->first();
+        return in_array($this->keyFormat($resource, $action, $role), $permissionArray);
+    }
+
+    private function keyFormat($resource, $action, $role): string
+    {
+        return $resource . $action . $role;
     }
 }

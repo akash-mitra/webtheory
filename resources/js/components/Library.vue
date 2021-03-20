@@ -1,64 +1,52 @@
 <template>
-    <div class="w-full my-6 max-w-4xl mx-auto px-6">
-        <h2 class="text-indigo-600 text-2xl flex items-center">
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-8 h-8 mr-3"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-            >
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                <polyline points="21 15 16 10 5 21"></polyline>
-            </svg>
-            Asset Library
-        </h2>
+    <div class="max-w-4xl mx-auto mb-12">
+        <div class="px-6 my-6 w-full flex justify-between items-center">
+            <h2 class="text-indigo-600 text-2xl flex items-center">
+                <svg
+                    class="w-8 h-8 mr-3"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <rect height="18" rx="2" ry="2" width="18" x="3" y="3"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                Asset Library
+            </h2>
+            <library-item-uploader @uploaded="onUpload"></library-item-uploader>
+        </div>
 
-        <div class="overflow-auto">
-            <VueImageBrowser
-                :images="photos"
-                :image-properties="imageFields"
-                allow-photo-pane
-                allow-delete
-                allow-upload
-                save-url="/api/media"
-                enable-lazy-load
-                :save-request-headers="headers"
-                @saved="onSave"
+        <delayed-search-box :search-status="searchStatus" @searched="onSearch"></delayed-search-box>
+
+        <div class="px-6 w-full flex flex-wrap justify-between items-center my-8">
+            <library-item
+                v-for="asset in assets"
+                :key="asset.id"
+                :asset="asset"
                 @deleted="onDelete"
-                @searched="onSearch"
-            >
-            </VueImageBrowser>
+            ></library-item>
         </div>
     </div>
 </template>
 
 <script>
-import VueImageBrowser from '@akashmitra/vue-image-browser'
+import LibraryItem from "./LibraryItem";
+import DelayedSearchBox from "./DelayedSearchBox";
+import LibraryItemUploader from "./LibraryItemUploader";
 
 export default {
-    components: {
-        VueImageBrowser,
-    },
+    components: {LibraryItem, LibraryItemUploader, DelayedSearchBox},
+
     data() {
         return {
-            photos: [],
-            headers: {
-                'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-            },
-            imageFields: {
-                id: 'File ID',
-                name: 'Image Name',
-                url: 'url',
-                size: 'File Size (KB)',
-                type: 'Image Type',
-                storage: 'Storage Type',
-                created_ago: 'Created',
-            },
+            assets: [],
+            searchPhrase: '',
+            searchStatus: '',
         }
     },
 
@@ -67,27 +55,41 @@ export default {
     },
 
     methods: {
-        onDelete(image) {
+
+        /**
+         * Delete the file object from the server.
+         * @param item
+         */
+        onDelete(item) {
             let p = this
-            util.ajax('DELETE', '/api/media/' + image.id, {}, () => {
-                for (let i = 0; i < p.photos.length; i++) {
-                    let photo = p.photos[i]
-                    if (photo.id === image.id) {
-                        p.photos.splice(i, 1)
+            util.ajax('DELETE', '/api/media/' + item.id, {}, () => {
+                for (let i = 0; i < p.assets.length; i++) {
+                    let photo = p.assets[i]
+                    if (photo.id === item.id) {
+                        p.assets.splice(i, 1)
                         break
                     }
                 }
             })
         },
 
+        /**
+         * Begin a new search in the server based on search query.
+         * @param query
+         */
         onSearch(query) {
+            this.searchStatus = 'Searching...'
             this.getFromServer(query)
         },
 
-        onSave(image) {
-            this.photos.unshift(image.file)
+        onUpload(image) {
+            this.assets.unshift(image.file)
         },
 
+        /**
+         * Fetch list of files from server.
+         * @param query
+         */
         getFromServer(query) {
             const p = this
             let url =
@@ -97,8 +99,13 @@ export default {
                     : '')
 
             util.ajax('GET', url, {}, (response) => {
-                p.photos = response.data
+                p.assets = response.data
+                p.searchStatus = (response.total === 0) ? 'No record found.' : ''
             })
+        },
+
+        log(item) {
+            console.log(item)
         },
     },
 }

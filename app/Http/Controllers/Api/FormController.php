@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\User;
 use App\Form;
 use App\FormResponse;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\CustomFormRequest;
-use App\Traits\BotScanner;
-use App\Traits\SetMailConfig;
-use App\Mail\FormResponseNotification;
+use App\Traits\CustomEmailSetup;
+use App\Traits\SpamProtection;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use function header;
 
 class FormController extends Controller
 {
-    use SetMailConfig;
-    use BotScanner;
+    use CustomEmailSetup;
+    use SpamProtection;
 
     /**
      * Create a new controller instance.
@@ -30,9 +34,9 @@ class FormController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         return response()->json(Form::paginate(10));
     }
@@ -40,10 +44,10 @@ class FormController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param CustomFormRequest $request
+     * @return JsonResponse
      */
-    public function store(CustomFormRequest $request)
+    public function store(CustomFormRequest $request): JsonResponse
     {
         $form = new Form([
             'name' => $request->name,
@@ -60,10 +64,10 @@ class FormController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Form  $form
-     * @return \Illuminate\Http\Response
+     * @param Form $form
+     * @return JsonResponse
      */
-    public function show(Form $form)
+    public function show(Form $form): JsonResponse
     {
         return response()->json($form);
     }
@@ -71,25 +75,13 @@ class FormController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Form  $form
-     * @return \Illuminate\Http\Response
+     * @param CustomFormRequest $request
+     * @param Form $form
+     * @return JsonResponse
      */
-    public function update(CustomFormRequest $request, Form $form)
+    public function update(CustomFormRequest $request, Form $form): JsonResponse
     {
-        // if ($form->hasFormResponses()) {
-        //     return response()->json(
-        //         [
-        //             'message' => 'Unable to update the form',
-        //             'errors' => [
-        //                 'name' => ['This form has responses.'],
-        //             ],
-        //         ],
-        //         422
-        //     );
-        // }
-
-        $form->fill(request(['name', 'description', 'status', 'captcha', 'fields']))->save();
+        $form->fill($request->only(['name', 'description', 'status', 'captcha', 'fields']))->save();
 
         return response()->json($form);
     }
@@ -97,12 +89,13 @@ class FormController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Form  $form
-     * @return \Illuminate\Http\Response
+     * @param Form $form
+     * @return JsonResponse
+     * @throws Exception
      */
-    public function destroy(Form $form)
+    public function destroy(Form $form): JsonResponse
     {
-        if ($form->hasFormResponses()) {
+        if ($form->hasResponses()) {
             return response()->json(
                 [
                     'message' => 'Unable to delete the form',
@@ -122,10 +115,10 @@ class FormController extends Controller
     /**
      * Display the responses under a form.
      *
-     * @param  Form  $form
-     * @return \Illuminate\Http\Response
+     * @param Form $form
+     * @return JsonResponse
      */
-    public function formResponses(Form $form)
+    public function formResponses(Form $form): JsonResponse
     {
         return response()->json(
             FormResponse::where('form_id', $form->id)
@@ -137,29 +130,28 @@ class FormController extends Controller
     /**
      * Display the form response.
      *
-     * @param  FormResponse  $formResponse
-     * @return \Illuminate\Http\Response
+     * @param FormResponse $formResponse
+     * @return JsonResponse
      */
-    public function formResponse(FormResponse $formResponse)
+    public function formResponse(FormResponse $formResponse): JsonResponse
     {
-        // $formResponse->load('form');
         return response()->json($formResponse);
     }
 
     /**
      * Store a response to a form.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Form $form
+     * @return RedirectResponse
      */
-    public function storeResponse(Request $request, Form $form)
+    public function storeResponse(Request $request, Form $form): RedirectResponse
     {
         $data = $request->only($form->currentFields());
 
-        // if we are enabling captcha, then perform captcha check
+        // if captcha is enabled for this form, then record the captcha score.
         if ($form->captcha) {
-            $score = $this->preventBotSubmission();
-            $data['score'] = $score;
+            $data['score'] = $this->getCaptchaScore();
         }
 
         // validate according to user given validation rules
@@ -184,20 +176,21 @@ class FormController extends Controller
     /**
      * Download the responses under a form.
      *
-     * @param  Form  $form
-     * @return \Illuminate\Http\Response
+     * @param Form $form
+     * @return BinaryFileResponse
      */
-    public function formResponsesDownload(Form $form)
+    public function formResponsesDownload(Form $form): BinaryFileResponse
     {
         $formHeader[0] = 'Response#';
-        
+
         $formFields = json_decode($form->fields);
-        foreach($formFields as $field) {
+        foreach ($formFields as $field) {
             array_push($formHeader, $field->name);
         }
-        
-        if ($form->captcha)
+
+        if ($form->captcha) {
             array_push($formHeader, 'SCORE');
+        }
 
         array_push($formHeader, 'RECEIVE TIMESTAMP');
         array_push($formHeader, 'FROM IP');
@@ -205,20 +198,20 @@ class FormController extends Controller
         $formResponses = FormResponse::where('form_id', $form->id)
             ->latest()
             ->get();
-        
-        \header('Content-Type: text/csv; charset=utf-8');  
-        \header('Content-Disposition: attachment; filename=' . $form->name . '_responses.csv');  
-        $output = fopen(storage_path('/app/' . $form->name . '_responses.csv'), 'w');  
-        
+
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename=' . $form->name . '_responses.csv');
+        $output = fopen(storage_path('/app/' . $form->name . '_responses.csv'), 'w');
+
         fputcsv($output, $formHeader);
 
-        foreach($formResponses as $formResponse) {
+        foreach ($formResponses as $formResponse) {
             $feedback = [];
             $feedback[0] = $formResponse->id;
-            
+
             $formFields = json_decode($form->fields);
             $responses = json_decode($formResponse->responses, true);
-            
+
             foreach($formFields as $field) {
                 $fieldName = $field->name;
                 if (array_key_exists($fieldName, $responses))
@@ -233,16 +226,16 @@ class FormController extends Controller
                 else
                     array_push($feedback, null);
             }
-                
+
 
             array_push($feedback, $formResponse->created_at);
             array_push($feedback, $formResponse->ip);
 
             fputcsv($output, $feedback);
         }
-        
+
         fclose($output);
-        
+
         return response()->download(storage_path('/app/' . $form->name . '_responses.csv'));
     }
 }

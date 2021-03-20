@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Page;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PageCommentRequest;
+use App\Page;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
+use App\Parameter;
+use App\Traits\SpamProtection;
 
 class PageCommentController extends Controller
 {
-    public function index(Page $page)
+    use SpamProtection;
+
+    public function index(Page $page): JsonResponse
     {
         $comments = $page
             ->directComments()
@@ -20,8 +25,10 @@ class PageCommentController extends Controller
         return response()->json($comments);
     }
 
-    public function store(Page $page, PageCommentRequest $request)
+    public function store(Page $page, PageCommentRequest $request): JsonResponse
     {
+        $this->preventSpamIfCaptchaConfigured();
+
         $comment = $page->comments()->create([
             'body' => $request->body,
             'parent_id' => $request->parent_id,

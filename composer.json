@@ -8,9 +8,12 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.2.5",
+        "php": "^7.4",
+        "ext-json": "*",
+        "ext-zip": "*",
         "algolia/algoliasearch-client-php": "^2.2",
         "aws/aws-sdk-php": "~3.0",
+        "bacon/bacon-qr-code": "^2.0",
         "beyondcode/laravel-websockets": "^1.4",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.2",
@@ -25,6 +28,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
         "league/flysystem-aws-s3-v3": "^1.0",
+        "pragmarx/google2fa-laravel": "^1.4",
         "predis/predis": "^1.1",
         "scrivo/highlight.php": "^9.18",
         "wildbit/swiftmailer-postmark": "^3.1"

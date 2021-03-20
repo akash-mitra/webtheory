@@ -2,12 +2,20 @@
 
 namespace App;
 
+use App\Traits\RelativeTime;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * Class CategoryComment
+ * @package App
+ */
 class CategoryComment extends Model
 {
     use SoftDeletes;
+    use RelativeTime;
 
     protected $fillable = ['parent_id', 'reference_id', 'user_id', 'body', 'likes', 'dislikes'];
 
@@ -15,38 +23,28 @@ class CategoryComment extends Model
 
     protected $touches = ['parent'];
 
-    public function parent()
+    public function parent(): BelongsTo
     {
         return $this->belongsTo('App\CategoryComment', 'parent_id');
     }
 
-    public function replies()
+    public function replies(): HasMany
     {
         return $this->hasMany('App\CategoryComment', 'parent_id');
     }
 
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo('App\Category', 'reference_id');
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo('App\User', 'user_id');
     }
 
-    public function isReply()
+    public function isReply(): bool
     {
         return $this->parent_id != null;
-    }
-
-    public function getCreatedAgoAttribute()
-    {
-        return empty($this->created_at) ? null : $this->created_at->diffForHumans();
-    }
-
-    public function getUpdatedAgoAttribute()
-    {
-        return empty($this->updated_at) ? null : $this->updated_at->diffForHumans();
     }
 }

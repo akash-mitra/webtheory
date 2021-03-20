@@ -6,12 +6,17 @@ use App\Category;
 use App\CategoryComment;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryCommentRequest;
-use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Parameter;
+use App\Traits\SpamProtection;
 
 class CategoryCommentController extends Controller
 {
-    public function index(Category $category)
+    use SpamProtection;
+
+    public function index(Category $category): JsonResponse
     {
         $comments = $category
             ->directComments()
@@ -22,8 +27,10 @@ class CategoryCommentController extends Controller
         return response()->json($comments);
     }
 
-    public function store(Category $category, CategoryCommentRequest $request)
+    public function store(Category $category, CategoryCommentRequest $request): JsonResponse
     {
+        $this->preventSpamIfCaptchaConfigured();
+
         $comment = $category->comments()->create([
             'body' => $request->body,
             'parent_id' => $request->parent_id,
@@ -40,41 +47,40 @@ class CategoryCommentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  CategoryComment  $categorycomment
-     * @return \Illuminate\Http\Response
+     * @param CategoryComment $categoryComment
+     * @return JsonResponse
+     * @throws Exception
      */
-    public function destroy(CategoryComment $categorycomment)
+    public function destroy(CategoryComment $categoryComment): JsonResponse
     {
-        $categorycomment->delete();
+        $categoryComment->delete();
 
         return response()->json('success', 204);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Increment the number of likes for the comment.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  CategoryComment  $categorycomment
-     * @return \Illuminate\Http\Response
+     * @param CategoryComment $categoryComment
+     * @return JsonResponse
      */
-    public function like(Request $request, CategoryComment $categorycomment)
+    public function like(CategoryComment $categoryComment): JsonResponse
     {
-        $categorycomment->increment('likes');
+        $categoryComment->increment('likes');
 
-        return response()->json($categorycomment);
+        return response()->json($categoryComment);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Increment the number of dislikes for the comment.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  CategoryComment  $categorycomment
-     * @return \Illuminate\Http\Response
+     * @param CategoryComment $categoryComment
+     * @return JsonResponse
      */
-    public function dislike(Request $request, CategoryComment $categorycomment)
+    public function dislike(CategoryComment $categoryComment): JsonResponse
     {
-        $categorycomment->increment('dislikes');
+        $categoryComment->increment('dislikes');
 
-        return response()->json($categorycomment);
+        return response()->json($categoryComment);
     }
 }

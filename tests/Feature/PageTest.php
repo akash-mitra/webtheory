@@ -69,7 +69,7 @@ class PageTest extends TestDataSetup
         $page = factory(Page::class)->create([
             'category_id' => $this->category->id,
             'user_id' => $this->adminUser->id,
-            'media_id' => $this->media->id,
+            'media_id' => $this->asset->id,
         ]);
         $pagecontent = factory(PageContent::class)->create(['page_id' => $page->id]);
 

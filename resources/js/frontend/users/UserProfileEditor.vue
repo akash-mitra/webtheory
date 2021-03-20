@@ -60,6 +60,21 @@
                         >Change Current Password</span
                     >
                 </div>
+
+                <div class="mb-2" v-if="user.google2fa">
+                    <span
+                        @click="disable2fa"
+                        class="text-red-600 cursor-pointer inline-block"
+                    >Disable Two-Factor Authentication</span
+                    >
+                </div>
+                <div class="mb-2" v-else>
+                    <span
+                        @click="enable2fa"
+                        class="text-blue-600 cursor-pointer inline-block"
+                    >Enable Two-Factor Authentication</span
+                    >
+                </div>
             </div>
 
             <TensorFormError
@@ -147,6 +162,39 @@
                 {{ message }}
             </div>
         </div>
+
+        <div class="py-4 w-full" v-if="tab === 'enable-google2fa'">
+            <div class="text-2xl px-12 py-4 border-b mb-6">Two Factor Authentication (2FA) is Enabled</div>
+            <div class="mb-4 px-12">
+                <p class="text-md">Open up your 2FA mobile app and scan the following QR barcode:</p>
+                <div v-html="image"></div>
+                <p class="text-md">If your 2FA mobile app does not support scanning of QR barcodes, enter in the
+                    following number:</p>
+                <p class="text-xl mt-4" v-text="secret"></p>
+            </div>
+            <div class="px-8 w-full m-8 py-4 flex items-center border-t justify-between">
+
+                <button class="px-6 py-3 bg-green-500 text-lg text-white hover:bg-green-700 rounded" @click="reload">
+                    Done
+                </button>
+
+                <span class="ml-4 text-red-600 cursor-pointer inline-block" @click="disable2fa"
+                >Do Not Enable</span
+                >
+            </div>
+        </div>
+
+        <div class="py-4 w-full" v-if="tab === 'disable-google2fa'">
+            <div class="text-2xl px-12 py-4 border-b mb-6">Two Factor Authentication (2FA) is Disabled</div>
+            <div class="mb-4 px-12">
+                <p class="text-red-600 text-md">Two-Factor Authentication has been Disabled!!</p>
+            </div>
+            <div class="px-8 w-full mt-8 py-4 flex items-center border-t">
+                <button class="px-6 py-3 bg-green-500 text-lg text-white hover:bg-green-700 rounded" @click="reload">
+                    Done
+                </button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -204,6 +252,9 @@ export default {
             tab: 'info',
             message: '',
             errors: null,
+
+            image: null,
+            secret: '',
         }
     },
 
@@ -222,7 +273,6 @@ export default {
                 about_me: this.aboutMe,
                 gender: this.gender,
                 preferences: preferences,
-                // 'dob': this.user.dob,
             }
 
             if (this.avatarBase64Data) {
@@ -243,6 +293,10 @@ export default {
             this.$emit('cancelled')
         },
 
+        reload() {
+            window.location.reload()
+        },
+
         resetPassword() {
             let data = {
                     current_password: this.current_password,
@@ -256,6 +310,37 @@ export default {
                 data,
                 function (response) {
                     p.message = 'Password Changed Successfully'
+                },
+                (error) => (this.errors = error)
+            )
+        },
+
+        enable2fa() {
+            let p = this
+
+            if (window.confirm("Enable Two-Factor Authentication?")) {
+                Tensor.xpost(
+                    '/2fa/enable',
+                    {},
+                    function (response) {
+                        p.image = response.image
+                        p.secret = response.secret
+                        p.tab = 'enable-google2fa'
+                    },
+                    (error) => (this.errors = error)
+                )
+            }
+        },
+
+        disable2fa() {
+            let p = this
+
+            Tensor.xpost(
+                '/2fa/disable',
+                {},
+                function (response) {
+                    p.secret = response.status
+                    p.tab = 'disable-google2fa'
                 },
                 (error) => (this.errors = error)
             )

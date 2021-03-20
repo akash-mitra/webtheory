@@ -14,6 +14,12 @@
 /*
 | AUTHENTICATION RELATED ROUTES
 */
+
+use App\Http\Controllers\Api\AssetController;
+use App\Http\Controllers\Api\MenuController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\HomeController;
+
 Route::post('register', 'Auth\RegisterController@register')->name('register');
 Route::get('email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->name(
     'verification.verify'
@@ -46,13 +52,21 @@ Route::get('social/login/{provider}/callback', 'Auth\SocialLoginController@callb
 );
 
 /*
+| 2FA RELATED ROUTES
+*/
+Route::post('2fa/enable', 'Auth\Google2FAController@enable')->name('google2fa.enable');
+Route::get('2fa/validate', 'Auth\LoginController@getToken')->name('google2fa.token');
+Route::post('2fa/validate', ['middleware' => 'throttle:5', 'uses' => 'Auth\LoginController@validateToken'])->name('google2fa.validate');
+Route::post('2fa/disable', 'Auth\Google2FAController@disable')->name('google2fa.disable');
+
+/*
 | FRONT-END RELATED ROUTES
 */
-Route::get('/', 'HomeController@root')->name('home');
-Route::get('blog', 'HomeController@blog')->name('blog');
-Route::get('pages/{page}/{slug?}', 'HomeController@single')->name('pages');
-Route::get('categories/{category}/{slug?}', 'HomeController@category')->name('categories');
-Route::get('profiles/{public_id}', 'HomeController@profile')->name('profile.show');
+Route::get('/', [HomeController::class, 'root'])->name('home');
+Route::get('blog', [HomeController::class, 'blog'])->name('blog');
+Route::get('pages/{page}/{slug?}', [HomeController::class, 'single'])->name('pages');
+Route::get('categories/{category}/{slug?}', [HomeController::class, 'category'])->name('categories');
+Route::get('profiles/{public_id}', [HomeController::class, 'profile'])->name('profile.show');
 
 /*
 | FRONT-END RELATED FIXED ROUTES
@@ -143,13 +157,13 @@ Route::prefix('api')
         );
 
         // --------------------------------------------------------------------------------------------------------------------------
-        // Media API
+        // Asset API
         // --------------------------------------------------------------------------------------------------------------------------
-        Route::get('media', 'Api\MediaController@index')->name('media.index');
-        Route::get('media/{media}', 'Api\MediaController@show')->name('media.show');
-        Route::post('media', 'Api\MediaController@upload')->name('media.upload');
-        Route::post('media/fetchUrl', 'Api\MediaController@uploadUrl')->name('media.uploadurl');
-        Route::delete('media/{media}', 'Api\MediaController@remove')->name('media.remove');
+        Route::get('media', [AssetController:: class, 'index'])->name('media.index');
+        Route::get('media/{asset}', [AssetController:: class, 'show'])->name('media.show');
+        Route::post('media', [AssetController:: class, 'upload'])->name('media.upload');
+        Route::post('media/fetchUrl', [AssetController:: class, 'fetch'])->name('media.uploadurl');
+        Route::delete('media/{asset}', [AssetController:: class, 'remove'])->name('media.remove');
 
         // --------------------------------------------------------------------------------------------------------------------------
         // Comments API
@@ -170,18 +184,19 @@ Route::prefix('api')
         Route::get('profile/comments', 'Api\ProfileController@comments')->name('profile.comments');
 
         // UserController methods are strictly for the admin users.
-        Route::get('users', 'Api\UserController@index')->name('users.index');
-        Route::get('users/banned', 'Api\UserController@banned')->name('users.banned');
-        Route::get('users/unverified', 'Api\UserController@unverified')->name('users.unverified');
-        Route::get('users/{user}', 'Api\UserController@show')->name('users.show');
-        Route::post('users', 'Api\UserController@store')->name('users.store');
-        Route::put('users/{user}', 'Api\UserController@update')->name('users.update');
-        Route::delete('users/{id}', 'Api\UserController@destroy')->name('users.destroy');
-        Route::patch('users/password', 'Api\UserController@changePassword')->name(
+        Route::get('users', [UserController::class, 'index'])->name('users.index');
+        Route::get('users/banned', [UserController::class, 'banned'])->name('users.banned');
+        Route::get('users/unverified', [UserController::class, 'unverified'])->name('users.unverified');
+        Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
+        Route::post('users', [UserController::class, 'store'])->name('users.store');
+        Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+        Route::put('users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
+        Route::patch('users/password', [UserController::class, 'changePassword'])->name(
             'users.changepassword'
         );
-        Route::get('users/{user}/pages', 'Api\UserController@pages')->name('users.pages');
-        Route::get('users/{user}/comments', 'Api\UserController@comments')->name('users.comments');
+        Route::get('users/{user}/pages', [UserController::class, 'pages'])->name('users.pages');
+        Route::get('users/{user}/comments', [UserController::class, 'comments'])->name('users.comments');
 
         // --------------------------------------------------------------------------------------------------------------------------
         // Templates Management API
@@ -311,6 +326,16 @@ Route::prefix('api')
             'dashboard.country'
         );
         Route::get('dashboard/city', 'Api\DashboardController@city')->name('dashboard.city');
+
+        // --------------------------------------------------------------------------------------------------------------------------
+        // Menus API
+        // --------------------------------------------------------------------------------------------------------------------------
+        Route::get('menus', [MenuController::class, 'index'])->name('menus.index');
+        Route::get('menus/{menu}', [MenuController::class, 'show'])->name('menus.show');
+        Route::post('menus', [MenuController::class, 'store'])->name('menus.store');
+        Route::put('menus/{menu}', [MenuController::class, 'update'])->name('menus.update');
+        Route::post('menuitems', [MenuController::class, 'upsert'])->name('menus.upsert');
+        Route::delete('menus/{menu}', [MenuController::class, 'destroy'])->name('menus.destroy');
     });
 
 // This is a catchall route.

@@ -24,7 +24,7 @@
             </h2>
 
             <a
-                v-if="authUserRole == 'admin'"
+                v-if="authUserRole === 'admin'"
                 href="/app/users/create"
                 class="bg-blue-600 h-10 text-white text-sm px-4 py-2 rounded shadow"
                 >Create</a
@@ -141,6 +141,7 @@
                         :user="data.item"
                         :can-ban="authUserRole === 'admin'"
                         @banned="banUser"
+                        @unbanned="removeBan"
                     ></User>
                 </template>
             </Paginator>
@@ -256,7 +257,7 @@ export default {
                     util.ajax('delete', '/api/users/' + id, {}, (response) => {
                         util.notifySuccess(
                             'User Banned',
-                            'The user has been banned from loggin-in to the site.'
+                            'The user has been banned from logging-in to the site.'
                         )
 
                         for (let index = 0; index < p.paginatedUsers.data.length; index++) {
@@ -269,11 +270,34 @@ export default {
             )
         },
 
+        removeBan(id) {
+            let p = this
+
+            util.confirm(
+                'Remove user ban?',
+                "Once removed, the user will be able to login.",
+                function () {
+                    util.ajax('put', '/api/users/' + id + '/restore', {}, (response) => {
+                        util.notifySuccess(
+                            'User Restored.',
+                            'The user can login to the site now.'
+                        )
+
+                        for (let index = 0; index < p.paginatedUsers.data.length; index++) {
+                            if (p.paginatedUsers.data[index].id === id) {
+                                p.paginatedUsers.data[index].deleted_at = null
+                            }
+                        }
+                    })
+                }
+            )
+        },
+
         deleteUser(id) {
             let p = this
 
             util.confirm('Delete this user?', 'This action can not be reverted.', function () {
-                util.ajax('delete', '/api/users/' + id, { forceDelete: true }, (response) => {
+                util.ajax('delete', '/api/users/' + id, {forceDelete: true}, (response) => {
                     util.notifySuccess(
                         'Deleted',
                         'The user has been successfully deleted from your system.'

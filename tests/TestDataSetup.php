@@ -4,11 +4,13 @@ namespace Tests;
 
 use App\Page;
 use App\User;
-use App\Media;
+use App\Asset;
 use App\Category;
 use App\PageContent;
 use App\Form;
 use App\FormResponse;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Tests\Support\AssertJson;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Notification;
@@ -20,6 +22,75 @@ class TestDataSetup extends TestCase
 {
     use AssertJson;
     use DatabaseMigrations;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $adminUser;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $authorUser1;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $authorUser2;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $registeredUser;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $category;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $draftPagecontent;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $formResponse;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $draftPage;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $pageContent;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $page;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $asset;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $user;
+
+    /**
+     * @var Collection|Model|mixed
+     */
+    protected $form;
+    /**
+     * @var string[]
+     */
+    protected array $media_attributes;
 
     public function setUp(): void
     {
@@ -68,7 +139,7 @@ class TestDataSetup extends TestCase
         ]);
         $this->user = factory(User::class)->create(['email' => 'testuser@example.com']);
 
-        $this->media = factory(Media::class)->create([
+        $this->asset = factory(Asset::class)->create([
             'user_id' => $this->adminUser->id,
         ]);
 
@@ -81,7 +152,7 @@ class TestDataSetup extends TestCase
             'user_id' => $this->adminUser->id,
             'status' => 'Live',
         ]);
-        $this->pagecontent = factory(PageContent::class)->create([
+        $this->pageContent = factory(PageContent::class)->create([
             'page_id' => $this->page->id,
         ]);
 
@@ -224,6 +295,19 @@ class TestDataSetup extends TestCase
             'updated_at',
         ];
 
+        $this->menu_attributes = [
+            'id',
+            'title',
+            'alias',
+            'parent_id',
+            'sequence_num',
+            'menuable_id',
+            'menuable_type',
+            'home',
+            'created_at',
+            'updated_at',
+        ];
+
         $this->category_attributes_list = array_merge($this->category_attributes, [
             'media',
             'author' => $this->user_attributes,
@@ -336,5 +420,9 @@ class TestDataSetup extends TestCase
             'created_at',
             'updated_at',
         ];
+
+        $this->menu_attributes_list = array_merge($this->menu_attributes, [
+            'menuable' => $this->category_attributes,
+        ]);
     }
 }

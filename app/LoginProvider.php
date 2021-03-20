@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LoginProvider extends Model
 {
@@ -17,8 +18,8 @@ class LoginProvider extends Model
      * returns the user associated with
      * this login provider
      */
-    protected function user()
+    protected function user(): BelongsTo
     {
-        return $this->belongsTo('App\User', 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

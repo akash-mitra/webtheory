@@ -33,19 +33,24 @@
 
     <body class="bg-gray-200">
 
-        <div class="w-full font-sans" id="app" @click="hideOverlayMenu" v-cloak>
+    <div class="w-full font-sans" id="app" @click="hideOverlayMenu" v-cloak>
 
-            <div v-if="authUser !== null && authUser.role != 'registered'" class="w-full bg-white border-b border-gray-400 md:flex items-center justify-between">
-                <div class="md:flex justify-start items-center overflow-hidden">
+        <div v-if="authUser !== null && authUser.role !== 'registered'"
+             class="w-full bg-white border-b border-gray-400 md:flex items-center justify-between">
+            <div class="md:flex justify-start items-center overflow-hidden">
 
-                    <div class="py-3 px-6 lg:px-8 flex items-center justify-between">
-                        <img src="/images/tensor.svg" alt="WebTheory Dashboard" class="h-10 w-10 mr-4 cursor-pointer" @click="$router.push('/app')">
-                        <p class="block md:hidden lg:block text-blue-500 font-bold mr-10">WebTheory</p>
+                <div class="py-3 px-6 lg:px-8 flex items-center justify-between">
+                    <img src="/images/tensor.svg" alt="WebTheory Dashboard" class="h-10 w-10 mr-4 cursor-pointer"
+                         @click="$router.push('/app')">
+                    <p class="block md:hidden lg:block text-blue-500 font-bold mr-10">WebTheory</p>
 
-                        <svg id="menu-toggle-button" @click="hamBurgerMenu=!hamBurgerMenu" class="md:hidden text-gray-500 fill-current w-6 h-6 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                            <path id="menu-toggle-btn-burger" v-if="hamBurgerMenu" d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"></path>
-                            <path id="menu-toggle-btn-x" v-else d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
-                        </svg>
+                    <svg id="menu-toggle-button" @click="hamBurgerMenu=!hamBurgerMenu"
+                         class="md:hidden text-gray-500 fill-current w-6 h-6 cursor-pointer"
+                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path id="menu-toggle-btn-burger" v-if="hamBurgerMenu"
+                              d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"></path>
+                        <path id="menu-toggle-btn-x" v-else d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+                    </svg>
                     </div>
 
                     <nav id="nav-menu" :class="hamBurgerMenu?'':'hidden'" class="md:flex w-full max-w-4xl overflow-x-auto space-x-0 md:space-x-8 xl:space-x-12">
@@ -70,8 +75,8 @@
                         </router-link>
 
 
-                        <router-link v-if="authUser.role == 'admin'" class="block tracking-wide outline-none border-t md:border-none text-sm py-3 px-6 md:px-0" active-class="font-bold text-blue-700" id="nav-menu-5" to="/app/templates">
-                            Templates
+                        <router-link v-if="authUser.role == 'admin'" class="block tracking-wide outline-none border-t md:border-none text-sm py-3 px-6 md:px-0" active-class="font-bold text-blue-700" id="nav-menu-5" to="/app/design">
+                            Design
                         </router-link>
 
                         <router-link v-if="authUser.role == 'admin'" class="block tracking-wide outline-none border-t md:border-none text-sm py-3 px-6 md:px-0" active-class="font-bold text-blue-700" id="nav-menu-6" to="/app/forms">
@@ -130,14 +135,27 @@
                     hamBurgerMenu: false,
                     keyboardMap: {
                         // order is: keycode.alt.ctrl.shift
-                        '67': (p) => { p.browseToRoute ('categories.index') },
-                        '80': (p) => { p.browseToRoute ('pages.index') },
-                        '76': (p) => { p.browseToRoute ('gallery.index') },
-                        '85': (p) => { p.browseToRoute ('users.index') },
-                        '84': (p) => { p.browseToRoute ('templates.index') },
-                        '70': (p) => { p.browseToRoute ('forms.index') },
-                        '83': (p) => { p.browseToRoute ('settings.index') },
-                        '68': (p) => { p.browseToRoute ('dashboard') },
+                        '67': (p) => {
+                            p.browseToRoute('categories.index')
+                        },
+                        '80': (p) => {
+                            p.browseToRoute('pages.index')
+                        },
+                        '76': (p) => {
+                            p.browseToRoute('gallery.index')
+                        },
+                        '85': (p) => {
+                            p.browseToRoute('users.index')
+                        },
+                        '70': (p) => {
+                            p.browseToRoute('forms.index')
+                        },
+                        '83': (p) => {
+                            p.browseToRoute('settings.index')
+                        },
+                        '68': (p) => {
+                            p.browseToRoute('design')
+                        },
                     }
                 },
 
@@ -169,17 +187,17 @@
 
                         // do not do anything if the key is pressed in a input field
                         // or content editable field.
-                        if (tag == 'INPUT') return;
-                        if (tag == 'TEXTAREA') return;
-                        if (tag == 'SELECT') return;
+                        if (tag === 'INPUT') return;
+                        if (tag === 'TEXTAREA') return;
+                        if (tag === 'SELECT') return;
                         if (target.isContentEditable) return;
 
                         // determine the keyboard command
                         let cmd = (e.which || e.keyCode)
-                                    + (e.altKey? '.alt' : '')
-                                    + (e.ctrlKey? '.ctrl': '')
-                                    + (e.metaKey? '.meta': '')
-                                    + (e.shiftKey? '.shift' : '')
+                            + (e.altKey ? '.alt' : '')
+                            + (e.ctrlKey ? '.ctrl' : '')
+                            + (e.metaKey ? '.meta' : '')
+                            + (e.shiftKey ? '.shift' : '')
 
                         // if an action is defined for the command, call it.
                         if (this.keyboardMap.hasOwnProperty(cmd)) {
@@ -190,14 +208,14 @@
                     },
 
                     browseToRoute(name) {
-                        if (this.$route.name != name) {
+                        if (this.$route.name !== name) {
 
                             this.$router.push({name: name})
                         }
                     },
 
-                    hideOverlayMenu (e) {
-                        if(e.target.id != 'auth-user-avatar') this.showDropdownMenu = false;
+                    hideOverlayMenu(e) {
+                        if (e.target.id !== 'auth-user-avatar') this.showDropdownMenu = false;
                     },
 
                     logout() {

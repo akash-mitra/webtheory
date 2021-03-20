@@ -6,16 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Page;
 use App\PageComment;
 use App\User;
-use App\ViewDaily;
-use App\ViewUniqueMonthly;
-use App\ViewContent;
-use App\ViewReferrer;
-use App\ViewPlatform;
 use App\ViewBrowser;
-use App\ViewCountry;
 use App\ViewCity;
+use App\ViewContent;
+use App\ViewCountry;
+use App\ViewDaily;
+use App\ViewPlatform;
+use App\ViewReferrer;
+use App\ViewUniqueMonthly;
 use Cache;
-use DB;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 
 class DashboardController extends Controller
@@ -32,23 +33,19 @@ class DashboardController extends Controller
 
     public function pagesCount()
     {
-        $count = Cache::rememberForever('pages.count', function () {
+        return Cache::rememberForever('pages.count', function () {
             return Page::count();
         });
-
-        return $count;
     }
 
     public function usersCount()
     {
-        $count = Cache::rememberForever('users.count', function () {
+        return Cache::rememberForever('users.count', function () {
             return User::count();
         });
-
-        return $count;
     }
 
-    public function topComments()
+    public function topComments(): JsonResponse
     {
         $comments = PageComment::with(['page', 'user'])
             ->whereNull('parent_id')
@@ -59,17 +56,16 @@ class DashboardController extends Controller
         return response()->json($comments);
     }
 
-    public function clearCache()
+    public function clearCache(): JsonResponse
     {
         Artisan::call('cache:clear');
 
-        return response()->json('Saved', 200);
+        return response()->json('Cache cleared.');
     }
 
 
     public function viewsdaily()
     {
-        
         // return Cache::rememberForever('dashboard.views-daily', function () {
             return ViewDaily::daily();
         // });
@@ -83,53 +79,53 @@ class DashboardController extends Controller
         // });
     }
 
-    public function uniquemonthly()
+    public function uniquemonthly(): Collection
     {
         // return Cache::rememberForever('dashboard.views-unique-monthly', function () {
-            return ViewUniqueMonthly::monthly();
+        return ViewUniqueMonthly::monthly();
         // });
     }
 
 
-    public function content()
+    public function content(): Collection
     {
         // return Cache::rememberForever('dashboard.content', function () {
-            return ViewContent::monthly();
+        return ViewContent::monthly();
         // });
     }
 
-    public function referrer()
+    public function referrer(): Collection
     {
         // return Cache::rememberForever('dashboard.referrer', function () {
-            return ViewReferrer::monthly();
+        return ViewReferrer::monthly();
         // });
     }
 
-    public function platform()
+    public function platform(): Collection
     {
         // return Cache::rememberForever('dashboard.platform', function () {
-            return ViewPlatform::monthly();
+        return ViewPlatform::monthly();
         // });
     }
 
-    public function browser()
+    public function browser(): Collection
     {
         // return Cache::rememberForever('dashboard.browser', function () {
-            return ViewBrowser::monthly();
+        return ViewBrowser::monthly();
         // });
     }
 
-    public function country()
+    public function country(): Collection
     {
         // return Cache::rememberForever('dashboard.country', function () {
-            return ViewCountry::monthly();
+        return ViewCountry::monthly();
         // });
     }
 
-    public function city()
+    public function city(): Collection
     {
         // return Cache::rememberForever('dashboard.city', function () {
-            // return ViewCity::monthly();
+        // return ViewCity::monthly();
         // });
         return ViewCity::monthly();
     }
