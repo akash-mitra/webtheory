@@ -7,35 +7,42 @@ use ReCaptcha;
 
 trait SpamProtection
 {
-    public function preventBotSubmission($scoreThreshold = 0.5)
+    public function preventSpamIfCaptchaConfigured($scoreThreshold = 0.5)
     {
-        $captchaResponse = $this->getCaptchaResponse();
+        $score = $this->getCaptchaScore();
 
-        $score = $captchaResponse->getScore();
-
-        abort_unless($score > $scoreThreshold, 403, 'Suspected Spam');
-
-        return $score;
+        if ($score != null) {
+            abort_unless($score > $scoreThreshold, 403, 'Suspected Spam');
+        }
     }
 
-    private function getCaptchaResponse(): ReCaptcha\Response
+    private function getCaptchaScore()
+    {
+        $serviceKey = $this->getCaptchaServiceKey();
+
+        if (empty($serviceKey)) return null;
+
+        $captchaResponse = $this->getCaptchaResponse($serviceKey);
+
+        return $captchaResponse->getScore();
+    }
+
+    private function getCaptchaResponse($serviceKey): ReCaptcha\Response
     {
         $request = request();
 
         $token = $this->findOrFailRecaptchaToken($request);
 
-        $service = $this->getCaptchaServiceKeys();
-
-        $captchaResponse = $this->verifyRecaptcha($service, $request, $token);
+        $captchaResponse = $this->verifyRecaptcha($serviceKey, $request, $token);
 
         abort_unless($captchaResponse->isSuccess(), 403, 'Invalid Captcha Response');
 
         return $captchaResponse;
     }
 
-    private function verifyRecaptcha($service, $request, $token): ReCaptcha\Response
+    private function verifyRecaptcha($serviceKey, $request, $token): ReCaptcha\Response
     {
-        $captcha = new ReCaptcha\ReCaptcha($service->secret_key);
+        $captcha = new ReCaptcha\ReCaptcha($serviceKey->secret_key);
 
         $captcha->setExpectedHostname($request->getHost());
 
@@ -51,12 +58,8 @@ trait SpamProtection
         return $recaptcha_token;
     }
 
-    private function getCaptchaServiceKeys()
+    private function getCaptchaServiceKey()
     {
-        $service = json_decode(Parameter::getKey('captcha_service'));
-
-        abort_if(empty(optional($service)->secret_key), 403, 'Captcha Service Not Configured');
-
-        return $service;
+        return json_decode(Parameter::getKey('captcha_service'));
     }
 }

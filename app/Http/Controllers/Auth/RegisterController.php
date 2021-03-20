@@ -67,13 +67,9 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        User::invalidateCache();
+        $this->preventSpamIfCaptchaConfigured();
 
-        $service = json_decode(Parameter::getKey('captcha_service'));
-        if (! empty(optional($service)->secret_key)) {
-            $score = $this->preventBotSubmission();
-            // \Log::info($score);
-        }
+        User::invalidateCache();
 
         return User::create([
             'name' => $data['name'],

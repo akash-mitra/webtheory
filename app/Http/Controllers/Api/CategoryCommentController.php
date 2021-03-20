@@ -29,12 +29,8 @@ class CategoryCommentController extends Controller
 
     public function store(Category $category, CategoryCommentRequest $request): JsonResponse
     {
-        $service = json_decode(Parameter::getKey('captcha_service'));
-        if (! empty(optional($service)->secret_key)) {
-            $score = $this->preventBotSubmission();
-            // \Log::info($score);
-        }
-        
+        $this->preventSpamIfCaptchaConfigured();
+
         $comment = $category->comments()->create([
             'body' => $request->body,
             'parent_id' => $request->parent_id,

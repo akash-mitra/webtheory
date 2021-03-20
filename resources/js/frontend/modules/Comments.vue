@@ -198,7 +198,7 @@ export default {
         }
     },
     mounted() {
-        
+
     },
 
     created() {
@@ -224,7 +224,7 @@ export default {
             let p = this
             Tensor.xget(this.getUrl(), (response) => {
                 let l = response.data.length
-                for (var i = 0; i < l; i++) {
+                for (let i = 0; i < l; i++) {
                     p.comments.data.push(response.data[i])
                 }
                 p.comments.next_page_url = response.next_page_url
@@ -233,7 +233,7 @@ export default {
 
         postComment() {
             let $this = this
-            
+
             grecaptcha.ready(function() {
                 grecaptcha.execute(this.captcha_site_key, {action: 'postComment'}).then(function(token) {
                     $this.networkActionInProgress = true
@@ -267,7 +267,7 @@ export default {
                         }
                     )
                 });
-            }); 
+            });
         },
 
         postReply(reply) {
@@ -278,7 +278,7 @@ export default {
                     $this.networkActionInProgress = true
 
                     let p = $this
-                    
+
                     Tensor.xpost(
                         $this.postUrl(),
                         {
