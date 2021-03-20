@@ -11,7 +11,7 @@
 
 @if($captcha_site_key != "")
     @push('pre-scripts')
-        <script src="https://www.google.com/recaptcha/api.js?render={{$captcha_site_key}}"></script>
+        <script src="https://www.google.com/recaptcha/api.js"></script>
     @endpush
 @endif
 
