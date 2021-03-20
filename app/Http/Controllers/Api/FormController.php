@@ -34,9 +34,9 @@ class FormController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return JsonResponse
      */
-    public function index(): Response
+    public function index(): JsonResponse
     {
         return response()->json(Form::paginate(10));
     }
