@@ -411,6 +411,8 @@ class TestDataSetup extends TestCase
             'fields',
             'created_at',
             'updated_at',
+            'url',
+            'permalink',
             'created_ago',
             'updated_ago',
         ];

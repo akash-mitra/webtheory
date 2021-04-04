@@ -23,6 +23,7 @@ trait DefaultTemplateTests
             'single.blade.php',
             'category.blade.php',
             'profile.blade.php',
+            'form.blade.php',
 
             'login-modal.blade.php',
             'user-menu.blade.php',
@@ -36,6 +37,7 @@ trait DefaultTemplateTests
             'single.blade.php',
             'category.blade.php',
             'profile.blade.php',
+            'form.blade.php',
 
             'login-modal.blade.php',
             'user-menu.blade.php',

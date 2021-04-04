@@ -67,6 +67,7 @@ Route::get('blog', [HomeController::class, 'blog'])->name('blog');
 Route::get('pages/{page}/{slug?}', [HomeController::class, 'single'])->name('pages');
 Route::get('categories/{category}/{slug?}', [HomeController::class, 'category'])->name('categories');
 Route::get('profiles/{public_id}', [HomeController::class, 'profile'])->name('profile.show');
+Route::get('forms/{form}/{slug?}', [HomeController::class, 'form'])->name('forms');
 
 /*
 | FRONT-END RELATED FIXED ROUTES

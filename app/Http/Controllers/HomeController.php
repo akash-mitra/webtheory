@@ -56,7 +56,7 @@ class HomeController extends Controller
     }
 
     /**
-     * Display the single page view.
+     * Display the single category view.
      *
      * @param string $categoryId
      * @return Application|Factory|Response|View
@@ -102,6 +102,23 @@ class HomeController extends Controller
         CaptureViewEvent::dispatchAfterResponse($this->getAnalyticsData('App\User', $user->id));
 
         return view('active.profile', compact('data'));
+    }
+
+    /**
+     * Display the single form view.
+     *
+     * @param string $formId
+     * @return Application|Factory|Response|View
+     */
+    public function form(string $formId)
+    {
+        $data = DataProvider::form($formId);
+
+        CaptureViewEvent::dispatchAfterResponse(
+            $this->getAnalyticsData('App\Form', $formId)
+        );
+
+        return view('active.form', compact('data'));
     }
 
     /**
@@ -265,6 +282,7 @@ class HomeController extends Controller
             'single.blade.php',
             'category.blade.php',
             'profile.blade.php',
+            'form.blade.php',
 
             'login-modal.blade.php',
             'user-menu.blade.php',
