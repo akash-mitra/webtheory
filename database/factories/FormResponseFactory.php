@@ -13,6 +13,7 @@ $factory->define(FormResponse::class, function (Faker $faker) {
         'magic_house' => $faker->randomElement(['Hufflepuff', 'Ravenclaw', 'Gryffindor', 'Slytherin']),
         'mentor' => $faker->randomElement(['Dumbledor', 'Severus Snape', 'Remus Lupin', 'Mad-eye Moody']),
         'friends' => $faker->randomElement(['Ron Weasley', 'Hermione', 'Neville Longbottom', 'Lucious Malfoy']),
+        'agree' => 'on',
         'score' => $faker->numberBetween($min = 6, $max = 10),
     ];
 

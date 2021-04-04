@@ -62,11 +62,11 @@ $factory->define(Form::class, function (Faker $faker) {
             'options' => ['Ron Weasley', 'Hermione', 'Neville Longbottom', 'Lucious Malfoy'],
         ],
         [
-            'name' => 'Agree',
+            'name' => 'agree',
             'type' => 'checkbox',
             'desc' => 'Agree to T&C',
             'placeholder' => 'Agree to T&C',
-            'validation' => 'accepted',
+            'validation' => '',
             'default' => null,
             'options' => [],
         ],
