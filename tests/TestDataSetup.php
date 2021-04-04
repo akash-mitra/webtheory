@@ -194,6 +194,7 @@ class TestDataSetup extends TestCase
             'created_ago',
             'updated_ago',
             'url',
+            'provider',
         ];
 
         $this->user_attributes_store = [
@@ -208,6 +209,7 @@ class TestDataSetup extends TestCase
             'created_ago',
             'updated_ago',
             'url',
+            'provider',
         ];
 
         $this->profile_attributes = [
@@ -228,6 +230,7 @@ class TestDataSetup extends TestCase
             'created_ago',
             'updated_ago',
             'url',
+            'provider',
         ];
 
         $this->media_attributes = [
