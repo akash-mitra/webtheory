@@ -7138,12 +7138,12 @@ __webpack_require__.r(__webpack_exports__);
       }));
       this.menus.push({
         id: -1 * Math.random(),
-        title: "",
+        title: '',
         menuable_id: 0,
         menuable: {
           title: null
         },
-        menuable_type: 'App\\Page',
+        menuable_type: 'App\\Category',
         sequence_num: max_sequence + 1,
         home: false
       });
@@ -7171,36 +7171,30 @@ __webpack_require__.r(__webpack_exports__);
       for (var index = 0; index < l; index++) {
         var menu = this.menus[index];
         if (!this.isValidMenu(menu)) return;
-      }
+      } // Recalculate the sequence number based
+      // on the positions of the menu items in UI.
+
 
       for (var _index = 0; _index < l; _index++) {
-        var _menu = this.menus[_index]; // Recalculate the sequence number based
-        // on the positions of the menu item while saving.
-
+        var _menu = this.menus[_index];
         _menu.sequence_num = _index + 1;
-
-        if (_menu.hasOwnProperty('id') && _menu.id > 0) {
-          this.update(_menu);
-        } else {
-          this.insert(_menu);
-        }
       }
 
-      util.notifySuccess("Menu saved");
+      this.upsert();
     },
-    update: function update(menu) {
-      util.ajax('put', '/api/menus/' + menu.id, menu, function (response) {
+    upsert: function upsert() {
+      var _this2 = this;
+
+      util.ajax('post', '/api/menus', {
+        'menus': this.menus
+      }, function (response) {
+        _this2.menus = response.menus;
+        util.notifySuccess('Menu saved');
+      }, function (response) {
+        util.notifyError('Could not save', 'Error occurred while saving menus.');
         console.log(response);
       }, function (response) {
-        util.notifyError("Could not save", "Error occurred while updating menu [" + menu.title + "]");
-        console.log(response);
-      });
-    },
-    insert: function insert(menu) {
-      util.ajax('post', '/api/menus', menu, function (response) {
-        console.log(response);
-      }, function (response) {
-        util.notifyError("Could not save", "Error occurred while creating menu [" + menu.title + "]");
+        util.notifyError('Could not save', 'Error occurred while saving menus.');
         console.log(response);
       });
     },
@@ -7209,18 +7203,25 @@ __webpack_require__.r(__webpack_exports__);
      * Remove a given menu item from the database.
      */
     remove: function remove(menu) {
+      if (menu.id <= 0) {
+        this.removeMenuItemFromUI(menu);
+        return;
+      }
+
       var p = this;
       util.confirm('Delete "' + menu.title + '"?', 'This action can not be undone.', function () {
-        util.ajax('delete', '/api/menus/' + menu.id, {}, function (response) {
-          for (var i = 0; i < p.menus.length; i++) {
-            if (p.menus[i].id === menu.id) {
-              p.menus.splice(i, 1);
-            }
-          }
-
+        util.ajax('delete', '/api/menus/' + menu.id, {}, function () {
+          p.removeMenuItemFromUI(menu);
           util.notifySuccess('Deleted', 'The menu has been successfully deleted');
         });
       });
+    },
+    removeMenuItemFromUI: function removeMenuItemFromUI(menu) {
+      for (var i = 0; i < this.menus.length; i++) {
+        if (this.menus[i].id === menu.id) {
+          this.menus.splice(i, 1);
+        }
+      }
     },
 
     /**
