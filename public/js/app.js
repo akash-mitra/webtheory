@@ -6454,7 +6454,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     saveSocialLogin: function saveSocialLogin() {
       if (!this.atLeastOneLoginMethodIsEnabled()) {
-        util.notifyError("Enable Login", "At least one login method must be enabled.");
+        util.notifyError('Enable Login', 'At least one login method must be enabled.');
         return;
       }
 
