@@ -4,9 +4,26 @@ namespace App;
 
 use Carbon\Carbon;
 use DB;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
+/**
+ * App\ViewBrowser
+ *
+ * @property int $month_key
+ * @property string|null $browser
+ * @property int $total_views
+ * @property string $created_at
+ * @method static Builder|ViewBrowser newModelQuery()
+ * @method static Builder|ViewBrowser newQuery()
+ * @method static Builder|ViewBrowser query()
+ * @method static Builder|ViewBrowser whereBrowser($value)
+ * @method static Builder|ViewBrowser whereCreatedAt($value)
+ * @method static Builder|ViewBrowser whereMonthKey($value)
+ * @method static Builder|ViewBrowser whereTotalViews($value)
+ * @mixin \Eloquent
+ */
 class ViewBrowser extends Model
 {
     protected $table = 'view_browsers';

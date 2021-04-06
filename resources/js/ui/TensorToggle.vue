@@ -20,7 +20,7 @@ export default {
     props: {
         value: {
             type: String,
-            default: 'yes',
+            default: 'no',
         },
 
         trueValue: {

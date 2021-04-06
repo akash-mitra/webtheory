@@ -4,9 +4,28 @@ namespace App;
 
 use Carbon\Carbon;
 use DB;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
+/**
+ * App\ViewContent
+ *
+ * @property int $month_key
+ * @property string $content_type
+ * @property int $content_id
+ * @property int $total_views
+ * @property string $created_at
+ * @method static Builder|ViewContent newModelQuery()
+ * @method static Builder|ViewContent newQuery()
+ * @method static Builder|ViewContent query()
+ * @method static Builder|ViewContent whereContentId($value)
+ * @method static Builder|ViewContent whereContentType($value)
+ * @method static Builder|ViewContent whereCreatedAt($value)
+ * @method static Builder|ViewContent whereMonthKey($value)
+ * @method static Builder|ViewContent whereTotalViews($value)
+ * @mixin \Eloquent
+ */
 class ViewContent extends Model
 {
     protected $table = 'view_contents';

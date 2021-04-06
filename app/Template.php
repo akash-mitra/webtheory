@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileExistsException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Database\Eloquent\Builder;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use ZipArchive;
 use Illuminate\Support\Str;
@@ -13,6 +14,33 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * App\Template
+ *
+ * @property int $id
+ * @property string $name
+ * @property string|null $description
+ * @property string|null $media_url
+ * @property string|null $parameters
+ * @property int $active
+ * @property int $user_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read array $files
+ * @method static Builder|Template newModelQuery()
+ * @method static Builder|Template newQuery()
+ * @method static Builder|Template query()
+ * @method static Builder|Template whereActive($value)
+ * @method static Builder|Template whereCreatedAt($value)
+ * @method static Builder|Template whereDescription($value)
+ * @method static Builder|Template whereId($value)
+ * @method static Builder|Template whereMediaUrl($value)
+ * @method static Builder|Template whereName($value)
+ * @method static Builder|Template whereParameters($value)
+ * @method static Builder|Template whereUpdatedAt($value)
+ * @method static Builder|Template whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Template extends Model
 {
     protected $fillable = [

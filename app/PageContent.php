@@ -3,9 +3,36 @@
 namespace App;
 
 use App\Converters\ContentsConverter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * App\PageContent
+ *
+ * @property int $id
+ * @property int $page_id
+ * @property object|null $body_json
+ * @property string $body_html
+ * @property string|null $type
+ * @property int $display_order
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Page $page
+ * @method static Builder|PageContent newModelQuery()
+ * @method static Builder|PageContent newQuery()
+ * @method static Builder|PageContent query()
+ * @method static Builder|PageContent whereBodyHtml($value)
+ * @method static Builder|PageContent whereBodyJson($value)
+ * @method static Builder|PageContent whereCreatedAt($value)
+ * @method static Builder|PageContent whereDisplayOrder($value)
+ * @method static Builder|PageContent whereId($value)
+ * @method static Builder|PageContent wherePageId($value)
+ * @method static Builder|PageContent whereType($value)
+ * @method static Builder|PageContent whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class PageContent extends Model
 {
     protected $fillable = ['page_id', 'body_json', 'body_html', 'type', 'display_order'];

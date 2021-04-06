@@ -4,11 +4,34 @@ namespace App;
 
 use App\Mail\FormResponseNotification;
 use App\Traits\CustomEmailSetup;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 // use App\Jobs\SendEmail;
 
+/**
+ * App\FormResponse
+ *
+ * @property int $id
+ * @property int $form_id
+ * @property string $ip
+ * @property string $responses
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read \App\Form $form
+ * @method static Builder|FormResponse newModelQuery()
+ * @method static Builder|FormResponse newQuery()
+ * @method static Builder|FormResponse query()
+ * @method static Builder|FormResponse whereCreatedAt($value)
+ * @method static Builder|FormResponse whereFormId($value)
+ * @method static Builder|FormResponse whereId($value)
+ * @method static Builder|FormResponse whereIp($value)
+ * @method static Builder|FormResponse whereResponses($value)
+ * @method static Builder|FormResponse whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class FormResponse extends Model
 {
     use CustomEmailSetup;

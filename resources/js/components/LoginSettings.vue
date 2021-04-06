@@ -68,8 +68,8 @@
                     </h3>
                     <a
                         href="https://console.developers.google.com/"
-                        target="_blank"
-                        class="text-blue-400 cursor-pointer"
+                        target='_blank'
+                        class='text-blue-400 cursor-pointer text-sm'
                         >Google Developer Console</a
                     >
                 </div>
@@ -146,8 +146,8 @@
                     </h3>
                     <a
                         href="https://developers.facebook.com/apps/"
-                        target="_blank"
-                        class="text-blue-400 cursor-pointer"
+                        target='_blank'
+                        class='text-blue-400 cursor-pointer text-sm'
                         >Facebook Developer Console</a
                     >
                 </div>
@@ -220,8 +220,8 @@
                     </h3>
                     <a
                         href="https://developer.twitter.com/"
-                        target="_blank"
-                        class="text-blue-400 cursor-pointer"
+                        target='_blank'
+                        class='text-blue-400 cursor-pointer text-sm'
                         >Twitter Developer Console</a
                     >
                 </div>
@@ -266,14 +266,48 @@
                             class="w-full sm:w-3/4 max-w-lg px-2 py-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none"
                         />
                     </div>
-                    <div class="w-full sm:flex mt-2">
-                        <label for="twitter_redirect" class="block w-full sm:w-1/4 text-sm py-1"
-                            >Redirect URL</label
+                    <div class='w-full sm:flex mt-2'>
+                        <label for='twitter_redirect' class='block w-full sm:w-1/4 text-sm py-1'
+                        >Redirect URL</label
                         >
-                        <div class="text-gray-800 text-sm w-full sm:w-3/4 max-w-lg py-1">
+                        <div class='text-gray-800 text-sm w-full sm:w-3/4 max-w-lg py-1'>
                             {{ socialProviderRedirectUrl.twitter }}
                         </div>
                     </div>
+                </div>
+            </div>
+
+
+            <div class='border-b bg-white rounded mb-3 pb-3'>
+                <div class='w-full border-b px-6 py-2 flex justify-between items-center'>
+                    <h3 class='text-blue-800 font-semibold flex items-center'>
+                        <img class='w-8 h-8 mr-4' src='/images/tensor.svg' />
+                        WebTheory Login
+                    </h3>
+                    <span
+                        class='text-gray-600 cursor-pointer text-sm'
+                    >Login system provided natively by WebTheory</span
+                    >
+                </div>
+
+                <div class='px-6 py-2'>
+                    <div class='w-full sm:flex mt-2'>
+                        <label class='block w-full sm:w-1/4 text-sm py-1' for='webtheory-enabled'
+                        >Enable Native Login</label
+                        >
+                        <t-toggle
+                            id='webtheory-enabled'
+                            v-model='socialprovider.webtheory'
+                            :show-value='true'
+                            box-class='w-16 shadow-inner bg-white border rounded-l rounded-r cursor-pointer'
+                            false-class='h-6 px-3 bg-gray-400 text-gray-100 rounded shadow-sm'
+                            false-value='Off'
+                            true-class='h-6 px-3 bg-blue-400 text-blue-100 rounded shadow-sm'
+                            true-value='On'
+                        >
+                        </t-toggle>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -338,9 +372,10 @@ export default {
 
     methods: {
         saveSocialLogin() {
-            let p = this
-
-            p.isSaving = true
+            if (!this.atLeastOneLoginMethodIsEnabled()) {
+                util.notifyError('Enable Login', 'At least one login method must be enabled.')
+                return
+            }
 
             let data = [
                 { key: 'FACEBOOK_CLIENT_ID', value: this.facebookClientId },
@@ -353,7 +388,10 @@ export default {
                 { key: 'GOOGLE_CLIENT_SECRET', value: this.googleClientSecret },
             ]
 
-            util.ajax('post', '/api/settings/loginprovider', { data }, function () {
+            let p = this
+            p.isSaving = true
+
+            util.ajax('post', '/api/settings/loginprovider', { data }, function() {
                 util.ajax(
                     'post',
                     '/api/parameters/socialprovider',
@@ -362,9 +400,16 @@ export default {
                         p.isSaving = false
 
                         util.notifySuccess('Saved', 'Login provider have been ' + status)
-                    }
+                    },
                 )
             })
+        },
+
+        atLeastOneLoginMethodIsEnabled() {
+            return this.socialprovider.google === 'On'
+                || this.socialprovider.facebook === 'On'
+                || this.socialprovider.twitter === 'On'
+                || this.socialprovider.webtheory === 'On'
         },
     },
 }
