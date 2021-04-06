@@ -9,6 +9,8 @@ use App\Http\Requests\MenuItemRequest;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use DB;
+use Illuminate\Support\Arr;
+use Throwable;
 
 class MenuController extends Controller
 {
@@ -89,48 +91,49 @@ class MenuController extends Controller
     /**
      * Upsert a resource in storage.
      *
-     * @param MenuRequest $request
+     * @param MenuItemRequest $request
      * @return JsonResponse
+     * @throws Throwable
      */
     public function upsert(MenuItemRequest $request): JsonResponse
     {
         Menu::invalidateCache();
-        
+
         DB::transaction(function () use ($request) {
-            foreach ($request->menus as $menuitem) {
-                if (!isset($menuitem['id'])) {
-                    // add new menu item
-                    $menu = new Menu([
-                        'title' => $menuitem['title'],
-                        'alias' => $menuitem['alias'],
-                        'parent_id' => $menuitem['parent_id'],
-                        'sequence_num' => $menuitem['sequence_num'],
-                        'menuable_id' => $menuitem['menuable_id'],
-                        'menuable_type' => $menuitem['menuable_type'],
-                        'home' => $menuitem['home'],
-                    ]);
-                    $menu->save();
-                } else {
+            foreach ($request->menus as $menuItem) {
+                if (isset($menuItem['id']) && $menuItem['id'] > 0) {
                     // update existing menu item
-                    $menu = Menu::findOrFail($menuitem['id']);
+                    $menu = Menu::findOrFail($menuItem['id']);
                     $menu
                         ->fill([
-                            'title' => $menuitem['title'],
-                            'alias' => $menuitem['alias'],
-                            'parent_id' => $menuitem['parent_id'],
-                            'sequence_num' => $menuitem['sequence_num'],
-                            'menuable_id' => $menuitem['menuable_id'],
-                            'menuable_type' => $menuitem['menuable_type'],
-                            'home' => $menuitem['home'],
+                            'title' => $menuItem['title'],
+                            'alias' => Arr::get($menuItem, 'alias', $menuItem['title']),
+                            'parent_id' => Arr::get($menuItem, 'parent_id'),
+                            'sequence_num' => $menuItem['sequence_num'],
+                            'menuable_id' => $menuItem['menuable_id'],
+                            'menuable_type' => $menuItem['menuable_type'],
+                            'home' => $menuItem['home'],
                         ])
                         ->save();
+                } else {
+                    // add new menu item
+                    $menu = new Menu([
+                        'title' => $menuItem['title'],
+                        'alias' => Arr::get($menuItem, 'alias', $menuItem['title']),
+                        'parent_id' => Arr::get($menuItem, 'parent_id'),
+                        'sequence_num' => $menuItem['sequence_num'],
+                        'menuable_id' => $menuItem['menuable_id'],
+                        'menuable_type' => $menuItem['menuable_type'],
+                        'home' => $menuItem['home'],
+                    ]);
+                    $menu->save();
                 }
             }
         });
-        
-        $menuitems = Menu::orderBy('sequence_num')->get();
-        $menus = ['menus' => $menuitems];
-        return response()->json($menus);
+
+        return response()->json([
+            'menus' => Menu::with('menuable')->orderBy('sequence_num')->get()
+        ]);
     }
 
     /**
