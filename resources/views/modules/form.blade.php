@@ -70,7 +70,7 @@
                     @break
 
                     @case('textbox')
-                        <textarea name="{{$field->name}}" class="mt-2 w-full px-2 py-1 border rounded wt-form-input" placeholder="{{ optional($field)->placeholder }}"></textarea>
+                        <textarea name="{{ $field->name }}" class="mt-2 w-full px-2 py-1 border rounded wt-form-input" placeholder="{{ optional($field)->placeholder }}"></textarea>
                     @break
 
                     @case('radio')
@@ -91,7 +91,7 @@
                             @endforeach
                         </select>
                     @break
-                    @case('multi')
+                    @case('multiselect')
                         <select name="{{$field->name}}" value="{{ old($field->name) }}" class="mt-2 w-full px-2 py-1 border rounded wt-form-input" placeholder="{{ optional($field)->placeholder }}" multiple>
                             <option disabled>Select one or more options</option>
                             @foreach($field->options as $option)
@@ -101,7 +101,7 @@
                     @break
                     @case('checkbox')
                         <div class="flex mt-2 wt-form-input">
-                            <input value="{{ old($field->name) }}" name="{{$field->name}}" type="checkbox" class="px-2 py-1 mr-3" value="true">
+                            <input name="{{$field->name}}" type="checkbox" class="px-2 py-1 mr-3" {!! $field->default ? ' checked' : '' !!}>
                             <label for="{{ $field->name }}">{{ optional($field)->desc}}</label>
                         </div>
                     @break

@@ -5,6 +5,7 @@ namespace App;
 use App\Traits\RelativeTime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Form extends Model
 {
@@ -17,7 +18,7 @@ class Form extends Model
      */
     protected $fillable = ['name', 'description', 'status', 'captcha', 'fields'];
 
-    protected $appends = ['created_ago', 'updated_ago'];
+    protected $appends = ['url', 'permalink', 'created_ago', 'updated_ago'];
 
     /**
      * The attributes that should be cast to native types.
@@ -71,5 +72,15 @@ class Form extends Model
         }, json_decode($this->fields));
 
         return array_combine($this->currentFields(), $validations);
+    }
+
+    public function getUrlAttribute()
+    {
+        return url('forms/' . $this->id . '/' . Str::slug($this->name));
+    }
+
+    public function getPermalinkAttribute()
+    {
+        return url('forms/' . $this->id);
     }
 }

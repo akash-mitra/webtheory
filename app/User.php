@@ -72,7 +72,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'preferences' => 'array',
     ];
 
-    protected $appends = ['created_ago', 'updated_ago', 'url'];
+    protected $appends = ['created_ago', 'updated_ago', 'url', 'provider'];
 
     public function categories(): HasMany
     {
@@ -125,6 +125,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getUrlAttribute()
     {
         return route('profile.show', $this->public_id);
+    }
+
+    public function getProviderAttribute()
+    {
+        $provider = LoginProvider::where('user_id', $this->id)->first();
+        if (empty($provider))
+            return 'native';
+        // return $provider->provider;
+        return 'social';
     }
 
     public function providers($provider = null)

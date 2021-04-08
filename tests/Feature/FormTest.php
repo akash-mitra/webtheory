@@ -87,6 +87,8 @@ class FormTest extends TestDataSetup
                 'updated_at',
                 'created_at',
                 'id',
+                'url',
+                'permalink',
                 'created_ago',
                 'updated_ago',
             ]);
