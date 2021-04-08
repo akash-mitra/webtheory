@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 /**
  * App\Form
@@ -102,5 +103,15 @@ class Form extends Model
         }, json_decode($this->fields));
 
         return array_combine($this->currentFields(), $validations);
+    }
+
+    public function getUrlAttribute()
+    {
+        return url('forms/' . $this->id . '/' . Str::slug($this->name));
+    }
+
+    public function getPermalinkAttribute()
+    {
+        return url('forms/' . $this->id);
     }
 }

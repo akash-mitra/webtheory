@@ -13,7 +13,7 @@
     </p>
 
     <p>
-        You can now login to this website using your social media account.
+        You can now login to <a href="{!! url()->current() !!}">{{ $site->name }}</a> using your social media account.
     </p>
 
     <p>
@@ -24,7 +24,7 @@
 <div style="padding: 10px 0; border-top: 1px solid #ccc;">
     <small style="font-size: 12px; color: gray">
         You are getting this email as you signed up to
-        our website using the email id {{ $user->email }}.
+        {{ $site->name }} using the email id {{ $user->email }}.
     </small>
 </div>
 

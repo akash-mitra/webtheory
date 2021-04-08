@@ -12,7 +12,7 @@ $factory->define(Form::class, function (Faker $faker) {
             'type' => 'text',
             'desc' => 'Provide your name',
             'placeholder' => 'Harry Potter',
-            'validation' => 'min" =>2|max" =>100',
+            'validation' => 'min:2|max:100',
             'default' => '',
             'options' => [],
         ],
@@ -60,6 +60,15 @@ $factory->define(Form::class, function (Faker $faker) {
             'validation' => '',
             'default' => '',
             'options' => ['Ron Weasley', 'Hermione', 'Neville Longbottom', 'Lucious Malfoy'],
+        ],
+        [
+            'name' => 'agree',
+            'type' => 'checkbox',
+            'desc' => 'Agree to T&C',
+            'placeholder' => 'Agree to T&C',
+            'validation' => '',
+            'default' => null,
+            'options' => [],
         ],
     ];
 

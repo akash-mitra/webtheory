@@ -5,7 +5,9 @@ namespace App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use App\ViewContent;
+use App\Category;
 use App\Page;
+use App\Form;
 
 class DataProvider
 {
@@ -82,6 +84,18 @@ class DataProvider
         return (object)[
             'ref' => self::ref('profile'),
             'profile' => (object)$user,
+            'menus' => self::menus(),
+            'user' => auth()->user(),
+        ];
+    }
+
+    public static function form($id): object
+    {
+        $form = Form::where('status', 'Live')->findOrFail($id);
+
+        return (object)[
+            'ref' => self::ref('form'),
+            'form' => $form,
             'menus' => self::menus(),
             'user' => auth()->user(),
         ];
