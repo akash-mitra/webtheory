@@ -61,6 +61,9 @@ class ViewBrowser extends Model
                 sum(total_views) as total_views
             ')
             ->whereBetween('month_key', [$start_month_key, $end_month_key])
+            ->whereNotNull('browser')
+            ->where('browser', 'NOT LIKE', "%bot%")
+            ->where('browser', 'NOT LIKE', "%Bot%")
             ->groupBy('browser')
             ->orderByRaw('sum(total_views) desc')
             ->take(10)
