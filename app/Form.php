@@ -3,11 +3,8 @@
 namespace App;
 
 use App\Traits\RelativeTime;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 /**
@@ -21,7 +18,7 @@ use Illuminate\Support\Str;
  * @property string $fields
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Collection|\App\FormResponse[] $formResponses
+ * @property-read Collection|FormResponse[] $formResponses
  * @property-read int|null $form_responses_count
  * @property-read null|string $created_ago
  * @property-read null|string $updated_ago
@@ -36,7 +33,7 @@ use Illuminate\Support\Str;
  * @method static Builder|Form whereName($value)
  * @method static Builder|Form whereStatus($value)
  * @method static Builder|Form whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class Form extends Model
 {
@@ -49,7 +46,7 @@ class Form extends Model
      */
     protected $fillable = ['name', 'description', 'status', 'captcha', 'fields'];
 
-    protected $appends = ['created_ago', 'updated_ago'];
+    protected $appends = ['url', 'permalink', 'created_ago', 'updated_ago'];
 
     /**
      * The attributes that should be cast to native types.
@@ -58,6 +55,7 @@ class Form extends Model
      */
     protected $casts = [
         'captcha' => 'boolean',
+        'fields' => 'array',
     ];
 
     /**
@@ -66,7 +64,7 @@ class Form extends Model
      */
     public function formResponses(): HasMany
     {
-        return $this->hasMany('App\FormResponse');
+        return $this->hasMany(FormResponse::class);
     }
 
     /**
@@ -86,8 +84,8 @@ class Form extends Model
     public function currentFields(): array
     {
         return array_map(function ($field) {
-            return $field->name;
-        }, json_decode($this->fields));
+            return $field['name'];
+        }, $this->fields);
     }
 
     /**
@@ -99,8 +97,8 @@ class Form extends Model
     public function fieldValidationRules(): array
     {
         $validations = array_map(function ($field) {
-            return optional($field)->validation ?? '';
-        }, json_decode($this->fields));
+            return $field['validation'] ?? '';
+        }, $this->fields);
 
         return array_combine($this->currentFields(), $validations);
     }
