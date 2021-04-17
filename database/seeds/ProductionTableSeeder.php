@@ -90,7 +90,7 @@ class ProductionTableSeeder extends Seeder
         // SOCIAL LOGIN
         DB::table('parameters')->insert([
             'key' => 'socialprovider',
-            'value' => '{"facebook": "Off", "twitter": "Off", "linkedin": "Off", "google": "Off"}',
+            'value' => '{"webtheory": "On", "facebook": "Off", "twitter": "Off", "linkedin": "Off", "google": "Off"}',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

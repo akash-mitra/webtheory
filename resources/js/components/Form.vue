@@ -36,7 +36,8 @@
         <div class="md:px-4 mt-4 md:mt-0 flex-grow">
             <a
                 :href="'/api/forms/' + item.id + '/responses/download'"
-                class="text-blue-500 py-2 rounded-lg cursor-pointer ml-1 inline-flex items-center"
+                class='text-blue-500 py-2 rounded-lg cursor-pointer ml-1 inline-flex items-center'
+                download
             >
                 <svg
                     class="w-4 h-4 mr-3"

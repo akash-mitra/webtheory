@@ -17,14 +17,15 @@
                 :key="c.id"
                 v-if="index < 10"
                 class="bg-white border rounded-lg shadow"
+                @deleted='remove'
             ></CommentStrip>
         </div>
     </div>
 </template>
 
 <script>
-import CommentStrip from './CommentStrip.vue'
-import CommentStripDummy from './CommentStripDummy.vue'
+import CommentStrip from '../CommentStrip.vue'
+import CommentStripDummy from '../CommentStripDummy.vue'
 
 export default {
     data() {
@@ -44,8 +45,6 @@ export default {
         this.isLoading = true
 
         util.ajax('get', url, {}, (response) => {
-            // response = []
-
             if (response.length < 1) {
                 this.noData = true
             } else {
@@ -54,5 +53,11 @@ export default {
             }
         })
     },
+
+    methods: {
+        remove(id) {
+            util.removeOneById(id, this.paginatedComments)
+        },
+    }
 }
 </script>

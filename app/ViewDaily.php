@@ -4,9 +4,30 @@ namespace App;
 
 use Carbon\Carbon;
 use DB;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
+/**
+ * App\ViewDaily
+ *
+ * @property int $date_key
+ * @property int $total_views
+ * @property int $unique_visitors
+ * @property int $bounce_rate
+ * @property int|null $avg_visit_duration
+ * @property string $created_at
+ * @method static Builder|ViewDaily newModelQuery()
+ * @method static Builder|ViewDaily newQuery()
+ * @method static Builder|ViewDaily query()
+ * @method static Builder|ViewDaily whereAvgVisitDuration($value)
+ * @method static Builder|ViewDaily whereBounceRate($value)
+ * @method static Builder|ViewDaily whereCreatedAt($value)
+ * @method static Builder|ViewDaily whereDateKey($value)
+ * @method static Builder|ViewDaily whereTotalViews($value)
+ * @method static Builder|ViewDaily whereUniqueVisitors($value)
+ * @mixin \Eloquent
+ */
 class ViewDaily extends Model
 {
     protected $table = 'views_daily';

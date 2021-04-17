@@ -1,11 +1,13 @@
 <template>
     <div class="flex items-center">
         <div class="flex-shrink-0">
-            <img :src="user.avatar" :class="imageClass" />
+            <a v-if="showAvatar" :href="'/app/users/' + user.id">
+                <img :src="user.avatar" :class="imageClass" :title='user.name'/>
+            </a>
         </div>
         <div class="mx-4">
-            <div :class="userClass">{{ user.name }}</div>
-            <div :class="roleClass">{{ user.role.toUpperCase() }}</div>
+            <div v-if="showName" :class="userClass">{{ user.name }}</div>
+            <div v-if="showRole" :class="roleClass">{{ user.role.toUpperCase() }}</div>
         </div>
     </div>
 </template>
@@ -15,7 +17,18 @@ export default {
         user: {
             type: Object,
         },
-
+        showAvatar: {
+            type: Boolean,
+            default: true
+        },
+        showName: {
+            type: Boolean,
+            default: true
+        },
+        showRole: {
+            type: Boolean,
+            default: true
+        },
         imageClass: {
             type: String,
             default: 'h-12 w-12 rounded-full border',

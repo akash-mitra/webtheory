@@ -4,9 +4,26 @@ namespace App;
 
 use Carbon\Carbon;
 use DB;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
+/**
+ * App\ViewPlatform
+ *
+ * @property int $month_key
+ * @property string|null $platform
+ * @property int $total_views
+ * @property string $created_at
+ * @method static Builder|ViewPlatform newModelQuery()
+ * @method static Builder|ViewPlatform newQuery()
+ * @method static Builder|ViewPlatform query()
+ * @method static Builder|ViewPlatform whereCreatedAt($value)
+ * @method static Builder|ViewPlatform whereMonthKey($value)
+ * @method static Builder|ViewPlatform wherePlatform($value)
+ * @method static Builder|ViewPlatform whereTotalViews($value)
+ * @mixin \Eloquent
+ */
 class ViewPlatform extends Model
 {
     protected $table = 'view_platforms';

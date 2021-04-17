@@ -236,6 +236,25 @@
     }
 
     /**
+     * Removes a single element from an array of objects if the
+     * id property of the element is equal to the given id.
+     *
+     * @param id
+     * @param arr array
+     */
+    util.removeOneById = function (id, arr) {
+        if(! Array.isArray(arr)) return
+        if (typeof id === 'undefined') return
+        for(let i = 0, l = arr.length; i < l; i++) {
+            let o = arr[i]
+            if(o.hasOwnProperty('id') && o.id === id) {
+                arr.splice(i, 1)
+                return
+            }
+        }
+    }
+
+    /**
      * AJAX Related Utility functions
      * ---------------------------------------------------------------
      * Makes ajax request to the URL with or without the given data

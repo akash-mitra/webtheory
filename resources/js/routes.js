@@ -1,4 +1,4 @@
-import Dashboard from './components/Dashboard.vue'
+import Dashboard from './components/dashboard/Dashboard.vue'
 import Pages from './components/Pages.vue'
 import Categories from './components/Categories.vue'
 import Design from './components/design/Design.vue'

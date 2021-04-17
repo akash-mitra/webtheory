@@ -4,9 +4,26 @@ namespace App;
 
 use Carbon\Carbon;
 use DB;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
+/**
+ * App\ViewReferrer
+ *
+ * @property int $month_key
+ * @property string|null $referrer_domain
+ * @property int $total_views
+ * @property string $created_at
+ * @method static Builder|ViewReferrer newModelQuery()
+ * @method static Builder|ViewReferrer newQuery()
+ * @method static Builder|ViewReferrer query()
+ * @method static Builder|ViewReferrer whereCreatedAt($value)
+ * @method static Builder|ViewReferrer whereMonthKey($value)
+ * @method static Builder|ViewReferrer whereReferrerDomain($value)
+ * @method static Builder|ViewReferrer whereTotalViews($value)
+ * @mixin \Eloquent
+ */
 class ViewReferrer extends Model
 {
     protected $table = 'view_referrers';
