@@ -5,6 +5,7 @@
                 :id="'show-user-' + user.id"
                 :to="{ name: 'users.edit', params: { id: user.id } }"
                 class="text-blue-600 hover:text-blue-900 focus:outline-none focus:underline"
+                :class="!!user.deleted_at ? 'cursor-not-allowed':''"
             >
                 <img
                     v-if="user.avatar"
@@ -30,33 +31,45 @@
                 <div class="text-sm leading-5 text-gray-500 flex items-center">
                     {{ user.email }}
 
-                    <div v-if="user.email_verified_at == null" class="tooltip text-red-400">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-4 w-4 ml-2"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M12 8v4M12 16h0" />
-                        </svg>
+                    <div v-if="user.email_verified_at == null" class="tooltip text-red-400 h-4 w-4 ml-2">
+                        <icon-exclamation/>
                         <span
                             class="tooltip-text bg-red-100 border border-red-200 mb-1 text-red-600 px-3 py-1 rounded-lg text-xs"
                             >Email Not Verified</span
                         >
                     </div>
+
+                    <div v-if="user.provider === 'google'" class="tooltip text-red-600 h-3 w-3 ml-2">
+                        <icon-google />
+                        <span
+                            class="tooltip-text bg-blue-100 border border-blue-200 mb-1 text-blue-600 px-3 py-1 rounded-lg text-xs"
+                        >Login via Google</span
+                        >
+                    </div>
+
+                    <div v-if="user.provider === 'facebook'" class="tooltip text-blue-600 h-4 w-4 ml-2">
+                        <icon-facebook />
+                        <span
+                            class="tooltip-text bg-blue-100 border border-blue-200 mb-1 text-blue-600 px-3 py-1 rounded-lg text-xs"
+                        >Login via Facebook</span
+                        >
+                    </div>
+
+                    <div v-if="user.provider === 'twitter'" class="tooltip text-blue-400 h-4 w-4 ml-2">
+                        <icon-twitter />
+                        <span
+                            class="tooltip-text bg-blue-100 border border-blue-200 mb-1 text-blue-600 px-3 py-1 rounded-lg text-xs"
+                        >Login via Twitter</span
+                        >
+                    </div>
+
+
                 </div>
             </div>
         </div>
 
         <div class="hidden sm:block w-1/6">
-            <div class="text-sm leading-5 text-gray-700">Joined {{ user.created_ago }}</div>
+            <div class="w-full text-xs leading-5 text-gray-700">Joined {{ user.created_ago }}</div>
         </div>
 
         <div class="w-1/6 sm:text-right mt-2 sm:mt-0">
@@ -136,7 +149,13 @@
 </template>
 
 <script>
+import IconExclamation from './icons/IconExclamation'
+import IconGoogle from './icons/IconGoogle'
+import IconFacebook from './icons/IconFacebook'
+import IconTwitter from './icons/IconTwitter'
+
 export default {
+    components: { IconTwitter, IconFacebook, IconGoogle, IconExclamation },
     props: {
         user: {
             type: Object,

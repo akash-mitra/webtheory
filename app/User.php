@@ -208,11 +208,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getProviderAttribute()
     {
-        $provider = LoginProvider::where('user_id', $this->id)->first();
-        if (empty($provider))
-            return 'native';
-        // return $provider->provider;
-        return 'social';
+        return optional($this->providers()->latest()->first())->provider;
     }
 
     public function providers($provider = null)

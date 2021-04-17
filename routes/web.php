@@ -94,8 +94,11 @@ Route::get('app/{any?}', 'AdminController@app')
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+
+
 // --------------------------------------------------------------------------------------------------------------------------
-// Unauthenticated API Routes
+// PUBLIC API
 // --------------------------------------------------------------------------------------------------------------------------
 
 // Related to Users pages
@@ -117,8 +120,9 @@ Route::post('api/forms/{form}/response', 'Api\FormController@storeResponse')->na
     'forms.storeresponse'
 );
 
+
 // --------------------------------------------------------------------------------------------------------------------------
-// Authenticated API Routes
+// PRIVATE API
 // --------------------------------------------------------------------------------------------------------------------------
 Route::prefix('api')
     ->middleware(['auth'])

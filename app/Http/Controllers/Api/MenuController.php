@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use DB;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Throwable;
 
 class MenuController extends Controller
@@ -100,34 +101,18 @@ class MenuController extends Controller
         Menu::invalidateCache();
 
         DB::transaction(function () use ($request) {
+            Menu::query()->delete();
             foreach ($request->menus as $menuItem) {
-                if (isset($menuItem['id']) && $menuItem['id'] > 0) {
-                    // update existing menu item
-                    $menu = Menu::findOrFail($menuItem['id']);
-                    $menu
-                        ->fill([
-                            'title' => $menuItem['title'],
-                            'alias' => Arr::get($menuItem, 'alias', $menuItem['title']),
-                            'parent_id' => Arr::get($menuItem, 'parent_id'),
-                            'sequence_num' => $menuItem['sequence_num'],
-                            'menuable_id' => $menuItem['menuable_id'],
-                            'menuable_type' => $menuItem['menuable_type'],
-                            'home' => $menuItem['home'],
-                        ])
-                        ->save();
-                } else {
-                    // add new menu item
-                    $menu = new Menu([
-                        'title' => $menuItem['title'],
-                        'alias' => Arr::get($menuItem, 'alias', $menuItem['title']),
-                        'parent_id' => Arr::get($menuItem, 'parent_id'),
-                        'sequence_num' => $menuItem['sequence_num'],
-                        'menuable_id' => $menuItem['menuable_id'],
-                        'menuable_type' => $menuItem['menuable_type'],
-                        'home' => $menuItem['home'],
-                    ]);
-                    $menu->save();
-                }
+                $menu = new Menu([
+                    'title' => $menuItem['title'],
+                    'alias' => Arr::get($menuItem, 'alias', Str::slug($menuItem['title'])),
+                    'parent_id' => Arr::get($menuItem, 'parent_id'),
+                    'sequence_num' => $menuItem['sequence_num'],
+                    'menuable_id' => $menuItem['menuable_id'],
+                    'menuable_type' => $menuItem['menuable_type'],
+                    'home' => $menuItem['home'],
+                ]);
+                $menu->save();
             }
         });
 
