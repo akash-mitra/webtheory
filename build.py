@@ -170,7 +170,7 @@ def analyze_and_report():
     files = os.listdir('./resources/views/templates/')
     # exclude any dot files
     templates_present = list(filter(lambda item: item.startswith(".")==False, files))
-    if set(templates_present) == set(['Serenity']):
+    if set(templates_present) == set(configs.DEFAULT_TEMPLATES):
         print(msg + positive)
     else:
         print(msg + negative)
