@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataProvider;
+use App\DataProviders\PageDataProvider;
 use App\Jobs\CaptureViewEvent;
 use App\Menu;
 use App\Page;
@@ -32,27 +33,21 @@ class HomeController extends Controller
             return view('active.home', compact('data'));
         }
 
-        switch ($homeMenuContent->menuable_type) {
-            case 'App\\Page':
-                return $this->single($homeMenuContent->menuable_id);
-            default:
-                return $this->category($homeMenuContent->menuable_id);
-        }
+        return match ($homeMenuContent->menuable_type) {
+            'App\\Page' => $this->single($homeMenuContent->menuable_id),
+            default => $this->category($homeMenuContent->menuable_id),
+        };
     }
 
     /**
      * Display the single page view.
      *
      * @param string $pageId
-     * @return Application|Factory|Response|View
+     * @return Application|Factory|View
      */
-    public function single(string $pageId)
+    public function single(string $pageId): Factory|View|Application
     {
-        $data = DataProvider::single($pageId);
-
-        CaptureViewEvent::dispatchAfterResponse($this->getAnalyticsData('App\Page', $pageId));
-
-        return view('active.single', compact('data'));
+        return view('default')->with('api', new PageDataProvider($pageId));
     }
 
     /**

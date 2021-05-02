@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Parameter;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 
 trait Shareable
@@ -16,9 +17,7 @@ trait Shareable
      */
     public function getShareUrl(string $platform = 'facebook'): string
     {
-        $url = $this->{array_get($this->shareOptions, 'url')}
-            ? $this->{array_get($this->shareOptions, 'url')}
-            : url()->current();
+        $url = $this->{array_get($this->shareOptions, 'url')} ?: url()->current();
 
         switch ($platform) {
             case "facebook":

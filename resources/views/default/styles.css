@@ -1,0 +1,40 @@
+.container {
+    @apply w-full xl:container mx-auto
+}
+
+.site-top { @apply w-full flex justify-between px-6 py-4 }
+.site-logo { @apply flex items-center justify-start}
+.site-logo-img { @apply w-12 h-12 }
+.site-logo-caption { @apply pl-2 cursor-pointer text-2xl md:text-3xl font-bold }
+
+.site-mid { @apply flex w-full }
+.site-main { @apply w-2/3 px-6 py-4 }
+.site-aside { @apply w-1/3 px-6 py-4 }
+
+.site-bottom { @apply flex w-full bg-red-100 px-6 py-4 }
+
+
+.wrap { @apply min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 }
+.wt-login-wrap { @apply p-6 box-border w-full space-y-8 }
+.wt-login-icon { @apply mx-auto h-12 w-auto }
+.wt-login-heading { @apply  mt-6 text-center text-3xl font-extrabold text-gray-900 }
+.wt-login-subhead {@apply mt-2 text-center text-sm text-gray-600 }
+.wt-login-body { @apply mt-8 space-y-6 }
+.wt-login-items { @apply rounded-md shadow-sm -space-y-px }
+.wt-login-inp { @apply appearance-none rounded-none relative block w-full box-border px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm }
+.wt-login-err-txt {}
+.wt-login-inp-lbl { @apply sr-only }
+.wt-login-setting { @apply flex items-center justify-between }
+.wt-login-setting div:first-child { @apply flex items-center }
+.wt-login-setting div:nth-child(2) { @apply text-sm }
+.wt-login-remember { @apply ml-2 block text-sm text-gray-900 }
+.wt-login-forgot-pass { @apply  font-medium text-indigo-600 hover:text-indigo-500 }
+
+#wt-login-wrap { @apply w-full p-6 box-border }
+#wt-login-header { @apply w-full }
+#wt-login-icon { @apply w-full text-center }
+#wt-login-signin-text { @apply w-full text-center text-3xl font-extrabold text-gray-900 }
+#wt-login-create-text { @apply w-full text-center text-sm text-gray-600 }
+
+
+

@@ -1,11 +1,7 @@
 {
     "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css",
-    "/js/comments.js": "/js/comments.js",
-    "/js/frontend.js": "/js/frontend.js",
-    "/js/profile.js": "/js/profile.js",
-    "/js/chunks/5.chunk.7b4c2fabf2951457a55c.js": "/js/chunks/5.chunk.7b4c2fabf2951457a55c.js",
-    "/js/chunks/6.chunk.e6485f1dbc3b009bf485.js": "/js/chunks/6.chunk.e6485f1dbc3b009bf485.js",
-    "/js/chunks/7.chunk.be65e69fe3fda9ffe56a.js": "/js/chunks/7.chunk.be65e69fe3fda9ffe56a.js",
-    "/js/chunks/8.chunk.d0fb1f52d909d32ca1c8.js": "/js/chunks/8.chunk.d0fb1f52d909d32ca1c8.js"
+    "/js/chunks/PageEditor.chunk.985f68c402162ee12063.js": "/js/chunks/PageEditor.chunk.985f68c402162ee12063.js",
+    "/js/chunks/TemplateFileEditor.chunk.92632f1771ff19df919f.js": "/js/chunks/TemplateFileEditor.chunk.92632f1771ff19df919f.js",
+    "/css/default.css": "/css/default.css",
+    "/css/app.css": "/css/app.css"
 }

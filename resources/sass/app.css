@@ -6,45 +6,6 @@
 
 @tailwind utilities;
 
-// @import './typography.scss';
-
-/* This provides a styling for the left-side plus button of editor */
-// .wt-typography .ce-toolbar__plus {
-//     // @apply text-orange-500 bg-yellow-100
-// }
-
-// @screen md {
-//     .wt-typography .ce-toolbar__plus {
-//         // @apply -ml-6 shadow rounded-l-full
-//     }
-// }
-
-// .wt-typography .ce-toolbox--opened  {
-//     // @apply  bg-yellow-100 px-6;
-// }
-
-// @screen md {
-//     .wt-typography .ce-toolbox--opened {
-//         // @apply -ml-6 shadow rounded-r-full
-//     }
-// }
-
-// p.ce-paragraph {
-//     @apply text-sm;
-// }
-
-// h2.ce-header {
-//     @apply text-3xl font-serif;
-// }
-
-// h3.ce-header {
-//     @apply text-2xl font-serif;
-// }
-
-// h4.ce-header {
-//     @apply text-lg font-serif font-semibold;
-// }
-
 [v-cloak] > * {
     display: none;
 }

@@ -176,7 +176,7 @@ class DataProvider
         });
     }
 
-    private static function site(): object
+    public static function site(): object
     {
         return (object)json_decode(Parameter::getKey('siteinfo'));
     }
