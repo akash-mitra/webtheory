@@ -66,8 +66,8 @@
             >
                 Fields
                 <span class="px-2 py-1 ml-3 bg-gray-300 text-white1 rounded">{{
-                    this.form.fields.length
-                }}</span>
+                        this.form.fields.length
+                    }}</span>
             </div>
 
             <div
@@ -149,7 +149,7 @@
                 <div class="">
                     You may post the form data manually to be below URL. <br />
                     <code class="text-red-700 bg-red-100 p-1"
-                        >/api/forms/{{ form.id }}/response</code
+                    >/api/forms/{{ form.id }}/response</code
                     >
                 </div>
             </div>
@@ -157,7 +157,7 @@
 
         <div v-if="tab === 'general'" class="px-6 bg-gray-100 mt-41 py-4 flex justify-end">
             <span class="text-sm text-red-500 py-2 cursor-pointer" @click="deleteForm"
-                >Delete Form</span
+            >Delete Form</span
             >
         </div>
 
@@ -254,8 +254,8 @@ export default {
                     name: this.form.name,
                     description: this.form.description,
                     status: this.form.status || 'Draft',
-                    captcha: this.spamProtect === 'On' ? true : false,
-                    fields: JSON.stringify(this.form.fields),
+                    captcha: this.spamProtect === 'On',
+                    fields: this.form.fields,
                 },
                 this.postSaveProcessing,
                 this.handleError

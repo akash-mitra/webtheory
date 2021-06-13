@@ -1,15 +1,15 @@
 <template>
     <div class="max-w-5xl mx-auto">
         <div
-            class="px-2 my-6 w-full sm:flex justify-between items-center pattern-wall border-t border-l border-r border-blue-200 pt-6"
+            class="px-2 my-6 w-full pt-6"
         >
-            <div class="sm:ml-6 flex justify-center items-center flex-col sm:flex-row">
-                <img v-if="avatar" :src="avatar" class="rounded-full mr-4 h-32 w-32 border" />
+            <div class="flex justify-center items-center flex-col">
+                <img v-if="avatar" :src="avatar" class="rounded-full mr-4 h-48 w-48 border" />
                 <svg
                     v-else
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
-                    class="rounded-full mr-4 h-32 w-32 fill-current"
+                    class="rounded-full mr-4 h-48 w-48 fill-current"
                 >
                     <g>
                         <path
@@ -22,9 +22,9 @@
                         />
                     </g>
                 </svg>
-                <div>
-                    <h2 class="text-gray-800 text-3xl flex items-center">{{ name }}</h2>
-                    <p class="text-gray-600">
+                <div class='w-full'>
+                    <h2 class="text-gray-800 text-3xl w-full text-center">{{ name }}</h2>
+                    <p class="text-gray-600 w-full text-center">
                         <span
                             v-if="role === 'registered'"
                             class="mr-2 bg-gray-100 text-green-700 px-2 border border-green-500 rounded uppercase text-xs tracking-wider font-bold"
@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <div class="flex justify-center sm:justify-end mt-8 sm:mt-0">
+            <div class="flex justify-center mt-8">
                 <t-button color="gray" @click.native="$router.push({ name: 'users.index' })">
                     Close
                 </t-button>
@@ -62,13 +62,14 @@
             </div>
         </div>
 
-        <div class="w-full bg-white border-t rounded mb-12 -mt-10">
+        <div class="w-full bg-white border-t rounded">
+
             <div class="w-full sm:flex px-6 pt-8">
                 <label for="userName" class="block w-full sm:w-1/6 sm:text-right text-sm py-1 px-3"
                     >Name</label
                 >
 
-                <div class="w-full my-1 sm:w-5/6 max-w-lg">
+                <div class="w-full my-1 w-full max-w-lg">
                     <input
                         type="text"
                         id="userName"
@@ -89,7 +90,7 @@
                 <label for="userEmail" class="block w-full sm:w-1/6 sm:text-right text-sm py-1 px-3"
                     >Email</label
                 >
-                <div class="w-full my-1 sm:w-5/6 max-w-lg">
+                <div class="w-full my-1 w-full max-w-lg">
                     <input
                         type="email"
                         id="userEmail"
@@ -110,7 +111,7 @@
                 <label for="userRole" class="block w-full sm:w-1/6 sm:text-right text-sm py-1 px-3"
                     >Role</label
                 >
-                <div class="inline-block relative w-64">
+                <div class="inline-block relative w-full max-w-lg">
                     <select
                         id="role"
                         v-model="role"
@@ -147,13 +148,13 @@
                     id="userAboutMe"
                     v-model="about_me"
                     ref="about_me"
-                    class="w-full sm:w-5/6 h-48 max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none"
+                    class="w-full w-full h-48 max-w-lg px-2 py-1 my-1 rounded appearance-none bg-gray-200 focus:bg-white border focus:outline-none"
                 ></textarea>
             </div>
 
-            <div class="w-full sm:flex items-center px-6 pt-6 pb-12">
+            <div class="w-full sm:flex items-center px-6 pt-6">
                 <label class="block w-full sm:w-1/6 sm:text-right text-sm py-1 px-3"></label>
-                <div v-if="authUserId === id" class="sm:w-5/6">
+                <div v-if="authUserId === id" class="w-full">
                     <span
                         class="px-6 py-2 inline-block text-sm bg-blue-600 rounded hover:bg-blue-700 text-white cursor-pointer"
                         @click="resetPasswordModal = true"

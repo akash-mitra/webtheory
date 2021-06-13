@@ -4,7 +4,11 @@ namespace App;
 
 use App\Traits\RelativeTime;
 use App\Traits\CustomEmailSetup;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
 use Laravel\Cashier\Billable;
 use Illuminate\Support\Carbon;
 use App\Mail\ResetPasswordLink;
@@ -17,7 +21,82 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Cashier\Subscription;
 
+/**
+ * App\User
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property Carbon|null $email_verified_at
+ * @property string|null $password
+ * @property string|null $remember_token
+ * @property string $role
+ * @property string|null $avatar
+ * @property string|null $about_me
+ * @property string|null $gender
+ * @property string|null $dob
+ * @property string|null $profile
+ * @property array|null $preferences
+ * @property string $public_id
+ * @property string|null $google2fa_secret
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property string|null $stripe_id
+ * @property string|null $card_brand
+ * @property string|null $card_last_four
+ * @property string|null $trial_ends_at
+ * @property-read Collection|Asset[] $assets
+ * @property-read int|null $assets_count
+ * @property-read Collection|Category[] $categories
+ * @property-read int|null $categories_count
+ * @property-read Collection|CategoryComment[] $categoryComments
+ * @property-read int|null $category_comments_count
+ * @property-read null|string $created_ago
+ * @property-read null|string $updated_ago
+ * @property-read mixed $url
+ * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
+ * @property-read Collection|PageComment[] $pageComments
+ * @property-read int|null $page_comments_count
+ * @property-read Collection|Page[] $pages
+ * @property-read int|null $pages_count
+ * @property-read Collection|Subscription[] $subscriptions
+ * @property-read int|null $subscriptions_count
+ * @property-read Collection|Template[] $templates
+ * @property-read int|null $templates_count
+ * @method static Builder|User newModelQuery()
+ * @method static Builder|User newQuery()
+ * @method static \Illuminate\Database\Query\Builder|User onlyTrashed()
+ * @method static Builder|User query()
+ * @method static Builder|User whereAboutMe($value)
+ * @method static Builder|User whereAvatar($value)
+ * @method static Builder|User whereCardBrand($value)
+ * @method static Builder|User whereCardLastFour($value)
+ * @method static Builder|User whereCreatedAt($value)
+ * @method static Builder|User whereDeletedAt($value)
+ * @method static Builder|User whereDob($value)
+ * @method static Builder|User whereEmail($value)
+ * @method static Builder|User whereEmailVerifiedAt($value)
+ * @method static Builder|User whereGender($value)
+ * @method static Builder|User whereGoogle2faSecret($value)
+ * @method static Builder|User whereId($value)
+ * @method static Builder|User whereName($value)
+ * @method static Builder|User wherePassword($value)
+ * @method static Builder|User wherePreferences($value)
+ * @method static Builder|User whereProfile($value)
+ * @method static Builder|User wherePublicId($value)
+ * @method static Builder|User whereRememberToken($value)
+ * @method static Builder|User whereRole($value)
+ * @method static Builder|User whereStripeId($value)
+ * @method static Builder|User whereTrialEndsAt($value)
+ * @method static Builder|User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|User withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|User withoutTrashed()
+ * @mixin \Eloquent
+ */
 class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable, SoftDeletes, Billable, EnableDummyAvatar, CustomEmailSetup, RelativeTime;
@@ -72,7 +151,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'preferences' => 'array',
     ];
 
-    protected $appends = ['created_ago', 'updated_ago', 'url'];
+    protected $appends = ['created_ago', 'updated_ago', 'url', 'provider'];
 
     public function categories(): HasMany
     {
@@ -125,6 +204,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getUrlAttribute()
     {
         return route('profile.show', $this->public_id);
+    }
+
+    public function getProviderAttribute()
+    {
+        return optional($this->providers()->latest()->first())->provider;
     }
 
     public function providers($provider = null)

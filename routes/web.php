@@ -67,6 +67,7 @@ Route::get('blog', [HomeController::class, 'blog'])->name('blog');
 Route::get('pages/{page}/{slug?}', [HomeController::class, 'single'])->name('pages');
 Route::get('categories/{category}/{slug?}', [HomeController::class, 'category'])->name('categories');
 Route::get('profiles/{public_id}', [HomeController::class, 'profile'])->name('profile.show');
+Route::get('forms/{form}/{slug?}', [HomeController::class, 'form'])->name('forms');
 
 /*
 | FRONT-END RELATED FIXED ROUTES
@@ -93,8 +94,11 @@ Route::get('app/{any?}', 'AdminController@app')
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+
+
 // --------------------------------------------------------------------------------------------------------------------------
-// Unauthenticated API Routes
+// PUBLIC API
 // --------------------------------------------------------------------------------------------------------------------------
 
 // Related to Users pages
@@ -116,8 +120,9 @@ Route::post('api/forms/{form}/response', 'Api\FormController@storeResponse')->na
     'forms.storeresponse'
 );
 
+
 // --------------------------------------------------------------------------------------------------------------------------
-// Authenticated API Routes
+// PRIVATE API
 // --------------------------------------------------------------------------------------------------------------------------
 Route::prefix('api')
     ->middleware(['auth'])
@@ -171,9 +176,11 @@ Route::prefix('api')
         Route::post('categories/{category}/comments', 'Api\CategoryCommentController@store')->name(
             'categorycomment.store'
         );
+        Route::delete('comments/categories/{category_comment}', 'Api\CategoryCommentController@destroy')->name('categorycomment.destroy');
         Route::post('pages/{page}/comments', 'Api\PageCommentController@store')->name(
             'pagecomment.store'
         );
+        Route::delete('comments/pages/{page_comment}', 'Api\PageCommentController@destroy')->name('pagecomment.destroy');
 
         // --------------------------------------------------------------------------------------------------------------------------
         // Users API
@@ -332,9 +339,9 @@ Route::prefix('api')
         // --------------------------------------------------------------------------------------------------------------------------
         Route::get('menus', [MenuController::class, 'index'])->name('menus.index');
         Route::get('menus/{menu}', [MenuController::class, 'show'])->name('menus.show');
-        Route::post('menus', [MenuController::class, 'store'])->name('menus.store');
-        Route::put('menus/{menu}', [MenuController::class, 'update'])->name('menus.update');
-        Route::post('menuitems', [MenuController::class, 'upsert'])->name('menus.upsert');
+        //Route::post('menus', [MenuController::class, 'store'])->name('menus.store');
+        //Route::put('menus/{menu}', [MenuController::class, 'update'])->name('menus.update');
+        Route::post('menus', [MenuController::class, 'upsert'])->name('menus.upsert');
         Route::delete('menus/{menu}', [MenuController::class, 'destroy'])->name('menus.destroy');
     });
 

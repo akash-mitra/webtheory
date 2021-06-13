@@ -172,15 +172,15 @@
                     following number:</p>
                 <p class="text-xl mt-4" v-text="secret"></p>
             </div>
-            <div class="px-8 w-full m-8 py-4 flex items-center border-t justify-between">
+            <div class='px-8 w-full mt-8 py-4 flex items-center border-t justify-between'>
 
-                <button class="px-6 py-3 bg-green-500 text-lg text-white hover:bg-green-700 rounded" @click="reload">
+                <button class='px-6 py-3 bg-green-500 text-lg text-white hover:bg-green-700 rounded' @click='reload'>
                     Done
                 </button>
 
-                <span class="ml-4 text-red-600 cursor-pointer inline-block" @click="disable2fa"
-                >Do Not Enable</span
-                >
+                <span class='ml-4 text-red-600 cursor-pointer inline-block' @click='disable2fa'>
+                    Do Not Enable
+                </span>
             </div>
         </div>
 

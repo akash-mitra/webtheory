@@ -12,7 +12,7 @@ $factory->define(Form::class, function (Faker $faker) {
             'type' => 'text',
             'desc' => 'Provide your name',
             'placeholder' => 'Harry Potter',
-            'validation' => 'min" =>2|max" =>100',
+            'validation' => 'min:2|max:100',
             'default' => '',
             'options' => [],
         ],
@@ -61,13 +61,22 @@ $factory->define(Form::class, function (Faker $faker) {
             'default' => '',
             'options' => ['Ron Weasley', 'Hermione', 'Neville Longbottom', 'Lucious Malfoy'],
         ],
+        [
+            'name' => 'agree',
+            'type' => 'checkbox',
+            'desc' => 'Agree to T&C',
+            'placeholder' => 'Agree to T&C',
+            'validation' => '',
+            'default' => null,
+            'options' => [],
+        ],
     ];
 
     return [
         'name' => $faker->name,
         'description' => $faker->catchPhrase,
         'status' => $faker->randomElement(['Draft', 'Live']),
-        'captcha' => $faker->randomElement([1, 0]),
-        'fields' => json_encode($fields),
+        'captcha' => 0,
+        'fields' => $fields,
     ];
 });

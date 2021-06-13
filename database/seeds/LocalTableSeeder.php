@@ -173,7 +173,7 @@ class LocalTableSeeder extends Seeder
         // Form
         $form = factory(Form::class)->create([
             'name' => 'Contact Us',
-            'description' => 'Contact Us Form',
+            'description' => 'Feel free to reach us',
             'captcha' => 1,
             'status' => 'Live',
         ]);

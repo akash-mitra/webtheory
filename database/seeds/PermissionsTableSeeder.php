@@ -219,5 +219,13 @@ class PermissionsTableSeeder extends Seeder
         DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'menus', 'action' => 'destroy', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
 
 
+        /********************
+         * COMMENTS
+         *******************/
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'categorycomment', 'action' => 'destroy', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+        DB::table('permissions')->insert(['role' => 'admin', 'resource' => 'pagecomment', 'action' => 'destroy', 'permission' => true, 'created_at' => now(), 'updated_at' => now()]);
+
+
+
     }
 }

@@ -20,7 +20,7 @@
         "@editorjs/list": "^1.6.1",
         "@editorjs/marker": "^1.2.2",
         "@fullhuman/postcss-purgecss": "^2.3.0",
-        "@saurav.mitra/editor-table": "1.0.5",
+        "@saurav.mitra/editor-table": "1.0.6",
         "@vue/test-utils": "^1.1.2",
         "axios": "^0.21.1",
         "cross-env": "^7.0.3",

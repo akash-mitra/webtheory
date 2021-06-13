@@ -131,12 +131,12 @@ export default {
            let max_sequence = Math.max.apply(null, this.menus.map(item => item.sequence_num))
            this.menus.push({
                id: -1 * Math.random(),
-               title: "",
+               title: '',
                menuable_id: 0,
-               menuable: {title: null},
-               menuable_type: 'App\\Page',
+               menuable: { title: null },
+               menuable_type: 'App\\Category',
                sequence_num: max_sequence + 1,
-               home: false
+               home: false,
            })
         },
 
@@ -159,7 +159,7 @@ export default {
          * Save all the menu items individually by looping through "menus".
          */
         save() {
-            let l = this.menus.length;
+            let l = this.menus.length
 
             // validate
             for (let index = 0; index < l; index++) {
@@ -167,38 +167,25 @@ export default {
                 if (!this.isValidMenu(menu)) return
             }
 
+            // Recalculate the sequence number based
+            // on the positions of the menu items in UI.
             for (let index = 0; index < l; index++) {
                 let menu = this.menus[index]
-
-                // Recalculate the sequence number based
-                // on the positions of the menu item while saving.
                 menu.sequence_num = index + 1
-
-                if (menu.hasOwnProperty('id') && menu.id > 0) {
-                    this.update(menu)
-                } else {
-                    this.insert(menu)
-                }
             }
 
-            util.notifySuccess("Menu saved");
+            this.upsert()
         },
 
-        update(menu) {
-            util.ajax('put', '/api/menus/' + menu.id, menu, (response) => {
+        upsert() {
+            util.ajax('post', '/api/menus', { 'menus': this.menus }, (response) => {
+                this.menus = response.menus
+                util.notifySuccess('Menu saved')
+            }, (response) => {
+                util.notifyError('Could not save', 'Error occurred while saving menus.')
                 console.log(response)
             }, (response) => {
-                util.notifyError("Could not save", "Error occurred while updating menu [" + menu.title + "]")
-                console.log(response)
-            })
-        },
-
-
-        insert(menu) {
-            util.ajax('post', '/api/menus', menu, (response) => {
-                console.log(response)
-            }, (response) => {
-                util.notifyError("Could not save", "Error occurred while creating menu [" + menu.title + "]")
+                util.notifyError('Could not save', 'Error occurred while saving menus.')
                 console.log(response)
             })
         },
@@ -207,17 +194,27 @@ export default {
          * Remove a given menu item from the database.
          */
         remove(menu) {
+
+            if (menu.id <= 0) {
+                this.removeMenuItemFromUI(menu)
+                return
+            }
+
             let p = this
-            util.confirm('Delete "' + menu.title + '"?', 'This action can not be undone.', function () {
-                util.ajax('delete', '/api/menus/' + menu.id, {}, (response) => {
-                    for (let i = 0; i < p.menus.length; i++) {
-                        if (p.menus[i].id === menu.id) {
-                            p.menus.splice(i, 1)
-                        }
-                    }
+            util.confirm('Delete "' + menu.title + '"?', 'This action can not be undone.', function() {
+                util.ajax('delete', '/api/menus/' + menu.id, {}, () => {
+                    p.removeMenuItemFromUI(menu)
                     util.notifySuccess('Deleted', 'The menu has been successfully deleted')
                 })
             })
+        },
+
+        removeMenuItemFromUI(menu) {
+            for (let i = 0; i < this.menus.length; i++) {
+                if (this.menus[i].id === menu.id) {
+                    this.menus.splice(i, 1)
+                }
+            }
         },
 
         /**

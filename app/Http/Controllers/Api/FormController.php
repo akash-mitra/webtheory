@@ -199,9 +199,7 @@ class FormController extends Controller
             ->latest()
             ->get();
 
-        header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename=' . $form->name . '_responses.csv');
-        $output = fopen(storage_path('/app/' . $form->name . '_responses.csv'), 'w');
+        $output = fopen(storage_path('app/' . $form->name . '_responses.csv'), 'w');
 
         fputcsv($output, $formHeader);
 
@@ -235,7 +233,6 @@ class FormController extends Controller
         }
 
         fclose($output);
-
-        return response()->download(storage_path('/app/' . $form->name . '_responses.csv'));
+        return response()->download(storage_path('app/' . $form->name . '_responses.csv'))->deleteFileAfterSend();
     }
 }

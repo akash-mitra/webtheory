@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import UserStrip from './UserStrip.vue'
+import UserStrip from '../UserStrip.vue'
 
 export default {
     data() {

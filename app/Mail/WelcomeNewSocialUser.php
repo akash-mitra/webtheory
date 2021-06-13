@@ -6,12 +6,14 @@ use Storage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use App\Parameter;
 
 class WelcomeNewSocialUser extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $user;
+    public $site;
 
     /**
      * Create a new message instance.
@@ -21,6 +23,7 @@ class WelcomeNewSocialUser extends Mailable
     public function __construct($user)
     {
         $this->user = $user;
+        $this->site = json_decode(Parameter::getKey('siteinfo'));
     }
 
     /**

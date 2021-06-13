@@ -4,9 +4,24 @@ namespace App;
 
 use Carbon\Carbon;
 use DB;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
+/**
+ * App\ViewUniqueMonthly
+ *
+ * @property int $month_key
+ * @property int $unique_visitors
+ * @property string $created_at
+ * @method static Builder|ViewUniqueMonthly newModelQuery()
+ * @method static Builder|ViewUniqueMonthly newQuery()
+ * @method static Builder|ViewUniqueMonthly query()
+ * @method static Builder|ViewUniqueMonthly whereCreatedAt($value)
+ * @method static Builder|ViewUniqueMonthly whereMonthKey($value)
+ * @method static Builder|ViewUniqueMonthly whereUniqueVisitors($value)
+ * @mixin \Eloquent
+ */
 class ViewUniqueMonthly extends Model
 {
     protected $table = 'views_unique_monthly';

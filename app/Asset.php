@@ -5,6 +5,8 @@ namespace App;
 use App\Traits\RelativeTime;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,6 +20,37 @@ use Throwable;
  * Asset model stores all the media as well as other type of files uploaded by the user.
  *
  * @package App
+ * @property int $id
+ * @property string $name
+ * @property string $type
+ * @property string $size
+ * @property string $path
+ * @property string $url
+ * @property string $storage
+ * @property int $user_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read User $author
+ * @property-read Collection|Category[] $categories
+ * @property-read int|null $categories_count
+ * @property-read null|string $created_ago
+ * @property-read null|string $updated_ago
+ * @property-read Collection|Page[] $pages
+ * @property-read int|null $pages_count
+ * @method static Builder|Asset newModelQuery()
+ * @method static Builder|Asset newQuery()
+ * @method static Builder|Asset query()
+ * @method static Builder|Asset whereCreatedAt($value)
+ * @method static Builder|Asset whereId($value)
+ * @method static Builder|Asset whereName($value)
+ * @method static Builder|Asset wherePath($value)
+ * @method static Builder|Asset whereSize($value)
+ * @method static Builder|Asset whereStorage($value)
+ * @method static Builder|Asset whereType($value)
+ * @method static Builder|Asset whereUpdatedAt($value)
+ * @method static Builder|Asset whereUrl($value)
+ * @method static Builder|Asset whereUserId($value)
+ * @mixin \Eloquent
  */
 class Asset extends Model
 {

@@ -5,7 +5,37 @@ namespace App;
 use App\Traits\RelativeTime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Str;
 
+/**
+ * App\Form
+ *
+ * @property int $id
+ * @property string $name
+ * @property string|null $description
+ * @property string $status
+ * @property bool $captcha
+ * @property string $fields
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection|FormResponse[] $formResponses
+ * @property-read int|null $form_responses_count
+ * @property-read null|string $created_ago
+ * @property-read null|string $updated_ago
+ * @method static Builder|Form newModelQuery()
+ * @method static Builder|Form newQuery()
+ * @method static Builder|Form query()
+ * @method static Builder|Form whereCaptcha($value)
+ * @method static Builder|Form whereCreatedAt($value)
+ * @method static Builder|Form whereDescription($value)
+ * @method static Builder|Form whereFields($value)
+ * @method static Builder|Form whereId($value)
+ * @method static Builder|Form whereName($value)
+ * @method static Builder|Form whereStatus($value)
+ * @method static Builder|Form whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class Form extends Model
 {
     use RelativeTime;
@@ -17,7 +47,7 @@ class Form extends Model
      */
     protected $fillable = ['name', 'description', 'status', 'captcha', 'fields'];
 
-    protected $appends = ['created_ago', 'updated_ago'];
+    protected $appends = ['url', 'permalink', 'created_ago', 'updated_ago'];
 
     /**
      * The attributes that should be cast to native types.
@@ -26,6 +56,7 @@ class Form extends Model
      */
     protected $casts = [
         'captcha' => 'boolean',
+        'fields' => 'array',
     ];
 
     /**
@@ -34,7 +65,12 @@ class Form extends Model
      */
     public function formResponses(): HasMany
     {
-        return $this->hasMany('App\FormResponse');
+        return $this->hasMany(FormResponse::class);
+    }
+
+    public function menus(): MorphMany
+    {
+        return $this->morphMany(Menu::class, 'menuable');
     }
 
     /**
@@ -54,8 +90,8 @@ class Form extends Model
     public function currentFields(): array
     {
         return array_map(function ($field) {
-            return $field->name;
-        }, json_decode($this->fields));
+            return $field['name'];
+        }, $this->fields);
     }
 
     /**
@@ -67,9 +103,19 @@ class Form extends Model
     public function fieldValidationRules(): array
     {
         $validations = array_map(function ($field) {
-            return optional($field)->validation ?? '';
-        }, json_decode($this->fields));
+            return $field['validation'] ?? '';
+        }, $this->fields);
 
         return array_combine($this->currentFields(), $validations);
+    }
+
+    public function getUrlAttribute()
+    {
+        return url('forms/' . $this->id . '/' . Str::slug($this->name));
+    }
+
+    public function getPermalinkAttribute()
+    {
+        return url('forms/' . $this->id);
     }
 }

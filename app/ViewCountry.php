@@ -4,9 +4,26 @@ namespace App;
 
 use Carbon\Carbon;
 use DB;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
+/**
+ * App\ViewCountry
+ *
+ * @property int $month_key
+ * @property string|null $country
+ * @property int $total_views
+ * @property string $created_at
+ * @method static Builder|ViewCountry newModelQuery()
+ * @method static Builder|ViewCountry newQuery()
+ * @method static Builder|ViewCountry query()
+ * @method static Builder|ViewCountry whereCountry($value)
+ * @method static Builder|ViewCountry whereCreatedAt($value)
+ * @method static Builder|ViewCountry whereMonthKey($value)
+ * @method static Builder|ViewCountry whereTotalViews($value)
+ * @mixin \Eloquent
+ */
 class ViewCountry extends Model
 {
     protected $table = 'view_countries';
