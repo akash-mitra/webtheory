@@ -176,9 +176,11 @@ Route::prefix('api')
         Route::post('categories/{category}/comments', 'Api\CategoryCommentController@store')->name(
             'categorycomment.store'
         );
+        Route::delete('comments/categories/{category_comment}', 'Api\CategoryCommentController@destroy')->name('categorycomment.destroy');
         Route::post('pages/{page}/comments', 'Api\PageCommentController@store')->name(
             'pagecomment.store'
         );
+        Route::delete('comments/pages/{page_comment}', 'Api\PageCommentController@destroy')->name('pagecomment.destroy');
 
         // --------------------------------------------------------------------------------------------------------------------------
         // Users API

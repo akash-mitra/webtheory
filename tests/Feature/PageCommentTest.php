@@ -89,9 +89,7 @@ class PageCommentTest extends TestDataSetup
         $this->assertDatabaseHas('page_comments', ['body' => $pagecomment->body]);
     }
 
-    /*
-
-    // PageComment Destroy
+    /* PageComment Destroy */
     public function test_pagecomment_destroy()
     {
         $pagecomment = factory(PageComment::class)->create([
@@ -109,6 +107,8 @@ class PageCommentTest extends TestDataSetup
         $response->assertStatus(204);
         $this->assertSoftDeleted('page_comments', ['body' => $pagecomment->body]);
     }
+
+    /*
 
     // PageComment Like
     public function test_pagecomment_like()

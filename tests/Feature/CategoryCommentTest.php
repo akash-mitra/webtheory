@@ -89,9 +89,7 @@ class CategoryCommentTest extends TestDataSetup
         $this->assertDatabaseHas('category_comments', ['body' => $categorycomment->body]);
     }
 
-    /*
-
-    // CategoryComment Destroy
+    /* CategoryComment Destroy */
     public function test_categorycomment_destroy()
     {
         $categorycomment = factory(CategoryComment::class)->create([
@@ -109,6 +107,8 @@ class CategoryCommentTest extends TestDataSetup
         $response->assertStatus(204);
         $this->assertSoftDeleted('category_comments', ['body' => $categorycomment->body]);
     }
+    
+    /*
 
     // CategoryComment Like
     public function test_categorycomment_like()

@@ -45,7 +45,7 @@ export default {
         deleteComment() {
             let p = this
             util.confirm("Un-publish comment?", "The comment will be deleted from the page", () => {
-                util.ajax('delete', '/api/pages/comments/' + this.comment.id, {}, () => {
+                util.ajax('delete', '/api/comments/pages/' + this.comment.id, {}, () => {
                     p.$emit('deleted', p.comment.id)
                 })
             })
