@@ -16,6 +16,16 @@ class CategoryCommentController extends Controller
 {
     use SpamProtection;
 
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware(['check.permission'])->only(['destroy']);
+    }
+
     public function index(Category $category): JsonResponse
     {
         $comments = $category

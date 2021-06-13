@@ -15,6 +15,16 @@ class PageCommentController extends Controller
 {
     use SpamProtection;
 
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware(['check.permission'])->only(['destroy']);
+    }
+
     public function index(Page $page): JsonResponse
     {
         $comments = $page
@@ -42,18 +52,18 @@ class PageCommentController extends Controller
 
         return response()->json($comment);
     }
-//
-//    /**
-//     * Remove the specified page comment from storage.
-//     *
-//     * @param PageComment $pageComment
-//     * @return JsonResponse
-//     * @throws Exception
-//     */
-//    public function destroy(PageComment $pageComment): JsonResponse
-//    {
-//        $pageComment->delete();
-//
-//        return response()->json('success', 204);
-//    }
+
+   /**
+    * Remove the specified page comment from storage.
+    *
+    * @param PageComment $pageComment
+    * @return JsonResponse
+    * @throws Exception
+    */
+    public function destroy(PageComment $pageComment): JsonResponse
+    {
+        $pageComment->delete();
+
+        return response()->json('success', 204);
+    }
 }
