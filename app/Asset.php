@@ -226,7 +226,7 @@ class Asset extends Model
      * @param string $path
      * @return string
      */
-    private static function pathToPublicUrl(string $path): string
+    public static function pathToPublicUrl(string $path): string
     {
         switch (self::getMediaDisk()) {
             case "spaces":

@@ -100,6 +100,8 @@
 
             @ads
 
+            @maximize_images
+
         </main>
 
     </div>

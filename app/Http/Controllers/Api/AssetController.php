@@ -48,9 +48,22 @@ class AssetController extends Controller
      * @return JsonResponse
      * @throws Exception
      */
-    public function upload(AssetRequest $request): JsonResponse
+    public function upload(Request $request): JsonResponse
     {
-        $uploadedFile = $request->file('file');
+        if ($request->hasFile('image')) {
+            $request->validate([
+                'image' => ['required', 'file', 'max:25600'],
+            ]);
+            $uploadedFile = $request->file('image');
+        } else {
+            $request->validate([
+                'file' => ['required', 'file', 'max:25600'],
+            ]);
+            $uploadedFile = $request->file('file');
+        }
+        
+        if (! $request->hasFile('image') && ! $request->hasFile('file'))
+            abort(400, 'Cannot Laaa');
 
         $asset = Asset::store($uploadedFile);
 
@@ -78,6 +91,16 @@ class AssetController extends Controller
         // if the file URL is from the same website where this blog is hosted,
         // we can simply return the URL as no need to save the file again.
         if (parse_url($url, PHP_URL_HOST) === parse_url(url('/'), PHP_URL_HOST)) {
+            return response()->json([
+                'success' => 1,
+                'file' => [
+                    'url' => $url,
+                ],
+            ]);
+        }
+
+        // FOR SPACES CDN
+        if (parse_url($url, PHP_URL_HOST) === parse_url(Asset::pathToPublicUrl("dummy"), PHP_URL_HOST)) {
             return response()->json([
                 'success' => 1,
                 'file' => [
