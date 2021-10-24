@@ -53,6 +53,16 @@
     </style>
   @endif
 
+<style>
+    a {
+        color: cornflowerblue;
+        font-weight: bold;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
   @stack('styles')
 
   @stack('headers')
