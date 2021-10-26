@@ -38,5 +38,7 @@ class BladeExtensionServiceProvider extends ServiceProvider
         Blade::include('modules.recent_pages', 'recent_pages');
 
         Blade::include('modules.author_pages', 'author_pages');
+
+        Blade::include('modules.maximize_images', 'maximize_images');
     }
 }
